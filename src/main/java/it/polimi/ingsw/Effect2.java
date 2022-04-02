@@ -9,10 +9,11 @@ public class Effect2 implements Effect{
 	}
 
 	public Effect2(int id) {
+		this.id = id;
 	}
 
 	public int getId() {
-		return 0;
+		return id;
 	}
 
 }

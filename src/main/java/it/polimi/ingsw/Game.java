@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class Game {
 
-	private Player currentPlayer;
+	private int currentPlayer; //represents the position of currentPlayer in players Array
 
-	private Player influencePlayer;
+	private Player influencePlayer = null; //the player with the highest influence
 
 	private GameTable table;
 
@@ -14,14 +14,17 @@ public class Game {
 
 	private Character characters[];
 
-	private ArrayList<AssistantCard> cardsPlayed;
+	private ArrayList<AssistantCard> cardsPlayed; //each round has a list of Card containing the card played in the round
 
+	private int numPlayers;
 
 	public Game(int numPlayers, boolean expertMode) {
-		table = new GameTable(numPlayers);
 		this.expertMode = expertMode;
+		this.numPlayers = numPlayers;
+		table = new GameTable(numPlayers);
 
 		if(expertMode){
+			//creates 3 character cards
 			int id;
 			int availableEffects[]={1,2,3,4,5,6,7,11};
 
@@ -31,7 +34,15 @@ public class Game {
 			}
 		}
 
-		firstPlayer();
+		int numRound = 1;
+
+		while(!endingConditionCheck()){
+			playRound(numRound);
+		}
+	}
+
+	public GameTable getTable() {
+		return table;
 	}
 
 	private int chooseEffect(int[] availableEffect) {
@@ -50,17 +61,33 @@ public class Game {
 		return 0;
 	}
 
-	public void playRound() {
-		currentPlayer();
+	public void playRound(int numRound) {
+		if(numRound == 1) firstPlayer();
+		Player player = table.getPlayers()[currentPlayer];
 
 		planningPhase();
 
-		actionPhase();
+		setCurrentPlayer();
+		for(int i = 0; i < numPlayers; i++) {
+			actionPhase();
+			nextPlayer();
+		}
 
-		endingConditionCheck();
+		numRound++;
 	}
 
 	private boolean endingConditionCheck() {
+		for (Player player : table.getPlayers()) {
+			if(player.getNumTowers() == 0) return true;
+
+			if(player.getDeck().isEmpty()) return true;
+		}
+
+		if(table.getIslands().size()<=3) return true;
+
+		if(table.getBag().isEmpty()) return true;
+
+
 		return false;
 	}
 
@@ -71,14 +98,20 @@ public class Game {
 		table.getClouds()[1].addStudents(table.getExtractedStudents());
 
 		cardsPlayed.clear();
-		AssistantCard cardPlayed = new AssistantCard();
-		playCard(cardPlayed);
+
+		for(int i = 0; i < numPlayers; i++){
+			Player player = table.getPlayers()[currentPlayer];
+			AssistantCard cardPlayed = new AssistantCard();
+			playCard(cardPlayed, player);
+			nextPlayer();
+		}
+
 	}
 
-	public void playCard(AssistantCard cardPlayed) {
+	public void playCard(AssistantCard cardPlayed, Player player) {
 
 		try {
-			currentPlayer.playCard(cardsPlayed, cardPlayed);
+			player.playCard(cardsPlayed, cardPlayed);
 		} catch (CardAlreadyPlayedException e) {
 			e.printError();
 		}
@@ -89,27 +122,40 @@ public class Game {
 	private void actionPhase() {
 		//move student from entrance to dinner/island
 
-		//movemothernature
+		//move mother nature
 
-		//if -> controlling, conquering, unify
+		if(table.getMotherNatureIsland().getOwner() == null) controlling();
+		else conquering();
 
 		//choose cloud
 
+	}
 
+	private void setInfluencePlayer(){
+		influence();
+
+		for(int i = 0; i < numPlayers; i++){
+			if(influencePlayer.getInfluenceValue()<table.getPlayers()[i].getInfluenceValue()){
+				influencePlayer = table.getPlayers()[i];
+			}
+		}
 
 	}
 
-
 	//calculate influence
 	private void influence (){
-		for(Player player: table.getPlayers()) player.setInfluenceValue(0);
 
+		for(Player player : table.getPlayers()) player.setInfluenceValue(0); //reset influence
+
+		//number of students for each color in the island, es. numStudent[0] = num of yellow students
 		int numStudents[] = table.getMotherNatureIsland().getNumStudents();
 
+		//add influence to each player if the player is the owner, based on the number of students
 		for(Player player: table.getPlayers()){
 			for(int i = 0; i < 5; i++) table.getProfessors()[i].getOwner().addInfluence();
 		}
 
+		//add influence if the player has a tower
 		table.getMotherNatureIsland().getOwner().addInfluence();
 	}
 
@@ -119,16 +165,33 @@ public class Game {
 	}
 
 	private void controlling() {
+		setInfluencePlayer();
 
+		if(influencePlayer!=null){
+			table.getMotherNatureIsland().setOwner(influencePlayer);
+		}
 	}
 
 	public void firstPlayer() {
-		int i = (int) Math.random() * 2;
-		currentPlayer = table.getPlayers()[i];
+		currentPlayer = (int) Math.random() * numPlayers;
 	}
 
-	public void currentPlayer() {
+	public void nextPlayer() {
+		if((currentPlayer+1)<numPlayers) currentPlayer++;
+		else currentPlayer = 0;
+	}
 
+	private void setCurrentPlayer(){
+		//controls the assistant card played value to set the currentPlayer
+		int value1, value2, i = 0;
+
+		value1 = table.getPlayers()[currentPlayer].getLastCard().getValue();
+
+		for(Player player : table.getPlayers()){
+			value2 = player.getLastCard().getValue();
+			if(value2>value1) currentPlayer = i;
+			i++;
+		}
 	}
 
 	public void professorCheck() {
@@ -140,7 +203,11 @@ public class Game {
 	}
 
 	private void conquering() {
+		setInfluencePlayer();
 
+		if(influencePlayer != table.getMotherNatureIsland().getOwner()){
+			table.getMotherNatureIsland().setOwner(influencePlayer);
+		}
 	}
 
 	public void conquering(Character character) {

@@ -9,7 +9,7 @@ public class Character {
 	private boolean isActivated;
 
 	public Character(Game game, int id) {
-		if(id == 1) effect = new Effect1(id);
+		if(id == 1) effect = new Effect1(id, game);
 		if(id == 2) effect = new Effect2(id);
 		if(id == 3) effect = new Effect3(id);
 		if(id == 4) effect = new Effect4(id);
