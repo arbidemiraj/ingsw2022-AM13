@@ -45,6 +45,10 @@ public class Player {
 		this.influence=influence;
 	}
 
+	public void addInfluence(){
+		influence++;
+	}
+
 	public int getNumTowers() {
 		return numTowers;
 	}

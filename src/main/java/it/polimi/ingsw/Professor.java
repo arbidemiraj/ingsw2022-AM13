@@ -13,4 +13,7 @@ public class Professor {
 
 	}
 
+	public Player getOwner() {
+		return owner;
+	}
 }

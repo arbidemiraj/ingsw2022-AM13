@@ -51,7 +51,13 @@ public class Game {
 	}
 
 	public void playRound() {
+		currentPlayer();
+
 		planningPhase();
+
+		actionPhase();
+
+		endingConditionCheck();
 	}
 
 	private boolean endingConditionCheck() {
@@ -81,38 +87,30 @@ public class Game {
 	}
 
 	private void actionPhase() {
-		//step 1 move students
-		//move students to hall
-		DinnerRoomRow.addStudent();
-		table.
-		//move students to isle
-		Island.getStudents();
+		//move student from entrance to dinner/island
 
-		//step 2 move mother Nature and conquere islands
-		table.moveMotherNature();
+		//movemothernature
 
-		//step 3 choose cloud card and take students
-		//al momento presente nella planning phase
+		//if -> controlling, conquering, unify
+
+		//choose cloud
+
+
+
 	}
 
 
 	//calculate influence
-	public int influence (){
-		int influence=0;
-		//recupero gli studenti dell'isola in cui si trova madre natura
-		table.getMotherNature().getStudents();
-		//sommo l'influenza di tutti gli studenti controllati dal giocatore preso in considerazione
-		for(int i=0;i<5;i++){//scorro i 5 colori
-			//incremento solo se il player controlla il prof
-			if(colore==player.professore)
-				//incremento l'influenza in base al numero di studenti di quel colore
-				influence=influence+i.students;
-		}
-		//controllo che la torre sia del player
-		owner.addInfluence();
-		influence++;
+	private void influence (){
+		for(Player player: table.getPlayers()) player.setInfluenceValue(0);
 
-		return influence;
+		int numStudents[] = table.getMotherNatureIsland().getNumStudents();
+
+		for(Player player: table.getPlayers()){
+			for(int i = 0; i < 5; i++) table.getProfessors()[i].getOwner().addInfluence();
+		}
+
+		table.getMotherNatureIsland().getOwner().addInfluence();
 	}
 
 
@@ -146,10 +144,6 @@ public class Game {
 	}
 
 	public void conquering(Character character) {
-
-	}
-
-	private void influence() {
 
 	}
 

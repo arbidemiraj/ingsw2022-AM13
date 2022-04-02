@@ -96,6 +96,10 @@ public class GameTable {
 
 	}
 
+	public Professor[] getProfessors() {
+		return professors;
+	}
+
 	public void extractStudents(int numStudents) {
 		extractedStudents.clear();
 		int random;
@@ -114,7 +118,7 @@ public class GameTable {
 	public void moveMotherNature(int steps) {
 	}
 
-	public Island getMotherNature() {
+	public Island getMotherNatureIsland() {
 		return islands.get(motherNature);
 	}
 
