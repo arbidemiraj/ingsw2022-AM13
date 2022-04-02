@@ -9,7 +9,10 @@ public class PlayerBoard {
 	private DinnerRoomRow dinnerRoom[];
 
 	public void fillEntrance(List<Student> students) {
-
+		students.add(student);
+	}
+	public void fillDinnerRoomRow(List<Student> students) {
+		students.add(student);
 	}
 
 }

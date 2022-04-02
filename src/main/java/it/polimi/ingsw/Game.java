@@ -81,8 +81,40 @@ public class Game {
 	}
 
 	private void actionPhase() {
+		//step 1 move students
+		//move students to hall
+		DinnerRoomRow.addStudent();
+		table.
+		//move students to isle
+		Island.getStudents();
 
+		//step 2 move mother Nature and conquere islands
+		table.moveMotherNature();
+
+		//step 3 choose cloud card and take students
+		//al momento presente nella planning phase
 	}
+
+
+	//calculate influence
+	public int influence (){
+		int influence=0;
+		//recupero gli studenti dell'isola in cui si trova madre natura
+		table.getMotherNature().getStudents();
+		//sommo l'influenza di tutti gli studenti controllati dal giocatore preso in considerazione
+		for(int i=0;i<5;i++){//scorro i 5 colori
+			//incremento solo se il player controlla il prof
+			if(colore==player.professore)
+				//incremento l'influenza in base al numero di studenti di quel colore
+				influence=influence+i.students;
+		}
+		//controllo che la torre sia del player
+		owner.addInfluence();
+		influence++;
+
+		return influence;
+	}
+
 
 	private void unifyIslands() {
 

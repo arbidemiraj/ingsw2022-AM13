@@ -107,7 +107,15 @@ public class GameTable {
 		}
 	}
 
+	public ArrayList<Island> getIslands() {
+		return islands;
+	}
+
 	public void moveMotherNature(int steps) {
+	}
+
+	public Island getMotherNature() {
+		return islands.get(motherNature);
 	}
 
 	public void activateCharacter() {
