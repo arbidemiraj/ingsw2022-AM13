@@ -1,19 +1,21 @@
 package it.polimi.ingsw;
 
+import java.util.ArrayList;
+
 public class Effect1 implements Effect{
 
 	private int id;
+	private ArrayList<Student> students;
 
-	public void apply(GameTable gameTable) {
+	public Effect1(int id, Game game) {
 
 	}
 
-	public Effect1(int id) {
-
+	public void apply(GameTable gameTable) {
 	}
 
 	public int getId() {
-		return 0;
+		return id;
 	}
 
 }

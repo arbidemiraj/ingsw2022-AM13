@@ -57,4 +57,11 @@ public class Player {
 		return influence;
 	}
 
+	public AssistantCard getLastCard() {
+		return discardPile.get(discardPile.size());
+	}
+
+	public ArrayList<AssistantCard> getDeck() {
+		return deck;
+	}
 }

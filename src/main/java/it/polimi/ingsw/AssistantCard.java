@@ -6,8 +6,8 @@ public class AssistantCard {
 
 	private int motherNatureMoves;
 
-	public void getValue() {
-
+	public int getValue() {
+		return value;
 	}
 
 	public int getMotherNatureMoves() {

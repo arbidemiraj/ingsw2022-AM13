@@ -111,6 +111,14 @@ public class GameTable {
 		}
 	}
 
+	public ArrayList<Student> getBag() {
+		return bag;
+	}
+
+	public int getMotherNature() {
+		return motherNature;
+	}
+
 	public ArrayList<Island> getIslands() {
 		return islands;
 	}
@@ -118,6 +126,7 @@ public class GameTable {
 	public void moveMotherNature(int steps) {
 	}
 
+	//returns the island with mother nature in it
 	public Island getMotherNatureIsland() {
 		return islands.get(motherNature);
 	}
