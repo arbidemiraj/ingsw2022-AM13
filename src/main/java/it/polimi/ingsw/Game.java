@@ -128,6 +128,8 @@ public class Game {
 			if (table.getMotherNatureIsland().getOwner() == null) controlling();
 			else conquering();
 
+			mergeCheck();
+
 			//choose cloud
 			//get input from use
 		}
@@ -149,7 +151,7 @@ public class Game {
 
 		for(Player player : table.getPlayers()) player.setInfluenceValue(0); //reset influence
 
-		//number of students for each color in the island, es. numStudent[0] = num of yellow students
+		//number of students for each color in island, es. numStudent[0] = num of yellow students
 		int numStudents[] = table.getMotherNatureIsland().getNumStudents();
 
 		//add influence to each player if the player is the owner, based on the number of students
@@ -162,28 +164,54 @@ public class Game {
 	}
 
 	//merges the values of the two given islands
-	private UnifiedIsland unifyIslands(Island A1, Island A2) {
-		unifyIslands()= new ArrayList<>;
-		//for cicle to sum all students for all colours
-		for (int i=0;i<5;i++){
-			unifyIslands().setStudents(i)=A1.getNumStudents(i)+A2.getNumStudents(i);
-		}
-		//need to sum the tower
-		return unifyIslands();
+	private void unifyIslands(Island island1, Island island2) {
+		ArrayList<Student> students1 = new ArrayList<>();
+		ArrayList<Student> students2 = new ArrayList<>();
+		int numIslands;
+
+		UnifiedIsland unify = new UnifiedIsland();
+
+		//add student to the island with motherNature
+		students1 = island1.getStudents();
+		students2 = island2.getStudents();
+		students1.addAll(students2);
+
+		//sums the tower
+		unify.addIsland();
+		island1.changeState(unify);
 	}
 
 
 	//verify that the current island can be merged with the other
-	private void Merge(){
-		//tutte le variabili vanno sistemate, l'unione di due isole dove va a finire? dove verifico l'unione sennò?
-		Island A1,A2,A3; //indexes of the islands to compare
-		A1=table.getMotherNatureIsland(-1);//previous island
-		A2=table.getMotherNatureIsland();//current island
-		A3=table.getMotherNatureIsland(+1);//next island
-		if(A1.getOwner()==A2.getOwner())
-			unifyIslands();
-		if (A2.getOwner()==A3.getOwner())
-			unifyIslands();
+	private void mergeCheck(){
+		Island island1, island2, island3; //indexes of the islands to compare
+		int motherNature, previous, next;
+
+		motherNature = table.getMotherNature();
+
+
+		if(motherNature == table.getIslands().size()-1){
+			next = 0;
+		}
+		else next = motherNature + 1;
+
+		if(motherNature == 0){
+			previous = table.getIslands().size()-1;
+		}
+		else previous = motherNature - 1;
+
+		island1 = table.getIslands().get(previous);//previous island
+		island2 = table.getMotherNatureIsland();//current island
+		island3 = table.getIslands().get(next);//next island
+
+		if(island2.getOwner().equals(island1.getOwner())) {
+			unifyIslands(island2, island1);
+			table.getIslands().remove(previous);
+		}
+		if(island2.getOwner().equals(island3.getOwner())) {
+			unifyIslands(island2, island3);
+			table.getIslands().remove(next);
+		}
 	}
 
 	private void controlling() {

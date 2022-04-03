@@ -25,8 +25,12 @@ public class Island {
 		this.owner = owner;
 	}
 
-	public void changeState() {
-		islandState = new UnifiedIsland();
+	public void changeState(IslandState islandState) {
+		this.islandState = islandState;
+	}
+
+	public IslandState getIslandState() {
+		return islandState;
 	}
 
 	public void addStudent(Student student) {
@@ -49,6 +53,10 @@ public class Island {
 
 	public Player getOwner() {
 		return owner;
+	}
+
+	public void setStudents(ArrayList<Student> students) {
+		this.students = students;
 	}
 }
 

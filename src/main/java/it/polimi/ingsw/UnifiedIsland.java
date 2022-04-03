@@ -1,5 +1,17 @@
 package it.polimi.ingsw;
 
 public class UnifiedIsland implements IslandState{
-    //serve una variabile per il numero delle torri
+    private int numIslands = 0;
+
+    public UnifiedIsland() {
+        numIslands++;
+    }
+
+    public int getNumIslands() {
+        return numIslands;
+    }
+
+    public void addIsland() {
+        this.numIslands++;
+    }
 }
