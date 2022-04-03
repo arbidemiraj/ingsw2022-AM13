@@ -120,15 +120,17 @@ public class Game {
 	}
 
 	private void actionPhase() {
-		//move student from entrance to dinner/island
+		for(int i = 0; i < numPlayers; i++) {
+			//move student from entrance to dinner/island
+			//get input from user
+			//move mother nature
 
-		//move mother nature
+			if (table.getMotherNatureIsland().getOwner() == null) controlling();
+			else conquering();
 
-		if(table.getMotherNatureIsland().getOwner() == null) controlling();
-		else conquering();
-
-		//choose cloud
-
+			//choose cloud
+			//get input from use
+		}
 	}
 
 	private void setInfluencePlayer(){
@@ -159,9 +161,29 @@ public class Game {
 		table.getMotherNatureIsland().getOwner().addInfluence();
 	}
 
+	//merges the values of the two given islands
+	private UnifiedIsland unifyIslands(Island A1, Island A2) {
+		unifyIslands()= new ArrayList<>;
+		//for cicle to sum all students for all colours
+		for (int i=0;i<5;i++){
+			unifyIslands().setStudents(i)=A1.getNumStudents(i)+A2.getNumStudents(i);
+		}
+		//need to sum the tower
+		return unifyIslands();
+	}
 
-	private void unifyIslands() {
 
+	//verify that the current island can be merged with the other
+	private void Merge(){
+		//tutte le variabili vanno sistemate, l'unione di due isole dove va a finire? dove verifico l'unione sennò?
+		Island A1,A2,A3; //indexes of the islands to compare
+		A1=table.getMotherNatureIsland(-1);//previous island
+		A2=table.getMotherNatureIsland();//current island
+		A3=table.getMotherNatureIsland(+1);//next island
+		if(A1.getOwner()==A2.getOwner())
+			unifyIslands();
+		if (A2.getOwner()==A3.getOwner())
+			unifyIslands();
 	}
 
 	private void controlling() {
@@ -194,9 +216,6 @@ public class Game {
 		}
 	}
 
-	public void professorCheck() {
-
-	}
 
 	public void professorCheck(Character character) {
 
