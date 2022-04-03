@@ -25,4 +25,7 @@ public class PlayerBoard {
 
 	}
 
+	public DinnerRoomRow[] getDinnerRoom() {
+		return dinnerRoom;
+	}
 }

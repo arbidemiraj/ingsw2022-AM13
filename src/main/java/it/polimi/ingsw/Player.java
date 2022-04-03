@@ -18,7 +18,7 @@ public class Player {
 
 	private ArrayList<AssistantCard> discardPile;
 
-	private int numCoins;
+	private int numCoins = 0;
 
 	public Player(TowerColor towerColor, int numTowers) {
 		this.numTowers = numTowers;
@@ -63,5 +63,18 @@ public class Player {
 
 	public ArrayList<AssistantCard> getDeck() {
 		return deck;
+	}
+
+	public int numStudents(){
+		int numStudents = 0;
+		for(int i = 0; i < 5; i++){
+			numStudents += playerBoard.getDinnerRoom()[i].getNumStudents();
+		}
+
+		return numStudents;
+	}
+
+	public void addCoin(){
+		numCoins++;
 	}
 }

@@ -10,6 +10,10 @@ public class Game {
 
 	private GameTable table;
 
+	private int generalSupply;
+
+	private int motherNatureMoves = 0;
+
 	private boolean expertMode;
 
 	private Character characters[];
@@ -18,26 +22,43 @@ public class Game {
 
 	private int numPlayers;
 
-	public Game(int numPlayers, boolean expertMode) {
-		this.expertMode = expertMode;
+	public Game(int numPlayers){
 		this.numPlayers = numPlayers;
 		table = new GameTable(numPlayers);
-
-		if(expertMode){
-			//creates 3 character cards
-			int id;
-			int availableEffects[]={1,2,3,4,5,6,7,11};
-
-			for(int i = 0; i < 3; i++){
-				id = chooseEffect(availableEffects);
-				characters[i] = new Character(this, id);
-			}
-		}
 
 		int numRound = 1;
 
 		while(!endingConditionCheck()){
 			playRound(numRound);
+		}
+	}
+
+	public Game(int numPlayers, boolean expertMode) {
+		this.expertMode = expertMode;
+		this.numPlayers = numPlayers;
+		table = new GameTable(numPlayers);
+
+
+		setupExpertMode();
+		for(Player player : table.getPlayers()) player.addCoin();
+
+		int numRound = 1;
+
+		while(!endingConditionCheck()){
+			playRound(numRound);
+		}
+	}
+
+	private void setupExpertMode() {
+		//creates 3 character cards
+		int id;
+		int availableEffects[]={1,2,3,4,5,6,7,11};
+
+		generalSupply = 20-numPlayers;
+
+		for(int i = 0; i < 3; i++){
+			id = chooseEffect(availableEffects);
+			characters[i] = new Character(this, id);
 		}
 	}
 
@@ -108,6 +129,14 @@ public class Game {
 
 	}
 
+	public void setMotherNatureMoves(int motherNatureMoves) {
+		this.motherNatureMoves = motherNatureMoves;
+	}
+
+	public void addMotherNatureMoves() {
+		this.motherNatureMoves += 2;
+	}
+
 	public void playCard(AssistantCard cardPlayed, Player player) {
 
 		try {
@@ -122,6 +151,8 @@ public class Game {
 	private void actionPhase() {
 		for(int i = 0; i < numPlayers; i++) {
 			//move student from entrance to dinner/island
+			//for each move of student -> professorCheck(color);
+
 			//get input from user
 			//move mother nature
 
@@ -153,6 +184,22 @@ public class Game {
 
 		//number of students for each color in island, es. numStudent[0] = num of yellow students
 		int numStudents[] = table.getMotherNatureIsland().getNumStudents();
+
+		//add influence to each player if the player is the owner, based on the number of students
+		for(Player player: table.getPlayers()){
+			for(int i = 0; i < 5; i++) table.getProfessors()[i].getOwner().addInfluence();
+		}
+
+		//add influence if the player has a tower
+		table.getMotherNatureIsland().getOwner().addInfluence();
+	}
+
+	public void influence (Island island){
+
+		for(Player player : table.getPlayers()) player.setInfluenceValue(0); //reset influence
+
+		//number of students for each color in island, es. numStudent[0] = num of yellow students
+		int numStudents[] = island.getNumStudents();
 
 		//add influence to each player if the player is the owner, based on the number of students
 		for(Player player: table.getPlayers()){
@@ -245,8 +292,78 @@ public class Game {
 	}
 
 
-	public void professorCheck(Character character) {
+	public void professorCheck(Student color){
+		int numStudents[] = new int[numPlayers];
+		int highestStudent = 0, i = 0, j = 0, colorPos = 0, countHighest = 0;
+		Player owner;
 
+		if(color == Student.YELLOW) colorPos = 0;
+		if(color == Student.BLUE) colorPos = 1;
+		if(color == Student.GREEN) colorPos = 2;
+		if(color == Student.PINK) colorPos = 3;
+		if(color == Student.RED) colorPos = 4;
+
+		//get number of students for each player based on the color
+		for(Player player : table.getPlayers()){
+			numStudents[i] = player.getPlayerBoard().getDinnerRoom()[colorPos].getNumStudents();
+		}
+
+		for( i = 0; i < numPlayers; i++){
+			if(numStudents[i] >= highestStudent){
+				if(highestStudent == numStudents[i]){
+					countHighest++;
+				}
+
+				highestStudent = numStudents[i];
+
+				j = i;
+			}
+		}
+
+		if(highestStudent != 0 && countHighest == 1){
+			owner = table.getPlayers()[j];
+			table.getProfessors()[colorPos].setOwner(owner);
+		}
+	}
+
+	public void professorCheck(Character character, Student color) {
+		if(character.getEffectId() != 2) professorCheck(color);
+		else{
+			int[] numStudents = new int[numPlayers];
+			int highestStudent = 0, i = 0, j = 0, l=0, colorPos = 0;
+			Player highests[] = new Player[numPlayers];
+			Player owner;
+
+			if(color == Student.YELLOW) colorPos = 0;
+			if(color == Student.BLUE) colorPos = 1;
+			if(color == Student.GREEN) colorPos = 2;
+			if(color == Student.PINK) colorPos = 3;
+			if(color == Student.RED) colorPos = 4;
+
+			//get number of students for each player based on the color
+			for(Player player : table.getPlayers()){
+				numStudents[i] = player.getPlayerBoard().getDinnerRoom()[colorPos].getNumStudents();
+			}
+
+			//checks who are the player with highest num of students
+			for( i = 0; i < numPlayers; i++){
+				if(numStudents[i] >= highestStudent){
+					if(highestStudent == numStudents[i]){
+						highests[l] = table.getPlayers()[i];
+						l++;
+					}
+					highestStudent = numStudents[i];
+					j = i;
+				}
+			}
+
+			//if one of the player with highest student has activated the card gets the professor
+			for (Player player : highests){
+				if(character.getOwner().equals(player)){
+					table.getProfessors()[colorPos].setOwner(player);
+				}
+			}
+		}
 	}
 
 	private void conquering() {
@@ -258,11 +375,46 @@ public class Game {
 	}
 
 	public void conquering(Character character) {
+		if(character.getEffectId() != 6) conquering();
+		else{
+			setInfluencePlayer(character);
+		}
+	}
+
+	private void setInfluencePlayer(Character character){
+		influence(character);
+
+		for(int i = 0; i < numPlayers; i++){
+			if(influencePlayer.getInfluenceValue()<table.getPlayers()[i].getInfluenceValue()){
+				influencePlayer = table.getPlayers()[i];
+			}
+		}
+	}
+
+	private void influence(Character character){
+		if(character.getEffectId() == 7){
+			influence();
+			character.getOwner().addInfluence();
+			character.getOwner().addInfluence(); //additional 2 influence points
+		}
+		else if(character.getEffectId()!=6) {
+			influence();
+		} else{
+			for(Player player : table.getPlayers()) player.setInfluenceValue(0); //reset influence
+
+			//number of students for each color in island, es. numStudent[0] = num of yellow students
+			int numStudents[] = table.getMotherNatureIsland().getNumStudents();
+
+			//add influence to each player if the player is the owner, based on the number of students
+			for(Player player: table.getPlayers()){
+				for(int i = 0; i < 5; i++) table.getProfessors()[i].getOwner().addInfluence();
+			}
+		}
+
 
 	}
 
-	private void influence(Character character) {
+	public void moveStudent(Student student){
 
 	}
-
 }

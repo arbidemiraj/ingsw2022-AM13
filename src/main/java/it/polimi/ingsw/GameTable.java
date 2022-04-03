@@ -47,6 +47,7 @@ public class GameTable {
 		}
 	}
 
+
 	public Cloud[] getClouds() {
 		return clouds;
 	}
