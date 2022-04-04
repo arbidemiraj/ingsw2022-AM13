@@ -12,8 +12,8 @@ public class Effect1 implements StudentEffect{
 		this.students = students;
 	}
 
-	public void apply(GameTable gameTable) {
-		//move chosen student
+	public void apply(Game game, Student chosenStudent) {
+		//move chosen students
 	}
 
 	public ArrayList<Student> getStudents() {
@@ -24,8 +24,8 @@ public class Effect1 implements StudentEffect{
 		return id;
 	}
 
+
 	@Override
 	public void apply(Game game) {
-
 	}
 }

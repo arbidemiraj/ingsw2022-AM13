@@ -52,7 +52,7 @@ public class Game {
 	private void setupExpertMode() {
 		//creates 3 character cards
 		int id;
-		int availableEffects[]={1,2,3,4,5,6,7,11};
+		int availableEffects[]={1,2,3,4,5,6,8,11};
 
 		generalSupply = 20-numPlayers;
 
@@ -179,19 +179,20 @@ public class Game {
 
 	//calculate influence
 	private void influence (){
+		if(!table.getMotherNatureIsland().isNoEntryTile()) {
+			for (Player player : table.getPlayers()) player.setInfluenceValue(0); //reset influence
 
-		for(Player player : table.getPlayers()) player.setInfluenceValue(0); //reset influence
+			//number of students for each color in island, es. numStudent[0] = num of yellow students
+			int numStudents[] = table.getMotherNatureIsland().getNumStudents();
 
-		//number of students for each color in island, es. numStudent[0] = num of yellow students
-		int numStudents[] = table.getMotherNatureIsland().getNumStudents();
+			//add influence to each player if the player is the owner, based on the number of students
+			for (Player player : table.getPlayers()) {
+				for (int i = 0; i < 5; i++) table.getProfessors()[i].getOwner().addInfluence();
+			}
 
-		//add influence to each player if the player is the owner, based on the number of students
-		for(Player player: table.getPlayers()){
-			for(int i = 0; i < 5; i++) table.getProfessors()[i].getOwner().addInfluence();
+			//add influence if the player has a tower
+			table.getMotherNatureIsland().getOwner().addInfluence();
 		}
-
-		//add influence if the player has a tower
-		table.getMotherNatureIsland().getOwner().addInfluence();
 	}
 
 	public void influence (Island island){

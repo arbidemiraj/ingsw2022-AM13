@@ -12,6 +12,8 @@ public class Island {
 
 	private IslandState islandState;
 
+	private boolean noEntryTile;
+
 	public Island() {
 		students = new ArrayList<>();
 		owner = null;
@@ -57,6 +59,14 @@ public class Island {
 
 	public void setStudents(ArrayList<Student> students) {
 		this.students = students;
+	}
+
+	public void setNoEntryTile() {
+		this.noEntryTile = true;
+	}
+
+	public boolean isNoEntryTile() {
+		return noEntryTile;
 	}
 }
 
