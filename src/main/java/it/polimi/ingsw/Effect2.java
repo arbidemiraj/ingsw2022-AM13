@@ -4,8 +4,15 @@ public class Effect2 implements Effect{
 
 	private int id;
 
-	public void apply(Game game, Character character) {
-		character.activateEffect();
+
+	@Override
+	public void apply(Game game, Student chosenStudent) {
+
+	}
+
+	@Override
+	public void apply(Game game, Island chosenIsland) {
+
 	}
 
 	public Effect2(int id) {

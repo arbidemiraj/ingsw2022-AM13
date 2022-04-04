@@ -24,4 +24,9 @@ public class Effect5 implements Effect{
 	public void apply(Game game) {
 
 	}
+
+	@Override
+	public void apply(Game game, Student chosenStudent) {
+
+	}
 }

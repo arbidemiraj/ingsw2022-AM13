@@ -91,4 +91,8 @@ public class Player {
 	public void addCoin(){
 		numCoins++;
 	}
+
+	public int getNumCoins() {
+		return numCoins;
+	}
 }

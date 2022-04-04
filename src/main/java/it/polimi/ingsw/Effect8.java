@@ -14,10 +14,15 @@ public class Effect8 implements Effect{
 
 	@Override
 	public void apply(Game game) {
+	}
+
+	@Override
+	public void apply(Game game, Student chosenStudent) {
 
 	}
 
-	public void apply(Game game, Character character) {
-		character.activateEffect();
+	@Override
+	public void apply(Game game, Island chosenIsland) {
+
 	}
 }

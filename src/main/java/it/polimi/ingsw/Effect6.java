@@ -16,7 +16,13 @@ public class Effect6 implements Effect{
 	public void apply(Game game) {
 	}
 
-	public void apply(Game game, Character character) {
-		character.activateEffect();
+	@Override
+	public void apply(Game game, Student chosenStudent) {
+
+	}
+
+	@Override
+	public void apply(Game game, Island chosenIsland) {
+
 	}
 }

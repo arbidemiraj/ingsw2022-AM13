@@ -19,4 +19,9 @@ public class Effect3 implements Effect{
 	@Override
 	public void apply(Game game) {
 	}
+
+	@Override
+	public void apply(Game game, Student chosenStudent) {
+
+	}
 }

@@ -4,19 +4,17 @@ import java.util.ArrayList;
 
 public class GameTable {
 
-	private Player players[];
+	private Player[] players;
 
 	private ArrayList<Island> islands;
 
-	private ArrayList<Student> extractedStudents;
-
 	private ArrayList<Student> bag;
 
-	private Cloud clouds[];
+	private Cloud[] clouds;
 
 	private int motherNature;
 
-	private Professor professors[];
+	private Professor[] professors;
 
 	public GameTable (int numPlayers) {
 		islands = new ArrayList<>(12);
@@ -24,25 +22,29 @@ public class GameTable {
 
 		motherNature = (int) (Math.random()*12);
 
-		extractedStudents = new ArrayList<>();
-
+		//Initial 10 students in the bag
 		initBag();
 
+		//Create islands
 		fillIslands();
 
+		//Fill the bag with 120 students remaining
 		fillBag();
 
+		//Create instances for clouds
 		clouds[0] = new Cloud();
 		clouds[1] = new Cloud();
+
+		//Creates 5 professors
 		Professor yellow = new Professor(Student.YELLOW);
 		Professor blue = new Professor(Student.BLUE);
 		Professor green = new Professor(Student.GREEN);
 		Professor pink = new Professor(Student.PINK);
 		Professor red = new Professor(Student.RED);
 
+		//fill entrance for each player
 		for(int i = 0; i < numPlayers; i++) {
-			extractStudents(7);
-			players[i].getPlayerBoard().fillEntrance(extractedStudents);
+			players[i].getPlayerBoard().fillEntrance(extractStudents(7));
 		}
 	}
 
@@ -50,11 +52,6 @@ public class GameTable {
 	public Cloud[] getClouds() {
 		return clouds;
 	}
-
-	public ArrayList<Student> getExtractedStudents() {
-		return extractedStudents;
-	}
-
 
 	private void initBag() {
 		bag = new ArrayList<Student>();
@@ -79,7 +76,6 @@ public class GameTable {
 	}
 
 	private void fillIslands() {
-		extractStudents(10);
 		int random;
 		int i = 10;
 		int j = 0;
@@ -88,20 +84,20 @@ public class GameTable {
 			random = (int)(Math.random()*10);
 
 			if((islands.get(random).getStudents()) == null){
-				islands.get(random).addStudent(extractedStudents.get(j));
+				islands.get(random).addStudent(extractStudents(10).get(j));
 				i--;
 				j++;
 			}
 		}
-
 	}
 
 	public Professor[] getProfessors() {
 		return professors;
 	}
 
-	public void extractStudents(int numStudents) {
-		extractedStudents.clear();
+	public ArrayList<Student> extractStudents(int numStudents) {
+		ArrayList<Student> extractedStudents = new ArrayList<>();
+
 		int random;
 
 		for(int i = 0; i < numStudents; i++){
@@ -109,6 +105,8 @@ public class GameTable {
 			extractedStudents.add(i, bag.get(random));
 			bag.remove(random);
 		}
+
+		return extractedStudents;
 	}
 
 	public ArrayList<Student> getBag() {
@@ -134,5 +132,17 @@ public class GameTable {
 
 	public Player[] getPlayers() {
 		return players;
+	}
+
+	public void moveStudentsFromCloud(int numCloud, int currentPlayer){
+		ArrayList<Student> students = new ArrayList<>();
+
+		try{
+			students = clouds[numCloud].getStudents();
+		} catch (EmptyCloudException e) {
+			e.printStackTrace();
+		}
+
+		players[currentPlayer].getPlayerBoard().fillEntrance(students);
 	}
 }

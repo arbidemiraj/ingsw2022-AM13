@@ -15,14 +15,16 @@ public class Cloud {
 		this.students=students;
 	}
 
-	public ArrayList<Student> getStudents() {
-		return students;
-	}
+	public ArrayList<Student> getStudents() throws EmptyCloudException {
+		ArrayList<Student> stud;
 
-	public void removeStudents() throws EmptyCloudException {
+		stud = students;
+
 		for ( int i = 0; i < students.size(); i++){
 			if(students.isEmpty()) throw new EmptyCloudException();
 			students.remove(i);
 		}
+
+		return stud;
 	}
 }

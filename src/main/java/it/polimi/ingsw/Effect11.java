@@ -21,6 +21,11 @@ public class Effect11 implements Effect{
 	}
 
 	@Override
+	public void apply(Game game, Island chosenIsland) {
+
+	}
+
+	@Override
 	public void apply(Game game) {
 
 	}

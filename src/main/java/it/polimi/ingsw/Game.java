@@ -28,9 +28,9 @@ public class Game {
 
 		int numRound = 1;
 
-		while(!endingConditionCheck()){
+		do{
 			playRound(numRound);
-		}
+		}while(!endingConditionCheck());
 	}
 
 	public Game(int numPlayers, boolean expertMode) {
@@ -62,6 +62,63 @@ public class Game {
 		}
 	}
 
+	public void playRound(int numRound) {
+		if(numRound == 1) firstPlayer();
+
+		planningPhase();
+
+		setCurrentPlayer();
+		for(int i = 0; i < numPlayers; i++) {
+			actionPhase();
+			nextPlayer();
+		}
+
+		numRound++;
+	}
+
+	private void planningPhase() {
+		// fill the clouds
+
+		table.getClouds()[0].addStudents(table.extractStudents(3));
+		table.getClouds()[1].addStudents(table.extractStudents(3));
+
+		//cards played has the assistant card played in this round, so at the start of it is cleared
+		cardsPlayed.clear();
+
+		//each player plays a card
+		for(int i = 0; i < numPlayers; i++){
+			Player player = table.getPlayers()[currentPlayer];
+
+			//cardPlayed will be the cardPlayed from the player
+			AssistantCard cardPlayed = new AssistantCard(2,2);
+			playCard(cardPlayed, player);
+			nextPlayer();
+		}
+
+	}
+
+	private void actionPhase() {
+		for(int i = 0; i < numPlayers; i++) {
+			//move student from entrance to dinner/island
+			//table.moveToDinner(student) or table.moveToIsland(student, chosenIsland)
+			//for each move of student -> professorCheck(color);
+
+			//get input from user
+			int steps = 0;
+			table.moveMotherNature(steps);
+
+			//add control for effects to call overloaded methods
+			if (table.getMotherNatureIsland().getOwner() == null) controlling();
+			else conquering();
+
+			mergeCheck();
+
+			//choose cloud
+			//table.moveStudentsFromCloud(numCloud);
+			//get input from user
+		}
+	}
+
 	public GameTable getTable() {
 		return table;
 	}
@@ -82,21 +139,6 @@ public class Game {
 		return 0;
 	}
 
-	public void playRound(int numRound) {
-		if(numRound == 1) firstPlayer();
-		Player player = table.getPlayers()[currentPlayer];
-
-		planningPhase();
-
-		setCurrentPlayer();
-		for(int i = 0; i < numPlayers; i++) {
-			actionPhase();
-			nextPlayer();
-		}
-
-		numRound++;
-	}
-
 	private boolean endingConditionCheck() {
 		for (Player player : table.getPlayers()) {
 			if(player.getNumTowers() == 0) return true;
@@ -106,24 +148,9 @@ public class Game {
 
 		if(table.getIslands().size()<=3) return true;
 
-		return table.getBag().isEmpty();
-	}
+		if(table.getBag().isEmpty()) return true;
 
-	private void planningPhase() {
-		table.extractStudents(3);
-		table.getClouds()[0].addStudents(table.getExtractedStudents());
-		table.extractStudents(3);
-		table.getClouds()[1].addStudents(table.getExtractedStudents());
-
-		cardsPlayed.clear();
-
-		for(int i = 0; i < numPlayers; i++){
-			Player player = table.getPlayers()[currentPlayer];
-			AssistantCard cardPlayed = new AssistantCard(2,2);
-			playCard(cardPlayed, player);
-			nextPlayer();
-		}
-
+		return false;
 	}
 
 	public void addMotherNatureMoves() {
@@ -139,24 +166,6 @@ public class Game {
 		}
 
 		cardsPlayed.add(cardPlayed);
-	}
-
-	private void actionPhase() {
-		for(int i = 0; i < numPlayers; i++) {
-			//move student from entrance to dinner/island
-			//for each move of student -> professorCheck(color);
-
-			//get input from user
-			//move mother nature
-
-			if (table.getMotherNatureIsland().getOwner() == null) controlling();
-			else conquering();
-
-			mergeCheck();
-
-			//choose cloud
-			//get input from use
-		}
 	}
 
 	private void setInfluencePlayer(){
@@ -208,9 +217,9 @@ public class Game {
 	private void unifyIslands(Island island1, Island island2) {
 		ArrayList<Student> students1;
 		ArrayList<Student> students2;
-		int numIslands;
+		int numIslands = island1.getIslandState().getNumIslands();
 
-		UnifiedIsland unify = new UnifiedIsland();
+		UnifiedIsland unify = new UnifiedIsland(numIslands);
 
 		//add student to the island with motherNature
 		students1 = island1.getStudents();
@@ -221,7 +230,6 @@ public class Game {
 		unify.addIsland();
 		island1.changeState(unify);
 	}
-
 
 	//verify that the current island can be merged with the other
 	private void mergeCheck(){
@@ -416,8 +424,28 @@ public class Game {
 		return characters;
 	}
 
-	public void activateCharacter(Character character) {
-		character.activateEffect();
+	public void activateCharacter(Character character, Player player, Island chosenIsland) throws NotEnoughCoinException {
+		if(character.getCost()>player.getNumCoins()) throw new NotEnoughCoinException();
+		else{
+			character.setOwner(player);
+			character.applyEffect(chosenIsland);
+		}
+	}
+
+	public void activateCharacter(Character character, Player player, Student chosenStudent) throws NotEnoughCoinException {
+		if(character.getCost()>player.getNumCoins()) throw new NotEnoughCoinException();
+		else{
+			character.setOwner(player);
+			character.applyEffect(chosenStudent);
+		}
+	}
+
+	public void activateCharacter(Character character, Player player) throws NotEnoughCoinException {
+		if(character.getCost()>player.getNumCoins()) throw new NotEnoughCoinException();
+		else{
+			character.setOwner(player);
+			character.applyEffect();
+		}
 	}
 
 }

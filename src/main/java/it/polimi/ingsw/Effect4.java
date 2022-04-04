@@ -16,4 +16,14 @@ public class Effect4 implements Effect{
 	public void apply(Game game) {
 		game.addMotherNatureMoves();
 	}
+
+	@Override
+	public void apply(Game game, Student chosenStudent) {
+
+	}
+
+	@Override
+	public void apply(Game game, Island chosenIsland) {
+
+	}
 }

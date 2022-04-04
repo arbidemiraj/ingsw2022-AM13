@@ -8,7 +8,7 @@ public class Character {
 
 	private Effect effect;
 
-	private int effectId;
+	private final int effectId;
 
 	private boolean isActivated;
 
@@ -22,27 +22,45 @@ public class Character {
 		effectId = id;
 
 		if (id == 1) {
-			game.getTable().extractStudents(4);
-			ArrayList<Student> students = game.getTable().getExtractedStudents();
+			ArrayList<Student> students = game.getTable().extractStudents(4);
 			effect = new Effect1(id, students);
+			cost = 1;
 		}
 
-		if (id == 2) effect = new Effect2(id);
+		if (id == 2){
+			effect = new Effect2(id);
+			cost = 2;
+		}
 
-		if (id == 3) effect = new Effect3(id);
+		if (id == 3){
+			effect = new Effect3(id);
+			cost = 3;
+		}
 
-		if (id == 4) effect = new Effect4(id);
+		if (id == 4){
+			effect = new Effect4(id);
+			cost = 1;
+		}
 
-		if (id == 5) effect = new Effect5(id);
+		if (id == 5){
+			effect = new Effect5(id);
+			cost = 2;
+		}
 
-		if (id == 6) effect = new Effect6(id);
+		if (id == 6){
+			effect = new Effect6(id);
+			cost = 3;
+		}
 
-		if (id == 7) effect = new Effect8(id);
+		if (id == 8){
+			effect = new Effect8(id);
+			cost = 2;
+		}
 
 		if (id == 11) {
-			game.getTable().extractStudents(4);
-			ArrayList<Student> students = game.getTable().getExtractedStudents();
+			ArrayList<Student> students = game.getTable().extractStudents(4);
 			effect = new Effect11(id, students);
+			cost = 2;
 		}
 	}
 
@@ -66,9 +84,27 @@ public class Character {
 		this.owner = owner;
 	}
 
-	public void activateEffect() {
+	public void applyEffect(Student chosenStudent){
+		isActivated = true;
+
+		effect.apply(game, chosenStudent);
+
+
+	}
+
+	public int getCost() {
+		return cost;
+	}
+
+	public void applyEffect(Island chosenIsland){
+		isActivated = true;
+
+		effect.apply(game, chosenIsland);
+
+	}
+
+	public void applyEffect(){
 		isActivated = true;
 		effect.apply(game);
 	}
-
 }
