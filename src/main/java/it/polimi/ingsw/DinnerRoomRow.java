@@ -17,7 +17,7 @@ public class DinnerRoomRow {
 	}
 
 	public DinnerRoomRow(Student color) {
-
+		this.color = color;
 	}
 
 }

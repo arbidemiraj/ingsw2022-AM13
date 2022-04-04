@@ -14,12 +14,14 @@ class GameTest {
         assertEquals(true, game.getCharacters()[0].isActivated());
     }
 
-    @Test
-    void setMotherNatureMoves() {
-    }
 
     @Test
     void addMotherNatureMoves() {
+        Game game = new Game(2);
+        int prevMotherNat = game.getTable().getMotherNature();
+        game.addMotherNatureMoves();
+
+        assertEquals(prevMotherNat+1, game.getTable().getMotherNature());
     }
 
     @Test

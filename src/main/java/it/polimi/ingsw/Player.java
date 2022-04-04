@@ -28,6 +28,20 @@ public class Player {
 
 	public void chooseWizard(Wizard wizard){
 		this.wizard = wizard;
+		createDeck();
+	}
+
+	private void createDeck() {
+		deck.add(new AssistantCard(1,1));
+		deck.add(new AssistantCard(2,1));
+		deck.add(new AssistantCard(3,2));
+		deck.add(new AssistantCard(4,2));
+		deck.add(new AssistantCard(5,3));
+		deck.add(new AssistantCard(6,3));
+		deck.add(new AssistantCard(7,4));
+		deck.add(new AssistantCard(8,4));
+		deck.add(new AssistantCard(9,5));
+		deck.add(new AssistantCard(10,5));
 	}
 
 	public PlayerBoard getPlayerBoard() {
