@@ -25,11 +25,25 @@ class GameTest {
         assertEquals(prevMotherNat+1, game.getTable().getMotherNature());
     }
 
-    @Test //for no parameters function
+    @Test
     void influence() {
+        Player player1, player2;
+        Island island = new Island();
         Game game = new Game(2);
-        int game.influence();
-        assertEquals(game.influence(),game.influence());
+        int motherNature;
+
+        player1 = game.getTable().getPlayers()[0];
+        player2 = game.getTable().getPlayers()[1];
+
+        motherNature = game.getTable().getMotherNature();
+
+        for(int i = 0; i < 2; i++) game.getTable().getIslands().get(motherNature).addStudent(Student.YELLOW);
+
+        game.getTable().getProfessors()[0].setOwner(player1);
+
+        game.influence();
+
+        assertTrue(player1.getInfluenceValue() > player2.getInfluenceValue());
     }
 
     @Test
@@ -46,8 +60,6 @@ class GameTest {
 
     @Test
     void conquering() {
-        Game game = new Game(2);
-        game.conquering();
-        assertEquals(game.conquering(),game.conquering());
+
     }
 }

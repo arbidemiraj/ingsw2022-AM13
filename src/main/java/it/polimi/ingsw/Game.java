@@ -180,7 +180,7 @@ public class Game {
 	}
 
 	//calculate influence
-	private void influence (){
+    void influence(){
 		if(!table.getMotherNatureIsland().isNoEntryTile()) {
 			for (Player player : table.getPlayers()) player.setInfluenceValue(0); //reset influence
 
