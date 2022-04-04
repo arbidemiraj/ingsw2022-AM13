@@ -24,8 +24,11 @@ class GameTest {
         assertEquals(prevMotherNat+1, game.getTable().getMotherNature());
     }
 
-    @Test
+    @Test //for no parameters function
     void influence() {
+        Game game = new Game(2);
+        int game.influence();
+        assertEquals(game.influence(),game.influence());
     }
 
     @Test
@@ -42,5 +45,8 @@ class GameTest {
 
     @Test
     void conquering() {
+        Game game = new Game(2);
+        game.conquering();
+        assertEquals(game.conquering(),game.conquering());
     }
 }
