@@ -1,6 +1,6 @@
 package it.polimi.ingsw;
 
-public class Effect2 implements EffectType2{
+public class Effect2 implements Effect{
 
 	private int id;
 

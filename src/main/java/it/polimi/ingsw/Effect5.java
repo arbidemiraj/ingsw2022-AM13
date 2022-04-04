@@ -13,10 +13,15 @@ public class Effect5 implements Effect{
 		return 0;
 	}
 
+
+	public void apply(Game game, Island chosenIsland) {
+		chosenIsland.setNoEntryTile();
+		noEntryTiles--;
+	}
+
+
 	@Override
 	public void apply(Game game) {
 
 	}
-
-
 }

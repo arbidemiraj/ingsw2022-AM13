@@ -69,7 +69,7 @@ public class GameTable {
 		}
 	}
 
-	private void fillBag() {
+	public void fillBag() {
 		for(int i = 0; i < 120; i=i+5){
 			bag.add(i, Student.YELLOW);
 			bag.add(i+1, Student.BLUE);

@@ -14,21 +14,32 @@ public class Character {
 
 	private Player owner;
 
+	private Game game;
+
 	public Character(Game game, int id) {
+		this.game = game;
+
 		effectId = id;
-		if(id == 1){
+
+		if (id == 1) {
 			game.getTable().extractStudents(4);
 			ArrayList<Student> students = game.getTable().getExtractedStudents();
-
 			effect = new Effect1(id, students);
 		}
-		if(id == 2) effect = new Effect2(id);
-		if(id == 3) effect = new Effect3(id);
-		if(id == 4) effect = new Effect4(id);
-		if(id == 5) effect = new Effect5(id);
-		if(id == 6) effect = new Effect6(id);
-		if(id == 7) effect = new Effect7(id);
-		if(id == 11){
+
+		if (id == 2) effect = new Effect2(id);
+
+		if (id == 3) effect = new Effect3(id);
+
+		if (id == 4) effect = new Effect4(id);
+
+		if (id == 5) effect = new Effect5(id);
+
+		if (id == 6) effect = new Effect6(id);
+
+		if (id == 7) effect = new Effect8(id);
+
+		if (id == 11) {
 			game.getTable().extractStudents(4);
 			ArrayList<Student> students = game.getTable().getExtractedStudents();
 			effect = new Effect11(id, students);
@@ -39,7 +50,7 @@ public class Character {
 		return effect;
 	}
 
-	public int getEffectId(){
+	public int getEffectId() {
 		return effectId;
 	}
 
@@ -57,5 +68,7 @@ public class Character {
 
 	public void activateEffect() {
 		isActivated = true;
+		effect.apply(game);
 	}
+
 }

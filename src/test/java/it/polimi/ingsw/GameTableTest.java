@@ -7,6 +7,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameTableTest {
 
     @Test
-    void extractStudents() {
+    void testExtractStudents() {
+    }
+
+    @Test
+    void fillBag() {
+
+    }
+
+    @Test
+    void moveMotherNature() {
+    }
+
+    @Test
+    void activateCharacter() {
     }
 }
