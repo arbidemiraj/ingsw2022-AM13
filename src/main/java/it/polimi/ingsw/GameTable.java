@@ -34,7 +34,6 @@ public class GameTable {
 
 		clouds[0] = new Cloud();
 		clouds[1] = new Cloud();
-
 		Professor yellow = new Professor(Student.YELLOW);
 		Professor blue = new Professor(Student.BLUE);
 		Professor green = new Professor(Student.GREEN);
