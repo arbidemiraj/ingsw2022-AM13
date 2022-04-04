@@ -124,14 +124,12 @@ public class GameTable {
 	}
 
 	public void moveMotherNature(int steps) {
+		motherNature += steps;
 	}
 
 	//returns the island with mother nature in it
 	public Island getMotherNatureIsland() {
 		return islands.get(motherNature);
-	}
-
-	public void activateCharacter() {
 	}
 
 	public Player[] getPlayers() {

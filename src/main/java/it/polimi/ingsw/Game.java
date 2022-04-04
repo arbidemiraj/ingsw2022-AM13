@@ -418,4 +418,13 @@ public class Game {
 	public void moveStudent(Student student){
 
 	}
+
+	public Character[] getCharacters() {
+		return characters;
+	}
+
+	public void activateCharacter(Character character) {
+		character.activateEffect();
+	}
+
 }
