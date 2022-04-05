@@ -6,7 +6,7 @@ public class Game {
 
 	private int currentPlayer; //represents the position of currentPlayer in players Array
 
-	private Player influencePlayer = null; //the player with the highest influence
+	private Player influencePlayer; //the player with the highest influence
 
 	private final GameTable table;
 
@@ -53,6 +53,8 @@ public class Game {
 	private void setupExpertMode() {
 		//creates 3 character cards
 		int id;
+		characters = new Character[3];
+
 		int[] availableEffects={1,2,3,4,5,6,8,11};
 
 		generalSupply = 20-numPlayers;
@@ -84,7 +86,7 @@ public class Game {
 		table.getClouds()[1].addStudents(table.extractStudents(3));
 
 		//cards played has the assistant card played in this round, so at the start of it is cleared
-		cardsPlayed.clear();
+		if(cardsPlayed != null) cardsPlayed.clear();
 
 		//each player plays a card
 		for(int i = 0; i < numPlayers; i++){
@@ -96,6 +98,14 @@ public class Game {
 			nextPlayer();
 		}
 
+	}
+
+	public void setCurrentPlayer(int currentPlayer) {
+		this.currentPlayer = currentPlayer;
+	}
+
+	public int getCurrentPlayer() {
+		return currentPlayer;
 	}
 
 	private void actionPhase() {
@@ -168,17 +178,18 @@ public class Game {
 			e.printError();
 		}
 
-		cardsPlayed.add(cardPlayed);
+		//cardsPlayed.add(cardPlayed);
 	}
 
 	private void setInfluencePlayer(){
 		influence();
 
-		for(int i = 0; i < numPlayers; i++){
-			if(influencePlayer.getInfluenceValue()<table.getPlayers()[i].getInfluenceValue()){
-				influencePlayer = table.getPlayers()[i];
+			for(int i = 0; i < numPlayers; i++){
+
+				if(influencePlayer == null || influencePlayer.getInfluenceValue() < table.getPlayers()[i].getInfluenceValue()){
+					influencePlayer = table.getPlayers()[i];
+				}
 			}
-		}
 
 	}
 
@@ -289,13 +300,14 @@ public class Game {
 		//controls the assistant card played value to set the currentPlayer
 		int value1, value2, i = 0;
 
-		value1 = table.getPlayers()[currentPlayer].getLastCard().getValue();
+		/* value1 = table.getPlayers()[currentPlayer].getLastCard().getValue();
 
 		for(Player player : table.getPlayers()){
 			value2 = player.getLastCard().getValue();
 			if(value2>value1) currentPlayer = i;
 			i++;
 		}
+		 */
 	}
 
 

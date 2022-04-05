@@ -7,9 +7,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameTest {
     /*@Test
     void activateCharacter() throws NotEnoughCoinException {
-        Game game = new Game(2);
-        Character character = new Character(game, 1);
-        Player player = new Player(TowerColor.GRAY, 8);
+        Game game = new Game(2, true);
+        Character character = game.getCharacters()[0];
+        Player player = game.getTable().getPlayers()[0];
+        player.addCoin();
+
         game.activateCharacter(character, player);
 
         assertTrue(game.getCharacters()[0].isActivated());
@@ -29,8 +31,6 @@ class GameTest {
 
         for(int i = 0; i < 5; i++) game.getTable().getIslands().get(motherNature).addStudent(Student.YELLOW);
 
-        System.out.println(motherNature);
-
         game.influence();
 
         assertTrue(player1.getInfluenceValue() > player2.getInfluenceValue());
@@ -47,6 +47,16 @@ class GameTest {
 
     @Test
     void nextPlayer() {
+        Player player1, player2;
+        Game game = new Game(2);
+
+        player1 = game.getTable().getPlayers()[0];
+        player2 = game.getTable().getPlayers()[1];
+        game.setCurrentPlayer(0);
+
+        game.nextPlayer();
+
+        assertEquals(game.getCurrentPlayer(), 1);
     }
 
     @Test
@@ -59,21 +69,23 @@ class GameTest {
 
     @Test
     void conquering() {
-        Player player1, player2;
+        Player player1;
         Island island = new Island();
         Game game = new Game(2);
         int motherNature;
 
         player1 = game.getTable().getPlayers()[0];
-        player2 = game.getTable().getPlayers()[1];
 
         motherNature = game.getTable().getMotherNature();
 
-        for(int i = 0; i < 2; i++) game.getTable().getIslands().get(motherNature).addStudent(Student.YELLOW);
+        island = game.getTable().getIslands().get(motherNature);
+
+        for(int i = 0; i < 5; i++) island.addStudent(Student.YELLOW);
 
         game.getTable().getProfessors()[0].setOwner(player1);
 
         game.conquering();
-        assertTrue(player1==game.getTable().getIslands().get(motherNature).getOwner());
+
+        assertTrue(player1 == island.getOwner());
     }
 }

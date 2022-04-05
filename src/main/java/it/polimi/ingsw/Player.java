@@ -14,7 +14,7 @@ public class Player {
 
 	private Wizard wizard;
 
-	private int influence;
+	private int influence = 0;
 
 	private ArrayList<AssistantCard> discardPile;
 
@@ -24,6 +24,7 @@ public class Player {
 		this.numTowers = numTowers;
 		this.towerColor = towerColor;
 		playerBoard = new PlayerBoard();
+		chooseWizard(wizard);
 	}
 
 	public void chooseWizard(Wizard wizard){
@@ -32,6 +33,8 @@ public class Player {
 	}
 
 	private void createDeck() {
+		deck = new ArrayList<>();
+
 		deck.add(new AssistantCard(1,1));
 		deck.add(new AssistantCard(2,1));
 		deck.add(new AssistantCard(3,2));
@@ -49,10 +52,13 @@ public class Player {
 	}
 
 	public void playCard(ArrayList<AssistantCard> cardsPlayed, AssistantCard cardPlayed) throws CardAlreadyPlayedException {
-		if(cardsPlayed.contains(cardPlayed)) throw new CardAlreadyPlayedException();
-		else{
-			deck.remove(cardPlayed);
+		if(cardsPlayed != null) {
+			if (cardsPlayed.contains(cardPlayed)) throw new CardAlreadyPlayedException();
+			else {
+				deck.remove(cardPlayed);
+			}
 		}
+		else deck.remove(cardPlayed);
 	}
 
 	public void setInfluenceValue(int influence) {
@@ -72,7 +78,9 @@ public class Player {
 	}
 
 	public AssistantCard getLastCard() {
-		return discardPile.get(discardPile.size());
+		if(discardPile != null) return discardPile.get(discardPile.size());
+
+		return null;
 	}
 
 	public ArrayList<AssistantCard> getDeck() {
