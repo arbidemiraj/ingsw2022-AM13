@@ -26,11 +26,12 @@ public class Game {
 		this.numPlayers = numPlayers;
 		table = new GameTable(numPlayers);
 
-		int numRound = 1;
+		/*int numRound = 1;
 
 		do{
 			playRound(numRound);
 		}while(!endingConditionCheck());
+		 */
 	}
 
 	public Game(int numPlayers, boolean expertMode) {

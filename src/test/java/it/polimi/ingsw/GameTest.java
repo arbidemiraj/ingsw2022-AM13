@@ -12,7 +12,7 @@ class GameTest {
         Player player = new Player(TowerColor.GRAY, 8);
         game.activateCharacter(character, player);
 
-        assertEquals(true, game.getCharacters()[0].isActivated());
+        assertTrue(game.getCharacters()[0].isActivated());
     }
 
 

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CloudTest {
 
     @Test
-    void testAddStudents() {
+    void testAddStudents() throws EmptyCloudException {
         Student s1 = Student.YELLOW;
         Student s2 = Student.YELLOW;
         Student s3 = Student.YELLOW;
