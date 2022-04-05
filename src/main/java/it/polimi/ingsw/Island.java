@@ -36,7 +36,7 @@ public class Island {
 	}
 
 	public void addStudent(Student student) {
-		students.add(students.size() - 1, student);
+		students.add(student);
 	}
 
 	public int[] getNumStudents() {

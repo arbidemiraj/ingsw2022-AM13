@@ -155,7 +155,9 @@ public class Game {
 	}
 
 	public void addMotherNatureMoves() {
+		motherNatureMoves = table.getMotherNature();
 		this.motherNatureMoves += 2;
+		table.setMotherNature(motherNatureMoves);
 	}
 
 	public void playCard(AssistantCard cardPlayed, Player player) {
@@ -190,11 +192,13 @@ public class Game {
 
 			//add influence to each player if the player is the owner, based on the number of students
 			for (Player player : table.getPlayers()) {
-				for (int i = 0; i < 5; i++) table.getProfessors()[i].getOwner().addInfluence();
+				for (int i = 0; i < 5; i++){
+					if(table.getProfessors()[i].getOwner() != null) table.getProfessors()[i].getOwner().addInfluence();
+				}
 			}
 
 			//add influence if the player has a tower
-			table.getMotherNatureIsland().getOwner().addInfluence();
+			if(table.getMotherNatureIsland().getOwner() != null) table.getMotherNatureIsland().getOwner().addInfluence();
 		}
 	}
 

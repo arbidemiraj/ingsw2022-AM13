@@ -17,10 +17,25 @@ public class GameTable {
 	private Professor[] professors;
 
 	public GameTable (int numPlayers) {
-		islands = new ArrayList<>(12);
-		for (int i=0; i<12; i++) islands.add(i, new Island());
-
 		motherNature = (int) (Math.random()*12);
+		players = new Player[numPlayers];
+
+		TowerColor[] towerColor = {TowerColor.BLACK, TowerColor.GRAY, TowerColor.WHITE};
+		int numTowers;
+
+		if(numPlayers == 3) numTowers = 6;
+		else numTowers = 8;
+
+		for(int i = 0; i < numPlayers; i++){
+			this.players[i] = new Player(towerColor[i], numTowers);
+		}
+
+		islands = new ArrayList<>();
+
+		for (int i=0; i<12; i++){
+			Island island = new Island();
+			islands.add(i, island);
+		}
 
 		//Initial 10 students in the bag
 		initBag();
@@ -30,6 +45,8 @@ public class GameTable {
 
 		//Fill the bag with 120 students remaining
 		fillBag();
+
+		clouds = new Cloud[2];
 
 		//Create instances for clouds
 		clouds[0] = new Cloud();
@@ -42,10 +59,17 @@ public class GameTable {
 		Professor pink = new Professor(Student.PINK);
 		Professor red = new Professor(Student.RED);
 
+		professors = new Professor[5];
+		professors[0] = yellow;
+		professors[1] = blue;
+		professors[2] = green;
+		professors[3] = pink;
+		professors[4] = red;
+
 		//fill entrance for each player
-		for(int i = 0; i < numPlayers; i++) {
+		/*for(int i = 0; i < numPlayers; i++) {
 			players[i].getPlayerBoard().fillEntrance(extractStudents(7));
-		}
+		}*/
 	}
 
 
@@ -65,8 +89,12 @@ public class GameTable {
 		}
 	}
 
+	public void setMotherNature(int motherNature) {
+		this.motherNature = motherNature;
+	}
+
 	public void fillBag() {
-		for(int i = 0; i < 120; i=i+5){
+		for(int i = 0; i < 120; i = i+5){
 			bag.add(i, Student.YELLOW);
 			bag.add(i+1, Student.BLUE);
 			bag.add(i+2, Student.GREEN);
@@ -76,18 +104,11 @@ public class GameTable {
 	}
 
 	private void fillIslands() {
-		int random;
-		int i = 10;
-		int j = 0;
+		ArrayList<Student> students;
 
-		while(i > 0){
-			random = (int)(Math.random()*10);
-
-			if((islands.get(random).getStudents()) == null){
-				islands.get(random).addStudent(extractStudents(10).get(j));
-				i--;
-				j++;
-			}
+		students = extractStudents(10);
+		for(int i = 0; i < 10; i++){
+			islands.get(i).addStudent(students.get(i));
 		}
 	}
 

@@ -9,11 +9,15 @@ public class Professor {
 	public Professor(Student color){
 		this.color = color;
 	}
-	public void setOwner(Player player) {
-		owner = player;
+	public void setOwner(Player owner) {
+		this.owner = owner;
 	}
 
 	public Player getOwner() {
 		return owner;
+	}
+
+	public Student getColor() {
+		return color;
 	}
 }
