@@ -369,7 +369,7 @@ public class Game {
 		}
 	}
 
-	private void conquering() {
+	public void conquering() {
 		setInfluencePlayer();
 
 		if(influencePlayer != table.getMotherNatureIsland().getOwner()){
