@@ -13,12 +13,16 @@ class CloudTest {
         Student s1 = Student.YELLOW;
         Student s2 = Student.YELLOW;
         Student s3 = Student.YELLOW;
-        Cloud cloud = new Cloud();
+        Cloud cloud = new Cloud(2);
+
         ArrayList<Student> students = new ArrayList<>();
 
         students.add(s1);
         students.add(s2);
         students.add(s3);
+        System.out.println("Size "+ students);
+
+
         cloud.addStudents(students);
 
         assertEquals(s1, cloud.getStudents().get(0));

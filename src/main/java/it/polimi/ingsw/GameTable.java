@@ -49,8 +49,8 @@ public class GameTable {
 		clouds = new Cloud[2];
 
 		//Create instances for clouds
-		clouds[0] = new Cloud();
-		clouds[1] = new Cloud();
+		clouds[0] = new Cloud(numPlayers);
+		clouds[1] = new Cloud(numPlayers);
 
 		//Creates 5 professors
 		Professor yellow = new Professor(Student.YELLOW);
@@ -159,7 +159,7 @@ public class GameTable {
 		ArrayList<Student> students = new ArrayList<>();
 
 		try{
-			students = clouds[numCloud].getStudents();
+			students = clouds[numCloud].getStudentsFromCloud();
 		} catch (EmptyCloudException e) {
 			e.printStackTrace();
 		}
