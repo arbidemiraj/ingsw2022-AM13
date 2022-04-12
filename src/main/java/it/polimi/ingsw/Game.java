@@ -235,6 +235,8 @@ public class Game {
 		ArrayList<Student> students2;
 		int numIslands = island1.getIslandState().getNumIslands();
 
+		System.out.println("num" + numIslands);
+
 		UnifiedIsland unify = new UnifiedIsland(numIslands);
 
 		//add student to the island with motherNature
@@ -245,10 +247,11 @@ public class Game {
 		//sums the tower
 		unify.addIsland();
 		island1.changeState(unify);
+
 	}
 
 	//verify that the current island can be merged with the other
-	private void mergeCheck(){
+	public void mergeCheck(){
 		Island island1, island2, island3; //indexes of the islands to compare
 		int motherNature, previous, next;
 
@@ -258,6 +261,7 @@ public class Game {
 		if(motherNature == table.getIslands().size()-1){
 			next = 0;
 		}
+
 		else next = motherNature + 1;
 
 		if(motherNature == 0){
@@ -325,6 +329,7 @@ public class Game {
 		//get number of students for each player based on the color
 		for(Player player : table.getPlayers()){
 			numStudents[i] = player.getPlayerBoard().getDinnerRoom()[colorPos].getNumStudents();
+			i++;
 		}
 
 		for( i = 0; i < numPlayers; i++){
@@ -339,7 +344,9 @@ public class Game {
 			}
 		}
 
-		if(highestStudent != 0 && countHighest == 1){
+
+
+		if(highestStudent != 0 && countHighest == 0){
 			owner = table.getPlayers()[j];
 			table.getProfessors()[colorPos].setOwner(owner);
 		}

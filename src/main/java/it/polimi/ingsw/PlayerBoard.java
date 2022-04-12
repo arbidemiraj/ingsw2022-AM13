@@ -7,7 +7,15 @@ public class PlayerBoard {
 
 	private ArrayList<Student> entrance = new ArrayList<>();
 
-	private DinnerRoomRow dinnerRoom[];
+	private DinnerRoomRow[] dinnerRoom = new DinnerRoomRow[5];
+
+	public PlayerBoard(){
+		dinnerRoom[0] = new DinnerRoomRow(Student.YELLOW);
+		dinnerRoom[1] = new DinnerRoomRow(Student.BLUE);
+		dinnerRoom[2] = new DinnerRoomRow(Student.GREEN);
+		dinnerRoom[3] = new DinnerRoomRow(Student.PINK);
+		dinnerRoom[4] = new DinnerRoomRow(Student.RED);
+	}
 
 	public void fillEntrance(List<Student> students) {
 		for(Student student:students){

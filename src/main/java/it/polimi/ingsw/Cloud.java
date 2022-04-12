@@ -10,7 +10,7 @@ public class Cloud {
 	public Cloud(int numPlayers) {
 		if(numPlayers == 2) students = new ArrayList<>(3);
 		if(numPlayers == 3) students = new ArrayList<>(4);
-		System.out.println("Size "+ students.size());
+
 	}
 
 	public void addStudents(ArrayList<Student> students) {
@@ -18,13 +18,12 @@ public class Cloud {
 	}
 
 	public ArrayList<Student> getStudentsFromCloud() throws EmptyCloudException {
-		ArrayList<Student> stud;
-		stud = students;
+		ArrayList<Student> stud = new ArrayList<>();
+		stud.addAll(students);
 
-		for ( int i = 0; i < students.size(); i++){
-			if(students.isEmpty()) throw new EmptyCloudException();
-			students.remove(i);
-		}
+
+		if(students.isEmpty()) throw new EmptyCloudException();
+		else students.removeAll(students);
 
 		return stud;
 	}

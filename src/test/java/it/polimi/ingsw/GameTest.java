@@ -2,6 +2,8 @@ package it.polimi.ingsw;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
@@ -61,16 +63,28 @@ class GameTest {
 
     @Test
     void professorCheck() {
-    }
+        Game game = new Game(2);
+        Player player1, player2;
+        Student s1 = Student.BLUE, s2 = Student.BLUE, s3 = Student.BLUE;
+        ArrayList<Student> students = new ArrayList<>();
 
-    @Test
-    void testProfessorCheck() {
+        students.add(s1);
+        students.add(s2);
+        students.add(s3);
+
+        player1 = game.getTable().getPlayers()[0];
+
+        player1.getPlayerBoard().fillDinnerRoom(students);
+
+        game.professorCheck(Student.BLUE);
+
+        assertEquals(game.getTable().getProfessors()[1].getOwner(), player1);
     }
 
     @Test
     void conquering() {
         Player player1;
-        Island island = new Island();
+        Island island;
         Game game = new Game(2);
         int motherNature;
 
@@ -87,5 +101,25 @@ class GameTest {
         game.conquering();
 
         assertTrue(player1 == island.getOwner());
+    }
+
+    @Test
+    void mergeCheck() {
+        Game game = new Game(2);
+        Player player1;
+        int motherNature;
+
+        player1 = game.getTable().getPlayers()[0];
+
+        game.getTable().setMotherNature(4);
+        motherNature = game.getTable().getMotherNature();
+
+        game.getTable().getIslands().get(motherNature).setOwner(player1);
+        game.getTable().getIslands().get(motherNature-1).setOwner(player1);
+        game.getTable().getIslands().get(motherNature+1).setOwner(player1);
+
+        game.mergeCheck();
+
+        assertEquals(game.getTable().getIslands().get(motherNature-1).getIslandState().getNumIslands(), 3);
     }
 }

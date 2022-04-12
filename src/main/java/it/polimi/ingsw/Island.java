@@ -17,6 +17,7 @@ public class Island {
 	public Island() {
 		students = new ArrayList<>();
 		owner = null;
+		islandState = new SingleIsland();
 	}
 
 	public ArrayList<Student> getStudents() {

@@ -7,10 +7,10 @@ public class DinnerRoomRow {
 	private int numStudents;
 
 	public Student getColor() {
-		return null;
+		return color;
 	}
 
-	public void addStudent() {numStudents++; }
+	public void addStudent() {numStudents++;}
 
 	public int getNumStudents() {
 		return numStudents;

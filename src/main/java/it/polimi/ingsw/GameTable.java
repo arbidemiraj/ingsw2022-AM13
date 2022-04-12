@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class GameTable {
 
-	private Player[] players;
+	private final Player[] players;
 
-	private ArrayList<Island> islands;
+	private DoublyLinkedList islands;
 
 	private ArrayList<Student> bag;
 
@@ -14,7 +14,7 @@ public class GameTable {
 
 	private int motherNature;
 
-	private Professor[] professors;
+	private final Professor[] professors;
 
 	public GameTable (int numPlayers) {
 		motherNature = (int) (Math.random()*12);
@@ -30,11 +30,11 @@ public class GameTable {
 			this.players[i] = new Player(towerColor[i], numTowers);
 		}
 
-		islands = new ArrayList<>();
+		islands = new DoublyLinkedList();
 
 		for (int i=0; i<12; i++){
 			Island island = new Island();
-			islands.add(i, island);
+			islands.add(island);
 		}
 
 		//Initial 10 students in the bag
@@ -138,7 +138,7 @@ public class GameTable {
 		return motherNature;
 	}
 
-	public ArrayList<Island> getIslands() {
+	public DoublyLinkedList getIslands() {
 		return islands;
 	}
 
