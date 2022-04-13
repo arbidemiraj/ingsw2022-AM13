@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.effects.*;
+
 import java.util.ArrayList;
 
 public class Character {
@@ -18,12 +20,12 @@ public class Character {
 
 	public Character(Game game, int id) {
 		this.game = game;
-
 		isActivated = false;
-
 		effectId = id;
 
+		//create the instance of the effect based on the parameter id
 		if (id == 1) {
+			//extracts the 6 students to put on the card
 			ArrayList<Student> students = game.getTable().extractStudents(4);
 			effect = new Effect1(id, students);
 			cost = 1;
@@ -60,6 +62,7 @@ public class Character {
 		}
 
 		if (id == 11) {
+			//extracts the 6 students to put on the card
 			ArrayList<Student> students = game.getTable().extractStudents(4);
 			effect = new Effect11(id, students);
 			cost = 2;
@@ -86,6 +89,7 @@ public class Character {
 		this.owner = owner;
 	}
 
+	//method for the cards that needs a chosenStudent to apply the effect
 	public void applyEffect(Student chosenStudent){
 		isActivated = true;
 
@@ -96,6 +100,7 @@ public class Character {
 		return cost;
 	}
 
+	//method for the cards that needs a chosen Island to apply the effect
 	public void applyEffect(Island chosenIsland){
 		isActivated = true;
 

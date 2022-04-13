@@ -108,11 +108,64 @@ class GameTest {
 
         assertEquals(game.getTable().getIslands().get(motherNature-1).getIslandState().getNumIslands(), 3);
     }
+
     @Test
-    void characterCreation() {
+    void setupExpertMode() {
         Game game = new Game(2, true);
 
-        Character character = game.getCharacters()[0];
+        assertEquals(3, game.getCharacters().length);
+        for(Character character : game.getCharacters()){
+            assertTrue(character != null);
+        }
+    }
 
+    @Test
+    void planningPhase() {
+    }
+
+    @Test
+    void actionPhase() {
+    }
+
+    @Test
+    void chooseEffect() {
+    }
+
+    @Test
+    void endingConditionCheck1() {
+        Game game = new Game(2);
+
+        game.getTable().getBag().clear();
+
+        assertTrue(game.endingConditionCheck());
+    }
+    @Test
+    void endingConditionCheck2() {
+        Game game = new Game(2);
+
+        game.getTable().getPlayers()[0].setNumTowers(0);
+
+        assertTrue(game.endingConditionCheck());
+    }
+
+    @Test
+    void unifyIslands() {
+        Game game = new Game(2);
+        Student student1, student2, student3;
+        Island island1 = new Island();
+        Island island2 = new Island();
+
+        student1 = Student.YELLOW;
+        student2 = Student.YELLOW;
+        student3 = Student.BLUE;
+
+        island1.addStudent(student1);
+        island2.addStudent(student2);
+        island2.addStudent(student3);
+
+        game.unifyIslands(island1, island2);
+
+        assertEquals(2, island1.getIslandState().getNumIslands());
+        assertEquals(3, island1.getStudents().size());
     }
 }

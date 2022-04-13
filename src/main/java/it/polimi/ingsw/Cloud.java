@@ -17,6 +17,7 @@ public class Cloud {
 		this.students.addAll(students);
 	}
 
+	//gets the student from the cloud, removing them from the cloud
 	public ArrayList<Student> getStudentsFromCloud() throws EmptyCloudException {
 		ArrayList<Student> stud = new ArrayList<>();
 		stud.addAll(students);

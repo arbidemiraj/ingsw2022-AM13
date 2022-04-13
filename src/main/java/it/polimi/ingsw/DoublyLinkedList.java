@@ -86,7 +86,9 @@ public class DoublyLinkedList{
     }
 
     public int size(){
-        return head.previous.position+1;
+        if(head.previous != null) return head.previous.position+1;
+        if(head != null) return 1;
+        return 0;
     }
 
     public Island getNext(Island island){
@@ -110,5 +112,4 @@ public class DoublyLinkedList{
 
         return -1;
     }
-
 }

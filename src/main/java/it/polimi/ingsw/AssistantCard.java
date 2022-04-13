@@ -4,18 +4,18 @@ public class AssistantCard {
 
 	private int value;
 
-	private int motherNatureMoves;
+	private int maxMotherNatureMoves;
 
-	public AssistantCard(int value, int motherNatureMoves){
+	public AssistantCard(int value, int maxMotherNatureMoves){
 		this.value = value;
-		this.motherNatureMoves = motherNatureMoves;
+		this.maxMotherNatureMoves = maxMotherNatureMoves;
 	}
 	public int getValue() {
 		return value;
 	}
 
-	public int getMotherNatureMoves() {
-		return motherNatureMoves;
+	public int getMaxMotherNatureMoves() {
+		return maxMotherNatureMoves;
 	}
 
 }

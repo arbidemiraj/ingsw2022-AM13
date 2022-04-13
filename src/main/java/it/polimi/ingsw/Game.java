@@ -38,14 +38,14 @@ public class Game {
 
 	}
 
-	private void setupExpertMode() {
+	public void setupExpertMode() {
 		//creates 3 character cards
 		int id;
 		characters = new Character[3];
 
-		int[] availableEffects={1,2,3,4,5,6,8,11};
+		int[] availableEffects={1, 2, 3, 4, 5, 6, 8, 11};
 
-		generalSupply = 20-numPlayers;
+		generalSupply = 20 - numPlayers;
 
 		for(int i = 0; i < 3; i++){
 			id = chooseEffect(availableEffects);
@@ -67,12 +67,7 @@ public class Game {
 		numRound++;
 	}
 
-	private void planningPhase() {
-		// fill the clouds
-
-		table.getClouds()[0].addStudents(table.extractStudents(3));
-		table.getClouds()[1].addStudents(table.extractStudents(3));
-
+	public void planningPhase() {
 		//cards played has the assistant card played in this round, so at the start of it is cleared
 		if(cardsPlayed != null) cardsPlayed.clear();
 
@@ -96,7 +91,7 @@ public class Game {
 		return currentPlayer;
 	}
 
-	private void actionPhase() {
+	public void actionPhase() {
 		for(int i = 0; i < numPlayers; i++) {
 			//move student from entrance to dinner/island
 			//table.moveToDinner(student) or table.moveToIsland(student, chosenIsland)
@@ -122,7 +117,7 @@ public class Game {
 		return table;
 	}
 
-	private int chooseEffect(int[] availableEffect) {
+	public int chooseEffect(int[] availableEffect) {
 		int effect, random;
 
 		do {
@@ -138,14 +133,14 @@ public class Game {
 		return 0;
 	}
 
-	private boolean endingConditionCheck() {
+	public boolean endingConditionCheck() {
 		for (Player player : table.getPlayers()) {
 			if(player.getNumTowers() == 0) return true;
 
 			if(player.getDeck().isEmpty()) return true;
 		}
 
-		if(table.getIslands().size()<=3) return true;
+		if(table.getIslands().size() <= 3) return true;
 
 		if(table.getBag().isEmpty()) return true;
 
@@ -210,7 +205,11 @@ public class Game {
 
 		//add influence to each player if the player is the owner, based on the number of students
 		for(Player player: table.getPlayers()){
-			for(int i = 0; i < 5; i++) table.getProfessors()[i].getOwner().addInfluence();
+			for(int i = 0; i < 5; i++){
+				for(int j = 0; j < numStudents[i]; j++){
+					table.getProfessors()[i].getOwner().addInfluence();
+				}
+			}
 		}
 
 		//add influence if the player has a tower
@@ -218,7 +217,7 @@ public class Game {
 	}
 
 	//merges the values of the two given islands
-	private void unifyIslands(Island island1, Island island2) {
+	public void unifyIslands(Island island1, Island island2) {
 		ArrayList<Student> students1;
 		ArrayList<Student> students2;
 		int numIslands = island1.getIslandState().getNumIslands();
@@ -339,15 +338,12 @@ public class Game {
 		if(character.getEffectId() != 2) professorCheck(color);
 		else{
 			int[] numStudents = new int[numPlayers];
-			int highestStudent = 0, i = 0, j = 0, l=0, colorPos = 0;
+			int highestStudent = 0, i = 0, l = 0, colorPos;
 			Player[] highest = new Player[numPlayers];
-			Player owner;
+			ColorIntMap studentColorMap = new ColorIntMap();
+			HashMap<Student, Integer> studentColor = studentColorMap.getMap();
 
-			if(color == Student.YELLOW) colorPos = 0;
-			if(color == Student.BLUE) colorPos = 1;
-			if(color == Student.GREEN) colorPos = 2;
-			if(color == Student.PINK) colorPos = 3;
-			if(color == Student.RED) colorPos = 4;
+			colorPos = studentColor.get(color);
 
 			//get number of students for each player based on the color
 			for(Player player : table.getPlayers()){
@@ -362,7 +358,6 @@ public class Game {
 						l++;
 					}
 					highestStudent = numStudents[i];
-					j = i;
 				}
 			}
 
@@ -432,7 +427,7 @@ public class Game {
 	}
 
 	public void activateCharacter(Character character, Player player, Island chosenIsland) throws NotEnoughCoinException {
-		if(character.getCost()>player.getNumCoins()) throw new NotEnoughCoinException();
+		if(character.getCost() > player.getNumCoins()) throw new NotEnoughCoinException();
 		else{
 			character.setOwner(player);
 			character.applyEffect(chosenIsland);
@@ -440,7 +435,7 @@ public class Game {
 	}
 
 	public void activateCharacter(Character character, Player player, Student chosenStudent) throws NotEnoughCoinException {
-		if(character.getCost()>player.getNumCoins()) throw new NotEnoughCoinException();
+		if(character.getCost() > player.getNumCoins()) throw new NotEnoughCoinException();
 		else{
 			character.setOwner(player);
 			character.applyEffect(chosenStudent);
@@ -448,7 +443,7 @@ public class Game {
 	}
 
 	public void activateCharacter(Character character, Player player) throws NotEnoughCoinException {
-		if(character.getCost()>player.getNumCoins()) throw new NotEnoughCoinException();
+		if(character.getCost() > player.getNumCoins()) throw new NotEnoughCoinException();
 		else{
 			character.setOwner(player);
 			character.applyEffect();

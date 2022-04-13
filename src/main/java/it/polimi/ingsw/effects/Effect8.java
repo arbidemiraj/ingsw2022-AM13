@@ -1,4 +1,8 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.effects;
+
+import it.polimi.ingsw.Game;
+import it.polimi.ingsw.Island;
+import it.polimi.ingsw.Student;
 
 public class Effect8 implements Effect{
 

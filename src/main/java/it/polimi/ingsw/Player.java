@@ -103,4 +103,8 @@ public class Player {
 	public int getNumCoins() {
 		return numCoins;
 	}
+
+	public void setNumTowers(int numTowers) {
+		this.numTowers = numTowers;
+	}
 }
