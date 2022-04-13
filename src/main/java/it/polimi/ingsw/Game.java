@@ -39,15 +39,9 @@ public class Game {
 		this.numPlayers = numPlayers;
 		table = new GameTable(numPlayers);
 
-
 		setupExpertMode();
 		for(Player player : table.getPlayers()) player.addCoin();
 
-		int numRound = 1;
-
-		while(!endingConditionCheck()){
-			playRound(numRound);
-		}
 	}
 
 	private void setupExpertMode() {
@@ -235,8 +229,6 @@ public class Game {
 		ArrayList<Student> students2;
 		int numIslands = island1.getIslandState().getNumIslands();
 
-		System.out.println("num" + numIslands);
-
 		UnifiedIsland unify = new UnifiedIsland(numIslands);
 
 		//add student to the island with motherNature
@@ -275,6 +267,7 @@ public class Game {
 
 		if(island2.getOwner().equals(island1.getOwner())) {
 			unifyIslands(island2, island1);
+			table.setMotherNature(motherNature - 1);
 			table.getIslands().remove(previous);
 		}
 		if(island2.getOwner().equals(island3.getOwner())) {

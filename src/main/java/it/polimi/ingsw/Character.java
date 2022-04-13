@@ -19,6 +19,8 @@ public class Character {
 	public Character(Game game, int id) {
 		this.game = game;
 
+		isActivated = false;
+
 		effectId = id;
 
 		if (id == 1) {
@@ -88,8 +90,6 @@ public class Character {
 		isActivated = true;
 
 		effect.apply(game, chosenStudent);
-
-
 	}
 
 	public int getCost() {

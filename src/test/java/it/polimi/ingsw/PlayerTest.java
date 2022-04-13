@@ -9,12 +9,4 @@ class PlayerTest {
     @Test
     void playCard() {
     }
-
-    @Test
-    void addInfluence() {
-    }
-
-    @Test
-    void addCoin() {
-    }
 }

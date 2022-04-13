@@ -7,17 +7,6 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
-    /*@Test
-    void activateCharacter() throws NotEnoughCoinException {
-        Game game = new Game(2, true);
-        Character character = game.getCharacters()[0];
-        Player player = game.getTable().getPlayers()[0];
-        player.addCoin();
-
-        game.activateCharacter(character, player);
-
-        assertTrue(game.getCharacters()[0].isActivated());
-    }*/
 
     @Test
     void influence() {
@@ -49,11 +38,8 @@ class GameTest {
 
     @Test
     void nextPlayer() {
-        Player player1, player2;
         Game game = new Game(2);
 
-        player1 = game.getTable().getPlayers()[0];
-        player2 = game.getTable().getPlayers()[1];
         game.setCurrentPlayer(0);
 
         game.nextPlayer();
@@ -64,7 +50,7 @@ class GameTest {
     @Test
     void professorCheck() {
         Game game = new Game(2);
-        Player player1, player2;
+        Player player1;
         Student s1 = Student.BLUE, s2 = Student.BLUE, s3 = Student.BLUE;
         ArrayList<Student> students = new ArrayList<>();
 
@@ -121,5 +107,12 @@ class GameTest {
         game.mergeCheck();
 
         assertEquals(game.getTable().getIslands().get(motherNature-1).getIslandState().getNumIslands(), 3);
+    }
+    @Test
+    void characterCreation() {
+        Game game = new Game(2, true);
+
+        Character character = game.getCharacters()[0];
+
     }
 }

@@ -36,4 +36,8 @@ public class PlayerBoard {
 	public DinnerRoomRow[] getDinnerRoom() {
 		return dinnerRoom;
 	}
+
+	public ArrayList<Student> getEntrance() {
+		return entrance;
+	}
 }

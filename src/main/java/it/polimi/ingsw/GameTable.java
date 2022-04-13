@@ -17,7 +17,7 @@ public class GameTable {
 	private final Professor[] professors;
 
 	public GameTable (int numPlayers) {
-		motherNature = (int) (Math.random()*12);
+		motherNature = (int) (Math.random()*11);
 		players = new Player[numPlayers];
 
 		TowerColor[] towerColor = {TowerColor.BLACK, TowerColor.GRAY, TowerColor.WHITE};
@@ -52,6 +52,8 @@ public class GameTable {
 		clouds[0] = new Cloud(numPlayers);
 		clouds[1] = new Cloud(numPlayers);
 
+		fillClouds();
+
 		//Creates 5 professors
 		Professor yellow = new Professor(Student.YELLOW);
 		Professor blue = new Professor(Student.BLUE);
@@ -70,6 +72,12 @@ public class GameTable {
 		/*for(int i = 0; i < numPlayers; i++) {
 			players[i].getPlayerBoard().fillEntrance(extractStudents(7));
 		}*/
+	}
+
+	private void fillClouds() {
+		for(Cloud cloud : clouds){
+			cloud.addStudents(extractStudents(3));
+		}
 	}
 
 
@@ -103,15 +111,29 @@ public class GameTable {
 		}
 	}
 
-	private void fillIslands() {
+	public void fillIslands() {
 		ArrayList<Student> students;
+		int j = 0;
 
 		students = extractStudents(10);
-		for(int i = 0; i < 10; i++){
-			islands.get(i).addStudent(students.get(i));
+
+		for(int i = 0; i < 12; i++){
+			if(i != motherNature && i != getOppositeMotherNature()){
+				islands.get(i).addStudent(students.get(j));
+				j++;
+			}
 		}
 	}
 
+	public int getOppositeMotherNature(){
+		Island island = islands.get(motherNature);
+
+		for(int i = 0; i < 6; i++){
+			island = islands.getNext(island);
+		}
+
+		return islands.getPosition(island);
+	}
 	public Professor[] getProfessors() {
 		return professors;
 	}
