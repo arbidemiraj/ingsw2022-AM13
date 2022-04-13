@@ -1,6 +1,7 @@
 package it.polimi.ingsw;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GameTable {
 
@@ -55,23 +56,19 @@ public class GameTable {
 		fillClouds();
 
 		//Creates 5 professors
-		Professor yellow = new Professor(Student.YELLOW);
-		Professor blue = new Professor(Student.BLUE);
-		Professor green = new Professor(Student.GREEN);
-		Professor pink = new Professor(Student.PINK);
-		Professor red = new Professor(Student.RED);
+		IntColorMap studentColorMap = new IntColorMap();
+		HashMap<Integer, Student> studentColor = studentColorMap.getMap();
 
 		professors = new Professor[5];
-		professors[0] = yellow;
-		professors[1] = blue;
-		professors[2] = green;
-		professors[3] = pink;
-		professors[4] = red;
+
+		for(int i = 0; i < 5; i++){
+			professors[i] = new Professor(studentColor.get(i));
+		}
 
 		//fill entrance for each player
-		/*for(int i = 0; i < numPlayers; i++) {
-			players[i].getPlayerBoard().fillEntrance(extractStudents(7));
-		}*/
+		for(Player player : players) {
+			player.getPlayerBoard().fillEntrance(extractStudents(7));
+		}
 	}
 
 	private void fillClouds() {
@@ -86,7 +83,7 @@ public class GameTable {
 	}
 
 	private void initBag() {
-		bag = new ArrayList<Student>();
+		bag = new ArrayList<>();
 
 		for(int i = 0; i < 10; i=i+5){
 			bag.add(i, Student.YELLOW);

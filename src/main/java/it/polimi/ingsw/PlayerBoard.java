@@ -1,6 +1,7 @@
 package it.polimi.ingsw;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PlayerBoard {
@@ -10,11 +11,12 @@ public class PlayerBoard {
 	private DinnerRoomRow[] dinnerRoom = new DinnerRoomRow[5];
 
 	public PlayerBoard(){
-		dinnerRoom[0] = new DinnerRoomRow(Student.YELLOW);
-		dinnerRoom[1] = new DinnerRoomRow(Student.BLUE);
-		dinnerRoom[2] = new DinnerRoomRow(Student.GREEN);
-		dinnerRoom[3] = new DinnerRoomRow(Student.PINK);
-		dinnerRoom[4] = new DinnerRoomRow(Student.RED);
+		IntColorMap studentColorMap = new IntColorMap();
+		HashMap<Integer, Student> studentColor = studentColorMap.getMap();
+
+		for(int i = 0; i < 5; i++){
+			dinnerRoom[i] = new DinnerRoomRow(studentColor.get(i));
+		}
 	}
 
 	public void fillEntrance(List<Student> students) {
@@ -23,12 +25,11 @@ public class PlayerBoard {
 		}
 	}
 	public void fillDinnerRoom(List<Student> students) {
+		ColorIntMap studentColorMap = new ColorIntMap();
+		HashMap<Student, Integer> studentColor = studentColorMap.getMap();
+
 		for(Student student:students){
-			if(student == Student.YELLOW) dinnerRoom[0].addStudent();
-			if(student == Student.BLUE) dinnerRoom[1].addStudent();
-			if(student == Student.GREEN) dinnerRoom[2].addStudent();
-			if(student == Student.PINK) dinnerRoom[3].addStudent();
-			if(student == Student.RED) dinnerRoom[4].addStudent();
+			dinnerRoom[studentColor.get(student)].addStudent();
 		}
 
 	}

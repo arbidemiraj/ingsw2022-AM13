@@ -12,7 +12,7 @@ class GameTableTest {
     void fillBag() {
         GameTable table = new GameTable(2);
 
-        assertEquals(114, table.getBag().size());
+        assertEquals(100, table.getBag().size());
     }
 
     @Test

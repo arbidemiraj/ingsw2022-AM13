@@ -1,8 +1,7 @@
 package it.polimi.ingsw;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Island {
 
@@ -42,14 +41,12 @@ public class Island {
 
 	public int[] getNumStudents() {
 		int numStudents[] = new int[5];
+		ColorIntMap studentColorMap = new ColorIntMap();
+		HashMap<Student, Integer> studentColor = studentColorMap.getMap();
 
 		for (Student student : students) {
-			if (student.equals(Student.YELLOW)) numStudents[0]++;
-			if (student.equals(Student.BLUE)) numStudents[1]++;
-			if (student.equals(Student.GREEN)) numStudents[2]++;
-			if (student.equals(Student.PINK)) numStudents[3]++;
-			if (student.equals(Student.RED)) numStudents[4]++;
-		}
+				numStudents[studentColor.get(student)]++;
+			}
 
 		return numStudents;
 	}

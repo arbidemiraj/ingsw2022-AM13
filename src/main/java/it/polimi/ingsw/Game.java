@@ -1,6 +1,7 @@
 package it.polimi.ingsw;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Game {
 
@@ -25,13 +26,6 @@ public class Game {
 	public Game(int numPlayers){
 		this.numPlayers = numPlayers;
 		table = new GameTable(numPlayers);
-
-		/*int numRound = 1;
-
-		do{
-			playRound(numRound);
-		}while(!endingConditionCheck());
-		 */
 	}
 
 	public Game(int numPlayers, boolean expertMode) {
@@ -312,12 +306,10 @@ public class Game {
 		int[] numStudents = new int[numPlayers];
 		int highestStudent = 0, i = 0, j = 0, colorPos = 0, countHighest = 0;
 		Player owner;
+		ColorIntMap studentColorMap = new ColorIntMap();
+		HashMap<Student, Integer> studentColor = studentColorMap.getMap();
 
-		if(color == Student.YELLOW) colorPos = 0;
-		if(color == Student.BLUE) colorPos = 1;
-		if(color == Student.GREEN) colorPos = 2;
-		if(color == Student.PINK) colorPos = 3;
-		if(color == Student.RED) colorPos = 4;
+		colorPos = studentColor.get(color);
 
 		//get number of students for each player based on the color
 		for(Player player : table.getPlayers()){
@@ -336,8 +328,6 @@ public class Game {
 				j = i;
 			}
 		}
-
-
 
 		if(highestStudent != 0 && countHighest == 0){
 			owner = table.getPlayers()[j];
