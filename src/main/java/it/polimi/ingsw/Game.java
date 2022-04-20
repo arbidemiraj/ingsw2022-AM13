@@ -177,7 +177,7 @@ public class Game {
 	}
 
 	//calculate influence
-    void influence(){
+    public void influence(){
 		if(!table.getMotherNatureIsland().isNoEntryTile()) {
 			for (Player player : table.getPlayers()) player.setInfluenceValue(0); //reset influence
 
@@ -185,11 +185,13 @@ public class Game {
 			int[] numStudents = table.getMotherNatureIsland().getNumStudents();
 
 			//add influence to each player if the player is the owner, based on the number of students
-			for (Player player : table.getPlayers()) {
-				for (int i = 0; i < 5; i++){
-					if(table.getProfessors()[i].getOwner() != null) table.getProfessors()[i].getOwner().addInfluence();
+
+			for (int i = 0; i < 5; i++){
+				for(int j = 0; j < numStudents[i]; j++) {
+					if (table.getProfessors()[i].getOwner() != null) table.getProfessors()[i].getOwner().addInfluence();
 				}
-			}
+				}
+
 
 			//add influence if the player has a tower
 			if(table.getMotherNatureIsland().getOwner() != null) table.getMotherNatureIsland().getOwner().addInfluence();
@@ -204,16 +206,15 @@ public class Game {
 		int[] numStudents = island.getNumStudents();
 
 		//add influence to each player if the player is the owner, based on the number of students
-		for(Player player: table.getPlayers()){
 			for(int i = 0; i < 5; i++){
 				for(int j = 0; j < numStudents[i]; j++){
-					table.getProfessors()[i].getOwner().addInfluence();
+					if(table.getProfessors()[i].getOwner() != null) table.getProfessors()[i].getOwner().addInfluence();
 				}
-			}
+
 		}
 
 		//add influence if the player has a tower
-		table.getMotherNatureIsland().getOwner().addInfluence();
+		if(table.getMotherNatureIsland().getOwner() != null) table.getMotherNatureIsland().getOwner().addInfluence();
 	}
 
 	//merges the values of the two given islands
@@ -338,8 +339,9 @@ public class Game {
 		if(character.getEffectId() != 2) professorCheck(color);
 		else{
 			int[] numStudents = new int[numPlayers];
-			int highestStudent = 0, i = 0, l = 0, colorPos;
+			int highestStudent = 0, l = 0, k = 0, colorPos;
 			Player[] highest = new Player[numPlayers];
+
 			ColorIntMap studentColorMap = new ColorIntMap();
 			HashMap<Student, Integer> studentColor = studentColorMap.getMap();
 
@@ -347,13 +349,14 @@ public class Game {
 
 			//get number of students for each player based on the color
 			for(Player player : table.getPlayers()){
-				numStudents[i] = player.getPlayerBoard().getDinnerRoom()[colorPos].getNumStudents();
+				numStudents[k] = player.getPlayerBoard().getDinnerRoom()[colorPos].getNumStudents();
+				k++;
 			}
 
 			//checks who are the player with highest num of students
-			for( i = 0; i < numPlayers; i++){
+			for(int i = 0; i < numPlayers; i++){
 				if(numStudents[i] >= highestStudent){
-					if(highestStudent == numStudents[i]){
+					if(highestStudent == numStudents[i] || highestStudent == 0){
 						highest[l] = table.getPlayers()[i];
 						l++;
 					}
@@ -382,15 +385,19 @@ public class Game {
 		if(character.getEffectId() != 6) conquering();
 		else{
 			setInfluencePlayer(character);
+			table.getMotherNatureIsland().setOwner(influencePlayer);
 		}
 	}
 
-	private void setInfluencePlayer(Character character){
+	public void setInfluencePlayer(Character character){
 		influence(character);
-
+		//fix
 		for(int i = 0; i < numPlayers; i++){
-			if(influencePlayer.getInfluenceValue()<table.getPlayers()[i].getInfluenceValue()){
-				influencePlayer = table.getPlayers()[i];
+			if(influencePlayer == null) { influencePlayer = table.getPlayers()[i];}
+			else{
+				if (influencePlayer.getInfluenceValue() < table.getPlayers()[i].getInfluenceValue()) {
+					influencePlayer = table.getPlayers()[i];
+				}
 			}
 		}
 	}
@@ -401,7 +408,7 @@ public class Game {
 			character.getOwner().addInfluence();
 			character.getOwner().addInfluence(); //additional 2 influence points
 		}
-		else if(character.getEffectId()!=6) {
+		else if(character.getEffectId() != 6) {
 			influence();
 		} else{
 			for(Player player : table.getPlayers()) player.setInfluenceValue(0); //reset influence
@@ -411,7 +418,11 @@ public class Game {
 
 			//add influence to each player if the player is the owner, based on the number of students
 			for(Player player: table.getPlayers()){
-				for(int i = 0; i < 5; i++) table.getProfessors()[i].getOwner().addInfluence();
+				for(int i = 0; i < 5; i++) {
+					if(table.getProfessors()[i].getOwner() != null){
+						for(int j = 0; j < numStudents[i]; j++) table.getProfessors()[i].getOwner().addInfluence();
+					}
+				}
 			}
 		}
 

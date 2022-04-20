@@ -2,7 +2,7 @@ package it.polimi.ingsw;
 
 public class DinnerRoomRow {
 
-	private Student color;
+	private final Student color;
 
 	private int numStudents;
 

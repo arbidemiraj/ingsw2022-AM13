@@ -3,7 +3,7 @@ package it.polimi.ingsw;
 import java.util.HashMap;
 
 public class ColorIntMap {
-    private HashMap<Student, Integer> map = new HashMap<Student, Integer>();
+    private HashMap<Student, Integer> map = new HashMap<>();
 
     public ColorIntMap() {
         map.put(Student.YELLOW, 0);

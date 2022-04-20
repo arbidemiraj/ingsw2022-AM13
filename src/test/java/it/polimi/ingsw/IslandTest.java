@@ -13,6 +13,7 @@ class IslandTest {
 
         island.addStudent(student);
 
+        assertEquals(1, island.getStudents().size());
         assertEquals(student, island.getStudents().get(0));
     }
 

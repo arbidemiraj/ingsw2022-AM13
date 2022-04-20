@@ -67,13 +67,16 @@ public class GameTable {
 
 		//fill entrance for each player
 		for(Player player : players) {
-			player.getPlayerBoard().fillEntrance(extractStudents(7));
+			if(numPlayers == 2) player.getPlayerBoard().fillEntrance(extractStudents(7));
+			if(numPlayers == 3) player.getPlayerBoard().fillEntrance(extractStudents(9));
 		}
 	}
 
 	private void fillClouds() {
+		int dim = players.length + 1;
+
 		for(Cloud cloud : clouds){
-			cloud.addStudents(extractStudents(3));
+			cloud.addStudents(extractStudents(dim));
 		}
 	}
 

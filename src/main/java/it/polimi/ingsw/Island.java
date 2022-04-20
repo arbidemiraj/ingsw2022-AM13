@@ -40,7 +40,7 @@ public class Island {
 	}
 
 	public int[] getNumStudents() {
-		int numStudents[] = new int[5];
+		int[] numStudents = new int[5];
 		ColorIntMap studentColorMap = new ColorIntMap();
 		HashMap<Student, Integer> studentColor = studentColorMap.getMap();
 

@@ -66,7 +66,7 @@ public class Player {
 	}
 
 	public void addInfluence(){
-		influence++;
+		this.influence++;
 	}
 
 	public int getNumTowers() {
@@ -106,5 +106,9 @@ public class Player {
 
 	public void setNumTowers(int numTowers) {
 		this.numTowers = numTowers;
+	}
+
+	public void setNumCoins(int numCoins) {
+		this.numCoins = numCoins;
 	}
 }

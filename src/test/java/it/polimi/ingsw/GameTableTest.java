@@ -45,6 +45,7 @@ class GameTableTest {
         for(int i = 0; i < 12; i++) {
             if (i != motherNature && i != game.getTable().getOppositeMotherNature()) {
                 assertFalse(game.getTable().getIslands().get(i).getStudents().isEmpty());
+                assertEquals(1, game.getTable().getIslands().get(i).getStudents().size());
             }
             if(i == motherNature || i == game.getTable().getOppositeMotherNature()){
                 assertTrue(game.getTable().getIslands().get(i).getStudents().isEmpty());
@@ -55,7 +56,7 @@ class GameTableTest {
     @Test
     void moveStudentsFromCloud() {
         Game game = new Game(2);
-        Cloud cloud = new Cloud(2);
+        Cloud cloud;
         Player currentPlayer = game.getTable().getPlayers()[game.getCurrentPlayer()];
 
 
