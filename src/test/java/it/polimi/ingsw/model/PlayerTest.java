@@ -17,10 +17,10 @@ class PlayerTest {
     @Test
     void numStudents(){
         Game game = new Game(2);
-        game.getTable().addPlayer("FirstPlayer");
-        game.getTable().addPlayer("SecondPlayer");
+        game.getBoard().addPlayer("FirstPlayer");
+        game.getBoard().addPlayer("SecondPlayer");
 
-        game.getTable().prepareGame();
+        game.getBoard().prepareGame();
         ArrayList<Student> students = new ArrayList<>();
         int numStud;
 
@@ -28,9 +28,9 @@ class PlayerTest {
             students.add(Student.YELLOW);
         }
 
-        game.getTable().getPlayers().get(0).getPlayerBoard().fillDinnerRoom(students);
+        game.getBoard().getPlayers().get(0).getPlayerBoard().fillDinnerRoom(students);
 
-        numStud = game.getTable().getPlayers().get(0).numStudents();
+        numStud = game.getBoard().getPlayers().get(0).numStudents();
 
         assertEquals(4, numStud);
 

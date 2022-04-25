@@ -23,14 +23,14 @@ public class Controller {
 
     public Controller(Game model) {
         this.model = model;
-        this.nicknameQueue = new ArrayList<>(model.getTable().getNicknames());
+        this.nicknameQueue = new ArrayList<>(model.getBoard().getNicknames());
         turnCardsPlayed = new ArrayList<>();
 
         firstPlayer();
     }
 
     public void applyIslandEffect(int id, Island chosenIsland){
-        Player player = model.getTable().getPlayerByNickname(currentPlayer);
+        Player player = model.getBoard().getPlayerByNickname(currentPlayer);
 
         List<Character> activatedCharacter = Arrays.asList(model.getCharacters())
                 .stream()
@@ -41,7 +41,7 @@ public class Controller {
     }
 
     public void applyStudentEffect(int id, Student chosenStudent){
-        Player player = model.getTable().getPlayerByNickname(currentPlayer);
+        Player player = model.getBoard().getPlayerByNickname(currentPlayer);
 
         List<Character> activatedCharacter = Arrays.asList(model.getCharacters())
                 .stream()
@@ -53,7 +53,7 @@ public class Controller {
     }
 
     public void applyEffect(int id){
-        Player player = model.getTable().getPlayerByNickname(currentPlayer);
+        Player player = model.getBoard().getPlayerByNickname(currentPlayer);
 
         List<Character> activatedCharacter = Arrays.asList(model.getCharacters())
                 .stream()
@@ -70,13 +70,13 @@ public class Controller {
     public void firstPlayer() {
         int choose = (int) (Math.random() * model.getNumPlayers());
 
-        currentPlayer = model.getTable().getPlayers().get(choose).getNickname();
+        currentPlayer = model.getBoard().getPlayers().get(choose).getNickname();
     }
 
     private void setCurrentPlayer(){
         ArrayList<Integer> values = new ArrayList<>();
 
-        for(Player player : model.getTable().getPlayers()){
+        for(Player player : model.getBoard().getPlayers()){
             values.add(player.getLastCard().getValue());
         }
 
@@ -87,7 +87,7 @@ public class Controller {
 
         int maxValuePos = values.indexOf(maxValue);
 
-        currentPlayer = model.getTable().getPlayers().get(maxValuePos).getNickname();
+        currentPlayer = model.getBoard().getPlayers().get(maxValuePos).getNickname();
     }
 
     public String currentPlayer() {
@@ -95,7 +95,7 @@ public class Controller {
     }
 
     public Player getCurrentPlayer(){
-        return model.getTable().getPlayerByNickname(currentPlayer);
+        return model.getBoard().getPlayerByNickname(currentPlayer);
     }
 
     public void nextPlayer() {
@@ -108,7 +108,7 @@ public class Controller {
     }
 
     public void playCard(AssistantCard cardPlayed) throws CardAlreadyPlayedException {
-        Player player = model.getTable().getPlayerByNickname(currentPlayer);
+        Player player = model.getBoard().getPlayerByNickname(currentPlayer);
 
         if(!turnCardsPlayed.contains(cardPlayed))
             player.playCard(cardPlayed);
@@ -123,15 +123,15 @@ public class Controller {
     }
 
     public boolean endingConditionCheck() {
-        for (Player player : model.getTable().getPlayers()) {
+        for (Player player : model.getBoard().getPlayers()) {
             if(player.getNumTowers() == 0) return true;
 
             if(player.getDeck().isEmpty()) return true;
         }
 
-        if(model.getTable().getIslands().size() <= 3) return true;
+        if(model.getBoard().getIslands().size() <= 3) return true;
 
-        if(model.getTable().getBag().isEmpty()) return true;
+        if(model.getBoard().getBag().isEmpty()) return true;
 
         return false;
     }

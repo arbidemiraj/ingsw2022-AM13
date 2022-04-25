@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.maps.IntColorMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GameTable {
+public class GameBoard {
 
 	private ArrayList<Player> players;
 
@@ -30,7 +30,7 @@ public class GameTable {
 
 	private final Professor[] professors;
 
-	public GameTable (int numPlayers) {
+	public GameBoard(int numPlayers) {
 		motherNature = (int) (Math.random()*11);
 		towerColors = new ArrayList<>();
 		players = new ArrayList<>(numPlayers);

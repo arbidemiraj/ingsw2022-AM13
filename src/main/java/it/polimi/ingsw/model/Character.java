@@ -27,7 +27,7 @@ public class Character {
 		//create the instance of the effect based on the parameter id
 		if (id == 1) {
 			//extracts the 6 students to put on the card
-			ArrayList<Student> students = game.getTable().extractStudents(4);
+			ArrayList<Student> students = game.getBoard().extractStudents(4);
 			effect = new Effect1(id, students);
 			cost = 1;
 		}
@@ -64,7 +64,7 @@ public class Character {
 
 		if (id == 11) {
 			//extracts the 6 students to put on the card
-			ArrayList<Student> students = game.getTable().extractStudents(4);
+			ArrayList<Student> students = game.getBoard().extractStudents(4);
 			effect = new Effect11(id, students);
 			cost = 2;
 		}

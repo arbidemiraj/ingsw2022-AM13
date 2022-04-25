@@ -11,10 +11,10 @@ class CharacterTest {
     @Test
     void applyEffect() {
         Game game = new Game(2, true);
-        game.getTable().addPlayer("FirstPlayer");
-        game.getTable().addPlayer("SecondPlayer");
+        game.getBoard().addPlayer("FirstPlayer");
+        game.getBoard().addPlayer("SecondPlayer");
 
-        game.getTable().prepareGame();
+        game.getBoard().prepareGame();
         Character character = game.getCharacters()[0];
 
         character.applyEffect();

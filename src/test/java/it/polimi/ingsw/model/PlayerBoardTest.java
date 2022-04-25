@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.GameTable;
-import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.enumerations.Student;
 import org.junit.jupiter.api.Test;
 
@@ -13,12 +11,12 @@ class PlayerBoardTest {
 
     @Test
     void fillEntrance() {
-        GameTable gameTable = new GameTable(2);
-        gameTable.prepareGame();
+        GameBoard gameBoard = new GameBoard(2);
+        gameBoard.prepareGame();
         ArrayList<Student> students;
         PlayerBoard playerBoard = new PlayerBoard();
 
-        students = gameTable.extractStudents(5);
+        students = gameBoard.extractStudents(5);
 
         playerBoard.fillEntrance(students);
 

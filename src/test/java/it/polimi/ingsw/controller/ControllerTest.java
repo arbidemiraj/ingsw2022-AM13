@@ -11,28 +11,28 @@ class ControllerTest {
     @Test
     void endingConditionCheck1() {
         Game game = new Game(2);
-        game.getTable().addPlayer("FirstPlayer");
-        game.getTable().addPlayer("SecondPlayer");
+        game.getBoard().addPlayer("FirstPlayer");
+        game.getBoard().addPlayer("SecondPlayer");
 
-        game.getTable().prepareGame();
+        game.getBoard().prepareGame();
 
         Controller gameController = new Controller(game);
 
-        game.getTable().getBag().clear();
+        game.getBoard().getBag().clear();
 
         assertTrue(gameController.endingConditionCheck());
     }
     @Test
     void endingConditionCheck2() {
         Game game = new Game(2);
-        game.getTable().addPlayer("FirstPlayer");
-        game.getTable().addPlayer("SecondPlayer");
+        game.getBoard().addPlayer("FirstPlayer");
+        game.getBoard().addPlayer("SecondPlayer");
 
-        game.getTable().prepareGame();
+        game.getBoard().prepareGame();
 
         Controller gameController = new Controller(game);
 
-        game.getTable().getPlayers().get(0).setNumTowers(0);
+        game.getBoard().getPlayers().get(0).setNumTowers(0);
 
         assertTrue(gameController.endingConditionCheck());
     }
@@ -52,10 +52,10 @@ class ControllerTest {
     @Test
     void moveStudent() {
         Game game = new Game(2);
-        game.getTable().prepareGame();
-        game.getTable().addPlayer("FirstPlayer");
-        Island island = game.getTable().getIslands().get(5);
-        PlayerBoard playerBoard = game.getTable().getPlayers().get(0).getPlayerBoard();
+        game.getBoard().prepareGame();
+        game.getBoard().addPlayer("FirstPlayer");
+        Island island = game.getBoard().getIslands().get(5);
+        PlayerBoard playerBoard = game.getBoard().getPlayers().get(0).getPlayerBoard();
         Student student = Student.BLUE;
 
         island.getStudents().clear();
@@ -71,8 +71,8 @@ class ControllerTest {
     @Test
     void firstPlayer() {
         Game game = new Game(2);
-        game.getTable().prepareGame();
-        game.getTable().addPlayer("FirstPlayer");
+        game.getBoard().prepareGame();
+        game.getBoard().addPlayer("FirstPlayer");
         Controller controller = new Controller(game);
 
         controller.firstPlayer();
