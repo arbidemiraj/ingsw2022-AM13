@@ -28,7 +28,7 @@ class GameTest {
 
         for(int i = 0; i < 5; i++) game.getBoard().getIslands().get(motherNature).addStudent(Student.YELLOW);
 
-        game.influence();
+        game.influence(game.getBoard().getMotherNatureIsland());
 
         assertTrue(player1.getInfluenceValue() > player2.getInfluenceValue());
     }

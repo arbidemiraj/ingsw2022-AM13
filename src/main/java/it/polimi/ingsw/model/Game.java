@@ -119,7 +119,7 @@ public class Game {
 
 
 	private void setInfluencePlayer(){
-		influence();
+		influence(board.getMotherNatureIsland());
 
 			for(int i = 0; i < numPlayers; i++){
 
@@ -130,45 +130,27 @@ public class Game {
 
 	}
 
-	//calculate influence
-    public void influence(){
-		if(!board.getMotherNatureIsland().isNoEntryTile()) {
+
+
+	public void influence (Island island) {
+		if (!island.isNoEntryTile()) {
 			for (Player player : board.getPlayers()) player.setInfluenceValue(0); //reset influence
 
 			//number of students for each color in island, es. numStudent[0] = num of yellow students
-			int[] numStudents = board.getMotherNatureIsland().getNumStudents();
+			int[] numStudents = island.getNumStudents();
 
 			//add influence to each player if the player is the owner, based on the number of students
-
-			for (int i = 0; i < 5; i++){
-				for(int j = 0; j < numStudents[i]; j++) {
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < numStudents[i]; j++) {
 					if (board.getProfessors()[i].getOwner() != null) board.getProfessors()[i].getOwner().addInfluence();
 				}
-				}
 
+			}
 
 			//add influence if the player has a tower
-			if(board.getMotherNatureIsland().getOwner() != null) board.getMotherNatureIsland().getOwner().addInfluence();
+			if (board.getMotherNatureIsland().getOwner() != null)
+				board.getMotherNatureIsland().getOwner().addInfluence();
 		}
-	}
-
-	public void influence (Island island){
-
-		for(Player player : board.getPlayers()) player.setInfluenceValue(0); //reset influence
-
-		//number of students for each color in island, es. numStudent[0] = num of yellow students
-		int[] numStudents = island.getNumStudents();
-
-		//add influence to each player if the player is the owner, based on the number of students
-			for(int i = 0; i < 5; i++){
-				for(int j = 0; j < numStudents[i]; j++){
-					if(board.getProfessors()[i].getOwner() != null) board.getProfessors()[i].getOwner().addInfluence();
-				}
-
-		}
-
-		//add influence if the player has a tower
-		if(board.getMotherNatureIsland().getOwner() != null) board.getMotherNatureIsland().getOwner().addInfluence();
 	}
 
 	//merges the values of the two given islands
@@ -338,12 +320,12 @@ public class Game {
 
 	private void influence(Character character){
 		if(character.getEffectId() == 7){
-			influence();
+			influence(board.getMotherNatureIsland());
 			character.getOwner().addInfluence();
 			character.getOwner().addInfluence(); //additional 2 influence points
 		}
 		else if(character.getEffectId() != 6) {
-			influence();
+			influence(board.getMotherNatureIsland());
 		} else{
 			for(Player player : board.getPlayers()) player.setInfluenceValue(0); //reset influence
 
