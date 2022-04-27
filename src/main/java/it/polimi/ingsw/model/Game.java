@@ -19,8 +19,6 @@ public class Game {
 
 	private int generalSupply;
 
-	private final boolean expertMode;
-
 	private Character[] characters;
 
 	private ArrayList<Integer> activatedCharacters;
@@ -29,6 +27,7 @@ public class Game {
 
 	private final int numPlayers;
 
+	private Random r = new Random();
 
 	/**
 	 * Default constructor
@@ -37,12 +36,11 @@ public class Game {
 	 */
 	public Game(int numPlayers, boolean expertMode){
 		board = new GameBoard(numPlayers);
-		this.expertMode = expertMode;
 		this.numPlayers = numPlayers;
 		activatedCharacters = new ArrayList<>();
 		cardsPlayed = new ArrayList<>();
 
-		if(expertMode == true){
+		if(expertMode){
 			board.prepareGame();
 			setupExpertMode();
 			for(Player player : board.getPlayers()) player.addCoin();
@@ -76,10 +74,11 @@ public class Game {
 	 * @return an effect id, used to generate a character for expert mode
 	 */
 	private int chooseEffect(int[] availableEffect) {
-		int effect, random;
+		int effect;
+		int random;
 
 		do {
-			random = (int)(Math.random()*8);
+			random = r.nextInt(8);
 			effect = availableEffect[random];
 
 			if(effect != 0){
@@ -130,15 +129,14 @@ public class Game {
 	 * @param island		the island where you want to calculate influence
 	 */
 	public void influence (Island island) {
-		if(!activatedCharacters.isEmpty()){
-			if(activatedCharacters.contains(7)){
-				Player owner = getCharacterOwner(7);
+		for (Player player : board.getPlayers()) player.setInfluenceValue(0); //reset influence
+
+		if(!activatedCharacters.isEmpty() && activatedCharacters.contains(8)){
+				Player owner = getCharacterOwner(8);
 				owner.addInfluence();
 				owner.addInfluence();
-			}
 		}
 		if (!island.isNoEntryTile()) {
-			for (Player player : board.getPlayers()) player.setInfluenceValue(0); //reset influence
 
 			//number of students for each color in island, es. numStudent[0] = num of yellow students
 			int[] numStudents = island.getNumStudents();
@@ -152,8 +150,7 @@ public class Game {
 			}
 
 			//add influence if the player has a tower
-			if(!activatedCharacters.isEmpty()&&!activatedCharacters.contains(6)){
-				if (board.getMotherNatureIsland().getOwner() != null)
+			if(!activatedCharacters.isEmpty() && !activatedCharacters.contains(6) && board.getMotherNatureIsland().getOwner() != null){
 					board.getMotherNatureIsland().getOwner().addInfluence();
 			}
 		}
@@ -331,7 +328,7 @@ public class Game {
 	 * Return the cards played in this round
 	 * @return		 the cards played in this round
 	 */
-	public ArrayList<AssistantCard> getCardsPlayed() {
+	public List<AssistantCard> getCardsPlayed() {
 		return cardsPlayed;
 	}
 
@@ -339,7 +336,19 @@ public class Game {
 	 * Returns the currently activated characters
 	 * @return		the currently activated characters
 	 */
-	public ArrayList<Integer> getActivatedCharacters() {
+	public List<Integer> getActivatedCharacters() {
 		return activatedCharacters;
+	}
+
+	public void removeCoins(int numCoins){
+		this.generalSupply -= numCoins;
+	}
+
+	public void addCoins(int numCoins){
+		this.generalSupply += numCoins;
+	}
+
+	public int getGeneralSupply() {
+		return generalSupply;
 	}
 }

@@ -18,7 +18,7 @@ public class Player {
 	private ArrayList<AssistantCard> deck;
 	private Wizard wizard;
 	private int influence = 0;
-	private ArrayList<AssistantCard> discardPile;
+	private AssistantCard lastCard;
 	private int numCoins = 0;
 
 	public Player(TowerColor towerColor, int numTowers, String nickname) {
@@ -27,6 +27,8 @@ public class Player {
 		this.nickname = nickname;
 		playerBoard = new PlayerBoard();
 		chooseWizard(wizard);
+		lastCard = new AssistantCard(0,0);
+
 	}
 
 	public void chooseWizard(Wizard wizard){
@@ -63,6 +65,7 @@ public class Player {
 	}
 
 	public void playCard(AssistantCard cardPlayed){
+		this.lastCard = cardPlayed;
 		deck.remove(cardPlayed);
 		motherNatureMoves = cardPlayed.getMaxMotherNatureMoves();
 	}
@@ -80,13 +83,7 @@ public class Player {
 	}
 
 	public int getInfluenceValue() {
-		return influence;
-	}
-
-	public AssistantCard getLastCard() {
-		if(discardPile != null) return discardPile.get(discardPile.size());
-
-		return null;
+		return this.influence;
 	}
 
 	public ArrayList<AssistantCard> getDeck() {
@@ -128,5 +125,9 @@ public class Player {
 
 	public void setMotherNatureMoves(int motherNatureMoves) {
 		this.motherNatureMoves = motherNatureMoves;
+	}
+
+	public AssistantCard getLastCard() {
+		return lastCard;
 	}
 }

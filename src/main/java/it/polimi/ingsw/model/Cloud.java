@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.EmptyCloudException;
 
 import java.util.ArrayList;
-
+import java.util.List;
 
 
 public class Cloud {
@@ -16,7 +16,7 @@ public class Cloud {
 
 	}
 
-	public void addStudents(ArrayList<Student> students) {
+	public void addStudents(List<Student> students) {
 		this.students.addAll(students);
 	}
 
@@ -27,7 +27,7 @@ public class Cloud {
 
 
 		if(students.isEmpty()) throw new EmptyCloudException();
-		else students.removeAll(students);
+		else students.removeAll(stud);
 
 		return stud;
 	}

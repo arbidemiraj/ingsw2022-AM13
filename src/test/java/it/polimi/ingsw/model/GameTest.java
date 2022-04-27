@@ -125,10 +125,6 @@ class GameTest {
     }
 
     @Test
-    void chooseEffect() {
-    }
-
-    @Test
     void unifyIslands() {
         Game game = new Game(2, false);
         game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
@@ -153,6 +149,32 @@ class GameTest {
         assertEquals(3, island1.getStudents().size());
     }
 
+    @Test
+    void influenceCharacter8() throws NotEnoughCoinException {
+        Game game = new Game(2, true);
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().prepareGame();
+        Player player = game.getBoard().getPlayers().get(0);
+
+
+        Controller controller = new Controller(game);
+
+        Character character = new Character(game, 8);
+        game.getCharacters()[0] = character;
+
+
+
+        controller.setCurrentPlayer("FirstPlayer");
+
+        controller.getCurrentPlayer().setNumCoins(character.getCost());
+
+        controller.activateCharacter(8);
+        game.getActivatedCharacters().add(8);
+
+        game.influence(game.getBoard().getMotherNatureIsland());
+
+        assertEquals(2, character.getOwner().getInfluenceValue());
+    }
     @Test
     void influenceIsland() {
         Game game = new Game(2, true);
@@ -248,11 +270,6 @@ class GameTest {
         assertEquals(player1, island.getOwner());
     }
 
-
-    @Test
-    void expertSetInfluencePlayer() {
-    }
-
     @Test
     void twoPlayersGame(){
         Game game = new Game(2, false);
@@ -293,5 +310,23 @@ class GameTest {
             assertEquals(4, cloud.getStudents().size());
         }
 
+    }
+
+    @Test
+    void addCoin(){
+        Game game = new Game(2, true);
+
+        game.addCoins(2);
+
+        assertEquals(20, game.getGeneralSupply());
+    }
+
+    @Test
+    void removeCoin(){
+        Game game = new Game(2, true);
+
+        game.removeCoins(2);
+
+        assertEquals(16, game.getGeneralSupply());
     }
 }

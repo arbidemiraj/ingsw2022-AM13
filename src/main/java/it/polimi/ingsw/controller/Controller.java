@@ -9,8 +9,6 @@ import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class Controller {
 
@@ -37,6 +35,8 @@ public class Controller {
         else{
             character.setOwner(player);
             character.applyEffect(chosenIsland);
+            player.setNumCoins(player.getNumCoins() - character.getCost());
+            model.removeCoins(character.getCost());
             model.getActivatedCharacters().add(character.getEffectId());
         }
     }
@@ -50,6 +50,8 @@ public class Controller {
         else{
             character.setOwner(player);
             character.applyEffect(chosenStudent);
+            player.setNumCoins(player.getNumCoins() - character.getCost());
+            model.removeCoins(character.getCost());
             model.getActivatedCharacters().add(character.getEffectId());
         }
 
@@ -64,6 +66,8 @@ public class Controller {
         else{
             character.setOwner(player);
             character.applyEffect();
+            player.setNumCoins(player.getNumCoins() - character.getCost());
+            model.removeCoins(character.getCost());
             model.getActivatedCharacters().add(character.getEffectId());
         }
     }
@@ -78,7 +82,7 @@ public class Controller {
         currentPlayer = model.getBoard().getPlayers().get(choose).getNickname();
     }
 
-    private void setCurrentPlayer(){
+    public void setCurrentPlayer(){
         ArrayList<Integer> values = new ArrayList<>();
 
         for(Player player : model.getBoard().getPlayers()){
@@ -162,4 +166,7 @@ public class Controller {
         }
     }
 
+    public ArrayList<AssistantCard> getTurnCardsPlayed() {
+        return turnCardsPlayed;
+    }
 }

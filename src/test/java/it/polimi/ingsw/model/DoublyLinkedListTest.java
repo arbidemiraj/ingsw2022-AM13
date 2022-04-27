@@ -59,7 +59,7 @@ class DoublyLinkedListTest {
         doublyLinkedList.add(island1);
         doublyLinkedList.add(island2);
 
-        assertEquals(doublyLinkedList.size(), 3);
+        assertEquals(3, doublyLinkedList.size());
     }
 
     @Test

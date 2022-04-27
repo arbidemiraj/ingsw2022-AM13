@@ -86,10 +86,6 @@ class GameBoardTest {
         assertEquals(currentPlayer.getPlayerBoard().getEntrance(), students);
         assertTrue(cloud.getStudents().isEmpty());
     }
-    @Test
-    void getPlayersByNickname() {
-
-    }
 
     @Test
     void addPlayer() {
@@ -104,6 +100,13 @@ class GameBoardTest {
     @Test
     void prepareGame() {
         Game game = new Game(2, false);
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.WHITE);
+        Player player1 = game.getBoard().getPlayers().get(0);
+
+        game.getBoard().prepareGame();
+
+        assertEquals(109, game.getBoard().getBag().size());
+        assertEquals(7, player1.getPlayerBoard().getEntrance().size());
     }
 
     @Test
