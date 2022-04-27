@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.enumerations.Student;
+import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
 import org.junit.jupiter.api.Test;
 
@@ -13,9 +15,9 @@ class GameTest {
     @Test
     void influence() {
         Player player1, player2;
-        Game game = new Game(2);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        Game game = new Game(2, false);
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         int motherNature;
@@ -33,24 +35,12 @@ class GameTest {
         assertTrue(player1.getInfluenceValue() > player2.getInfluenceValue());
     }
 
-    @Test
-    void addMotherNatureMoves() {
-        Game game = new Game(2);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
-
-        game.getBoard().prepareGame();
-        int prevMotherNat = game.getBoard().getMotherNature();
-        game.addMotherNatureMoves();
-
-        assertEquals(prevMotherNat+2, game.getBoard().getMotherNature());
-    }
 
     @Test
     void professorCheck() {
-        Game game = new Game(2);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        Game game = new Game(2, false);
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         Player player1;
@@ -74,9 +64,9 @@ class GameTest {
     void conquering() {
         Player player1;
         Island island;
-        Game game = new Game(2);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        Game game = new Game(2, false);
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         int motherNature;
@@ -93,14 +83,14 @@ class GameTest {
 
         game.conquering();
 
-        assertTrue(player1 == island.getOwner());
+        assertEquals(player1, island.getOwner());
     }
 
     @Test
     void mergeCheck() {
-        Game game = new Game(2);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        Game game = new Game(2, false);
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         Player player1;
@@ -123,14 +113,14 @@ class GameTest {
     @Test
     void setupExpertMode() {
         Game game = new Game(2, true);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
 
         assertEquals(3, game.getCharacters().length);
         for(it.polimi.ingsw.model.Character character : game.getCharacters()){
-            assertTrue(character != null);
+            assertNotNull(character);
         }
     }
 
@@ -140,9 +130,9 @@ class GameTest {
 
     @Test
     void unifyIslands() {
-        Game game = new Game(2);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        Game game = new Game(2, false);
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         Student student1, student2, student3;
@@ -157,7 +147,7 @@ class GameTest {
         island2.addStudent(student2);
         island2.addStudent(student3);
 
-        game.unifyIslands(island1, island2);
+        game.mergeIslands(island1, island2);
 
         assertEquals(2, island1.getIslandState().getNumIslands());
         assertEquals(3, island1.getStudents().size());
@@ -166,14 +156,12 @@ class GameTest {
     @Test
     void influenceIsland() {
         Game game = new Game(2, true);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         Player player;
         Island island;
-
-        int motherNature = game.getBoard().getMotherNature();
 
         player = game.getBoard().getPlayers().get(0);
         game.getBoard().getProfessors()[0].setOwner(player);
@@ -187,18 +175,25 @@ class GameTest {
     }
 
     @Test
-    void expertProfessorCheck() {
+    void expertProfessorCheck() throws NotEnoughCoinException {
         Game game = new Game(2, true);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
+        Controller controller = new Controller(game);
+
         Player player1, player2;
         player1 = game.getBoard().getPlayers().get(0);
         player2 = game.getBoard().getPlayers().get(1);
 
-        it.polimi.ingsw.model.Character character = new it.polimi.ingsw.model.Character(game, 2);
+        Character character = new Character(game, 2);
+        game.getCharacters()[0] = character;
+
         character.setOwner(player1);
+        player1.setNumCoins(character.getCost());
+        controller.setCurrentPlayer("FirstPlayer");
+        controller.activateCharacter(2);
 
         Student s1 = Student.BLUE;
         ArrayList<Student> students1 = new ArrayList<>();
@@ -212,16 +207,16 @@ class GameTest {
         player1.getPlayerBoard().fillDinnerRoom(students1);
         player2.getPlayerBoard().fillDinnerRoom(students2);
 
-        game.professorCheck(character, Student.BLUE);
+        game.professorCheck(Student.BLUE);
 
         assertEquals(player1, game.getBoard().getProfessors()[1].getOwner());
     }
 
     @Test
     void getNumPlayers(){
-        Game game = new Game(2);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        Game game = new Game(2, false);
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
         game.getBoard().prepareGame();
 
         assertEquals(2, game.getNumPlayers());
@@ -229,8 +224,8 @@ class GameTest {
     @Test
     void expertConquering() {
         Game game = new Game(2, true);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         it.polimi.ingsw.model.Character character = new it.polimi.ingsw.model.Character(game, 6);
@@ -248,7 +243,7 @@ class GameTest {
         island.addStudent(Student.YELLOW);
         island.setOwner(player2);
 
-        game.conquering(character);
+        game.conquering();
 
         assertEquals(player1, island.getOwner());
     }
@@ -260,9 +255,9 @@ class GameTest {
 
     @Test
     void twoPlayersGame(){
-        Game game = new Game(2);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        Game game = new Game(2, false);
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
 
@@ -280,10 +275,10 @@ class GameTest {
 
     @Test
     void threePlayersGame(){
-        Game game = new Game(3);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
-        game.getBoard().addPlayer("ThirdPlayer");
+        Game game = new Game(3, false);
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.getBoard().addPlayer("ThirdPlayer", TowerColor.WHITE);
 
         game.getBoard().prepareGame();
 

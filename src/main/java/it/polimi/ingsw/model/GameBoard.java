@@ -7,9 +7,11 @@ import it.polimi.ingsw.model.maps.IntColorMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This classes manages the game components
+ */
 public class GameBoard {
 
 	private ArrayList<Player> players;
@@ -32,8 +34,13 @@ public class GameBoard {
 
 	private final Professor[] professors;
 
+
+	/**
+	 * Default constructor,
+	 * @param numPlayers
+	 */
 	public GameBoard(int numPlayers) {
-		motherNature = (int) (Math.random()*11);
+		motherNature = (int) (Math.random() * 11);
 		towerColors = new ArrayList<>();
 		players = new ArrayList<>(numPlayers);
 
@@ -44,12 +51,12 @@ public class GameBoard {
 
 		this.numPlayers = numPlayers;
 
-		if(numPlayers == 3) numTowers = 6;
+		if (numPlayers == 3) numTowers = 6;
 		else numTowers = 8;
 
 		islands = new DoublyLinkedList();
 
-		for (int i = 0; i < 12; i++){
+		for (int i = 0; i < 12; i++) {
 			Island island = new Island();
 			islands.add(island);
 		}
@@ -67,16 +74,16 @@ public class GameBoard {
 
 		professors = new Professor[5];
 
-		for(int i = 0; i < 5; i++){
+		for (int i = 0; i < 5; i++) {
 			professors[i] = new Professor(studentColor.get(i));
 		}
 	}
 
-	public void addPlayer(Player player){
+	public void addPlayer(Player player) {
 		players.add(player);
 	}
 
-	public void prepareGame(){
+	public void prepareGame() {
 		//Initial 10 students in the bag
 		initBag();
 
@@ -89,39 +96,37 @@ public class GameBoard {
 		fillClouds();
 
 		//fill entrance for each player
-		for(Player player : players) {
-			if(numPlayers == 2) player.getPlayerBoard().fillEntrance(extractStudents(7));
-			if(numPlayers == 3) player.getPlayerBoard().fillEntrance(extractStudents(9));
+		for (Player player : players) {
+			if (numPlayers == 2) player.getPlayerBoard().fillEntrance(extractStudents(7));
+			if (numPlayers == 3) player.getPlayerBoard().fillEntrance(extractStudents(9));
 		}
 	}
 
-	public Player getPlayerByNickname(String nickname){
+	public Player getPlayerByNickname(String nickname) {
 		Player player = players
 				.stream()
 				.filter(p -> p.getNickname().equals(nickname))
 				.collect(Collectors.toList())
 				.get(0);
 
-
 		return player;
 	}
 
-	public ArrayList<String> getNicknames(){
+	public ArrayList<String> getNicknames() {
 		ArrayList<String> nicknames = new ArrayList<>();
 
-		for(Player player : players){
+		for (Player player : players) {
 			nicknames.add(player.getNickname());
 		}
 
 		return nicknames;
 	}
 
-	public void addPlayer(String nickname){
-		if(currentNumPlayers < numPlayers){
-			Player player = new Player(towerColors.get(currentNumPlayers), numTowers, nickname );
+	public void addPlayer(String nickname, TowerColor chosenTowerColor) {
+		if (currentNumPlayers < numPlayers) {
+			Player player = new Player(chosenTowerColor, numTowers, nickname);
 			players.add(player);
-		}
-		else {
+		} else {
 			System.out.println("Max number of players");
 		}
 	}
@@ -129,7 +134,7 @@ public class GameBoard {
 	private void fillClouds() {
 		int dim = players.size() + 1;
 
-		for(Cloud cloud : clouds){
+		for (Cloud cloud : clouds) {
 			cloud.addStudents(extractStudents(dim));
 		}
 	}
@@ -142,12 +147,12 @@ public class GameBoard {
 	private void initBag() {
 		bag = new ArrayList<>();
 
-		for(int i = 0; i < 10; i=i+5){
+		for (int i = 0; i < 10; i = i + 5) {
 			bag.add(i, Student.YELLOW);
-			bag.add(i+1, Student.BLUE);
-			bag.add(i+2, Student.GREEN);
-			bag.add(i+3, Student.PINK);
-			bag.add(i+4, Student.RED);
+			bag.add(i + 1, Student.BLUE);
+			bag.add(i + 2, Student.GREEN);
+			bag.add(i + 3, Student.PINK);
+			bag.add(i + 4, Student.RED);
 		}
 	}
 
@@ -156,12 +161,12 @@ public class GameBoard {
 	}
 
 	public void fillBag() {
-		for(int i = 0; i < 120; i = i+5){
+		for (int i = 0; i < 120; i = i + 5) {
 			bag.add(i, Student.YELLOW);
-			bag.add(i+1, Student.BLUE);
-			bag.add(i+2, Student.GREEN);
-			bag.add(i+3, Student.PINK);
-			bag.add(i+4, Student.RED);
+			bag.add(i + 1, Student.BLUE);
+			bag.add(i + 2, Student.GREEN);
+			bag.add(i + 3, Student.PINK);
+			bag.add(i + 4, Student.RED);
 		}
 	}
 
@@ -171,23 +176,24 @@ public class GameBoard {
 
 		students = extractStudents(10);
 
-		for(int i = 0; i < 12; i++){
-			if(i != motherNature && i != getOppositeMotherNature()){
+		for (int i = 0; i < 12; i++) {
+			if (i != motherNature && i != getOppositeMotherNature()) {
 				islands.get(i).addStudent(students.get(j));
 				j++;
 			}
 		}
 	}
 
-	public int getOppositeMotherNature(){
+	public int getOppositeMotherNature() {
 		Island island = islands.get(motherNature);
 
-		for(int i = 0; i < 6; i++){
+		for (int i = 0; i < 6; i++) {
 			island = islands.getNext(island);
 		}
 
 		return islands.getPosition(island);
 	}
+
 	public Professor[] getProfessors() {
 		return professors;
 	}
@@ -197,8 +203,8 @@ public class GameBoard {
 
 		int random;
 
-		for(int i = 0; i < numStudents; i++){
-			random = (int)(Math.random() * bag.size());
+		for (int i = 0; i < numStudents; i++) {
+			random = (int) (Math.random() * bag.size());
 			extractedStudents.add(i, bag.get(random));
 			bag.remove(random);
 		}
@@ -230,10 +236,10 @@ public class GameBoard {
 		return players;
 	}
 
-	public void moveStudentsFromCloud(int numCloud, int currentPlayer){
+	public void moveStudentsFromCloud(int numCloud, int currentPlayer) {
 		ArrayList<Student> students = new ArrayList<>();
 
-		try{
+		try {
 			students = clouds[numCloud].getStudentsFromCloud();
 		} catch (EmptyCloudException e) {
 			e.printStackTrace();

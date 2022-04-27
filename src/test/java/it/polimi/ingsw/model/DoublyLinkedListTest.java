@@ -61,4 +61,29 @@ class DoublyLinkedListTest {
 
         assertEquals(doublyLinkedList.size(), 3);
     }
+
+    @Test
+    void getPrevious() {
+        Island island = new Island();
+        Island island1 = new Island();
+        DoublyLinkedList doublyLinkedList = new DoublyLinkedList();
+
+        doublyLinkedList.add(island);
+        doublyLinkedList.add(island1);
+
+        assertEquals(island, doublyLinkedList.getPrevious(island1));
+    }
+
+    @Test
+    void getNext() {
+        Island island = new Island();
+        Island island1 = new Island();
+        DoublyLinkedList doublyLinkedList = new DoublyLinkedList();
+
+        doublyLinkedList.add(island);
+        doublyLinkedList.add(island1);
+
+        assertEquals(island1, doublyLinkedList.getNext(island));
+    }
+
 }

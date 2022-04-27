@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.enumerations.Student;
 
-public class Effect4 implements Effect{
+public class Effect4 implements Actionable {
 
 	private int id;
 
@@ -18,7 +18,6 @@ public class Effect4 implements Effect{
 
 	@Override
 	public void apply(Game game) {
-		game.addMotherNatureMoves();
 	}
 
 	@Override

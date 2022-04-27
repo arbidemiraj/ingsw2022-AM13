@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.enumerations.Student;
 
-public class Effect3 implements Effect{
+public class Effect3 implements Actionable {
 
 	private int id;
 

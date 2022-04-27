@@ -9,7 +9,7 @@ public class Character {
 
 	private int cost;
 
-	private Effect effect;
+	private Actionable effect;
 
 	private final int effectId;
 
@@ -70,7 +70,7 @@ public class Character {
 		}
 	}
 
-	public Effect getEffect() {
+	public Actionable getEffect() {
 		return effect;
 	}
 

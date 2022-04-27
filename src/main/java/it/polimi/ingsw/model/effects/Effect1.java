@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.enumerations.Student;
 
 import java.util.ArrayList;
 
-public class Effect1 implements Effect {
+public class Effect1 implements Actionable {
 
 	private int id;
 	private ArrayList<Student> students;
@@ -26,7 +26,7 @@ public class Effect1 implements Effect {
 
 	@Override
 	public void apply(Game game, Student chosenStudent) {
-		//move chosen students
+
 	}
 
 	@Override

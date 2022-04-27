@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.Student;
+import it.polimi.ingsw.model.enumerations.TowerColor;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -44,9 +45,9 @@ class GameBoardTest {
 
     @Test
     void fillIslands() {
-        Game game = new Game(2);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        Game game = new Game(2, false);
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         int motherNature = game.getBoard().getMotherNature();
@@ -64,9 +65,9 @@ class GameBoardTest {
 
     @Test
     void moveStudentsFromCloud() {
-        Game game = new Game(2);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        Game game = new Game(2, false);
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
         game.getBoard().prepareGame();
         Cloud cloud;
         Player currentPlayer = game.getBoard().getPlayers().get(game.getCurrentPlayer());
@@ -93,7 +94,7 @@ class GameBoardTest {
     @Test
     void addPlayer() {
         GameBoard gameBoard = new GameBoard(2);
-        gameBoard.addPlayer("FirstPlayer");
+        gameBoard.addPlayer("FirstPlayer", TowerColor.GRAY);
         Player player = gameBoard.getPlayers().get(0);
 
         assertEquals(1, gameBoard.getPlayers().size());
@@ -102,13 +103,13 @@ class GameBoardTest {
 
     @Test
     void prepareGame() {
-        Game game = new Game(2);
+        Game game = new Game(2, false);
     }
 
     @Test
     void getPlayerByNickname() {
         GameBoard gameBoard = new GameBoard(2);
-        gameBoard.addPlayer("FirstPlayer");
+        gameBoard.addPlayer("FirstPlayer", TowerColor.GRAY);
 
         Player player = gameBoard.getPlayers().get(0);
 

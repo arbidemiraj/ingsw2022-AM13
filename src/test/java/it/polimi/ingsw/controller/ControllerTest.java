@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.Character;
 import it.polimi.ingsw.model.enumerations.Student;
+import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
 import org.junit.jupiter.api.Test;
 
@@ -11,9 +12,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class ControllerTest {
     @Test
     void endingConditionCheck1() {
-        Game game = new Game(2);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        Game game = new Game(2, false);
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
 
@@ -26,9 +27,9 @@ class ControllerTest {
 
     @Test
     void endingConditionCheck2() {
-        Game game = new Game(2);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        Game game = new Game(2, false);
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
 
@@ -53,9 +54,9 @@ class ControllerTest {
 
     @Test
     void moveStudent() {
-        Game game = new Game(2);
+        Game game = new Game(2, false);
         game.getBoard().prepareGame();
-        game.getBoard().addPlayer("FirstPlayer");
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
         Island island = game.getBoard().getIslands().get(5);
         PlayerBoard playerBoard = game.getBoard().getPlayers().get(0).getPlayerBoard();
         Student student = Student.BLUE;
@@ -72,9 +73,9 @@ class ControllerTest {
 
     @Test
     void firstPlayer() {
-        Game game = new Game(2);
+        Game game = new Game(2, false);
         game.getBoard().prepareGame();
-        game.getBoard().addPlayer("FirstPlayer");
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
         Controller controller = new Controller(game);
 
         controller.firstPlayer();
@@ -98,8 +99,8 @@ class ControllerTest {
     @Test
     void activateCharacter() throws NotEnoughCoinException {
         Game game = new Game(2, true);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
         game.getBoard().prepareGame();
 
         Controller controller = new Controller(game);
@@ -121,8 +122,8 @@ class ControllerTest {
     @Test
     void activateCharacterFail() throws NotEnoughCoinException {
         Game game = new Game(2, true);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         Controller controller = new Controller(game);

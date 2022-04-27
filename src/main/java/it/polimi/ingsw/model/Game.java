@@ -1,13 +1,14 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.Student;
-import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
 import it.polimi.ingsw.model.maps.ColorIntMap;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
+/**
+ * This class manages the game logic
+ */
 public class Game {
 
 	private int currentPlayer; //represents the position of currentPlayer in players Array
@@ -18,35 +19,42 @@ public class Game {
 
 	private int generalSupply;
 
-	private int motherNatureMoves = 0;
-
-	private boolean expertMode;
+	private final boolean expertMode;
 
 	private Character[] characters;
+
+	private ArrayList<Integer> activatedCharacters;
 
 	private ArrayList<AssistantCard> cardsPlayed; //each round has a list of Card containing the card played in the round
 
 	private final int numPlayers;
 
-	public Game(int numPlayers){
+
+	/**
+	 * Default constructor
+	 * @param numPlayers		max number of players the user chose
+	 * @param expertMode		true if the expert mode is ON
+	 */
+	public Game(int numPlayers, boolean expertMode){
 		board = new GameBoard(numPlayers);
-		this.numPlayers = numPlayers;
-
-	}
-
-	public Game(int numPlayers, boolean expertMode) {
 		this.expertMode = expertMode;
 		this.numPlayers = numPlayers;
-		board = new GameBoard(numPlayers);
-		board.prepareGame();
+		activatedCharacters = new ArrayList<>();
+		cardsPlayed = new ArrayList<>();
 
-		setupExpertMode();
-		for(Player player : board.getPlayers()) player.addCoin();
-
+		if(expertMode == true){
+			board.prepareGame();
+			setupExpertMode();
+			for(Player player : board.getPlayers()) player.addCoin();
+		}
 	}
 
-	public void setupExpertMode() {
-		//creates 3 character cards
+
+	/**
+	 * Setup for expert mode
+	 * Creates the instances of the 3 character cards randomly chose
+	 */
+	private void setupExpertMode() {
 		int id;
 		characters = new Character[3];
 
@@ -61,19 +69,13 @@ public class Game {
 	}
 
 
-	public void setCurrentPlayer(int currentPlayer) {
-		this.currentPlayer = currentPlayer;
-	}
-
-	public int getCurrentPlayer() {
-		return currentPlayer;
-	}
-
-	public GameBoard getBoard() {
-		return board;
-	}
-
-	public int chooseEffect(int[] availableEffect) {
+	/**
+	 * Returns an effect id, used to randomly generate 3 character that will be used in the game
+	 *
+	 * @param availableEffect		array of available effect that can be generated
+	 * @return an effect id, used to generate a character for expert mode
+	 */
+	private int chooseEffect(int[] availableEffect) {
 		int effect, random;
 
 		do {
@@ -89,27 +91,52 @@ public class Game {
 		return 0;
 	}
 
-	public void addMotherNatureMoves() {
-		motherNatureMoves = board.getMotherNature();
-		this.motherNatureMoves += 2;
-		board.setMotherNature(motherNatureMoves);
+	/**
+	 * Returns the current player index in the players arraylist
+	 *
+	 * @return the current player index in the players arraylist
+	 */
+	public int getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	/**
+	 * Returns the game board
+	 *
+	 * @return the game board
+	 */
+	public GameBoard getBoard() {
+		return board;
 	}
 
 
+	/**
+	 * Sets influencePlayer as the player with the highest influence, if it
+	 * doesn't exist it is set to null
+	 */
+	private void setInfluencePlayer(Island island){
+		influence(island);
 
-	private void setInfluencePlayer(){
-		influence(board.getMotherNatureIsland());
-
-			for(int i = 0; i < numPlayers; i++){
-
-				if(influencePlayer == null || influencePlayer.getInfluenceValue() < board.getPlayers().get(i).getInfluenceValue()){
-					influencePlayer = board.getPlayers().get(i);
-				}
-			}
-
+		influencePlayer = board.getPlayers()
+				.stream()
+				.max(Comparator.comparing(Player::getInfluenceValue))
+				.orElse(null);
 	}
 
+
+	/**
+	 * Calculates the influence of a chosen island
+	 *
+	 * @param island		the island where you want to calculate influence
+	 */
 	public void influence (Island island) {
+		if(!activatedCharacters.isEmpty()){
+			if(activatedCharacters.contains(7)){
+				Player owner = getCharacterOwner(7);
+				owner.addInfluence();
+				owner.addInfluence();
+			}
+		}
 		if (!island.isNoEntryTile()) {
 			for (Player player : board.getPlayers()) player.setInfluenceValue(0); //reset influence
 
@@ -125,13 +152,21 @@ public class Game {
 			}
 
 			//add influence if the player has a tower
-			if (board.getMotherNatureIsland().getOwner() != null)
-				board.getMotherNatureIsland().getOwner().addInfluence();
+			if(!activatedCharacters.isEmpty()&&!activatedCharacters.contains(6)){
+				if (board.getMotherNatureIsland().getOwner() != null)
+					board.getMotherNatureIsland().getOwner().addInfluence();
+			}
 		}
 	}
 
-	//merges the values of the two given islands
-	public void unifyIslands(Island island1, Island island2) {
+
+	/**
+	 * Unify 2 islands
+	 *
+	 * @param island1		first island to unify
+	 * @param island2		second island to unify
+	 */
+	public void mergeIslands(Island island1, Island island2) {
 		ArrayList<Student> students1;
 		ArrayList<Student> students2;
 		int numIslands = island1.getIslandState().getNumIslands();
@@ -149,185 +184,162 @@ public class Game {
 
 	}
 
-	//verify that the current island can be merged with the other
+
+	/**
+	 * Checks if the current island (the one with mother nature on it) can be merged
+	 */
 	public void mergeCheck(){
 		Island island1, island2, island3; //indexes of the islands to compare
 		int motherNature, previous, next;
 
 		motherNature = board.getMotherNature();
 
+		next = board.getIslands().getPosition(board.getIslands().getNext(board.getMotherNatureIsland()));
 
-		if(motherNature == board.getIslands().size()-1){
-			next = 0;
-		}
-
-		else next = motherNature + 1;
-
-		if(motherNature == 0){
-			previous = board.getIslands().size()-1;
-		}
-		else previous = motherNature - 1;
+		previous = board.getIslands().getPosition(board.getIslands().getPrevious(board.getMotherNatureIsland()));
 
 		island1 = board.getIslands().get(previous);//previous island
 		island2 = board.getMotherNatureIsland();//current island
 		island3 = board.getIslands().get(next);//next island
 
 		if(island2.getOwner().equals(island1.getOwner())) {
-			unifyIslands(island2, island1);
+			mergeIslands(island2, island1);
 			board.setMotherNature(motherNature - 1);
 			board.getIslands().remove(previous);
 		}
 		if(island2.getOwner().equals(island3.getOwner())) {
-			unifyIslands(island2, island3);
+			mergeIslands(island2, island3);
 			board.getIslands().remove(next);
 		}
 	}
 
+	/**
+	 * After setting the influence player if it isn't null changes the current island owner
+	 */
 	private void controlling() {
-		setInfluencePlayer();
+		setInfluencePlayer(board.getMotherNatureIsland());
 
 		if(influencePlayer!=null){
 			board.getMotherNatureIsland().setOwner(influencePlayer);
 		}
 	}
 
+	/**
+	 * Returns the current number of players in the game
+	 *
+	 * @return the current number of players in the game
+	 */
 	public int getNumPlayers(){
 		return board.getPlayers().size();
 	}
 
+	/**
+	 * Calculates the number of students of the color for each player and sets the professor
+	 * owner if it is not null
+	 * Checks also if the character card with effect 2 is activated
+	 *
+	 * @param color		the professor color you want to check
+	 */
+
 	public void professorCheck(Student color){
-		int[] numStudents = new int[numPlayers];
-		int highestStudent = 0, i = 0, j = 0, colorPos = 0, countHighest = 0;
-		Player owner;
+		int colorPos = createColorIntMap(color);
+
+		int numStud = board.getPlayers()
+				.stream()
+				.mapToInt(p -> p.getNumStudents(color))
+				.max()
+				.orElse(0);
+
+		List<Player> players = board.getPlayers()
+						.stream()
+						.filter(p -> p.getNumStudents(color) == numStud)
+						.collect(Collectors.toList());
+
+		if(!activatedCharacters.isEmpty()){
+			if(activatedCharacters.contains(2)){
+				Character character = getCharacter(2);
+
+				Player owner = character.getOwner();
+
+				if(players.contains(owner)) board.getProfessors()[colorPos].setOwner(owner);
+			}
+		}
+		else if(players.size() == 1) board.getProfessors()[colorPos].setOwner(players.get(0));
+	}
+
+	/**
+	 * returns the integer associated to the color by using the maps
+	 * @param color			the color associated to the position you want to know
+	 * @return				the integer associated to the color passed by using the maps
+	 */
+	private int createColorIntMap(Student color) {
 		ColorIntMap studentColorMap = new ColorIntMap();
 		HashMap<Student, Integer> studentColor = studentColorMap.getMap();
 
-		colorPos = studentColor.get(color);
-
-		//get number of students for each player based on the color
-		for(Player player : board.getPlayers()){
-			numStudents[i] = player.getPlayerBoard().getDinnerRoom()[colorPos].getNumStudents();
-			i++;
-		}
-		
-		for( i = 0; i < numPlayers; i++){
-			if(numStudents[i] >= highestStudent){
-				if(highestStudent == numStudents[i]){
-					countHighest++;
-				}
-				highestStudent = numStudents[i];
-				j = i;
-			}
-		}
-
-		if(highestStudent != 0 && countHighest == 0){
-			owner = board.getPlayers().get(j);
-			board.getProfessors()[colorPos].setOwner(owner);
-		}
+		return studentColor.get(color);
 	}
 
-	public void professorCheck(Character character, Student color) {
-		if(character.getEffectId() != 2) professorCheck(color);
-		else{
-			int[] numStudents = new int[numPlayers];
-			int highestStudent = 0, l = 0, k = 0, colorPos;
-			Player[] highest = new Player[numPlayers];
-
-			ColorIntMap studentColorMap = new ColorIntMap();
-			HashMap<Student, Integer> studentColor = studentColorMap.getMap();
-
-			colorPos = studentColor.get(color);
-
-			//get number of students for each player based on the color
-			for(Player player : board.getPlayers()){
-				numStudents[k] = player.getPlayerBoard().getDinnerRoom()[colorPos].getNumStudents();
-				k++;
-			}
-
-			//checks who are the player with highest num of students
-			for(int i = 0; i < numPlayers; i++){
-				if(numStudents[i] >= highestStudent){
-					if(highestStudent == numStudents[i] || highestStudent == 0){
-						highest[l] = board.getPlayers().get(i);
-						l++;
-					}
-					highestStudent = numStudents[i];
-				}
-			}
-
-			//if one of the player with the highest num of student has activated the card gets the professor
-			for (Player player : highest){
-				if(character.getOwner().equals(player)){
-					board.getProfessors()[colorPos].setOwner(player);
-				}
-			}
-		}
-	}
-
+	/**
+	 * After setting the influence player if it is not the actual island owner he conquers it
+	 */
 	public void conquering() {
-		setInfluencePlayer();
+		setInfluencePlayer(board.getMotherNatureIsland());
 
 		if(influencePlayer != board.getMotherNatureIsland().getOwner()){
 			board.getMotherNatureIsland().setOwner(influencePlayer);
 		}
 	}
 
-	public void conquering(Character character) {
-		if(character.getEffectId() != 6) conquering();
-		else{
-			setInfluencePlayer(character);
-			board.getMotherNatureIsland().setOwner(influencePlayer);
-		}
+
+	/**
+	 * Returns the player that is the owner of the character with the id passed
+	 * @param id	id of the effect of the character you want to know the owner
+	 * @return		the player that is the owner of the character with the id passed
+	 */
+	public Player getCharacterOwner(int id) {
+		return Arrays.asList(characters)
+				.stream()
+				.filter(c -> c.getEffectId() == id)
+				.collect(Collectors.toList())
+				.get(0)
+				.getOwner();
 	}
 
-	public void setInfluencePlayer(Character character){
-		influence(character);
-		//fix
-		for(int i = 0; i < numPlayers; i++){
-			if(influencePlayer == null) { influencePlayer = board.getPlayers().get(i);}
-			else{
-				if (influencePlayer.getInfluenceValue() < board.getPlayers().get(i).getInfluenceValue()) {
-					influencePlayer = board.getPlayers().get(i);
-				}
-			}
-		}
+	/**
+	 * Returns the character with the id passed
+	 * @param id	id of the effect of character you want
+	 * @return		the character with the id passed
+	 */
+	public Character getCharacter(int id) {
+		return Arrays.asList(characters)
+				.stream()
+				.filter(c -> c.getEffectId() == id)
+				.collect(Collectors.toList())
+				.get(0);
 	}
 
-	private void influence(Character character){
-		if(character.getEffectId() == 7){
-			influence(board.getMotherNatureIsland());
-			character.getOwner().addInfluence();
-			character.getOwner().addInfluence(); //additional 2 influence points
-		}
-		else if(character.getEffectId() != 6) {
-			influence(board.getMotherNatureIsland());
-		} else{
-			for(Player player : board.getPlayers()) player.setInfluenceValue(0); //reset influence
-
-			//number of students for each color in island, es. numStudent[0] = num of yellow students
-			int[] numStudents = board.getMotherNatureIsland().getNumStudents();
-
-			//add influence to each player if the player is the owner, based on the number of students
-			for(Player player: board.getPlayers()){
-				for(int i = 0; i < 5; i++) {
-					if(board.getProfessors()[i].getOwner() != null){
-						for(int j = 0; j < numStudents[i]; j++) board.getProfessors()[i].getOwner().addInfluence();
-					}
-				}
-			}
-		}
-
-
-	}
-	
+	/**
+	 * Returns the character of the game
+	 * @return	the character of the game
+	 */
 	public Character[] getCharacters() {
 		return characters;
 	}
 
+
+	/**
+	 * Return the cards played in this round
+	 * @return		 the cards played in this round
+	 */
 	public ArrayList<AssistantCard> getCardsPlayed() {
 		return cardsPlayed;
 	}
 
-	public void moveStudent(Student chosenStudent) {
+	/**
+	 * Returns the currently activated characters
+	 * @return		the currently activated characters
+	 */
+	public ArrayList<Integer> getActivatedCharacters() {
+		return activatedCharacters;
 	}
 }

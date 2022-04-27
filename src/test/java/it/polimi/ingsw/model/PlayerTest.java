@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.enumerations.Student;
+import it.polimi.ingsw.model.enumerations.TowerColor;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -16,9 +17,9 @@ class PlayerTest {
 
     @Test
     void numStudents(){
-        Game game = new Game(2);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
+        Game game = new Game(2, false);
+        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         ArrayList<Student> students = new ArrayList<>();

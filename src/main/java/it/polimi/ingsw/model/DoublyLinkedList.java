@@ -7,7 +7,7 @@ public class DoublyLinkedList{
         Island island;
         Node previous;
         Node next;
-        int position;
+        int index;
     }
 
     public void add(Island island){
@@ -19,16 +19,16 @@ public class DoublyLinkedList{
             newNode.next = newNode.previous = newNode;
 
             head = newNode;
-            newNode.position = 0;
+            newNode.index = 0;
         }
 
         else{
             Node last = head.previous;
-            int pos = last.position;
+            int pos = last.index;
 
             Node newNode = new Node();
             newNode.island = island;
-            newNode.position = pos + 1;
+            newNode.index = pos + 1;
             newNode.next = head;
 
             head.previous = newNode;
@@ -40,13 +40,13 @@ public class DoublyLinkedList{
 
     }
 
-    public void remove(int position){
+    public void remove(int index){
         Node node = head;
         Node del = new Node();
 
 
         for(int i = 0; i < this.size(); i++){
-            if(node.position == position){
+            if(node.index == index){
                 del = node;
             }
             else node = node.next;
@@ -68,25 +68,25 @@ public class DoublyLinkedList{
             del.previous.next = del.next;
         }
 
-        for(int i = del.position; i < this.size(); i++){
-            del.next.position--;
+        for(int i = del.index; i < this.size(); i++){
+            del.next.index--;
             del = del.next;
         }
     }
 
-    public Island get(int position){
+    public Island get(int index){
         Node node = head;
 
         for(int i = 0; i < this.size(); i++){
             node = node.next;
-            if(node.position == position) return node.island;
+            if(node.index == index) return node.island;
         }
 
        return null;
     }
 
     public int size(){
-        if(head.previous != null) return head.previous.position+1;
+        if(head.previous != null) return head.previous.index+1;
         if(head != null) return 1;
         return 0;
     }
@@ -102,12 +102,23 @@ public class DoublyLinkedList{
         return null;
     }
 
+    public Island getPrevious(Island island){
+        Node node = head;
+
+        for(int i = 0; i < this.size(); i++){
+            node = node.previous;
+            if(node.island.equals(island)) return node.previous.island;
+        }
+
+        return null;
+    }
+
     public int getPosition(Island island){
         Node node = head;
 
         for(int i = 0; i < this.size(); i++){
             node = node.next;
-            if(node.island.equals(island)) return node.position;
+            if(node.island.equals(island)) return node.index;
         }
 
         return -1;

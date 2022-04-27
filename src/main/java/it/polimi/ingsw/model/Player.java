@@ -1,14 +1,17 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.model.enumerations.Wizard;
-import it.polimi.ingsw.model.exceptions.CardAlreadyPlayedException;
+import it.polimi.ingsw.model.maps.ColorIntMap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Player {
 
 	private PlayerBoard playerBoard;
+	private int motherNatureMoves;
 	private final String nickname;
 	private TowerColor towerColor;
 	private int numTowers;
@@ -29,6 +32,15 @@ public class Player {
 	public void chooseWizard(Wizard wizard){
 		this.wizard = wizard;
 		createDeck();
+	}
+
+	public int getNumStudents(Student color) {
+		ColorIntMap studentColorMap = new ColorIntMap();
+		HashMap<Student, Integer> studentColor = studentColorMap.getMap();
+
+		int colorPos = studentColor.get(color);
+
+		return playerBoard.getDinnerRoom()[colorPos].getNumStudents();
 	}
 
 	private void createDeck() {
@@ -52,6 +64,7 @@ public class Player {
 
 	public void playCard(AssistantCard cardPlayed){
 		deck.remove(cardPlayed);
+		motherNatureMoves = cardPlayed.getMaxMotherNatureMoves();
 	}
 
 	public void setInfluenceValue(int influence) {
@@ -107,5 +120,13 @@ public class Player {
 
 	public String getNickname() {
 		return nickname;
+	}
+
+	public int getMotherNatureMoves() {
+		return motherNatureMoves;
+	}
+
+	public void setMotherNatureMoves(int motherNatureMoves) {
+		this.motherNatureMoves = motherNatureMoves;
 	}
 }
