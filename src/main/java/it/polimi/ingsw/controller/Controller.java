@@ -5,10 +5,10 @@ import it.polimi.ingsw.model.Character;
 import it.polimi.ingsw.model.effects.Effect;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.CardAlreadyPlayedException;
+import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class Controller {
@@ -25,50 +25,63 @@ public class Controller {
         this.model = model;
         this.nicknameQueue = new ArrayList<>(model.getBoard().getNicknames());
         turnCardsPlayed = new ArrayList<>();
-
-        firstPlayer();
     }
 
-    public void applyIslandEffect(int id, Island chosenIsland){
+    public void activateIslandCharacter(int id, Island chosenIsland) throws NotEnoughCoinException {
         Player player = model.getBoard().getPlayerByNickname(currentPlayer);
 
-        List<Character> activatedCharacter = Arrays.asList(model.getCharacters())
+        Character character = Arrays.asList(model.getCharacters())
                 .stream()
                 .filter(c -> c.getEffectId() == id)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList())
+                .get(0);
 
-        activatedCharacter.get(0).applyEffect(chosenIsland);
+        if(character.getCost() > player.getNumCoins()) throw new NotEnoughCoinException();
+        else{
+            character.setOwner(player);
+            character.applyEffect(chosenIsland);
+        }
     }
 
-    public void applyStudentEffect(int id, Student chosenStudent){
+    public void activateStudentCharacter(int id, Student chosenStudent) throws NotEnoughCoinException {
         Player player = model.getBoard().getPlayerByNickname(currentPlayer);
 
-        List<Character> activatedCharacter = Arrays.asList(model.getCharacters())
+        Character character = Arrays.asList(model.getCharacters())
                 .stream()
                 .filter(c -> c.getEffectId() == id)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList())
+                .get(0);
 
-        activatedCharacter.get(0).applyEffect(chosenStudent);
+        if(character.getCost() > player.getNumCoins()) throw new NotEnoughCoinException();
+        else{
+            character.setOwner(player);
+            character.applyEffect(chosenStudent);
+        }
 
     }
 
-    public void applyEffect(int id){
+    public void activateCharacter(int id) throws NotEnoughCoinException {
         Player player = model.getBoard().getPlayerByNickname(currentPlayer);
 
-        List<Character> activatedCharacter = Arrays.asList(model.getCharacters())
+        Character character = Arrays.asList(model.getCharacters())
                 .stream()
                 .filter(c -> c.getEffectId() == id)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList())
+                .get(0);
 
-        activatedCharacter.get(0).applyEffect();
+        if(character.getCost() > player.getNumCoins()) throw new NotEnoughCoinException();
+        else{
+            character.setOwner(player);
+            character.applyEffect();
+        }
     }
 
-    public void moveStudent(Move from,int position, Move to){
-        to.addStudent(from.removeStudent(position));
+    public void moveStudent(Movable from, Student color, Movable to){
+        to.addStudent(from.removeStudent(color));
     }
 
     public void firstPlayer() {
-        int choose = (int) (Math.random() * model.getNumPlayers());
+        int choose = (int) (Math.random() * (model.getNumPlayers()));
 
         currentPlayer = model.getBoard().getPlayers().get(choose).getNickname();
     }
@@ -138,5 +151,13 @@ public class Controller {
 
     public Game getGame() {
         return model;
+    }
+
+    public void setCurrentPlayer(String currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public String getCurrentPlayerNickname(){
+        return currentPlayer;
     }
 }

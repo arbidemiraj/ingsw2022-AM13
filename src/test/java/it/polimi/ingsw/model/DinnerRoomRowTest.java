@@ -23,4 +23,15 @@ class DinnerRoomRowTest {
 
         assertEquals(1, dinnerRoomRow.getNumStudents());
     }
+
+    @Test
+    void removeStudent() {
+        DinnerRoomRow dinnerRoomRow = new DinnerRoomRow(Student.YELLOW);
+
+        dinnerRoomRow.addStudent(Student.YELLOW);
+        dinnerRoomRow.removeStudent(Student.YELLOW);
+
+        assertEquals(0, dinnerRoomRow.getNumStudents());
+    }
+
 }

@@ -104,4 +104,15 @@ class GameBoardTest {
     void prepareGame() {
         Game game = new Game(2);
     }
+
+    @Test
+    void getPlayerByNickname() {
+        GameBoard gameBoard = new GameBoard(2);
+        gameBoard.addPlayer("FirstPlayer");
+
+        Player player = gameBoard.getPlayers().get(0);
+
+        assertEquals(player, gameBoard.getPlayerByNickname("FirstPlayer"));
+
+    }
 }

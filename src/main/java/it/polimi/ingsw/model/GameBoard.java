@@ -7,6 +7,8 @@ import it.polimi.ingsw.model.maps.IntColorMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameBoard {
 
@@ -94,7 +96,14 @@ public class GameBoard {
 	}
 
 	public Player getPlayerByNickname(String nickname){
-		return null;
+		Player player = players
+				.stream()
+				.filter(p -> p.getNickname().equals(nickname))
+				.collect(Collectors.toList())
+				.get(0);
+
+
+		return player;
 	}
 
 	public ArrayList<String> getNicknames(){

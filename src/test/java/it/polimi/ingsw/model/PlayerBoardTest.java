@@ -40,4 +40,24 @@ class PlayerBoardTest {
         assertEquals(5, playerBoard.getDinnerRoom()[0].getNumStudents());
         assertEquals(3, playerBoard.getDinnerRoom()[1].getNumStudents());
     }
+
+    @Test
+    void removeStudent() {
+        PlayerBoard playerBoard = new PlayerBoard();
+
+        playerBoard.addStudent(Student.YELLOW);
+        Student student = playerBoard.removeStudent(Student.YELLOW);
+
+        assertEquals(Student.YELLOW, student);
+        assertEquals(0, playerBoard.getEntrance().size());
+    }
+
+    @Test
+    void addStudent() {
+        PlayerBoard playerBoard = new PlayerBoard();
+
+        playerBoard.addStudent(Student.YELLOW);
+
+        assertEquals(Student.YELLOW, playerBoard.getEntrance().get(0));
+    }
 }

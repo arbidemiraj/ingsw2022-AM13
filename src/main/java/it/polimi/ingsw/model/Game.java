@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
 import it.polimi.ingsw.model.maps.ColorIntMap;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class Game {
@@ -68,28 +69,6 @@ public class Game {
 		return currentPlayer;
 	}
 
-	public void actionPhase() {
-		for(int i = 0; i < numPlayers; i++) {
-			//move student from entrance to dinner/island
-			//board.moveToDinner(student) or board.moveToIsland(student, chosenIsland)
-			//for each move of student -> professorCheck(color);
-
-			//get input from user
-			int steps = 0;
-			board.moveMotherNature(steps);
-
-			//add control for effects to call overloaded methods
-			if (board.getMotherNatureIsland().getOwner() == null) controlling();
-			else conquering();
-
-			mergeCheck();
-
-			//choose cloud
-			//board.moveStudentsFromCloud(numCloud);
-			//get input from user
-		}
-	}
-
 	public GameBoard getBoard() {
 		return board;
 	}
@@ -129,8 +108,6 @@ public class Game {
 			}
 
 	}
-
-
 
 	public void influence (Island island) {
 		if (!island.isNoEntryTile()) {
@@ -232,15 +209,13 @@ public class Game {
 			numStudents[i] = player.getPlayerBoard().getDinnerRoom()[colorPos].getNumStudents();
 			i++;
 		}
-
+		
 		for( i = 0; i < numPlayers; i++){
 			if(numStudents[i] >= highestStudent){
 				if(highestStudent == numStudents[i]){
 					countHighest++;
 				}
-
 				highestStudent = numStudents[i];
-
 				j = i;
 			}
 		}
@@ -344,40 +319,15 @@ public class Game {
 
 
 	}
-
-	public void moveStudent(Student student){
-
-	}
-
+	
 	public Character[] getCharacters() {
 		return characters;
 	}
 
-	public void activateCharacter(Character character, Player player, Island chosenIsland) throws NotEnoughCoinException {
-		if(character.getCost() > player.getNumCoins()) throw new NotEnoughCoinException();
-		else{
-			character.setOwner(player);
-			character.applyEffect(chosenIsland);
-		}
-	}
-
-	public void activateCharacter(Character character, Player player, Student chosenStudent) throws NotEnoughCoinException {
-		if(character.getCost() > player.getNumCoins()) throw new NotEnoughCoinException();
-		else{
-			character.setOwner(player);
-			character.applyEffect(chosenStudent);
-		}
-	}
-
-	public void activateCharacter(Character character, Player player) throws NotEnoughCoinException {
-		if(character.getCost() > player.getNumCoins()) throw new NotEnoughCoinException();
-		else{
-			character.setOwner(player);
-			character.applyEffect();
-		}
-	}
-
 	public ArrayList<AssistantCard> getCardsPlayed() {
 		return cardsPlayed;
+	}
+
+	public void moveStudent(Student chosenStudent) {
 	}
 }

@@ -5,8 +5,9 @@ import it.polimi.ingsw.model.maps.ColorIntMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
-public class Island implements Move{
+public class Island implements Movable {
 
 	private ArrayList<Student> students;
 
@@ -39,11 +40,15 @@ public class Island implements Move{
 	}
 
 	@Override
-	public Student removeStudent(int position) {
-		Student student = students.get(position);
-		students.remove(position);
+	public Student removeStudent(Student color) {
+		Student student;
 
-		return student;
+		for(int i = 0; i < students.size(); i ++){
+			student = students.get(i);
+			if(student.equals(color)) return student;
+		}
+
+		return null;
 	}
 	@Override
 	public void addStudent(Student student) {

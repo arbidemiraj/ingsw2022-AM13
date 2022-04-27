@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class PlayerBoard implements Move{
+public class PlayerBoard implements Movable {
 
 	private ArrayList<Student> entrance = new ArrayList<>();
 
@@ -47,11 +47,19 @@ public class PlayerBoard implements Move{
 	}
 
 	@Override
-	public Student removeStudent(int position) {
-		Student student = entrance.get(position);
-		entrance.remove(position);
+	public Student removeStudent(Student color) {
+		Student student = null;
 
-		return student;
+		for(int i = 0; i < entrance.size(); i++){
+			if(entrance.get(i).equals(color)){
+				student = entrance.get(i);
+				entrance.remove(student);
+				return student;
+			}
+
+		}
+
+		return null;
 	}
 
 	@Override

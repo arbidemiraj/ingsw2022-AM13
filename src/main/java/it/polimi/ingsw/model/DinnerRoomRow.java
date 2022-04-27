@@ -2,7 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.Student;
 
-public class DinnerRoomRow implements Move{
+public class DinnerRoomRow implements Movable {
 
 	private final Student color;
 
@@ -21,11 +21,11 @@ public class DinnerRoomRow implements Move{
 	}
 
 	@Override
-	public Student removeStudent(int position) {
+	public Student removeStudent(Student color) {
 		numStudents--;
 		Student student = this.color;
 
-		return student;
+		return color;
 	}
 
 	@Override

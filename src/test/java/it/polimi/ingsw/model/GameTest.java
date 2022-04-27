@@ -218,6 +218,15 @@ class GameTest {
     }
 
     @Test
+    void getNumPlayers(){
+        Game game = new Game(2);
+        game.getBoard().addPlayer("FirstPlayer");
+        game.getBoard().addPlayer("SecondPlayer");
+        game.getBoard().prepareGame();
+
+        assertEquals(2, game.getNumPlayers());
+    }
+    @Test
     void expertConquering() {
         Game game = new Game(2, true);
         game.getBoard().addPlayer("FirstPlayer");
@@ -244,46 +253,6 @@ class GameTest {
         assertEquals(player1, island.getOwner());
     }
 
-    @Test
-    void activateCharacter() throws NotEnoughCoinException {
-        Game game = new Game(2, true);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
-
-        game.getBoard().prepareGame();
-        it.polimi.ingsw.model.Character character = game.getCharacters()[0];
-        int cost = character.getCost();
-        Player player = game.getBoard().getPlayers().get(0);
-
-        player.setNumCoins(cost);
-
-        game.activateCharacter(character, player);
-
-        assertEquals(character.getOwner(), player);
-
-    }
-
-    @Test
-    void activateCharacterFail() throws NotEnoughCoinException {
-        Game game = new Game(2, true);
-        game.getBoard().addPlayer("FirstPlayer");
-        game.getBoard().addPlayer("SecondPlayer");
-
-        game.getBoard().prepareGame();
-        Character character = game.getCharacters()[0];
-        Player player = game.getBoard().getPlayers().get(0);
-        player.setNumCoins(0);
-
-        try {
-            game.activateCharacter(character, player);
-        }
-        catch(NotEnoughCoinException e) {
-        }
-
-
-        assertNull(character.getOwner());
-
-    }
 
     @Test
     void expertSetInfluencePlayer() {
