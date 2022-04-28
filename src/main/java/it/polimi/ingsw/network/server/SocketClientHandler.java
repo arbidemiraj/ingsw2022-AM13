@@ -73,7 +73,7 @@ public class SocketClientHandler implements ClientHandler, Runnable {
                             socketServer.addClient(message.getNickname(), this);
                         } else {
                             Server.LOGGER.info(() -> "Received: " + message);
-                            socketServer.onMessageReceived(message);
+                            socketServer.MessageReceived(message);
                         }
                     }
                 }
@@ -110,7 +110,7 @@ public class SocketClientHandler implements ClientHandler, Runnable {
             connected = false;
             Thread.currentThread().interrupt();
 
-            socketServer.onDisconnect(this);
+            socketServer.Disconnect(this);
         }
     }
 

@@ -59,8 +59,8 @@ public class SocketServer implements Runnable {
      *
      * @param message the message to be forwarded.
      */
-    public void onMessageReceived(Message message) {
-        server.onMessageReceived(message);
+    public void MessageReceived(Message message) {
+        server.MessageReceived(message);
     }
 
     /**
@@ -68,7 +68,7 @@ public class SocketServer implements Runnable {
      *
      * @param clientHandler the ClientHandler of the disconnecting client.
      */
-    public void onDisconnect(ClientHandler clientHandler) {
-        server.onDisconnect(clientHandler);
+    public void Disconnect(ClientHandler clientHandler) {
+        server.Disconnect(clientHandler);
     }
 }

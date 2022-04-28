@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.server;
 
-import it.polimi.ingsw.controller.GameController;
+import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.view.VirtualView;
 
@@ -67,8 +67,8 @@ public class Server {
      *
      * @param message the message to be forwarded.
      */
-    public void onMessageReceived(Message message) {
-        gameController.onMessageReceived(message);
+    public void MessageReceived(Message message) {
+        gameController.MessageReceived(message);
     }
 
     /**
@@ -76,16 +76,16 @@ public class Server {
      *
      * @param clientHandler the client disconnecting.
      */
-    public void onDisconnect(ClientHandler clientHandler) {
+    public void Disconnect(ClientHandler clientHandler) {
         synchronized (lock) {
             String nickname = getNicknameFromClientHandler(clientHandler);
 
             if (nickname != null) {
 
-                boolean gameStarted = gameController.isGameStarted();
+                boolean gameStarted = Controller.isGameStarted();
                 removeClient(nickname, !gameStarted); // enable lobby notifications only if the game didn't start yet.
 
-                if(gameController.getTurnController() != null &&
+                if(Controller.getTurnController() != null &&
                         !gameController.getTurnController().getNicknameQueue().contains(nickname)) {
                     return;
                 }
