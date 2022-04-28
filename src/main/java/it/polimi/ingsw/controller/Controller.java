@@ -237,4 +237,20 @@ public class Controller {
     public ArrayList<AssistantCard> getTurnCardsPlayed() {
         return turnCardsPlayed;
     }
+
+    // arrray that hold all the usernames of the players
+    //needs to be implemented
+    private ArrayList<String> Players=new ArrayList<>();
+
+    //verifies that the username passed hasn't been already used
+    private boolean IsUnique (String username){
+        int i=0;
+        boolean uguale=false;
+        while (uguale==false || i<Players().length){
+            if (Players[i].equals(username)==false)
+                uguale=true;
+            i++;
+        }
+        return uguale;
+    }
 }

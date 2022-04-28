@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.message;
 
+import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.Game;
 
 /**
@@ -12,7 +13,7 @@ public class LoginReply extends Message {
     private final boolean connectionSuccessful;
 
     public LoginReply(boolean nicknameAccepted, boolean connectionSuccessful) {
-        super(Game.Number, MessageType.LOGIN_REPLY);//needs the number of the lobby to access at
+        super(Controller.IsUnique, MessageType.LOGIN_REPLY);//needs the metod to very if it's unique, needs some work
         this.nicknameAccepted = nicknameAccepted;
         this.connectionSuccessful = connectionSuccessful;
     }

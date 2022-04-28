@@ -8,7 +8,7 @@ import java.io.Serializable;
  * This avoids the usage of the "instance of" primitive.
  */
 public abstract class Message implements Serializable {
-    private static final long serialVersionUID = 6589184250663958343L;
+    private static final long serialVersionUID = 6589184250663958396L;
 
     private final String nickname;
     private final MessageType messageType;
