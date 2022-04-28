@@ -243,14 +243,8 @@ public class Controller {
     private ArrayList<String> Players=new ArrayList<>();
 
     //verifies that the username passed hasn't been already used
-    private boolean IsUnique (String username){
-        int i=0;
-        boolean uguale=false;
-        while (uguale==false || i<Players().length){
-            if (Players[i].equals(username)==false)
-                uguale=true;
-            i++;
-        }
-        return uguale;
+    private boolean IsUnique (String username) {
+        if (nicknameQueue.contains(username)) return true;
+        return false;
     }
 }
