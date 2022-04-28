@@ -92,4 +92,8 @@ public class Character {
 		isActivated = true;
 		effect.apply(game);
 	}
+
+	public void setCost(int cost) {
+		this.cost = cost;
+	}
 }

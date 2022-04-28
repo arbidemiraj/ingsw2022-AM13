@@ -47,7 +47,8 @@ public class Controller {
             character.setOwner(player);
             character.applyEffect(chosenIsland);
             player.setNumCoins(player.getNumCoins() - character.getCost());
-            model.removeCoins(character.getCost());
+            model.removeCoins(character.getCost()-1);
+            character.setCost(character.getCost()+1);
             model.getActivatedCharacters().add(character.getEffectId());
         }
     }
@@ -69,7 +70,8 @@ public class Controller {
             character.setOwner(player);
             character.applyEffect(chosenStudent);
             player.setNumCoins(player.getNumCoins() - character.getCost());
-            model.removeCoins(character.getCost());
+            model.removeCoins(character.getCost()-1);
+            character.setCost(character.getCost()+1);
             model.getActivatedCharacters().add(character.getEffectId());
         }
 
@@ -91,7 +93,8 @@ public class Controller {
             character.setOwner(player);
             character.applyEffect();
             player.setNumCoins(player.getNumCoins() - character.getCost());
-            model.removeCoins(character.getCost());
+            model.removeCoins(character.getCost()-1);
+            character.setCost(character.getCost()+1);
             model.getActivatedCharacters().add(character.getEffectId());
         }
     }
