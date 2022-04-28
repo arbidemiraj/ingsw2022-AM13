@@ -238,13 +238,13 @@ public class Controller {
         return turnCardsPlayed;
     }
 
-    // arrray that hold all the usernames of the players
-    //needs to be implemented
-    private ArrayList<String> Players=new ArrayList<>();
-
-    //verifies that the username passed hasn't been already used
+    /**
+     *
+     * @param username
+     * @return
+     */
     private boolean IsUnique (String username) {
-        if (nicknameQueue.contains(username)) return true;
+        if (!nicknameQueue.contains(username)) return true;
         return false;
     }
 }

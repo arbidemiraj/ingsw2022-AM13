@@ -3,9 +3,7 @@ package it.polimi.ingsw.network.message;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.Game;
 
-/**
- * Message used to confirm or discard a login request of a client.
- */
+/*
 public class LoginReply extends Message {
 
     private static final long serialVersionUID = -1423312065079102467L;
@@ -34,4 +32,4 @@ public class LoginReply extends Message {
                 ", connectionSuccessful=" + connectionSuccessful +
                 '}';
     }
-}
+}*/
