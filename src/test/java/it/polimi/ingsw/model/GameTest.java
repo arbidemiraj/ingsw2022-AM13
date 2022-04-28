@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
@@ -61,7 +62,7 @@ class GameTest {
     }
 
     @Test
-    void conquering() {
+    void setIslandOwner() {
         Player player1;
         Island island;
         Game game = new Game(2, false);
@@ -81,7 +82,7 @@ class GameTest {
 
         game.getBoard().getProfessors()[0].setOwner(player1);
 
-        game.conquering();
+        game.setIslandOwner(island);
 
         assertEquals(player1, island.getOwner());
     }
@@ -119,7 +120,7 @@ class GameTest {
         game.getBoard().prepareGame();
 
         assertEquals(3, game.getCharacters().length);
-        for(it.polimi.ingsw.model.Character character : game.getCharacters()){
+        for(Character character : game.getCharacters()){
             assertNotNull(character);
         }
     }
@@ -159,7 +160,7 @@ class GameTest {
 
         Controller controller = new Controller(game);
 
-        Character character = new Character(game, 8);
+        Character character = new Character(game, 8, 2);
         game.getCharacters()[0] = character;
 
 
@@ -209,7 +210,7 @@ class GameTest {
         player1 = game.getBoard().getPlayers().get(0);
         player2 = game.getBoard().getPlayers().get(1);
 
-        Character character = new Character(game, 2);
+        Character character = new Character(game, 2, 2);
         game.getCharacters()[0] = character;
 
         character.setOwner(player1);
@@ -244,13 +245,13 @@ class GameTest {
         assertEquals(2, game.getNumPlayers());
     }
     @Test
-    void expertConquering() {
+    void expertSetIslandOwner() {
         Game game = new Game(2, true);
         game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
         game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
-        it.polimi.ingsw.model.Character character = new it.polimi.ingsw.model.Character(game, 6);
+        Character character = new Character(game, 6, 3);
         Player player1, player2;
 
         Island island = game.getBoard().getMotherNatureIsland();
@@ -265,7 +266,7 @@ class GameTest {
         island.addStudent(Student.YELLOW);
         island.setOwner(player2);
 
-        game.conquering();
+        game.setIslandOwner(island);
 
         assertEquals(player1, island.getOwner());
     }

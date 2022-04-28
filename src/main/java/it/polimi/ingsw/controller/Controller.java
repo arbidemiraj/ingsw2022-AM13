@@ -1,8 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.Character;
-import it.polimi.ingsw.model.effects.Actionable;
+import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.CardAlreadyPlayedException;
 import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
@@ -10,15 +9,20 @@ import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
 
 import java.util.ArrayList;
 
+/**
+ * Controller class
+ */
 public class Controller {
 
     private final Game model;
     private String currentPlayer;
     private final ArrayList<String> nicknameQueue;
-    private ArrayList<Actionable> activeEffects;
     private ArrayList<AssistantCard> turnCardsPlayed;
 
-
+    /**
+     * Default constructor
+     * @param model
+     */
 
     public Controller(Game model) {
         this.model = model;
@@ -26,6 +30,13 @@ public class Controller {
         turnCardsPlayed = new ArrayList<>();
     }
 
+    /**
+     * method used to activate a character after receiving the chosenIsland
+     *
+     * @param id        the id of the character
+     * @param chosenIsland      the island the player choose for applying the effect
+     * @throws NotEnoughCoinException       when the player hasn't enough coins to activate the character
+     */
     public void activateIslandCharacter(int id, Island chosenIsland) throws NotEnoughCoinException {
         Player player = model.getBoard().getPlayerByNickname(currentPlayer);
 
@@ -41,6 +52,13 @@ public class Controller {
         }
     }
 
+    /**
+     * method used to activate a character after receiving the chosen Student
+     *
+     * @param id        the id of the character
+     * @param chosenStudent      the student the player choose to move
+     * @throws NotEnoughCoinException       when the player hasn't enough coins to activate the character
+     */
     public void activateStudentCharacter(int id, Student chosenStudent) throws NotEnoughCoinException {
         Player player = model.getBoard().getPlayerByNickname(currentPlayer);
 
@@ -57,6 +75,12 @@ public class Controller {
 
     }
 
+    /**
+     * method used to activate the character that don't need parameters
+     *
+     * @param id        the id of the character
+     * @throws NotEnoughCoinException       when the player hasn't enough coins to activate the character
+     */
     public void activateCharacter(int id) throws NotEnoughCoinException {
         Player player = model.getBoard().getPlayerByNickname(currentPlayer);
 
@@ -72,16 +96,29 @@ public class Controller {
         }
     }
 
+    /**
+     * Method used to move a student
+     * @param from      the movable object where the student is
+     * @param color     the color of the student the player wants to move
+     * @param to        the movable object where the player wants to move the student
+     */
     public void moveStudent(Movable from, Student color, Movable to){
         to.addStudent(from.removeStudent(color));
     }
 
+    /**
+     * Randomly chooses the first player and sets it as current player
+     */
     public void firstPlayer() {
         int choose = (int) (Math.random() * (model.getNumPlayers()));
 
         currentPlayer = model.getBoard().getPlayers().get(choose).getNickname();
     }
 
+    /**
+     * At the start of the action phase is called to set the first player
+     * based on the assistant cards played
+     */
     public void setCurrentPlayer(){
         ArrayList<Integer> values = new ArrayList<>();
 
@@ -97,7 +134,9 @@ public class Controller {
         int maxValuePos = values.indexOf(maxValue);
 
         currentPlayer = model.getBoard().getPlayers().get(maxValuePos).getNickname();
+        model.setCurrentPlayer(nicknameQueue.indexOf(currentPlayer));
     }
+
 
     public String currentPlayer() {
         return currentPlayer;
@@ -107,6 +146,9 @@ public class Controller {
         return model.getBoard().getPlayerByNickname(currentPlayer);
     }
 
+    /**
+     * Used on each phase to advance to another player turn
+     */
     public void nextPlayer() {
         int currentPlayerIndex = nicknameQueue.indexOf(currentPlayer);
 
@@ -114,8 +156,14 @@ public class Controller {
         else currentPlayerIndex = 0;
 
         currentPlayer = nicknameQueue.get(currentPlayerIndex);
+        model.setCurrentPlayer(nicknameQueue.indexOf(currentPlayer));
     }
 
+    /**
+     * Method called when a user plays a card
+     * @param cardPlayed        the card the player decided to play
+     * @throws CardAlreadyPlayedException       the player can't play assistant card already played in this round
+     */
     public void playCard(AssistantCard cardPlayed) throws CardAlreadyPlayedException {
         Player player = model.getBoard().getPlayerByNickname(currentPlayer);
 
@@ -131,6 +179,10 @@ public class Controller {
         }
     }
 
+    /**
+     * Method called at the end of each round to verify if the game has to end
+     * @return
+     */
     public boolean endingConditionCheck() {
         for (Player player : model.getBoard().getPlayers()) {
             if(player.getNumTowers() == 0) return true;
@@ -153,10 +205,19 @@ public class Controller {
         this.currentPlayer = currentPlayer;
     }
 
+    /**
+     * Get the current player nickname
+     * @return  the current player nickname
+     */
     public String getCurrentPlayerNickname(){
         return currentPlayer;
     }
 
+    /**
+     * Method called when the player wants to move mother nature
+     * @param steps        number of steps he wants to move mother nature
+     * @throws InvalidMotherNatureMovesException
+     */
     public void moveMotherNature(int steps) throws InvalidMotherNatureMovesException {
         Player player = model.getBoard().getPlayerByNickname(currentPlayer);
 
@@ -166,6 +227,10 @@ public class Controller {
         }
     }
 
+    /**
+     * Get the card played in this round
+     * @return      the card played in this round
+     */
     public ArrayList<AssistantCard> getTurnCardsPlayed() {
         return turnCardsPlayed;
     }

@@ -32,7 +32,7 @@ public class Cloud {
 		return stud;
 	}
 
-	public ArrayList<Student> getStudents() {
+	public List<Student> getStudents() {
 		return students;
 	}
 }

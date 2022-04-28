@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.maps.ColorIntMap;
 
@@ -16,6 +17,8 @@ public class Game {
 	private Player influencePlayer; //the player with the highest influence
 
 	private final GameBoard board;
+
+	private int[] cost;
 
 	private int generalSupply;
 
@@ -56,13 +59,14 @@ public class Game {
 		int id;
 		characters = new Character[3];
 
-		int[] availableEffects={1, 2, 3, 4, 5, 6, 8, 11};
+		int[] availableEffects = {1, 2, 3, 4, 5, 6, 8, 11};
+		int[] cost = {0, 1, 2, 3, 1, 2, 3, 0, 2, 0, 0, 2};
 
 		generalSupply = 20 - numPlayers;
 
 		for(int i = 0; i < 3; i++){
 			id = chooseEffect(availableEffects);
-			characters[i] = new Character(this, id);
+			characters[i] = new Character(this, id, cost[id]);
 		}
 	}
 
@@ -97,6 +101,11 @@ public class Game {
 	 */
 	public int getCurrentPlayer() {
 		return currentPlayer;
+	}
+
+
+	public void setCurrentPlayer(int currentPlayer) {
+		this.currentPlayer = currentPlayer;
 	}
 
 	/**
@@ -211,17 +220,6 @@ public class Game {
 	}
 
 	/**
-	 * After setting the influence player if it isn't null changes the current island owner
-	 */
-	private void controlling() {
-		setInfluencePlayer(board.getMotherNatureIsland());
-
-		if(influencePlayer!=null){
-			board.getMotherNatureIsland().setOwner(influencePlayer);
-		}
-	}
-
-	/**
 	 * Returns the current number of players in the game
 	 *
 	 * @return the current number of players in the game
@@ -279,8 +277,8 @@ public class Game {
 	/**
 	 * After setting the influence player if it is not the actual island owner he conquers it
 	 */
-	public void conquering() {
-		setInfluencePlayer(board.getMotherNatureIsland());
+	public void setIslandOwner(Island island) {
+		setInfluencePlayer(island);
 
 		if(influencePlayer != board.getMotherNatureIsland().getOwner()){
 			board.getMotherNatureIsland().setOwner(influencePlayer);

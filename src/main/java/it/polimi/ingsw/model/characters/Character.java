@@ -1,6 +1,8 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.characters;
 
-import it.polimi.ingsw.model.effects.*;
+import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.Island;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enumerations.Student;
 
 import java.util.ArrayList;
@@ -19,54 +21,34 @@ public class Character {
 
 	private Game game;
 
-	public Character(Game game, int id) {
+	public Character(Game game, int id, int cost) {
 		this.game = game;
 		isActivated = false;
 		effectId = id;
+		this.cost = cost;
 
-		//create the instance of the effect based on the parameter id
-		if (id == 1) {
-			//extracts the 6 students to put on the card
-			ArrayList<Student> students = game.getBoard().extractStudents(4);
-			effect = new Effect1(id, students);
-			cost = 1;
-		}
+		switch(effectId){
+			case 1:
+				ArrayList<Student> students1 = game.getBoard().extractStudents(4);
+				effect = new Effect1(students1);
+				break;
 
-		if (id == 2){
-			effect = new Effect2(id);
-			cost = 2;
-		}
+			case 3:
+				effect = new Effect3();
+				break;
 
-		if (id == 3){
-			effect = new Effect3(id);
-			cost = 3;
-		}
+			case 5:
+				effect = new Effect5();
+				break;
 
-		if (id == 4){
-			effect = new Effect4(id);
-			cost = 1;
-		}
+			case 11:
+				ArrayList<Student> students11 = game.getBoard().extractStudents(4);
+				effect = new Effect11(students11);
+				break;
 
-		if (id == 5){
-			effect = new Effect5(id);
-			cost = 2;
-		}
-
-		if (id == 6){
-			effect = new Effect6(id);
-			cost = 3;
-		}
-
-		if (id == 8){
-			effect = new Effect8(id);
-			cost = 2;
-		}
-
-		if (id == 11) {
-			//extracts the 6 students to put on the card
-			ArrayList<Student> students = game.getBoard().extractStudents(4);
-			effect = new Effect11(id, students);
-			cost = 2;
+			default:
+				effect = new Effect();
+				break;
 		}
 	}
 
@@ -90,23 +72,20 @@ public class Character {
 		this.owner = owner;
 	}
 
+	public int getCost() {
+		return cost;
+	}
+
 	//method for the cards that needs a chosenStudent to apply the effect
 	public void applyEffect(Student chosenStudent){
 		isActivated = true;
-
 		effect.apply(game, chosenStudent);
-	}
-
-	public int getCost() {
-		return cost;
 	}
 
 	//method for the cards that needs a chosen Island to apply the effect
 	public void applyEffect(Island chosenIsland){
 		isActivated = true;
-
 		effect.apply(game, chosenIsland);
-
 	}
 
 	public void applyEffect(){
