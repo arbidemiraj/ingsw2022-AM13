@@ -5,7 +5,7 @@ package it.polimi.ingsw.network.message;
  */
 public class LoginRequest extends Message {
 
-    private static final long serialVersionUID = 6589184250663958396L;
+    private static final long serialVersionUID = -3234502390970792179L;
 
     public LoginRequest(String nickname) {
         super(nickname, MessageType.LOGIN_REQUEST);

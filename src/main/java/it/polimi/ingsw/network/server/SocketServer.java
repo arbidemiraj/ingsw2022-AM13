@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-/**
+/*
 public class SocketServer implements Runnable {
     private final Server server;
     private final int port;

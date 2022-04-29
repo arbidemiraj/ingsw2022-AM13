@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.Game;
 /*
 public class LoginReply extends Message {
 
-    private static final long serialVersionUID = 6589184250663958396L;
+    private static final long serialVersionUID = -3234502390970792179L;
     private final boolean nicknameAccepted;
     private final boolean connectionSuccessful;
 
