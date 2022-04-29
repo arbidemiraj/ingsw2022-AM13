@@ -6,12 +6,12 @@ import it.polimi.ingsw.model.Game;
 /*
 public class LoginReply extends Message {
 
-    private static final long serialVersionUID = -1423312065079102467L;
+    private static final long serialVersionUID = 6589184250663958396L;
     private final boolean nicknameAccepted;
     private final boolean connectionSuccessful;
 
     public LoginReply(boolean nicknameAccepted, boolean connectionSuccessful) {
-        super(Controller.IsUnique, MessageType.LOGIN_REPLY);//needs the metod to very if it's unique, needs some work
+        super(Controller.IsUnique(nickname), MessageType.LOGIN_REPLY);//needs the metod to very if it's unique, needs some work
         this.nicknameAccepted = nicknameAccepted;
         this.connectionSuccessful = connectionSuccessful;
     }

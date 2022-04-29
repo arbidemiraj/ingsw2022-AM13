@@ -5,30 +5,25 @@ package it.polimi.ingsw.network.message;
  */
 public enum MessageType {
     LOGIN_REQUEST, LOGIN_REPLY,
-    PLAYERNUMBER_REQUEST, PLAYERNUMBER_REPLY,
     LOBBY,
-    GODLIST,
     PICK_FIRST_PLAYER,
     BOARD,
-    INIT_WORKERSPOSITIONS,
+    GAME_TABLE,
     INIT_COLORS,
-    PICK_MOVING_WORKER,
-    MOVE,
-    MOVE_FX,
-    BUILD,
-    BUILD_FX,
+    TOWER_COLOR,
+    MOVE_STUDENT,
+    MOVE_MN,
+    MOVE_PROFESSOR,
     WIN,
-    WIN_FX,
     LOSE,
 
     //utility:
-    GAME_LOAD,
+    NEW_GAME,
+    LOAD_GAME,
     MATCH_INFO,
-    DISCONNECTION,
+    DISCONNECTED,
     GENERIC_MESSAGE,
     PING,
     ERROR,
-    ENABLE_EFFECT,
-    APPLY_EFFECT,
-    PERSISTENCE
+    CARD_EFFECT
 }
