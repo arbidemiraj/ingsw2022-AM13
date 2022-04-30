@@ -17,7 +17,6 @@ public class SocketServer implements Runnable {
         this.port = port;
     }
 
-    @Override
     public void run() {
         try {
             serverSocket = new ServerSocket(port);
@@ -42,7 +41,7 @@ public class SocketServer implements Runnable {
         }
     }
 
-    public void addClient(String nickname, ClientHandler clientHandler) {
+    public void addPlayer(String nickname, ClientHandler clientHandler) {
         server.addPlayer(nickname, clientHandler);
     }
 
