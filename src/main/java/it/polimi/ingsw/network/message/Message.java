@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.message;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -7,9 +8,11 @@ import java.io.Serializable;
  * Both server and clients will communicate using this generic type of message.
  * This avoids the usage of the "instance of" primitive.
  */
-public abstract class Message implements Serializable {
-    private static final long serialVersionUID = 6589184250663958396L;
 
+public abstract class Message implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -6150546994815248224L;
     private final String nickname;
     private final MessageType messageType;
 
