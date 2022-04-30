@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.CardAlreadyPlayedException;
 import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
+import it.polimi.ingsw.network.message.Message;
 
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ public class Controller {
 
     private final Game model;
     private String currentPlayer;
-    private final ArrayList<String> nicknameQueue;
+    private final ArrayList<String> usernameQueue;
     private ArrayList<AssistantCard> turnCardsPlayed;
 
     /**
@@ -26,7 +27,7 @@ public class Controller {
 
     public Controller(Game model) {
         this.model = model;
-        this.nicknameQueue = new ArrayList<>(model.getBoard().getNicknames());
+        this.usernameQueue = new ArrayList<>(model.getBoard().getNicknames());
         turnCardsPlayed = new ArrayList<>();
     }
 
@@ -137,7 +138,7 @@ public class Controller {
         int maxValuePos = values.indexOf(maxValue);
 
         currentPlayer = model.getBoard().getPlayers().get(maxValuePos).getNickname();
-        model.setCurrentPlayer(nicknameQueue.indexOf(currentPlayer));
+        model.setCurrentPlayer(usernameQueue.indexOf(currentPlayer));
     }
 
 
@@ -153,13 +154,13 @@ public class Controller {
      * Used on each phase to advance to another player turn
      */
     public void nextPlayer() {
-        int currentPlayerIndex = nicknameQueue.indexOf(currentPlayer);
+        int currentPlayerIndex = usernameQueue.indexOf(currentPlayer);
 
         if((currentPlayerIndex + 1) < model.getNumPlayers()) currentPlayerIndex++;
         else currentPlayerIndex = 0;
 
-        currentPlayer = nicknameQueue.get(currentPlayerIndex);
-        model.setCurrentPlayer(nicknameQueue.indexOf(currentPlayer));
+        currentPlayer = usernameQueue.get(currentPlayerIndex);
+        model.setCurrentPlayer(usernameQueue.indexOf(currentPlayer));
     }
 
     /**
@@ -239,12 +240,15 @@ public class Controller {
     }
 
     /**
-     *
+     *verifies if the player username is unique
      * @param username
-     * @return
+     * @return boolean
      */
     private boolean IsUnique (String username) {
-        if (!nicknameQueue.contains(username)) return true;
+        if (!usernameQueue.contains(username)) return true;
         return false;
+    }
+
+    public static void messageReceived(Message message) {
     }
 }

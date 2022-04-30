@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-/*
+
 public class SocketServer implements Runnable {
     private final Server server;
     private final int port;
@@ -43,16 +43,16 @@ public class SocketServer implements Runnable {
     }
 
     public void addClient(String nickname, ClientHandler clientHandler) {
-        server.addClient(nickname, clientHandler);
+        server.addPlayer(nickname, clientHandler);
     }
 
 
     public void MessageReceived(Message message) {
-        server.MessageReceived(message);
+        server.messageReceived(message);
     }
 
 
     public void Disconnect(ClientHandler clientHandler) {
         server.Disconnect(clientHandler);
     }
-}*/
+}

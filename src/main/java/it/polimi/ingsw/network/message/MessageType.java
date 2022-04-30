@@ -11,18 +11,22 @@ public enum MessageType {
     GAME_TABLE,
     INIT_COLORS,
     TOWER_COLOR,
+    START_TURN,
+    SELECT_ISLAND,
     MOVE_STUDENT,
     MOVE_MN,
     MOVE_PROFESSOR,
     WIN,
     LOSE,
 
+
     //utility:
     NEW_GAME,
     LOAD_GAME,
-    MATCH_INFO,
+    GAME_INFO,
     DISCONNECTED,
     GENERIC_MESSAGE,
+    SUCCESS_MESSAGE,
     PING,
     ERROR,
     CARD_EFFECT

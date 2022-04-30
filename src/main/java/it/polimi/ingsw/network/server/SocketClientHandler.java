@@ -8,7 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-/**
+
 public class SocketClientHandler implements ClientHandler, Runnable {
     private final Socket client;
     private final SocketServer socketServer;
@@ -110,4 +110,4 @@ public class SocketClientHandler implements ClientHandler, Runnable {
             disconnect();
         }
     }
-}*/
+}
