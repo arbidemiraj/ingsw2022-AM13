@@ -219,7 +219,7 @@ public class Controller {
 
     /**
      * Method called when the player wants to move mother nature
-     * @param steps        number of steps he wants to move mother nature
+     * @param steps number of steps he wants to move mother nature
      * @throws InvalidMotherNatureMovesException
      */
     public void moveMotherNature(int steps) throws InvalidMotherNatureMovesException {

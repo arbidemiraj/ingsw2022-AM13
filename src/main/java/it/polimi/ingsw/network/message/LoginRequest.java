@@ -9,7 +9,7 @@ public class LoginRequest extends Message {
 
 
     @Serial
-    private static final long serialVersionUID = -6112309482264268808L;
+    private static final long serialVersionUID = -3234502390970792179L;
 
     public LoginRequest(String nickname) {
         super(nickname, MessageType.LOGIN_REQUEST);
