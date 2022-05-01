@@ -22,8 +22,8 @@ import java.util.concurrent.TimeUnit;
 
         private final Socket socket;
 
-        private final ObjectOutputStream outputStm;
-        private final ObjectInputStream inputStm;
+        private final ObjectOutputStream output;
+        private final ObjectInputStream input;
         private final ExecutorService readExecutionQueue;
         private final ScheduledExecutorService pinger;
 
@@ -32,8 +32,8 @@ import java.util.concurrent.TimeUnit;
         public SocketClient(String address, int port) throws IOException {
             this.socket = new Socket();
             this.socket.connect(new InetSocketAddress(address, port), SOCKET_TIMEOUT);
-            this.outputStm = new ObjectOutputStream(socket.getOutputStream());
-            this.inputStm = new ObjectInputStream(socket.getInputStream());
+            this.output = new ObjectOutputStream(socket.getOutputStream());
+            this.input = new ObjectInputStream(socket.getInputStream());
             this.readExecutionQueue = Executors.newSingleThreadExecutor();
             this.pinger = Executors.newSingleThreadScheduledExecutor();
         }
@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit;
                 while (!readExecutionQueue.isShutdown()) {
                     Message message;
                     try {
-                        message = (Message) inputStm.readObject();
+                        message = (Message) input.readObject();
                         Client.LOGGER.info("Received: " + message);
                     } catch (IOException | ClassNotFoundException e) {
                         message = new ErrorMessage(null, "Connection lost with the server.");
@@ -64,8 +64,8 @@ import java.util.concurrent.TimeUnit;
         @Override
         public void sendMessage(Message message) {
             try {
-                outputStm.writeObject(message);
-                outputStm.reset();
+                output.writeObject(message);
+                output.reset();
             } catch (IOException e) {
                 disconnect();
 

@@ -31,6 +31,9 @@ public class Controller {
         turnCardsPlayed = new ArrayList<>();
     }
 
+    public static void removePlayer(String username) {
+    }
+
     /**
      * method used to activate a character after receiving the chosenIsland
      *
@@ -239,12 +242,13 @@ public class Controller {
         return turnCardsPlayed;
     }
 
+
     /**
      *verifies if the player username is unique
      * @param username
-     * @return boolean
+     * @return boolean      true if it is unique, false if it isn't
      */
-    private boolean IsUnique (String username) {
+    private boolean isUnique (String username) {
         if (!usernameQueue.contains(username)) return true;
         return false;
     }

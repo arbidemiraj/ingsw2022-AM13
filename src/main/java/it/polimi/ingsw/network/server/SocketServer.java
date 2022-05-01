@@ -52,6 +52,6 @@ public class SocketServer implements Runnable {
 
 
     public void Disconnect(ClientHandler clientHandler) {
-        server.Disconnect(clientHandler);
+        server.disconnect(clientHandler);
     }
 }

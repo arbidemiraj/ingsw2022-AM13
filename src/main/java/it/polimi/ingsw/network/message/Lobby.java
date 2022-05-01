@@ -1,10 +1,6 @@
 package it.polimi.ingsw.network.message;
 
-import it.polimi.ingsw.model.Game;
-
-import java.util.List;
-
-    /**
+/**
      * Message which contains the current players and the maximum size of the lobby .
      */
     /*public class LobbyReply extends Message {

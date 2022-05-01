@@ -41,7 +41,7 @@ public class Server {
      */
     public void removePlayer(String username, boolean notifyEnabled) {
         clientHandlerMap.remove(username);
-        //Controller.removePlayer(username, notifyEnabled);
+        Controller.removePlayer(username);
         LOGGER.info(() -> "Removed " + username + " from the client list.");
     }
 
@@ -55,24 +55,9 @@ public class Server {
     /**
      * Handles the disconnection of a client.
      */
-    public void Disconnect(ClientHandler clientHandler) {
+    public void disconnect(ClientHandler clientHandler) {
         synchronized (lock) {
             String username = getUsernameFromClientHandler(clientHandler);
-
-            /*if (username != null) {
-
-                boolean gameStarted = controller.isGameStarted();
-
-                if(controller.getTurn() != null &&
-                        !controller.getTurn().getUsernameQueue().contains(username)) {
-                    return;
-                }
-
-                if (gameStarted) {
-                    controller.DisconnectionMessage(username, " disconnected from the server. GAME ENDED.");
-                    controller.endGame();
-                }
-            }*/
         }
     }
 

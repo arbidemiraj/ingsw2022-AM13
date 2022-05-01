@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.MessageType;
+import it.polimi.ingsw.network.message.SuccessMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -62,6 +63,8 @@ public class SocketClientHandler implements ClientHandler, Runnable {
                         } else {
                             Server.LOGGER.info(() -> "Received: " + message);
                             socketServer.MessageReceived(message);
+                            SuccessMessage successMessage = new SuccessMessage("Player1");
+                            sendMessage(successMessage);
                         }
                     }
                 }
