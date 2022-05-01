@@ -8,7 +8,7 @@ import java.util.List;
      * Message which contains the current players and the maximum size of the lobby .
      */
     /*public class LobbyReply extends Message {
-        private static final long serialVersionUID = -3234502390970792179L;
+        private static final long serialVersionUID = ;
         private final List<String> nicknameList;
         private final int maxPlayers;
 
