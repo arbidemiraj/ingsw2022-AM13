@@ -40,7 +40,7 @@ public class Server {
      *this creates a new player profile
      */
     public void addClient(String username, ClientHandler clientHandler) throws DuplicateUsernameException {
-        if(clientHandlerMap.containsKey(username)) throw new DuplicateUsernameException();
+        if(getUsernameFromClientHandler(clientHandler) != null) throw new DuplicateUsernameException();
         else clientHandlerMap.put(username, clientHandler);
     }
 

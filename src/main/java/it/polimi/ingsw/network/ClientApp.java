@@ -30,7 +30,6 @@ public class ClientApp {
         System.out.printf("> ");
         String username;
 
-
         username = scanner.nextLine();
 
         LoginMessage login = new LoginMessage(username);
