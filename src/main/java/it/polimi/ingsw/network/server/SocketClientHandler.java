@@ -55,12 +55,13 @@ public class SocketClientHandler implements ClientHandler, Runnable {
             while (!Thread.currentThread().isInterrupted()) {
                 synchronized (inputLock) {
                     Message message = (Message) input.readObject();
+                    SuccessMessage successMessage = new SuccessMessage();
 
                     if (message != null && message.getMessageType() != MessageType.PING) {
                         if (message.getMessageType() == MessageType.LOGIN_REQUEST) {
-
                             try {
                                 socketServer.addPlayer(message.getUsername(), this);
+                                sendMessage(successMessage);
                             } catch (DuplicateUsernameException e) {
                                 ErrorMessage errorMessage = new ErrorMessage(message.getUsername(), e.getError());
                                 sendMessage(errorMessage);
@@ -74,7 +75,6 @@ public class SocketClientHandler implements ClientHandler, Runnable {
                         else if(message.getMessageType() == MessageType.NEW_GAME){
                             Server.LOGGER.info(() -> "Received: " + message);
                             socketServer.createNewGame((NewGameMessage) message);
-                            SuccessMessage successMessage = new SuccessMessage();
                             sendMessage(successMessage);
                         }
                         else {
