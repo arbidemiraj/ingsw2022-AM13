@@ -1,16 +1,14 @@
 package it.polimi.ingsw.network.client;
 
 
-import it.polimi.ingsw.network.message.ErrorMessage;
-import it.polimi.ingsw.network.message.Message;
-import it.polimi.ingsw.network.message.MessageType;
-import it.polimi.ingsw.network.message.Ping;
+import it.polimi.ingsw.network.message.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -38,6 +36,7 @@ import java.util.concurrent.TimeUnit;
             this.readExecutionQueue = Executors.newSingleThreadExecutor();
             this.pinger = Executors.newSingleThreadScheduledExecutor();
         }
+
 
         /**
          * Asynchronously reads a message from the server via socket and notifies the ClientController.

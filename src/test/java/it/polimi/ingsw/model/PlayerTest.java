@@ -18,8 +18,8 @@ class PlayerTest {
     @Test
     void numStudents(){
         Game game = new Game(2, false);
-        game.addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("FirstPlayer");
+        game.addPlayer("SecondPlayer");
 
         game.getBoard().prepareGame();
         ArrayList<Student> students = new ArrayList<>();

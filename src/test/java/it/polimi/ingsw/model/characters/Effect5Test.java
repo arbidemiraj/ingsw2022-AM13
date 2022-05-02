@@ -14,7 +14,7 @@ class Effect5Test {
     void apply() {
         Game game = new Game(2, false);
         game.getBoard().prepareGame();
-        game.addPlayer("FirstPlayer", TowerColor.WHITE);
+        game.addPlayer("FirstPlayer");
         Player player = game.getPlayers().get(0);
 
         Effect5 effect5 = new Effect5();

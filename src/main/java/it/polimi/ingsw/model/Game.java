@@ -377,8 +377,8 @@ public class Game {
 		return players;
 	}
 
-	public void addPlayer(String username, TowerColor chosenTowerColor) {
-		Player player = new Player(chosenTowerColor,numTowers, username);
+	public void addPlayer(String username) {
+		Player player = new Player(numTowers, username);
 		players.add(player);
 	}
 

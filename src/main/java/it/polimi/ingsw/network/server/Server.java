@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.model.exceptions.DuplicateUsernameException;
 import it.polimi.ingsw.network.client.SocketClient;
 import it.polimi.ingsw.network.message.*;
 
@@ -38,8 +39,20 @@ public class Server {
      * Adds a client to be managed by the server instance
      *this creates a new player profile
      */
-    public void addClient(String username, ClientHandler clientHandler) {
-        clientHandlerMap.put(username, clientHandler);
+    public void addClient(String username, ClientHandler clientHandler) throws DuplicateUsernameException {
+        if(clientHandlerMap.containsKey(username)) throw new DuplicateUsernameException();
+        else clientHandlerMap.put(username, clientHandler);
+    }
+
+
+    /**
+     *verifies if the player username is unique
+     * @param username
+     * @return boolean      true if it is unique, false if it isn't
+     */
+    private boolean isUnique (String username) {
+        if(clientHandlerMap.containsKey(username)) return true;
+        else return false;
     }
 
     /**

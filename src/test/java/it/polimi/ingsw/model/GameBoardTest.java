@@ -46,8 +46,8 @@ class GameBoardTest {
     @Test
     void fillIslands() {
         Game game = new Game(2, false);
-        game.addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("FirstPlayer");
+        game.addPlayer("SecondPlayer");
 
         game.getBoard().prepareGame();
         int motherNature = game.getBoard().getMotherNature();
@@ -67,7 +67,7 @@ class GameBoardTest {
     @Test
     void prepareGame() {
         Game game = new Game(2, false);
-        game.addPlayer("FirstPlayer", TowerColor.WHITE);
+        game.addPlayer("FirstPlayer");
         Player player1 = game.getPlayers().get(0);
 
         game.getBoard().prepareGame();

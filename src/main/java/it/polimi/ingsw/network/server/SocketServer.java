@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.server;
 
+import it.polimi.ingsw.model.exceptions.DuplicateUsernameException;
 import it.polimi.ingsw.network.message.ChooseTowerColor;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.NewGameMessage;
@@ -43,7 +44,7 @@ public class SocketServer implements Runnable {
         }
     }
 
-    public void addPlayer(String username, ClientHandler clientHandler) {
+    public void addPlayer(String username, ClientHandler clientHandler) throws DuplicateUsernameException {
         server.addClient(username, clientHandler);
     }
 

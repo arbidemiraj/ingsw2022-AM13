@@ -21,9 +21,8 @@ public class Player {
 	private AssistantCard lastCard;
 	private int numCoins = 0;
 
-	public Player(TowerColor towerColor, int numTowers, String username) {
+	public Player(int numTowers, String username) {
 		this.numTowers = numTowers;
-		this.towerColor = towerColor;
 		this.username = username;
 		playerBoard = new PlayerBoard();
 		chooseWizard(wizard);
@@ -129,5 +128,9 @@ public class Player {
 
 	public AssistantCard getLastCard() {
 		return lastCard;
+	}
+
+	public void setTowerColor(TowerColor towerColor) {
+		this.towerColor = towerColor;
 	}
 }

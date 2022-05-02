@@ -20,8 +20,8 @@ class ControllerTest {
     
     void prepareTestGame(boolean expertMode){
         testGame = new Game(2, expertMode);
-        testGame.addPlayer("FirstPlayer", TowerColor.GRAY);
-        testGame.addPlayer("SecondPlayer", TowerColor.BLACK);
+        testGame.addPlayer("FirstPlayer");
+        testGame.addPlayer("SecondPlayer");
 
         testGame.getBoard().prepareGame();
 

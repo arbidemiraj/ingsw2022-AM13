@@ -15,7 +15,7 @@ class Effect11Test {
     void apply() {
         Game game = new Game(2, false);
         game.getBoard().prepareGame();
-        game.addPlayer("FirstPlayer", TowerColor.WHITE);
+        game.addPlayer("FirstPlayer");
 
         game.setCurrentPlayer(0);
         Player player = game.getPlayers().get(game.getCurrentPlayer());

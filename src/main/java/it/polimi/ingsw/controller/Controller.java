@@ -244,25 +244,9 @@ public class Controller {
         return turnCardsPlayed;
     }
 
-
-    /**
-     *verifies if the player username is unique
-     * @param username
-     * @return boolean      true if it is unique, false if it isn't
-     */
-    private boolean isUnique (String username) {
-        if (!usernameQueue.contains(username)) return true;
-        return false;
-    }
-
     public void messageReceived(Message receivedMessage) {
         switch (receivedMessage.getMessageType()){
-            case LOGIN_REQUEST -> login(receivedMessage);
         }
-    }
-
-    public void login(Message receivedMessage){
-        if(isUnique(receivedMessage.getUsername()));
     }
 
     public void moveStudentsFromCloud(CloudMessage cloudMessage) {

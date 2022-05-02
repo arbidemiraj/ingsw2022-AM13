@@ -11,8 +11,8 @@ class CharacterTest {
     @Test
     void applyEffect() {
         Game game = new Game(2, true);
-        game.addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("FirstPlayer");
+        game.addPlayer("SecondPlayer");
 
         game.getBoard().prepareGame();
         Character character = game.getCharacters()[0];

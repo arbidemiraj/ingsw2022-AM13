@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.server;
 
+import it.polimi.ingsw.model.exceptions.DuplicateUsernameException;
 import it.polimi.ingsw.network.message.*;
 
 import java.io.IOException;
@@ -57,7 +58,15 @@ public class SocketClientHandler implements ClientHandler, Runnable {
 
                     if (message != null && message.getMessageType() != MessageType.PING) {
                         if (message.getMessageType() == MessageType.LOGIN_REQUEST) {
-                            socketServer.addPlayer(message.getUsername(), this);
+
+                            try {
+                                socketServer.addPlayer(message.getUsername(), this);
+                            } catch (DuplicateUsernameException e) {
+                                ErrorMessage errorMessage = new ErrorMessage(message.getUsername(), e.getError());
+                                sendMessage(errorMessage);
+                            }
+
+
                             ChooseMessage chooseMessage = new ChooseMessage(message.getUsername());
                             Server.LOGGER.info(() -> "New user -> username: " + message.getUsername());
                             sendMessage(chooseMessage);
