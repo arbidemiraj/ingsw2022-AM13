@@ -14,15 +14,11 @@ import java.util.stream.Collectors;
  */
 public class GameBoard {
 
-	private ArrayList<Player> players;
-
-	private ArrayList<TowerColor> towerColors;
-
 	private int currentNumPlayers;
 
-	private int numTowers;
-
 	private final int numPlayers;
+
+	private int numTowers;
 
 	private DoublyLinkedList islands;
 
@@ -40,19 +36,9 @@ public class GameBoard {
 	 * @param numPlayers
 	 */
 	public GameBoard(int numPlayers) {
-		motherNature = (int) (Math.random() * 11);
-		towerColors = new ArrayList<>();
-		players = new ArrayList<>(numPlayers);
-
-		currentNumPlayers = 0;
-		towerColors.add(TowerColor.BLACK);
-		towerColors.add(TowerColor.GRAY);
-		towerColors.add(TowerColor.WHITE);
-
 		this.numPlayers = numPlayers;
 
-		if (numPlayers == 3) numTowers = 6;
-		else numTowers = 8;
+		motherNature = (int) (Math.random() * 11);
 
 		islands = new DoublyLinkedList();
 
@@ -79,10 +65,6 @@ public class GameBoard {
 		}
 	}
 
-	public void addPlayer(Player player) {
-		players.add(player);
-	}
-
 	public void prepareGame() {
 		//Initial 10 students in the bag
 		initBag();
@@ -96,43 +78,11 @@ public class GameBoard {
 		fillClouds();
 
 		//fill entrance for each player
-		for (Player player : players) {
-			if (numPlayers == 2) player.getPlayerBoard().fillEntrance(extractStudents(7));
-			if (numPlayers == 3) player.getPlayerBoard().fillEntrance(extractStudents(9));
-		}
-	}
 
-	public Player getPlayerByUsername(String username) {
-		Player player = players
-				.stream()
-				.filter(p -> p.getUsername().equals(username))
-				.collect(Collectors.toList())
-				.get(0);
-
-		return player;
-	}
-
-	public ArrayList<String> getUsernames() {
-		ArrayList<String> usernames = new ArrayList<>();
-
-		for (Player player : players) {
-			usernames.add(player.getUsername());
-		}
-
-		return usernames;
-	}
-
-	public void addPlayer(String username, TowerColor chosenTowerColor) {
-		if (currentNumPlayers < numPlayers) {
-			Player player = new Player(chosenTowerColor, numTowers, username);
-			players.add(player);
-		} else {
-			System.out.println("Max number of players");
-		}
 	}
 
 	private void fillClouds() {
-		int dim = players.size() + 1;
+		int dim = numPlayers + 1;
 
 		for (Cloud cloud : clouds) {
 			cloud.addStudents(extractStudents(dim));
@@ -232,19 +182,7 @@ public class GameBoard {
 		return islands.get(motherNature);
 	}
 
-	public ArrayList<Player> getPlayers() {
-		return players;
-	}
-
-	public void moveStudentsFromCloud(int numCloud, int currentPlayer) {
-		ArrayList<Student> students = new ArrayList<>();
-
-		try {
-			students = clouds[numCloud].getStudentsFromCloud();
-		} catch (EmptyCloudException e) {
-			e.printStackTrace();
-		}
-
-		players.get(currentPlayer).getPlayerBoard().fillEntrance(students);
+	public void setNumTowers(int numTowers) {
+		this.numTowers = numTowers;
 	}
 }

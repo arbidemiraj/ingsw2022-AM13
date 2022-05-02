@@ -7,6 +7,8 @@ public enum MessageType {
     LOGIN_REQUEST,
     CHOOSE,
     SUCCESS,
+    TOWER_COLOR_CHOOSE,
+    TOWER_COLOR_ASK,
     LOGIN_REPLY,
     LOBBY,
     PICK_FIRST_PLAYER,
@@ -20,8 +22,7 @@ public enum MessageType {
     MOVE_MN,
     WIN,
     LOSE,
-
-
+    CLOUD,
     NEW_GAME,
     LOAD_GAME,
     GAME_INFO,

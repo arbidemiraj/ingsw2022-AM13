@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.enumerations.Student;
+import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.model.maps.ColorIntMap;
 
 import java.util.*;
@@ -16,6 +17,16 @@ public class Game {
 
 	private Player influencePlayer; //the player with the highest influence
 
+	private int currentNumPlayers;
+
+	private final ArrayList<Player> activePlayers = new ArrayList<>();
+
+	private final int numTowers;
+
+	private ArrayList<Player> players = new ArrayList<>();
+
+	private int numPlayers;
+
 	private final GameBoard board;
 
 	private int[] cost;
@@ -28,8 +39,6 @@ public class Game {
 
 	private ArrayList<AssistantCard> cardsPlayed; //each round has a list of Card containing the card played in the round
 
-	private final int numPlayers;
-
 	private Random r = new Random();
 
 	/**
@@ -39,14 +48,19 @@ public class Game {
 	 */
 	public Game(int numPlayers, boolean expertMode){
 		board = new GameBoard(numPlayers);
+		currentNumPlayers = 0;
+		if(numPlayers == 2) numTowers = 8;
+		else numTowers = 6;
+
 		this.numPlayers = numPlayers;
-		activatedCharacters = new ArrayList<>();
 		cardsPlayed = new ArrayList<>();
 
+
 		if(expertMode){
+			activatedCharacters = new ArrayList<>();
 			board.prepareGame();
 			setupExpertMode();
-			for(Player player : board.getPlayers()) player.addCoin();
+			for(Player player : players) player.addCoin();
 		}
 	}
 
@@ -124,7 +138,7 @@ public class Game {
 	private void setInfluencePlayer(Island island){
 		influence(island);
 
-		influencePlayer = board.getPlayers()
+		influencePlayer = players
 				.stream()
 				.max(Comparator.comparing(Player::getInfluenceValue))
 				.orElse(null);
@@ -137,9 +151,9 @@ public class Game {
 	 * @param island		the island where you want to calculate influence
 	 */
 	public void influence (Island island) {
-		for (Player player : board.getPlayers()) player.setInfluenceValue(0); //reset influence
+		for (Player player : players) player.setInfluenceValue(0); //reset influence
 
-		if(!activatedCharacters.isEmpty() && activatedCharacters.contains(8)){
+		if(activatedCharacters != null && !activatedCharacters.isEmpty() && activatedCharacters.contains(8)){
 				Player owner = getCharacterOwner(8);
 				owner.addInfluence();
 				owner.addInfluence();
@@ -158,7 +172,7 @@ public class Game {
 			}
 
 			//add influence if the player has a tower
-			if(!activatedCharacters.isEmpty() && !activatedCharacters.contains(6) && board.getMotherNatureIsland().getOwner() != null){
+			if(activatedCharacters != null && !activatedCharacters.isEmpty() && !activatedCharacters.contains(6) && board.getMotherNatureIsland().getOwner() != null){
 					board.getMotherNatureIsland().getOwner().addInfluence();
 			}
 		}
@@ -224,7 +238,7 @@ public class Game {
 	 * @return the current number of players in the game
 	 */
 	public int getNumPlayers(){
-		return board.getPlayers().size();
+		return numPlayers;
 	}
 
 	/**
@@ -238,27 +252,27 @@ public class Game {
 	public void professorCheck(Student color){
 		int colorPos = createColorIntMap(color);
 
-		int numStud = board.getPlayers()
+		int numStud = players
 				.stream()
 				.mapToInt(p -> p.getNumStudents(color))
 				.max()
 				.orElse(0);
 
-		List<Player> players = board.getPlayers()
+		List<Player> playersCheck = players
 						.stream()
 						.filter(p -> p.getNumStudents(color) == numStud)
 						.collect(Collectors.toList());
 
-		if(!activatedCharacters.isEmpty()){
+		if(activatedCharacters != null && !activatedCharacters.isEmpty()){
 			if(activatedCharacters.contains(2)){
 				Character character = getCharacter(2);
 
 				Player owner = character.getOwner();
 
-				if(players.contains(owner)) board.getProfessors()[colorPos].setOwner(owner);
+				if(playersCheck.contains(owner)) board.getProfessors()[colorPos].setOwner(owner);
 			}
 		}
-		else if(players.size() == 1) board.getProfessors()[colorPos].setOwner(players.get(0));
+		else if(playersCheck.size() == 1) board.getProfessors()[colorPos].setOwner(playersCheck.get(0));
 	}
 
 	/**
@@ -347,5 +361,41 @@ public class Game {
 
 	public int getGeneralSupply() {
 		return generalSupply;
+	}
+
+	public Player getPlayerByUsername(String username) {
+		Player player = players
+				.stream()
+				.filter(p -> p.getUsername().equals(username))
+				.collect(Collectors.toList())
+				.get(0);
+
+		return player;
+	}
+
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+
+	public void addPlayer(String username, TowerColor chosenTowerColor) {
+		Player player = new Player(chosenTowerColor,numTowers, username);
+		players.add(player);
+	}
+
+	public void setupPhase(){
+		for (Player player : players) {
+			if (numPlayers == 2) player.getPlayerBoard().fillEntrance(board.extractStudents(7));
+			if (numPlayers == 3) player.getPlayerBoard().fillEntrance(board.extractStudents(9));
+		}
+	}
+
+	public ArrayList<String> getUsernames() {
+		ArrayList<String> usernames = new ArrayList<>();
+
+		for (Player player : players) {
+			usernames.add(player.getUsername());
+		}
+
+		return usernames;
 	}
 }

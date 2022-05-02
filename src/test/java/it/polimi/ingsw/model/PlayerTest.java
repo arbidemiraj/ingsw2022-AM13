@@ -18,8 +18,8 @@ class PlayerTest {
     @Test
     void numStudents(){
         Game game = new Game(2, false);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         ArrayList<Student> students = new ArrayList<>();
@@ -29,9 +29,9 @@ class PlayerTest {
             students.add(Student.YELLOW);
         }
 
-        game.getBoard().getPlayers().get(0).getPlayerBoard().fillDinnerRoom(students);
+        game.getPlayers().get(0).getPlayerBoard().fillDinnerRoom(students);
 
-        numStud = game.getBoard().getPlayers().get(0).numStudents();
+        numStud = game.getPlayers().get(0).numStudents();
 
         assertEquals(4, numStud);
 

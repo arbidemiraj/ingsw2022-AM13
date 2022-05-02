@@ -37,22 +37,7 @@ import java.util.concurrent.TimeUnit;
             this.input = new ObjectInputStream(socket.getInputStream());
             this.readExecutionQueue = Executors.newSingleThreadExecutor();
             this.pinger = Executors.newSingleThreadScheduledExecutor();
-
-       /*     try{
-            while(true){
-                Message message = (Message) input.readObject();
-
-                if(message.getMessageType() == MessageType.SUCCESS){
-                    break;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }*/
-
-    }
+        }
 
         /**
          * Asynchronously reads a message from the server via socket and notifies the ClientController.

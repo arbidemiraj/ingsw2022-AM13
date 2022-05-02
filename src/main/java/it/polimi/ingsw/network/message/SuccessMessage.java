@@ -2,8 +2,8 @@ package it.polimi.ingsw.network.message;
 
 public class SuccessMessage extends Message{
 
-    public SuccessMessage(String username) {
-        super(username, MessageType.SUCCESS);
+    public SuccessMessage() {
+        super("server", MessageType.SUCCESS);
     }
 
     @Override

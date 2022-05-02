@@ -15,10 +15,10 @@ class Effect11Test {
     void apply() {
         Game game = new Game(2, false);
         game.getBoard().prepareGame();
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.WHITE);
+        game.addPlayer("FirstPlayer", TowerColor.WHITE);
 
         game.setCurrentPlayer(0);
-        Player player = game.getBoard().getPlayers().get(game.getCurrentPlayer());
+        Player player = game.getPlayers().get(game.getCurrentPlayer());
 
         Effect11 effect11 = new Effect11(game.getBoard().extractStudents(4));
         Student chosenStudent = effect11.getStudents().get(0);

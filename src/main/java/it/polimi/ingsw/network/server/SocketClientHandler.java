@@ -65,7 +65,7 @@ public class SocketClientHandler implements ClientHandler, Runnable {
                         else if(message.getMessageType() == MessageType.NEW_GAME){
                             Server.LOGGER.info(() -> "Received: " + message);
                             socketServer.createNewGame((NewGameMessage) message);
-                            SuccessMessage successMessage = new SuccessMessage(message.getUsername());
+                            SuccessMessage successMessage = new SuccessMessage();
                             sendMessage(successMessage);
                         }
                         else {

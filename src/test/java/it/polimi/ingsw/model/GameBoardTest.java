@@ -15,7 +15,7 @@ class GameBoardTest {
         GameBoard board = new GameBoard(2);
         board.prepareGame();
 
-        assertEquals(118, board.getBag().size());
+        assertEquals(114, board.getBag().size());
     }
 
     @Test
@@ -46,8 +46,8 @@ class GameBoardTest {
     @Test
     void fillIslands() {
         Game game = new Game(2, false);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         int motherNature = game.getBoard().getMotherNature();
@@ -63,60 +63,15 @@ class GameBoardTest {
         }
     }
 
-    @Test
-    void moveStudentsFromCloud() {
-        Game game = new Game(2, false);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
-        game.getBoard().prepareGame();
-        Cloud cloud;
-        Player currentPlayer = game.getBoard().getPlayers().get(game.getCurrentPlayer());
-
-
-        cloud = game.getBoard().getClouds()[0];
-
-        ArrayList<Student> students = new ArrayList<>();
-
-        students.addAll(cloud.getStudents());
-
-        currentPlayer.getPlayerBoard().getEntrance().clear();
-
-        game.getBoard().moveStudentsFromCloud(0, game.getCurrentPlayer());
-
-        assertEquals(currentPlayer.getPlayerBoard().getEntrance(), students);
-        assertTrue(cloud.getStudents().isEmpty());
-    }
-
-    @Test
-    void addPlayer() {
-        GameBoard gameBoard = new GameBoard(2);
-        gameBoard.addPlayer("FirstPlayer", TowerColor.GRAY);
-        Player player = gameBoard.getPlayers().get(0);
-
-        assertEquals(1, gameBoard.getPlayers().size());
-        assertEquals("FirstPlayer", player.getUsername());
-    }
 
     @Test
     void prepareGame() {
         Game game = new Game(2, false);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.WHITE);
-        Player player1 = game.getBoard().getPlayers().get(0);
+        game.addPlayer("FirstPlayer", TowerColor.WHITE);
+        Player player1 = game.getPlayers().get(0);
 
         game.getBoard().prepareGame();
 
-        assertEquals(109, game.getBoard().getBag().size());
-        assertEquals(7, player1.getPlayerBoard().getEntrance().size());
-    }
-
-    @Test
-    void getPlayerByUsername() {
-        GameBoard gameBoard = new GameBoard(2);
-        gameBoard.addPlayer("FirstPlayer", TowerColor.GRAY);
-
-        Player player = gameBoard.getPlayers().get(0);
-
-        assertEquals(player, gameBoard.getPlayerByUsername("FirstPlayer"));
-
+        assertEquals(114, game.getBoard().getBag().size());
     }
 }

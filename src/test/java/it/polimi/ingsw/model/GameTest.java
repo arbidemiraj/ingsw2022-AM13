@@ -17,14 +17,14 @@ class GameTest {
     void influence() {
         Player player1, player2;
         Game game = new Game(2, false);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         int motherNature;
 
-        player1 = game.getBoard().getPlayers().get(0);
-        player2 = game.getBoard().getPlayers().get(1);
+        player1 = game.getPlayers().get(0);
+        player2 = game.getPlayers().get(1);
         motherNature = game.getBoard().getMotherNature();
 
         game.getBoard().getProfessors()[0].setOwner(player1);
@@ -40,10 +40,12 @@ class GameTest {
     @Test
     void professorCheck() {
         Game game = new Game(2, false);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
+        game.setupPhase();
+
         Player player1;
         Student s1 = Student.BLUE;
         ArrayList<Student> students = new ArrayList<>();
@@ -52,7 +54,7 @@ class GameTest {
         students.add(s1);
         students.add(s1);
 
-        player1 = game.getBoard().getPlayers().get(0);
+        player1 = game.getPlayers().get(0);
 
         player1.getPlayerBoard().fillDinnerRoom(students);
 
@@ -66,13 +68,13 @@ class GameTest {
         Player player1;
         Island island;
         Game game = new Game(2, false);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         int motherNature;
 
-        player1 = game.getBoard().getPlayers().get(0);
+        player1 = game.getPlayers().get(0);
 
         motherNature = game.getBoard().getMotherNature();
 
@@ -90,14 +92,14 @@ class GameTest {
     @Test
     void mergeCheck() {
         Game game = new Game(2, false);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         Player player1;
         int motherNature;
 
-        player1 = game.getBoard().getPlayers().get(0);
+        player1 = game.getPlayers().get(0);
 
         game.getBoard().setMotherNature(4);
         motherNature = game.getBoard().getMotherNature();
@@ -114,8 +116,8 @@ class GameTest {
     @Test
     void setupExpertMode() {
         Game game = new Game(2, true);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
 
@@ -128,8 +130,8 @@ class GameTest {
     @Test
     void unifyIslands() {
         Game game = new Game(2, false);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         Student student1, student2, student3;
@@ -153,9 +155,9 @@ class GameTest {
     @Test
     void influenceCharacter8() throws NotEnoughCoinException {
         Game game = new Game(2, true);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
         game.getBoard().prepareGame();
-        Player player = game.getBoard().getPlayers().get(0);
+        Player player = game.getPlayers().get(0);
 
 
         Controller controller = new Controller(game);
@@ -179,14 +181,14 @@ class GameTest {
     @Test
     void influenceIsland() {
         Game game = new Game(2, true);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         Player player;
         Island island;
 
-        player = game.getBoard().getPlayers().get(0);
+        player = game.getPlayers().get(0);
         game.getBoard().getProfessors()[0].setOwner(player);
 
         island = game.getBoard().getIslands().get(5);
@@ -200,15 +202,15 @@ class GameTest {
     @Test
     void expertProfessorCheck() throws NotEnoughCoinException {
         Game game = new Game(2, true);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         Controller controller = new Controller(game);
 
         Player player1, player2;
-        player1 = game.getBoard().getPlayers().get(0);
-        player2 = game.getBoard().getPlayers().get(1);
+        player1 = game.getPlayers().get(0);
+        player2 = game.getPlayers().get(1);
 
         Character character = new Character(game, 2, 2);
         game.getCharacters()[0] = character;
@@ -238,8 +240,8 @@ class GameTest {
     @Test
     void getNumPlayers(){
         Game game = new Game(2, false);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.addPlayer("SecondPlayer", TowerColor.BLACK);
         game.getBoard().prepareGame();
 
         assertEquals(2, game.getNumPlayers());
@@ -247,8 +249,8 @@ class GameTest {
     @Test
     void expertSetIslandOwner() {
         Game game = new Game(2, true);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
         Character character = new Character(game, 6, 3);
@@ -256,8 +258,8 @@ class GameTest {
 
         Island island = game.getBoard().getMotherNatureIsland();
 
-        player1 = game.getBoard().getPlayers().get(0);
-        player2 = game.getBoard().getPlayers().get(1);
+        player1 = game.getPlayers().get(0);
+        player2 = game.getPlayers().get(1);
 
         character.setOwner(player1);
         game.getBoard().getProfessors()[0].setOwner(player1);
@@ -274,14 +276,15 @@ class GameTest {
     @Test
     void twoPlayersGame(){
         Game game = new Game(2, false);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.addPlayer("SecondPlayer", TowerColor.BLACK);
 
         game.getBoard().prepareGame();
+        game.setupPhase();
 
-        assertEquals(2, game.getBoard().getPlayers().size());
+        assertEquals(2, game.getPlayers().size());
 
-        for(Player player : game.getBoard().getPlayers()){
+        for(Player player : game.getPlayers()){
             assertEquals(8, player.getNumTowers());
             assertEquals(7, player.getPlayerBoard().getEntrance().size());
         }
@@ -294,15 +297,16 @@ class GameTest {
     @Test
     void threePlayersGame(){
         Game game = new Game(3, false);
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.GRAY);
-        game.getBoard().addPlayer("SecondPlayer", TowerColor.BLACK);
-        game.getBoard().addPlayer("ThirdPlayer", TowerColor.WHITE);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
+        game.addPlayer("SecondPlayer", TowerColor.BLACK);
+        game.addPlayer("ThirdPlayer", TowerColor.WHITE);
 
         game.getBoard().prepareGame();
+        game.setupPhase();
 
-        assertEquals(3, game.getBoard().getPlayers().size());
+        assertEquals(3, game.getPlayers().size());
 
-        for(Player player : game.getBoard().getPlayers()){
+        for(Player player : game.getPlayers()){
             assertEquals(6, player.getNumTowers());
             assertEquals(9, player.getPlayerBoard().getEntrance().size());
         }
@@ -329,5 +333,26 @@ class GameTest {
         game.removeCoins(2);
 
         assertEquals(16, game.getGeneralSupply());
+    }
+
+    @Test
+    void getPlayerByUsername() {
+        Game game = new Game(2, false);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
+
+        Player player = game.getPlayers().get(0);
+
+        assertEquals(player, game.getPlayerByUsername("FirstPlayer"));
+
+    }
+
+    @Test
+    void addPlayer() {
+        Game game = new Game(2, false);
+        game.addPlayer("FirstPlayer", TowerColor.GRAY);
+        Player player = game.getPlayers().get(0);
+
+        assertEquals(1, game.getPlayers().size());
+        assertEquals("FirstPlayer", player.getUsername());
     }
 }

@@ -14,8 +14,8 @@ class Effect5Test {
     void apply() {
         Game game = new Game(2, false);
         game.getBoard().prepareGame();
-        game.getBoard().addPlayer("FirstPlayer", TowerColor.WHITE);
-        Player player = game.getBoard().getPlayers().get(0);
+        game.addPlayer("FirstPlayer", TowerColor.WHITE);
+        Player player = game.getPlayers().get(0);
 
         Effect5 effect5 = new Effect5();
         effect5.apply(game, game.getBoard().getMotherNatureIsland());

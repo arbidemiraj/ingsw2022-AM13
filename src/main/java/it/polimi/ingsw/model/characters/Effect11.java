@@ -16,7 +16,7 @@ public class Effect11 implements Actionable {
 
 	@Override
 	public void apply(Game game , Student chosenStudent) {
-		Player player = game.getBoard().getPlayers().get(game.getCurrentPlayer());
+		Player player = game.getPlayers().get(game.getCurrentPlayer());
 		player.getPlayerBoard().addStudent(chosenStudent);
 		students.remove(chosenStudent);
 		students.add(game.getBoard().extractStudents(1).get(0));

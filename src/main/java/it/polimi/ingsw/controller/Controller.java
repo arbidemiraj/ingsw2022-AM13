@@ -4,8 +4,10 @@ import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.CardAlreadyPlayedException;
+import it.polimi.ingsw.model.exceptions.EmptyCloudException;
 import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
+import it.polimi.ingsw.network.message.CloudMessage;
 import it.polimi.ingsw.network.message.Message;
 
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ public class Controller {
 
     public Controller(Game model) {
         this.model = model;
-        this.usernameQueue = new ArrayList<>(model.getBoard().getUsernames());
+        this.usernameQueue = new ArrayList<>(model.getUsernames());
         turnCardsPlayed = new ArrayList<>();
     }
 
@@ -42,7 +44,7 @@ public class Controller {
      * @throws NotEnoughCoinException       when the player hasn't enough coins to activate the character
      */
     public void activateIslandCharacter(int id, Island chosenIsland) throws NotEnoughCoinException {
-        Player player = model.getBoard().getPlayerByUsername(currentPlayer);
+        Player player = model.getPlayerByUsername(currentPlayer);
 
         Character character = model.getCharacter(id);
 
@@ -65,7 +67,7 @@ public class Controller {
      * @throws NotEnoughCoinException       when the player hasn't enough coins to activate the character
      */
     public void activateStudentCharacter(int id, Student chosenStudent) throws NotEnoughCoinException {
-        Player player = model.getBoard().getPlayerByUsername(currentPlayer);
+        Player player = model.getPlayerByUsername(currentPlayer);
 
         Character character = model.getCharacter(id);
 
@@ -88,7 +90,7 @@ public class Controller {
      * @throws NotEnoughCoinException       when the player hasn't enough coins to activate the character
      */
     public void activateCharacter(int id) throws NotEnoughCoinException {
-        Player player = model.getBoard().getPlayerByUsername(currentPlayer);
+        Player player = model.getPlayerByUsername(currentPlayer);
 
         Character character = model.getCharacter(id);
 
@@ -119,7 +121,7 @@ public class Controller {
     public void firstPlayer() {
         int choose = (int) (Math.random() * (model.getNumPlayers()));
 
-        currentPlayer = model.getBoard().getPlayers().get(choose).getUsername();
+        currentPlayer = model.getPlayers().get(choose).getUsername();
     }
 
     /**
@@ -129,7 +131,7 @@ public class Controller {
     public void setCurrentPlayer(){
         ArrayList<Integer> values = new ArrayList<>();
 
-        for(Player player : model.getBoard().getPlayers()){
+        for(Player player : model.getPlayers()){
             values.add(player.getLastCard().getValue());
         }
 
@@ -140,7 +142,7 @@ public class Controller {
 
         int maxValuePos = values.indexOf(maxValue);
 
-        currentPlayer = model.getBoard().getPlayers().get(maxValuePos).getUsername();
+        currentPlayer = model.getPlayers().get(maxValuePos).getUsername();
         model.setCurrentPlayer(usernameQueue.indexOf(currentPlayer));
     }
 
@@ -150,7 +152,7 @@ public class Controller {
     }
 
     public Player getCurrentPlayer(){
-        return model.getBoard().getPlayerByUsername(currentPlayer);
+        return model.getPlayerByUsername(currentPlayer);
     }
 
     /**
@@ -172,7 +174,7 @@ public class Controller {
      * @throws CardAlreadyPlayedException       the player can't play assistant card already played in this round
      */
     public void playCard(AssistantCard cardPlayed) throws CardAlreadyPlayedException {
-        Player player = model.getBoard().getPlayerByUsername(currentPlayer);
+        Player player = model.getPlayerByUsername(currentPlayer);
 
         if(!turnCardsPlayed.contains(cardPlayed))
             player.playCard(cardPlayed);
@@ -191,7 +193,7 @@ public class Controller {
      * @return
      */
     public boolean endingConditionCheck() {
-        for (Player player : model.getBoard().getPlayers()) {
+        for (Player player : model.getPlayers()) {
             if(player.getNumTowers() == 0) return true;
 
             if(player.getDeck().isEmpty()) return true;
@@ -226,7 +228,7 @@ public class Controller {
      * @throws InvalidMotherNatureMovesException
      */
     public void moveMotherNature(int steps) throws InvalidMotherNatureMovesException {
-        Player player = model.getBoard().getPlayerByUsername(currentPlayer);
+        Player player = model.getPlayerByUsername(currentPlayer);
 
         if(steps > player.getMotherNatureMoves()) throw new InvalidMotherNatureMovesException();
         else{
@@ -261,5 +263,18 @@ public class Controller {
 
     public void login(Message receivedMessage){
         if(isUnique(receivedMessage.getUsername()));
+    }
+
+    public void moveStudentsFromCloud(CloudMessage cloudMessage) {
+        ArrayList<Student> students = new ArrayList<>();
+
+        Cloud[] clouds = model.getBoard().getClouds();
+        try {
+            students = clouds[cloudMessage.getCloudId()].getStudentsFromCloud();
+        } catch (EmptyCloudException e) {
+            e.printStackTrace();
+        }
+
+        getCurrentPlayer().getPlayerBoard().fillEntrance(students);
     }
 }
