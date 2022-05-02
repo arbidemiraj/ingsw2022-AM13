@@ -43,10 +43,11 @@ public class ClientApp {
         int choice = Integer.parseInt(reader.readLine());
 
         switch (choice){
-            case 1 -> {Client.LOGGER.info("Insert number of players: ");
+            case 1 -> {
+                System.out.println("Insert number of players");
             int maxPlayers = scanner.nextInt();
 
-            Client.LOGGER.info("Insert [1] for expert mode ON [2] else: ");
+            System.out.println("Insert \n[1] for expert mode ON \n[2] for expert mode OFF: ");
             int expertMode = scanner.nextInt();
 
             boolean expertModeBoolean = false;
