@@ -21,11 +21,15 @@ public enum MessageType {
     WIN,
     LOSE,
 
+
     NEW_GAME,
     LOAD_GAME,
     GAME_INFO,
     DISCONNECTED,
     PING,
     ERROR,
-    CARD_EFFECT;
+    CARD_EFFECT,
+    END_TURN,
+    JOIN_GAME,
+    RELOAD_GAME;
 }
