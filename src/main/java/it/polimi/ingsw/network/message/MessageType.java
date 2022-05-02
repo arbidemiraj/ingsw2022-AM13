@@ -5,6 +5,7 @@ package it.polimi.ingsw.network.message;
  */
 public enum MessageType {
     LOGIN_REQUEST,
+    CHOOSE,
     SUCCESS,
     LOGIN_REPLY,
     LOBBY,
@@ -24,8 +25,6 @@ public enum MessageType {
     LOAD_GAME,
     GAME_INFO,
     DISCONNECTED,
-    GENERIC_MESSAGE,
-    SUCCESS_MESSAGE,
     PING,
     ERROR,
     CARD_EFFECT;

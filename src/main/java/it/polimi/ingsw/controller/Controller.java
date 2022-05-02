@@ -27,7 +27,7 @@ public class Controller {
 
     public Controller(Game model) {
         this.model = model;
-        this.usernameQueue = new ArrayList<>(model.getBoard().getNicknames());
+        this.usernameQueue = new ArrayList<>(model.getBoard().getUsernames());
         turnCardsPlayed = new ArrayList<>();
     }
 
@@ -42,7 +42,7 @@ public class Controller {
      * @throws NotEnoughCoinException       when the player hasn't enough coins to activate the character
      */
     public void activateIslandCharacter(int id, Island chosenIsland) throws NotEnoughCoinException {
-        Player player = model.getBoard().getPlayerByNickname(currentPlayer);
+        Player player = model.getBoard().getPlayerByUsername(currentPlayer);
 
         Character character = model.getCharacter(id);
 
@@ -65,7 +65,7 @@ public class Controller {
      * @throws NotEnoughCoinException       when the player hasn't enough coins to activate the character
      */
     public void activateStudentCharacter(int id, Student chosenStudent) throws NotEnoughCoinException {
-        Player player = model.getBoard().getPlayerByNickname(currentPlayer);
+        Player player = model.getBoard().getPlayerByUsername(currentPlayer);
 
         Character character = model.getCharacter(id);
 
@@ -88,7 +88,7 @@ public class Controller {
      * @throws NotEnoughCoinException       when the player hasn't enough coins to activate the character
      */
     public void activateCharacter(int id) throws NotEnoughCoinException {
-        Player player = model.getBoard().getPlayerByNickname(currentPlayer);
+        Player player = model.getBoard().getPlayerByUsername(currentPlayer);
 
         Character character = model.getCharacter(id);
 
@@ -119,7 +119,7 @@ public class Controller {
     public void firstPlayer() {
         int choose = (int) (Math.random() * (model.getNumPlayers()));
 
-        currentPlayer = model.getBoard().getPlayers().get(choose).getNickname();
+        currentPlayer = model.getBoard().getPlayers().get(choose).getUsername();
     }
 
     /**
@@ -140,7 +140,7 @@ public class Controller {
 
         int maxValuePos = values.indexOf(maxValue);
 
-        currentPlayer = model.getBoard().getPlayers().get(maxValuePos).getNickname();
+        currentPlayer = model.getBoard().getPlayers().get(maxValuePos).getUsername();
         model.setCurrentPlayer(usernameQueue.indexOf(currentPlayer));
     }
 
@@ -150,7 +150,7 @@ public class Controller {
     }
 
     public Player getCurrentPlayer(){
-        return model.getBoard().getPlayerByNickname(currentPlayer);
+        return model.getBoard().getPlayerByUsername(currentPlayer);
     }
 
     /**
@@ -172,7 +172,7 @@ public class Controller {
      * @throws CardAlreadyPlayedException       the player can't play assistant card already played in this round
      */
     public void playCard(AssistantCard cardPlayed) throws CardAlreadyPlayedException {
-        Player player = model.getBoard().getPlayerByNickname(currentPlayer);
+        Player player = model.getBoard().getPlayerByUsername(currentPlayer);
 
         if(!turnCardsPlayed.contains(cardPlayed))
             player.playCard(cardPlayed);
@@ -213,10 +213,10 @@ public class Controller {
     }
 
     /**
-     * Get the current player nickname
-     * @return  the current player nickname
+     * Get the current player username
+     * @return  the current player username
      */
-    public String getCurrentPlayerNickname(){
+    public String getCurrentPlayerUsername(){
         return currentPlayer;
     }
 
@@ -226,7 +226,7 @@ public class Controller {
      * @throws InvalidMotherNatureMovesException
      */
     public void moveMotherNature(int steps) throws InvalidMotherNatureMovesException {
-        Player player = model.getBoard().getPlayerByNickname(currentPlayer);
+        Player player = model.getBoard().getPlayerByUsername(currentPlayer);
 
         if(steps > player.getMotherNatureMoves()) throw new InvalidMotherNatureMovesException();
         else{
@@ -253,6 +253,13 @@ public class Controller {
         return false;
     }
 
-    public static void messageReceived(Message message) {
+    public void messageReceived(Message receivedMessage) {
+        switch (receivedMessage.getMessageType()){
+            case LOGIN_REQUEST -> login(receivedMessage);
+        }
+    }
+
+    public void login(Message receivedMessage){
+        if(isUnique(receivedMessage.getUsername()));
     }
 }

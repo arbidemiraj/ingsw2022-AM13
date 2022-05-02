@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.network.message.NewGameMessage;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -41,8 +42,8 @@ public class SocketServer implements Runnable {
         }
     }
 
-    public void addPlayer(String nickname, ClientHandler clientHandler) {
-        server.addPlayer(nickname, clientHandler);
+    public void addPlayer(String username, ClientHandler clientHandler) {
+        server.addPlayer(username, clientHandler);
     }
 
 
@@ -53,5 +54,9 @@ public class SocketServer implements Runnable {
 
     public void Disconnect(ClientHandler clientHandler) {
         server.disconnect(clientHandler);
+    }
+
+    public void createNewGame(NewGameMessage newGameMessage){
+        server.createNewGame(newGameMessage);
     }
 }

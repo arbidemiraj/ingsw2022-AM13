@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.network.message.ErrorMessage;
 import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.network.message.MessageType;
 import it.polimi.ingsw.network.message.Ping;
 
 import java.io.IOException;
@@ -36,7 +37,22 @@ import java.util.concurrent.TimeUnit;
             this.input = new ObjectInputStream(socket.getInputStream());
             this.readExecutionQueue = Executors.newSingleThreadExecutor();
             this.pinger = Executors.newSingleThreadScheduledExecutor();
-        }
+
+       /*     try{
+            while(true){
+                Message message = (Message) input.readObject();
+
+                if(message.getMessageType() == MessageType.SUCCESS){
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }*/
+
+    }
 
         /**
          * Asynchronously reads a message from the server via socket and notifies the ClientController.
@@ -55,7 +71,6 @@ import java.util.concurrent.TimeUnit;
                         disconnect();
                         readExecutionQueue.shutdownNow();
                     }
-
                 }
             });
         }
@@ -66,6 +81,7 @@ import java.util.concurrent.TimeUnit;
             try {
                 output.writeObject(message);
                 output.reset();
+                readMessage(); //reads answer
             } catch (IOException e) {
                 disconnect();
 

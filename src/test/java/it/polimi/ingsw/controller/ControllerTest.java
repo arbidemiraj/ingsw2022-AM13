@@ -65,7 +65,7 @@ class ControllerTest {
         testController.firstPlayer();
 
         assertTrue(testController.currentPlayer() != null);
-        assertTrue(testGame.getBoard().getPlayers().contains(testGame.getBoard().getPlayerByNickname(testController.getCurrentPlayerNickname())));
+        assertTrue(testGame.getBoard().getPlayers().contains(testGame.getBoard().getPlayerByUsername(testController.getCurrentPlayerUsername())));
     }
 
     @Test
@@ -76,11 +76,11 @@ class ControllerTest {
 
         testController.nextPlayer();
 
-        assertEquals("SecondPlayer", testController.getCurrentPlayerNickname());
+        assertEquals("SecondPlayer", testController.getCurrentPlayerUsername());
 
         testController.nextPlayer();
 
-        assertEquals("FirstPlayer", testController.getCurrentPlayerNickname());
+        assertEquals("FirstPlayer", testController.getCurrentPlayerUsername());
     }
 
     @Test
@@ -113,7 +113,7 @@ class ControllerTest {
 
         player.setNumCoins(cost);
 
-        testController.setCurrentPlayer(player.getNickname());
+        testController.setCurrentPlayer(player.getUsername());
 
         try{
             testController.activateCharacter(character.getEffectId());
@@ -135,7 +135,7 @@ class ControllerTest {
         Player player = testGame.getBoard().getPlayers().get(0);
         player.setNumCoins(0);
 
-        testController.setCurrentPlayer(player.getNickname());
+        testController.setCurrentPlayer(player.getUsername());
 
         try {
             testController.activateCharacter(character.getEffectId());
@@ -160,7 +160,7 @@ class ControllerTest {
         Player player = testGame.getBoard().getPlayers().get(0);
         player.setNumCoins(character.getCost());
 
-        testController.setCurrentPlayer(player.getNickname());
+        testController.setCurrentPlayer(player.getUsername());
 
         try {
             testController.activateIslandCharacter(3, chosenIsland);
@@ -185,7 +185,7 @@ class ControllerTest {
         Player player = testGame.getBoard().getPlayers().get(0);
         player.setNumCoins(character.getCost());
 
-        testController.setCurrentPlayer(player.getNickname());
+        testController.setCurrentPlayer(player.getUsername());
 
         try {
             testController.activateStudentCharacter(1, chosenStudent);
@@ -226,7 +226,7 @@ class ControllerTest {
         }
 
         testController.setCurrentPlayer();
-        assertEquals("FirstPlayer", testController.getCurrentPlayerNickname());
+        assertEquals("FirstPlayer", testController.getCurrentPlayerUsername());
     }
 
     @Test
@@ -235,7 +235,7 @@ class ControllerTest {
 
         Player player = testGame.getBoard().getPlayers().get(0);
 
-        testController.setCurrentPlayer(player.getNickname());
+        testController.setCurrentPlayer(player.getUsername());
 
         AssistantCard assistantCard = player.getDeck().get(0);
 
@@ -265,7 +265,7 @@ class ControllerTest {
 
         AssistantCard assistantCard = player.getDeck().get(0);
 
-        testController.setCurrentPlayer(player.getNickname());
+        testController.setCurrentPlayer(player.getUsername());
 
         try {
             testController.playCard(assistantCard);

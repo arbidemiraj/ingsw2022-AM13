@@ -102,29 +102,29 @@ public class GameBoard {
 		}
 	}
 
-	public Player getPlayerByNickname(String nickname) {
+	public Player getPlayerByUsername(String username) {
 		Player player = players
 				.stream()
-				.filter(p -> p.getNickname().equals(nickname))
+				.filter(p -> p.getUsername().equals(username))
 				.collect(Collectors.toList())
 				.get(0);
 
 		return player;
 	}
 
-	public ArrayList<String> getNicknames() {
-		ArrayList<String> nicknames = new ArrayList<>();
+	public ArrayList<String> getUsernames() {
+		ArrayList<String> usernames = new ArrayList<>();
 
 		for (Player player : players) {
-			nicknames.add(player.getNickname());
+			usernames.add(player.getUsername());
 		}
 
-		return nicknames;
+		return usernames;
 	}
 
-	public void addPlayer(String nickname, TowerColor chosenTowerColor) {
+	public void addPlayer(String username, TowerColor chosenTowerColor) {
 		if (currentNumPlayers < numPlayers) {
-			Player player = new Player(chosenTowerColor, numTowers, nickname);
+			Player player = new Player(chosenTowerColor, numTowers, username);
 			players.add(player);
 		} else {
 			System.out.println("Max number of players");

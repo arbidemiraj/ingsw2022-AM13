@@ -11,11 +11,9 @@ import it.polimi.ingsw.network.server.SocketServer;
 public class ServerApp {
 
     public static void main(String[] args) {
-        int serverPort = 16847; // default value
+        int serverPort = 12345; // default value
 
-        Game game = new Game(2, false);
-        Controller controller = new Controller(game);
-        Server server = new Server(controller);
+        Server server = new Server();
 
         SocketServer socketServer = new SocketServer(server, serverPort);
         Thread thread = new Thread(socketServer, "socketserver_");

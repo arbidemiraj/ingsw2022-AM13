@@ -50,7 +50,6 @@ public class Game {
 		}
 	}
 
-
 	/**
 	 * Setup for expert mode
 	 * Creates the instances of the 3 character cards randomly chose

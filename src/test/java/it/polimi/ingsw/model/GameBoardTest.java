@@ -94,7 +94,7 @@ class GameBoardTest {
         Player player = gameBoard.getPlayers().get(0);
 
         assertEquals(1, gameBoard.getPlayers().size());
-        assertEquals("FirstPlayer", player.getNickname());
+        assertEquals("FirstPlayer", player.getUsername());
     }
 
     @Test
@@ -110,13 +110,13 @@ class GameBoardTest {
     }
 
     @Test
-    void getPlayerByNickname() {
+    void getPlayerByUsername() {
         GameBoard gameBoard = new GameBoard(2);
         gameBoard.addPlayer("FirstPlayer", TowerColor.GRAY);
 
         Player player = gameBoard.getPlayers().get(0);
 
-        assertEquals(player, gameBoard.getPlayerByNickname("FirstPlayer"));
+        assertEquals(player, gameBoard.getPlayerByUsername("FirstPlayer"));
 
     }
 }

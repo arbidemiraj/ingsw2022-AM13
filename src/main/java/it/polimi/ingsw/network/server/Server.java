@@ -1,7 +1,10 @@
 package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.network.message.MessageType;
+import it.polimi.ingsw.network.message.NewGameMessage;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class Server {
 
-    private final Controller controller;
+    private Controller controller;
 
     private final Map<String, ClientHandler> clientHandlerMap;
 
@@ -22,8 +25,7 @@ public class Server {
 
     private final Object lock;
 
-    public Server(Controller controller) {
-        this.controller = controller;
+    public Server() {
         this.clientHandlerMap = Collections.synchronizedMap(new HashMap<>());
         this.lock = new Object();
     }
@@ -32,7 +34,7 @@ public class Server {
      * Adds a client to be managed by the server instance
      *this creates a new player profile
      */
-    public void addPlayer(String nickname, ClientHandler clientHandler) {
+    public void addPlayer(String username, ClientHandler clientHandler) {
 
     }
 
@@ -49,21 +51,18 @@ public class Server {
      * Forwards a received message from the client to the GameController.
      */
     public void messageReceived(Message message) {
-        Controller.messageReceived(message);
+        controller.messageReceived(message);
     }
 
     /**
      * Handles the disconnection of a client.
      */
     public void disconnect(ClientHandler clientHandler) {
-        synchronized (lock) {
-            String username = getUsernameFromClientHandler(clientHandler);
-        }
     }
 
 
     /**
-     * Returns the corresponding nickname of a ClientHandler
+     * Returns the corresponding username of a ClientHandler
      */
     private String getUsernameFromClientHandler(ClientHandler clientHandler) {
         return clientHandlerMap.entrySet()
@@ -72,5 +71,10 @@ public class Server {
                 .map(Map.Entry::getKey)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public void createNewGame(NewGameMessage newGameMessage){
+        Game game = new Game(newGameMessage.getMaxPlayers(), newGameMessage.isExpertMode());
+        controller = new Controller(game);
     }
 }

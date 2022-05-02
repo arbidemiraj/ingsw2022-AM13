@@ -12,7 +12,7 @@ public class Player {
 
 	private PlayerBoard playerBoard;
 	private int motherNatureMoves;
-	private final String nickname;
+	private final String username;
 	private TowerColor towerColor;
 	private int numTowers;
 	private ArrayList<AssistantCard> deck;
@@ -21,10 +21,10 @@ public class Player {
 	private AssistantCard lastCard;
 	private int numCoins = 0;
 
-	public Player(TowerColor towerColor, int numTowers, String nickname) {
+	public Player(TowerColor towerColor, int numTowers, String username) {
 		this.numTowers = numTowers;
 		this.towerColor = towerColor;
-		this.nickname = nickname;
+		this.username = username;
 		playerBoard = new PlayerBoard();
 		chooseWizard(wizard);
 		lastCard = new AssistantCard(0,0);
@@ -115,8 +115,8 @@ public class Player {
 		this.numCoins = numCoins;
 	}
 
-	public String getNickname() {
-		return nickname;
+	public String getUsername() {
+		return username;
 	}
 
 	public int getMotherNatureMoves() {

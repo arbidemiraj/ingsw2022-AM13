@@ -1,8 +1,6 @@
 package it.polimi.ingsw.network.server;
 
-import it.polimi.ingsw.network.message.Message;
-import it.polimi.ingsw.network.message.MessageType;
-import it.polimi.ingsw.network.message.SuccessMessage;
+import it.polimi.ingsw.network.message.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -59,12 +57,20 @@ public class SocketClientHandler implements ClientHandler, Runnable {
 
                     if (message != null && message.getMessageType() != MessageType.PING) {
                         if (message.getMessageType() == MessageType.LOGIN_REQUEST) {
-                            socketServer.addPlayer(message.getNickname(), this);
-                        } else {
+                            socketServer.addPlayer(message.getUsername(), this);
+                            ChooseMessage chooseMessage = new ChooseMessage(message.getUsername());
+                            Server.LOGGER.info(() -> "New user -> username: " + message.getUsername());
+                            sendMessage(chooseMessage);
+                        }
+                        else if(message.getMessageType() == MessageType.NEW_GAME){
+                            Server.LOGGER.info(() -> "Received: " + message);
+                            socketServer.createNewGame((NewGameMessage) message);
+                            SuccessMessage successMessage = new SuccessMessage(message.getUsername());
+                            sendMessage(successMessage);
+                        }
+                        else {
                             Server.LOGGER.info(() -> "Received: " + message);
                             socketServer.MessageReceived(message);
-                            SuccessMessage successMessage = new SuccessMessage("Player1");
-                            sendMessage(successMessage);
                         }
                     }
                 }

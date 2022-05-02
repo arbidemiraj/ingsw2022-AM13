@@ -9,22 +9,22 @@ import it.polimi.ingsw.model.Game;
 public class Win extends Message {
     private static final long serialVersionUID = 8320443324980300856L;
 
-    public String getWinnerNickname() {
-        return winnerNickname;
+    public String getWinnerusername() {
+        return winnerusername;
     }
 
-    private final String winnerNickname;
+    private final String winnerusername;
 
-    public WinMessage(String winnerNickname) {
-        super(Game.SERVER_NICKNAME, MessageType.WIN);
-        this.winnerNickname = winnerNickname;
+    public WinMessage(String winnerusername) {
+        super(Game.SERVER_username, MessageType.WIN);
+        this.winnerusername = winnerusername;
     }
 
     @Override
     public String toString() {
         return "WinMessage{" +
-                "nickname=" + getNickname() +
-                ", winnerNickname=" + winnerNickname +
+                "username=" + getUsername() +
+                ", winnerusername=" + winnerusername +
                 '}';
     }
 }*/
