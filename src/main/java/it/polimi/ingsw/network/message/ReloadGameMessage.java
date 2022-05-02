@@ -17,7 +17,6 @@ public class ReloadGameMessage extends Message{
         return "ReloadGameMessage{" +
                 "username=" + getUsername() +
                 '}';
-
     }
 
 }
