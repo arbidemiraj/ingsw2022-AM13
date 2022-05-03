@@ -18,6 +18,8 @@ public enum MessageType {
     TOWER_COLOR,
     START_TURN,
     SELECT_ISLAND,
+    START_GAME,
+    INPUT,
     MOVE_STUDENT,
     MOVE_MN,
     WIN,

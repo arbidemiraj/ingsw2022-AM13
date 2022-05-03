@@ -43,7 +43,7 @@ public class SocketServer implements Runnable {
         }
     }
 
-    public void addPlayer(String username, ClientHandler clientHandler) throws DuplicateUsernameException {
+    public void addClient(String username, ClientHandler clientHandler) throws DuplicateUsernameException {
         server.addClient(username, clientHandler);
     }
 

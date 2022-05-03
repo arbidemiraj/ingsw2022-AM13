@@ -2,7 +2,6 @@ package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.model.exceptions.DuplicateUsernameException;
 import it.polimi.ingsw.network.message.*;
-import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
 import it.polimi.ingsw.network.message.servermsg.ChooseMessage;
 import it.polimi.ingsw.network.message.servermsg.ErrorMessage;
 import it.polimi.ingsw.network.message.servermsg.SuccessMessage;
@@ -11,7 +10,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.concurrent.ScheduledExecutorService;
 
 
 public class SocketClientHandler implements ClientHandler, Runnable {
@@ -19,6 +17,8 @@ public class SocketClientHandler implements ClientHandler, Runnable {
     private final SocketServer socketServer;
 
     private boolean connected;
+
+    private int gameId;
 
     private final Object inputLock;
     private final Object outputLock;
@@ -64,15 +64,17 @@ public class SocketClientHandler implements ClientHandler, Runnable {
                     if (message != null && message.getMessageType() != MessageType.PING) {
                         if (message.getMessageType() == MessageType.LOGIN_REQUEST) {
                             try {
-                                socketServer.addPlayer(message.getUsername(), this);
+                                socketServer.addClient(message.getUsername(), this);
+                                ChooseMessage chooseMessage = new ChooseMessage();
+                                sendMessage(chooseMessage);
                             } catch (DuplicateUsernameException e) {
                                 ErrorMessage errorMessage = new ErrorMessage(message.getUsername(), e.getError());
                                 sendMessage(errorMessage);
                             }
 
-                            ChooseMessage chooseMessage = new ChooseMessage(message.getUsername());
+
                             Server.LOGGER.info(() -> "New user -> username: " + message.getUsername());
-                            sendMessage(chooseMessage);
+
                         }
                         else {
                             Server.LOGGER.info(() -> "Received: " + message);
@@ -87,7 +89,6 @@ public class SocketClientHandler implements ClientHandler, Runnable {
         }
         client.close();
     }
-
 
     @Override
     public boolean isConnected() {
@@ -125,5 +126,9 @@ public class SocketClientHandler implements ClientHandler, Runnable {
             Server.LOGGER.severe(e.getMessage());
             disconnect();
         }
+    }
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
     }
 }

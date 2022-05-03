@@ -24,6 +24,7 @@ public class SocketClient extends Client {
     private final ExecutorService readExecutionQueue;
     private final ScheduledExecutorService pinger;
     private static final int SOCKET_TIMEOUT = 10000;
+
     public SocketClient(String address, int port) throws IOException {
         this.socket = new Socket();
         this.socket.connect(new InetSocketAddress(address, port), SOCKET_TIMEOUT);
@@ -45,9 +46,10 @@ public class SocketClient extends Client {
                     Message message;
                     try {
                         message = (Message) input.readObject();
-                        Client.LOGGER.info("Received: " + message);
+                        System.out.println(message);
                     } catch (IOException | ClassNotFoundException e) {
                         message = new ErrorMessage(null, "Connection lost with the server.");
+                        System.out.println(message);
                         disconnect();
                         readExecutionQueue.shutdownNow();
                     }

@@ -1,9 +1,9 @@
 package it.polimi.ingsw.network.server;
 
-import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.exceptions.DuplicateUsernameException;
 import it.polimi.ingsw.network.client.SocketClient;
 import it.polimi.ingsw.network.message.*;
+import it.polimi.ingsw.network.message.clientmsg.JoinGameMessage;
 import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
 import it.polimi.ingsw.network.message.servermsg.LobbyMessage;
 
@@ -71,12 +71,19 @@ public class Server {
      */
     public void messageReceived(Message message) {
         switch (message.getMessageType()){
-            case NEW_GAME -> createNewGame((NewGameMessage) message);
+            case NEW_GAME -> {
+                clientHandlerMap.get(message.getUsername()).setGameId(nextGameId);
+                createNewGame((NewGameMessage) message);
+                lobbyHandler.getGames().get(nextGameId - 1).addPlayer(message.getUsername());
+
+            }
             case JOIN_GAME -> {
                 LobbyMessage lobbyMessage = new LobbyMessage(lobbyHandler.printLobby());
                 clientHandlerMap.get(message.getUsername()).sendMessage(lobbyMessage);
+                JoinGameMessage joinGameMessage = (JoinGameMessage) message;
+                clientHandlerMap.get(message.getUsername()).setGameId(joinGameMessage.getGameId());
+                lobbyHandler.getGames().get(joinGameMessage.getGameId()).addPlayer(message.getUsername());
             }
-
         }
     }
 
@@ -96,6 +103,10 @@ public class Server {
                 .map(Map.Entry::getKey)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public Map<String, ClientHandler> getClientHandlerMap() {
+        return clientHandlerMap;
     }
 
     public void createNewGame(NewGameMessage newGameMessage){

@@ -4,6 +4,9 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.client.SocketClient;
 import it.polimi.ingsw.network.message.*;
+import it.polimi.ingsw.network.message.clientmsg.JoinGameMessage;
+import it.polimi.ingsw.network.message.clientmsg.LoginMessage;
+import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -57,6 +60,16 @@ public class ClientApp {
             NewGameMessage newGameMessage = new NewGameMessage(username, maxPlayers, expertModeBoolean);
 
             client.sendMessage(newGameMessage);}
+
+            case 2 -> {
+                System.out.println("Insert the id of the game you want to join: ");
+                System.out.printf("> ");
+
+                int gameId = scanner.nextInt();
+
+                JoinGameMessage joinGameMessage = new JoinGameMessage(username, gameId);
+                client.sendMessage(joinGameMessage);
+            }
         }
 
 

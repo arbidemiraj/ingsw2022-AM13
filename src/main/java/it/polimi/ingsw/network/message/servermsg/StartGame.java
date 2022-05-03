@@ -3,14 +3,14 @@ package it.polimi.ingsw.network.message.servermsg;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.MessageType;
 
-public class ChooseMessage extends Message {
+public class StartGame extends Message {
 
-    public ChooseMessage() {
-        super("Server", MessageType.CHOOSE);
+    public StartGame() {
+        super("Server", MessageType.START_GAME);
     }
 
     @Override
     public String toString() {
-        return "\n [1] to create a new game \n [2] to join a game \n [3] to reload a game";
+        return "The game has started! ";
     }
 }

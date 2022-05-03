@@ -2,10 +2,10 @@ package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
+import it.polimi.ingsw.network.message.servermsg.StartGame;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 public class GameHandler {
@@ -24,24 +24,33 @@ public class GameHandler {
         maxPlayers = newGameMessage.getMaxPlayers();
         game = new Game(maxPlayers, newGameMessage.isExpertMode());
         controller = new Controller(game);
-        numPlayers = 1;
+        numPlayers = 0;
         this.gameId = gameId;
     }
 
     public void startGame(){
         started = true;
+
+        StartGame startGame = new StartGame();
+
+        sendMessageToAll(startGame);
+
+        controller.firstPlayer();
+
     }
 
     public boolean isStarted(){
         return started;
     }
 
-    public void addPlayer(){
+    public void addPlayer(String username){
+        game.addPlayer(username);
         this.numPlayers++;
+        if(numPlayers == maxPlayers) startGame();
     }
 
-    public void removePlayer(){
-
+    public void removePlayer(String username){
+        game.getPlayers().remove(game.getPlayerByUsername(username));
     }
 
     public void endGame(){
@@ -65,6 +74,19 @@ public class GameHandler {
 
     public Game getGame() {
         return game;
+    }
+
+    public void receivedMessage(Message message){
+    }
+
+    public void sendMessage(Message message, String username){
+        server.getClientHandlerMap().get(username).sendMessage(message);
+    }
+
+    public void sendMessageToAll(Message message){
+        for(String username : controller.getGame().getUsernames()){
+            sendMessage(message, username);
+        }
     }
 }
 

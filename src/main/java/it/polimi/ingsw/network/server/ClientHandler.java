@@ -16,4 +16,6 @@ public interface ClientHandler {
 
 
     void sendMessage(Message message);
+
+    void setGameId(int gameId);
 }
