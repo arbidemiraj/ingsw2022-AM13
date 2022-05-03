@@ -4,6 +4,8 @@ import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.exceptions.DuplicateUsernameException;
 import it.polimi.ingsw.network.client.SocketClient;
 import it.polimi.ingsw.network.message.*;
+import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
+import it.polimi.ingsw.network.message.servermsg.LobbyMessage;
 
 import java.util.ArrayList;
 import java.util.Collections;

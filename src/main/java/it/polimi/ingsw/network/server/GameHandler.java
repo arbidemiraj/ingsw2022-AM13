@@ -2,7 +2,7 @@ package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.network.message.NewGameMessage;
+import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
 
 import java.util.logging.Logger;
 

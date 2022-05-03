@@ -1,9 +1,8 @@
 package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.model.exceptions.DuplicateUsernameException;
-import it.polimi.ingsw.network.message.ChooseTowerColor;
 import it.polimi.ingsw.network.message.Message;
-import it.polimi.ingsw.network.message.NewGameMessage;
+import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
 
 import java.io.IOException;
 import java.net.ServerSocket;

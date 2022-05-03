@@ -1,6 +1,9 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.message.clientmsg;
 
-public class CloudMessage extends Message{
+import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.network.message.MessageType;
+
+public class CloudMessage extends Message {
     private int cloudId;
     public CloudMessage(String username, int cloudId) {
         super(username, MessageType.CLOUD);

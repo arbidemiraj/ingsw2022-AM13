@@ -1,12 +1,9 @@
 package it.polimi.ingsw.network;
 
 
-import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.client.SocketClient;
-import it.polimi.ingsw.network.message.LoginMessage;
-import it.polimi.ingsw.network.message.Message;
-import it.polimi.ingsw.network.message.MessageType;
-import it.polimi.ingsw.network.message.NewGameMessage;
+import it.polimi.ingsw.network.message.clientmsg.LoginMessage;
+import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -55,9 +52,8 @@ public class ClientApp {
 
             NewGameMessage newGameMessage = new NewGameMessage(username, maxPlayers, expertModeBoolean);
 
-            client.sendMessage(newGameMessage);}
-
-
+            client.sendMessage(newGameMessage);
+            }
         }
 
     }
