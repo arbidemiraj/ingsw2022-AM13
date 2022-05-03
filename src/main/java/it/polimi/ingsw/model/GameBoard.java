@@ -1,13 +1,10 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.Student;
-import it.polimi.ingsw.model.enumerations.TowerColor;
-import it.polimi.ingsw.model.exceptions.EmptyCloudException;
 import it.polimi.ingsw.model.maps.IntColorMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.stream.Collectors;
 
 /**
  * This classes manages the game components
@@ -184,5 +181,9 @@ public class GameBoard {
 
 	public void setNumTowers(int numTowers) {
 		this.numTowers = numTowers;
+	}
+
+	public void putStudentInBag(Student student){
+		bag.add(student);
 	}
 }

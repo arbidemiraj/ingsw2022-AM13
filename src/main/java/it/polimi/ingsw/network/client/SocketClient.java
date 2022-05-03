@@ -49,7 +49,7 @@ import java.util.concurrent.TimeUnit;
                     Message message;
                     try {
                         message = (Message) input.readObject();
-                        Client.LOGGER.info("Received: " + message);
+                        System.out.println(message);
                     } catch (IOException | ClassNotFoundException e) {
                         message = new ErrorMessage(null, "Connection lost with the server.");
                         disconnect();

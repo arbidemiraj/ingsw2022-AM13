@@ -15,6 +15,8 @@ public class Game {
 
 	private int currentPlayer; //represents the position of currentPlayer in players Array
 
+	private int disabledColor = -1;
+
 	private Player influencePlayer; //the player with the highest influence
 
 	private int currentNumPlayers;
@@ -41,12 +43,15 @@ public class Game {
 
 	private Random r = new Random();
 
+	private final boolean expertMode;
+
 	/**
 	 * Default constructor
 	 * @param numPlayers		max number of players the user chose
 	 * @param expertMode		true if the expert mode is ON
 	 */
 	public Game(int numPlayers, boolean expertMode){
+		this.expertMode = expertMode;
 		board = new GameBoard(numPlayers);
 		currentNumPlayers = 0;
 		if(numPlayers == 2) numTowers = 8;
@@ -54,10 +59,10 @@ public class Game {
 
 		this.numPlayers = numPlayers;
 		cardsPlayed = new ArrayList<>();
-
+		activatedCharacters = new ArrayList<>();
 
 		if(expertMode){
-			activatedCharacters = new ArrayList<>();
+
 			board.prepareGame();
 			setupExpertMode();
 			for(Player player : players) player.addCoin();
@@ -153,7 +158,7 @@ public class Game {
 	public void influence (Island island) {
 		for (Player player : players) player.setInfluenceValue(0); //reset influence
 
-		if(activatedCharacters != null && !activatedCharacters.isEmpty() && activatedCharacters.contains(8)){
+		if(!activatedCharacters.isEmpty() && activatedCharacters.contains(8)){
 				Player owner = getCharacterOwner(8);
 				owner.addInfluence();
 				owner.addInfluence();
@@ -165,14 +170,15 @@ public class Game {
 
 			//add influence to each player if the player is the owner, based on the number of students
 			for (int i = 0; i < 5; i++) {
-				for (int j = 0; j < numStudents[i]; j++) {
-					if (board.getProfessors()[i].getOwner() != null) board.getProfessors()[i].getOwner().addInfluence();
+				if(i != disabledColor){
+					for (int j = 0; j < numStudents[i]; j++) {
+						if (board.getProfessors()[i].getOwner() != null) board.getProfessors()[i].getOwner().addInfluence();
+					}
 				}
-
 			}
 
 			//add influence if the player has a tower
-			if(activatedCharacters != null && !activatedCharacters.isEmpty() && !activatedCharacters.contains(6) && board.getMotherNatureIsland().getOwner() != null){
+			if(!activatedCharacters.isEmpty() && !activatedCharacters.contains(6) && board.getMotherNatureIsland().getOwner() != null){
 					board.getMotherNatureIsland().getOwner().addInfluence();
 			}
 		}
@@ -397,5 +403,13 @@ public class Game {
 		}
 
 		return usernames;
+	}
+
+	public void setDisabledColor(Student color) {
+		disabledColor = createColorIntMap(color);
+	}
+
+	public boolean isExpertMode() {
+		return expertMode;
 	}
 }

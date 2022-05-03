@@ -41,6 +41,13 @@ public class Character {
 				effect = new Effect5();
 				break;
 
+			case 7:
+				ArrayList<Student> students7 = game.getBoard().extractStudents(6);
+				effect = new Effect7(students7);
+				break;
+
+			case 9:
+
 			case 11:
 				ArrayList<Student> students11 = game.getBoard().extractStudents(4);
 				effect = new Effect11(students11);

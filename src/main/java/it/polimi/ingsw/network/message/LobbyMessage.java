@@ -10,17 +10,16 @@ public class LobbyMessage extends Message {
 
     @Serial
     private static final long serialVersionUID = 8149425735430360323L;
+        private String lobby;
 
-
-        public LobbyMessage() {
+        public LobbyMessage(String lobby) {
             super("server", MessageType.LOBBY);
+            this.lobby = lobby;
         }
 
         @Override
         public String toString() {
-            return "LobbyMessage{" +
-                    "username=" + getUsername() +
-                    '}';
+            return lobby;
         }
 
     }

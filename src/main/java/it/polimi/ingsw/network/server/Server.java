@@ -17,11 +17,11 @@ import java.util.logging.Logger;
  */
 public class Server {
 
-    private Controller controller;
-
     private ArrayList<SocketClient> playersInLobby;
 
     private int nextGameId;
+
+    private LobbyHandler lobbyHandler;
 
     private final Map<String, ClientHandler> clientHandlerMap;
 
@@ -33,6 +33,7 @@ public class Server {
         this.clientHandlerMap = Collections.synchronizedMap(new HashMap<>());
         this.lock = new Object();
         this.playersInLobby = new ArrayList<>();
+        this.lobbyHandler = new LobbyHandler();
     }
 
     /**
@@ -58,25 +59,22 @@ public class Server {
     /**
      * Allows to delete a player given his username
      */
-    public void removePlayer(String username, boolean notifyEnabled) {
+    public void removeClient(String username, boolean notifyEnabled) {
         clientHandlerMap.remove(username);
-        Controller.removePlayer(username);
-        LOGGER.info(() -> "Removed " + username + " from the client list.");
+        LOGGER.info("Removed " + username + " from the client list.");
     }
 
     /**
      * Forwards a received message from the client to the GameController.
      */
     public void messageReceived(Message message) {
-
         switch (message.getMessageType()){
             case NEW_GAME -> createNewGame((NewGameMessage) message);
             case JOIN_GAME -> {
-                LobbyMessage lobbyMessage = new LobbyMessage();
+                LobbyMessage lobbyMessage = new LobbyMessage(lobbyHandler.printLobby());
                 clientHandlerMap.get(message.getUsername()).sendMessage(lobbyMessage);
-
             }
-            default -> controller.messageReceived(message);
+
         }
     }
 
@@ -100,6 +98,12 @@ public class Server {
 
     public void createNewGame(NewGameMessage newGameMessage){
         GameHandler gameHandler = new GameHandler(this, newGameMessage, nextGameId);
+        lobbyHandler.newGame(gameHandler);
         nextGameId++;
+    }
+
+    public Message getLobby(){
+        LobbyMessage lobbyMessage = new LobbyMessage(lobbyHandler.printLobby());
+        return lobbyMessage;
     }
 }

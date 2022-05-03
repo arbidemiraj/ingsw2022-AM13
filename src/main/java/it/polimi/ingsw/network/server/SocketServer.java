@@ -61,4 +61,8 @@ public class SocketServer implements Runnable {
     public void createNewGame(NewGameMessage newGameMessage){
         server.createNewGame(newGameMessage);
     }
+
+    public Message getLobby(){
+        return server.getLobby();
+    }
 }

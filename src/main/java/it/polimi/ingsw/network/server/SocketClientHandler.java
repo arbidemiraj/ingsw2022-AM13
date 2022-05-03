@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.concurrent.ScheduledExecutorService;
 
 
 public class SocketClientHandler implements ClientHandler, Runnable {
@@ -26,7 +27,6 @@ public class SocketClientHandler implements ClientHandler, Runnable {
         this.socketServer = socketServer;
         this.client = client;
         this.connected = true;
-
         this.inputLock = new Object();
         this.outputLock = new Object();
 
@@ -61,25 +61,19 @@ public class SocketClientHandler implements ClientHandler, Runnable {
                         if (message.getMessageType() == MessageType.LOGIN_REQUEST) {
                             try {
                                 socketServer.addPlayer(message.getUsername(), this);
-                                sendMessage(successMessage);
                             } catch (DuplicateUsernameException e) {
                                 ErrorMessage errorMessage = new ErrorMessage(message.getUsername(), e.getError());
                                 sendMessage(errorMessage);
                             }
 
-
                             ChooseMessage chooseMessage = new ChooseMessage(message.getUsername());
                             Server.LOGGER.info(() -> "New user -> username: " + message.getUsername());
                             sendMessage(chooseMessage);
                         }
-                        else if(message.getMessageType() == MessageType.NEW_GAME){
-                            Server.LOGGER.info(() -> "Received: " + message);
-                            socketServer.createNewGame((NewGameMessage) message);
-                            sendMessage(successMessage);
-                        }
                         else {
                             Server.LOGGER.info(() -> "Received: " + message);
                             socketServer.MessageReceived(message);
+                            sendMessage(socketServer.getLobby());
                         }
                     }
                 }

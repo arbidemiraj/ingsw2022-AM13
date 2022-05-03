@@ -180,7 +180,7 @@ class GameTest {
     }
     @Test
     void influenceIsland() {
-        Game game = new Game(2, true);
+        Game game = new Game(2, false);
         game.addPlayer("FirstPlayer");
         game.addPlayer("SecondPlayer");
 

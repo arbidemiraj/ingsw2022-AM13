@@ -3,10 +3,7 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.client.SocketClient;
-import it.polimi.ingsw.network.message.LoginMessage;
-import it.polimi.ingsw.network.message.Message;
-import it.polimi.ingsw.network.message.MessageType;
-import it.polimi.ingsw.network.message.NewGameMessage;
+import it.polimi.ingsw.network.message.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,13 +37,17 @@ public class ClientApp {
                 new InputStreamReader(System.in));
 
         int choice = Integer.parseInt(reader.readLine());
+        System.out.flush();
 
         switch (choice){
             case 1 -> {
-                System.out.println("Insert number of players");
+                System.out.flush();
+                System.out.println("Insert number of players: ");
+                System.out.printf("> ");
             int maxPlayers = scanner.nextInt();
 
-            System.out.println("Insert \n[1] for expert mode ON \n[2] for expert mode OFF: ");
+            System.out.println("Insert \n[1] for expert mode ON \n[2] for expert mode OFF ");
+            System.out.printf("> ");
             int expertMode = scanner.nextInt();
 
             boolean expertModeBoolean = false;
@@ -56,9 +57,11 @@ public class ClientApp {
             NewGameMessage newGameMessage = new NewGameMessage(username, maxPlayers, expertModeBoolean);
 
             client.sendMessage(newGameMessage);}
-
-
         }
+
+
+
+
 
     }
 }
