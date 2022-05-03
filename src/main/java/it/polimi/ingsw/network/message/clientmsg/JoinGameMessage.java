@@ -1,4 +1,7 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.message.clientmsg;
+
+import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.network.message.MessageType;
 
 /**
  *  This message is sent from the client to the server when the user wants to join a game

@@ -2,6 +2,10 @@ package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.model.exceptions.DuplicateUsernameException;
 import it.polimi.ingsw.network.message.*;
+import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
+import it.polimi.ingsw.network.message.servermsg.ChooseMessage;
+import it.polimi.ingsw.network.message.servermsg.ErrorMessage;
+import it.polimi.ingsw.network.message.servermsg.SuccessMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

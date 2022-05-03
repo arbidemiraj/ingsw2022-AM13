@@ -3,11 +3,10 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.enumerations.Student;
-import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.model.exceptions.CardAlreadyPlayedException;
 import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
-import it.polimi.ingsw.network.message.CloudMessage;
+import it.polimi.ingsw.network.message.clientmsg.CloudMessage;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

@@ -1,10 +1,13 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.message.clientmsg;
+
+import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.network.message.MessageType;
 
 /**
  * The player wants to reload a game that recently went down
  */
 
-public class ReloadGameMessage extends Message{
+public class ReloadGameMessage extends Message {
 
 
     public ReloadGameMessage(String username) {

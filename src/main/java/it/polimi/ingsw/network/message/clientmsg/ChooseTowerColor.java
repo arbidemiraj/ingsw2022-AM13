@@ -1,8 +1,10 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.message.clientmsg;
 
 import it.polimi.ingsw.model.enumerations.TowerColor;
+import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.network.message.MessageType;
 
-public class ChooseTowerColor extends Message{
+public class ChooseTowerColor extends Message {
     private TowerColor chosenTowerColor;
 
     public ChooseTowerColor(String username, TowerColor chosenTowerColor) {

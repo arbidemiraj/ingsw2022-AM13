@@ -1,4 +1,7 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.message.clientmsg;
+
+import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.network.message.MessageType;
 
 public class DisconnectionMessage extends Message {
 

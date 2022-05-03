@@ -1,6 +1,9 @@
-package it.polimi.ingsw.network.message;
+package it.polimi.ingsw.network.message.servermsg;
 
-public class ChooseMessage extends Message{
+import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.network.message.MessageType;
+
+public class ChooseMessage extends Message {
 
     public ChooseMessage(String username) {
         super(username, MessageType.CHOOSE);

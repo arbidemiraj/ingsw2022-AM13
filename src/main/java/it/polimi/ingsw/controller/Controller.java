@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.exceptions.CardAlreadyPlayedException;
 import it.polimi.ingsw.model.exceptions.EmptyCloudException;
 import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
-import it.polimi.ingsw.network.message.CloudMessage;
+import it.polimi.ingsw.network.message.clientmsg.CloudMessage;
 import it.polimi.ingsw.network.message.Message;
 
 import java.util.ArrayList;
