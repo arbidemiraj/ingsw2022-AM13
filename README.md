@@ -7,12 +7,14 @@
 
 | Functionality    |                       State                        |
 |:-----------------|:--------------------------------------------------:|
-| Basic rules      | 🟡 | Model implementation 
-| Complete rules   | 🟡 | Model implementation 
-| Socket           | 🔴 |
+| Basic rules      | 🟢 |  
+| Complete rules   | 🟢 | 
+| Socket           | 🟡 |
 | GUI              | 🔴 |
 | CLI              | 🔴 |
 | Persistence      | 🔴 |
+| Multiple games   | 🟡 |
+| All Characters   | 🟡 |
 
 🔴
 🟢
