@@ -9,6 +9,7 @@ import it.polimi.ingsw.network.message.MessageType;
 
 public class JoinGameMessage extends Message {
 
+
     private int gameId;
 
     public JoinGameMessage(String username, int gameId) {
@@ -28,6 +29,7 @@ public class JoinGameMessage extends Message {
                 "username=" + getUsername() +
                 ", gameId=" + gameId +
                 '}';
-}
+
 
     }
+}

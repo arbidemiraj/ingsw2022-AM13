@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.CardAlreadyPlayedException;
 import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
-import it.polimi.ingsw.network.message.clientmsg.CloudMessage;
+import it.polimi.ingsw.network.message.clientmsg.ChooseCloudMessage;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ class ControllerTest {
 
         currentPlayer.getPlayerBoard().getEntrance().clear();
 
-        CloudMessage cloudMessage = new CloudMessage(testController.getCurrentPlayerUsername(), 0);
+        ChooseCloudMessage cloudMessage = new ChooseCloudMessage(testController.getCurrentPlayerUsername(), 0);
         testController.moveStudentsFromCloud(cloudMessage);
 
         assertEquals(currentPlayer.getPlayerBoard().getEntrance(), students);

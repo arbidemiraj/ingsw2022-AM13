@@ -3,9 +3,13 @@ package it.polimi.ingsw.network.message.clientmsg;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.MessageType;
 
-public class CloudMessage extends Message {
+/**
+ * The player choose the cloud he wants to get the students from
+ */
+
+public class ChooseCloudMessage extends Message {
     private int cloudId;
-    public CloudMessage(String username, int cloudId) {
+    public ChooseCloudMessage(String username, int cloudId) {
         super(username, MessageType.CLOUD);
 
         this.cloudId = cloudId;

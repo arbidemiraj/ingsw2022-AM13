@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.exceptions.CardAlreadyPlayedException;
 import it.polimi.ingsw.model.exceptions.EmptyCloudException;
 import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
-import it.polimi.ingsw.network.message.clientmsg.CloudMessage;
+import it.polimi.ingsw.network.message.clientmsg.ChooseCloudMessage;
 import it.polimi.ingsw.network.message.Message;
 
 import java.util.ArrayList;
@@ -249,7 +249,7 @@ public class Controller {
         }
     }
 
-    public void moveStudentsFromCloud(CloudMessage cloudMessage) {
+    public void moveStudentsFromCloud(ChooseCloudMessage cloudMessage) {
         ArrayList<Student> students = new ArrayList<>();
 
         Cloud[] clouds = model.getBoard().getClouds();

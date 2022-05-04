@@ -3,10 +3,13 @@ package it.polimi.ingsw.network.message.clientmsg;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.MessageType;
 
-public class DisconnectionMessage extends Message {
+/**
+ * This message is sent from the client to the server when the user disconnects
+ */
+public class DisconnectMessage extends Message {
 
 
-    public DisconnectionMessage(String username) {
+    public DisconnectMessage(String username) {
         super(username, MessageType.DISCONNECTED);
     }
 
