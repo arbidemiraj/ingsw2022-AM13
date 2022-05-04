@@ -89,11 +89,28 @@ public class SocketClient extends Client {
      * Enable a heartbeat (ping messages) between client and server sockets to keep the connection alive.
      */
     public void enablePinger(boolean enabled) {
-        if (enabled) {
+        //counts the number of pings missed
+        int misses=0;
+        /**
+         * keep alive cycle
+         */
+        while (misses<5){
+            //sends a ping to the server every second
             pinger.scheduleAtFixedRate(() -> sendMessage(new Ping()), 0, 1000, TimeUnit.MILLISECONDS);
-        } else {//doesn't work as intended
-            pinger.shutdownNow();
+            try{
+                // Sets the timeout to 5 secs
+                socket.setSoTimeout(5000);
+                // Try to receive the response from the ping
+                readMessage();
+                // If the response is received, the code will continue here, otherwise it will continue in the catch
+                misses=0;
+            } catch (IOException e){
+                System.out.println("Connection timed out");
+                misses++;
+                //pinger.shutdownNow();
+            }
         }
+        pinger.shutdownNow();
     }
 }
 
