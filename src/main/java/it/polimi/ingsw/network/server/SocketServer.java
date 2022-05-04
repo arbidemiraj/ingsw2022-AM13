@@ -20,6 +20,9 @@ public class SocketServer implements Runnable {
     }
 
     public void run() {
+        /**
+        *runs the server socket and sees if it works
+        */
         try {
             serverSocket = new ServerSocket(port);
             Server.LOGGER.info(() -> "Socket server started on port " + port + ".");
@@ -28,6 +31,10 @@ public class SocketServer implements Runnable {
             return;
         }
 
+        /**
+         * creates a server-client thread and controls the connection status
+         *
+         */
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 Socket client = serverSocket.accept();

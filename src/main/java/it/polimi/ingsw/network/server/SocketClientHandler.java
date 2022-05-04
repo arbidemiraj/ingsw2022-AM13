@@ -9,7 +9,11 @@ import it.polimi.ingsw.network.message.servermsg.SuccessMessage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 public class SocketClientHandler implements ClientHandler, Runnable {
@@ -26,6 +30,10 @@ public class SocketClientHandler implements ClientHandler, Runnable {
     private ObjectOutputStream output;
     private ObjectInputStream input;
 
+    private final ScheduledExecutorService ping;
+
+    private static final int SOCKET_TIMEOUT = 10000;
+
 
     public SocketClientHandler(SocketServer socketServer, Socket client) {
         this.socketServer = socketServer;
@@ -33,6 +41,7 @@ public class SocketClientHandler implements ClientHandler, Runnable {
         this.connected = true;
         this.inputLock = new Object();
         this.outputLock = new Object();
+        this.ping = Executors.newSingleThreadScheduledExecutor();
 
         try {
             this.output = new ObjectOutputStream(client.getOutputStream());
@@ -127,7 +136,13 @@ public class SocketClientHandler implements ClientHandler, Runnable {
             disconnect();
         }
     }
-
+    public void ping(boolean enabled) {
+        if (enabled) {
+            ping.scheduleAtFixedRate(() -> sendMessage(new Ping()), 0, 1000, TimeUnit.MILLISECONDS);
+        } else {//doesn't work as intended
+            ping.shutdownNow();
+        }
+    }
     public void setGameId(int gameId) {
         this.gameId = gameId;
     }
