@@ -137,11 +137,14 @@ public class SocketClientHandler implements ClientHandler, Runnable {
         }
     }
     public void ping(boolean enabled) {
+        //counts the number of pings missed
+        int misses=0;
         if (enabled) {
             ping.scheduleAtFixedRate(() -> sendMessage(new Ping()), 0, 1000, TimeUnit.MILLISECONDS);
         } else {//doesn't work as intended
-            ping.shutdownNow();
+            System.out.println("Connection timed out with: "+ client);
         }
+        ping.shutdownNow();
     }
     public void setGameId(int gameId) {
         this.gameId = gameId;
