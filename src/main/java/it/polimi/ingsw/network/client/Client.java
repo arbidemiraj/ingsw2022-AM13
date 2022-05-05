@@ -26,6 +26,6 @@ import java.util.logging.Logger;
         public abstract void disconnect();
 
 
-        public abstract void enablePinger(boolean enabled);
+        public abstract void enablePing(boolean enabled);
     }
 

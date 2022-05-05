@@ -1,0 +1,1 @@
+[{"value":1,"maxMotherNatureMoves":1},{"value":2,"maxMotherNatureMoves":1},{"value":3,"maxMotherNatureMoves":2},{"value":4,"maxMotherNatureMoves":2},{"value":5,"maxMotherNatureMoves":3},{"value":6,"maxMotherNatureMoves":3},{"value":7,"maxMotherNatureMoves":4},{"value":8,"maxMotherNatureMoves":4},{"value":9,"maxMotherNatureMoves":5},{"value":10,"maxMotherNatureMoves":5}]

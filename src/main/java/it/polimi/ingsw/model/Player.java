@@ -1,12 +1,18 @@
 package it.polimi.ingsw.model;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.model.enumerations.Wizard;
 import it.polimi.ingsw.model.maps.ColorIntMap;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Player {
 
@@ -47,16 +53,22 @@ public class Player {
 	private void createDeck() {
 		deck = new ArrayList<>();
 
-		deck.add(new AssistantCard(1,1));
-		deck.add(new AssistantCard(2,1));
-		deck.add(new AssistantCard(3,2));
-		deck.add(new AssistantCard(4,2));
-		deck.add(new AssistantCard(5,3));
-		deck.add(new AssistantCard(6,3));
-		deck.add(new AssistantCard(7,4));
-		deck.add(new AssistantCard(8,4));
-		deck.add(new AssistantCard(9,5));
-		deck.add(new AssistantCard(10,5));
+		try {
+			File myObj = new File("./src/main/resources/AssistantCards.txt");
+			Scanner myReader = new Scanner(myObj);
+			String data = myReader.nextLine();
+
+			Gson gson = new Gson();
+			Type userListType = new TypeToken<ArrayList<AssistantCard>>(){}.getType();
+			deck = gson.fromJson(data, userListType);
+
+			myReader.close();
+
+		} catch (FileNotFoundException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+
 	}
 
 	public PlayerBoard getPlayerBoard() {
@@ -132,5 +144,10 @@ public class Player {
 
 	public void setTowerColor(TowerColor towerColor) {
 		this.towerColor = towerColor;
+	}
+
+	public boolean isColorChosen(){
+		if(towerColor != null) return true;
+		else return false;
 	}
 }

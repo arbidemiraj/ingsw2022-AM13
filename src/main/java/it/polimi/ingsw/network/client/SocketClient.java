@@ -35,9 +35,7 @@ public class SocketClient extends Client {
     }
 
 
-        /**
-         * Asynchronously reads a message from the server via socket and notifies the ClientController.
-         */
+
         @Override
         public void readMessage() {
             readExecutionQueue.execute(() -> {
@@ -46,10 +44,12 @@ public class SocketClient extends Client {
                     Message message;
                     try {
                         message = (Message) input.readObject();
-                        System.out.println(message);
+
+                        if(message != null && message.getMessageType() != MessageType.PING){
+                            System.out.println(message);
+                        }
                     } catch (IOException | ClassNotFoundException e) {
-                        message = new ErrorMessage(null, "Connection lost with the server.");
-                        System.out.println(message);
+                        System.out.println(new ErrorMessage(null, "Connection lost with the server."));
                         disconnect();
                         readExecutionQueue.shutdownNow();
                     }
@@ -76,7 +76,7 @@ public class SocketClient extends Client {
         try {
             if (!socket.isClosed()) {
                 readExecutionQueue.shutdownNow();
-                enablePinger(false);
+                enablePing(false);
                 socket.close();
             }
         } catch (IOException e) {
@@ -88,24 +88,13 @@ public class SocketClient extends Client {
     /**
      * Enable a heartbeat (ping messages) between client and server sockets to keep the connection alive.
      */
-    public void enablePinger(boolean enabled) {
-        //counts the number of pings missed
-        int misses=0;
-        /**
-         * keep alive cycle
-         */
-            //sends a ping to the server every second
-        pinger.scheduleAtFixedRate(() -> sendMessage(new Ping()), 0, 1000, TimeUnit.MILLISECONDS);
-        try{
-            // Sets the timeout to 5 secs
-            socket.setSoTimeout(5000);
-            // Try to receive the response from the ping
-            readMessage();
-            // If the response is received, the code will continue here, otherwise it will continue in the catch
-        } catch (IOException e){
-            System.out.println("Connection timed out");
-            //pinger.shutdownNow();
-        }
+    public void enablePing(boolean enabled) {
+            if (enabled) {
+                pinger.scheduleAtFixedRate(() -> sendMessage(new Ping()), 0, 1000, TimeUnit.MILLISECONDS);
+            } else {
+                pinger.shutdownNow();
+            }
     }
+
 }
 

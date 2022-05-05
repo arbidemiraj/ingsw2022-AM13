@@ -1,9 +1,7 @@
 package it.polimi.ingsw.network;
 
 
-import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.client.SocketClient;
-import it.polimi.ingsw.network.message.*;
 import it.polimi.ingsw.network.message.clientmsg.JoinGameMessage;
 import it.polimi.ingsw.network.message.clientmsg.LoginMessage;
 import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
@@ -22,7 +20,7 @@ public class ClientApp {
 
         SocketClient client = new SocketClient("127.0.0.1" ,12345 );
 
-        client.enablePinger(true);
+        client.enablePing(true);
 
         Scanner scanner = new Scanner(System.in);
 

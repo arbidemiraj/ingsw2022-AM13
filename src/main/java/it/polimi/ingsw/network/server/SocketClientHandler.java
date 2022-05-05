@@ -70,15 +70,17 @@ public class SocketClientHandler implements ClientHandler, Runnable {
                     Message message = (Message) input.readObject();
                     SuccessMessage successMessage = new SuccessMessage();
 
+                    //se riceve un ping risponde con un ping
+                    if(message != null && message.getMessageType() == MessageType.PING){
+                        sendMessage(new Ping());
+                    }
                     if (message != null && message.getMessageType() != MessageType.PING) {
                         if (message.getMessageType() == MessageType.LOGIN_REQUEST) {
                             try {
                                 socketServer.addClient(message.getUsername(), this);
-                                ChooseMessage chooseMessage = new ChooseMessage();
-                                sendMessage(chooseMessage);
+                                sendMessage(new ChooseMessage());
                             } catch (DuplicateUsernameException e) {
-                                ErrorMessage errorMessage = new ErrorMessage(message.getUsername(), e.getError());
-                                sendMessage(errorMessage);
+                                sendMessage(new ErrorMessage(message.getUsername(), e.getError()));
                             }
 
 
@@ -129,23 +131,16 @@ public class SocketClientHandler implements ClientHandler, Runnable {
             synchronized (outputLock) {
                 output.writeObject(message);
                 output.reset();
-                Server.LOGGER.info(() -> "Sent: " + message);
+                if(message != null && message.getMessageType() != MessageType.PING) {
+                    Server.LOGGER.info(() -> "Sent: " + message);
+                }
             }
         } catch (IOException e) {
             Server.LOGGER.severe(e.getMessage());
             disconnect();
         }
     }
-    public void ping(boolean enabled) {
-        //counts the number of pings missed
-        int misses=0;
-        if (enabled) {
-            ping.scheduleAtFixedRate(() -> sendMessage(new Ping()), 0, 1000, TimeUnit.MILLISECONDS);
-        } else {//doesn't work as intended
-            System.out.println("Connection timed out with: "+ client);
-        }
-        ping.shutdownNow();
-    }
+
     public void setGameId(int gameId) {
         this.gameId = gameId;
     }

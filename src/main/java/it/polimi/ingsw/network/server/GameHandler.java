@@ -4,6 +4,8 @@ import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
+import it.polimi.ingsw.network.message.clientmsg.TowerColorMessage;
+import it.polimi.ingsw.network.message.servermsg.AskTowerColor;
 import it.polimi.ingsw.network.message.servermsg.StartGame;
 
 import java.util.logging.Logger;
@@ -35,8 +37,11 @@ public class GameHandler {
 
         sendMessageToAll(startGame);
 
-        controller.firstPlayer();
+        gameSetup();
 
+        game.getBoard().prepareGame();
+
+        controller.firstPlayer();
     }
 
     public boolean isStarted(){
@@ -56,6 +61,7 @@ public class GameHandler {
     public void endGame(){
 
     }
+
     public void gameSetup(){
 
     }
@@ -77,6 +83,14 @@ public class GameHandler {
     }
 
     public void receivedMessage(Message message){
+        switch (message.getMessageType()){
+            case TOWER_COLOR ->{
+                TowerColorMessage towerColorMessage = (TowerColorMessage) message;
+
+                game.getPlayerByUsername(message.getUsername())
+                        .setTowerColor((towerColorMessage.getChosenTowerColor()));
+            }
+        }
     }
 
     public void sendMessage(Message message, String username){
