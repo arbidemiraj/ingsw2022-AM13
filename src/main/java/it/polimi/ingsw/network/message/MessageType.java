@@ -26,6 +26,9 @@ public enum MessageType {
     LOSE,
     CLOUD,
     NEW_GAME,
+
+    END_GAME,
+
     LOAD_GAME,
     GAME_INFO,
     DISCONNECTED,
