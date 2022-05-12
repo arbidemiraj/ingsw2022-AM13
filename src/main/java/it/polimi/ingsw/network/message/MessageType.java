@@ -21,7 +21,6 @@ public enum MessageType {
     START_GAME,
     INPUT,
     MOVE_STUDENT,
-    MOVE_MN,
     WIN,
     LOSE,
     CLOUD,
@@ -29,7 +28,6 @@ public enum MessageType {
 
     END_GAME,
 
-    LOAD_GAME,
     GAME_INFO,
     DISCONNECTED,
     PING,
@@ -37,7 +35,7 @@ public enum MessageType {
     CARD_EFFECT,
     END_TURN,
     JOIN_GAME,
-    RELOAD_GAME,
+    LOAD_GAME,
     MOVE_MOTHERNATURE,
     PLAY_CARD,
     ACTIVATE_CHARACTER,
