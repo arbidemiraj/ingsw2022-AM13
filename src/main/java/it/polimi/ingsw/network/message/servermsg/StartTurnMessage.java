@@ -5,11 +5,11 @@ import it.polimi.ingsw.network.message.MessageType;
 
 public class StartTurnMessage extends Message {
     public StartTurnMessage(){
-        super("game", MessageType.START_TURN);
+        super("server", MessageType.START_TURN);
     }
 
     @Override
     public String toString() {
-        return "action or preparation" + '}';
+        return "it's your turn";
     }
 }

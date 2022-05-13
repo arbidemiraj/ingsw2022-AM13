@@ -80,7 +80,7 @@ public class SocketClientHandler implements ClientHandler, Runnable {
                                 socketServer.addClient(message.getUsername(), this);
                                 sendMessage(new ChooseMessage());
                             } catch (DuplicateUsernameException e) {
-                                sendMessage(new ErrorMessage(message.getUsername(), e.getError()));
+                                sendMessage(new ErrorMessage(e.getError()));
                             }
 
 

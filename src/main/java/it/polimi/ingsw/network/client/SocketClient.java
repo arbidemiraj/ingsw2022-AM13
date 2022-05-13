@@ -49,7 +49,7 @@ public class SocketClient extends Client {
                             System.out.println(message);
                         }
                     } catch (IOException | ClassNotFoundException e) {
-                        System.out.println(new ErrorMessage(null, "Connection lost with the server."));
+                        System.out.println(new ErrorMessage("Connection lost with the server."));
                         disconnect();
                         readExecutionQueue.shutdownNow();
                     }
@@ -80,7 +80,7 @@ public class SocketClient extends Client {
                 socket.close();
             }
         } catch (IOException e) {
-            ErrorMessage message = new ErrorMessage("server","you've got disconnected");
+            ErrorMessage message = new ErrorMessage("you've got disconnected");
             sendMessage(message);
         }
     }
