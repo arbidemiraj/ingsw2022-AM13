@@ -1,80 +1,37 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.MessageType;
 import it.polimi.ingsw.network.message.clientmsg.MoveStudentMessage;
+import it.polimi.ingsw.network.message.clientmsg.TowerColorMessage;
 
 import java.io.Serializable;
 
 public class MessageControl implements Serializable {
     private static final long serialVersionUID = 1321929544794429579L;
 
-    //private final Game game;
-
-    public boolean controlMsgRecieved (Message message){
+    public void messageRecieved (Message message){
         switch (message.getMessageType()) {
-            case LOGIN_REQUEST:
-                break;
-            case CHOOSE:
-                break;
-            case TOWER_COLOR_CHOOSE:
-                break;
-            case TOWER_COLOR:
-                break;
-            case SELECT_ISLAND:
-                break;
-            case START_GAME:
-                break;
-            case INPUT:
-                break;
-            case MOVE_STUDENT:
-                return move(message);
-            case DISCONNECTED:
-                break;
-            case NEW_GAME:
-                return startGame(message);
-            case GAME_INFO:
-                break;
-            case JOIN_GAME:
-                return addPlayer(message);
-            case LOAD_GAME:
-                break;
-            case MOVE_MOTHERNATURE:
-                break;
-            case PLAY_CARD:
-                break;
-            case ACTIVATE_CHARACTER:
-                break;
-            default://in case of errors
-                return false;
-        }
-    return false;
-    }
-
-    public boolean move(Message message){
-
-        if(message.getMessageType() == MessageType.MOVE_STUDENT){
-            MoveStudentMessage moveStudent = ((MoveStudentMessage)message);
-            return true;
-        } else {
-            return false;
+            case ACTIVATE_CHARACTER -> {}
+            case CLOUD -> {}
+            case CHOOSE_STUDENT -> {}
+            case TOWER_COLOR_CHOOSE -> {
+                TowerColorMessage towerColorMessage = (TowerColorMessage) message;
+                //Controller.towerColor (towerColorMessage.getChosenTowerColor());
+            }
+            case DISCONNECTED -> {}
+            case GAME_INFO -> {}
+            case ISLAND_EFFECT -> {}
+            case MOVE_MOTHERNATURE -> {}
+            case MOVE_STUDENT -> {
+                MoveStudentMessage studentMessage = (MoveStudentMessage) message;
+                Controller.moveStudent (studentMessage.getFrom(),studentMessage.getColor(),studentMessage.getTo());
+            }
+            case SELECT_ISLAND->{}
+            case PLAY_CARD -> {}
+            case STUDENT_EFFECT -> {}
+            case TOWER_COLOR -> {}
         }
     }
-    public boolean startGame(Message message){
-        if(message.getMessageType() == MessageType.NEW_GAME){
-
-        } else {
-            return false;
-        }
-        return false;
-    }
-    public boolean addPlayer(Message message){
-        if(message.getMessageType() == MessageType.JOIN_GAME){
-
-        } else {
-            return false;
-        }
-        return false;
-    }
-
 }

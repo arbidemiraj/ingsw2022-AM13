@@ -6,7 +6,7 @@ import it.polimi.ingsw.network.message.MessageType;
 
 public class ChooseStudent extends Message {
     public ChooseStudent(String username){
-        super(username, MessageType.CHOOSE);
+        super(username, MessageType.CHOOSE_STUDENT);
     }
 
     @Override

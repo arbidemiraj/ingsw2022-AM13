@@ -4,7 +4,7 @@ import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.MessageType;
 
 /**
- * The player choose the cloud he wants to get the students from
+ * The player  the cloud he wants to get the students from
  */
 
 public class ChooseCloudMessage extends Message {

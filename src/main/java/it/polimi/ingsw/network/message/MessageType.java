@@ -5,7 +5,7 @@ package it.polimi.ingsw.network.message;
  */
 public enum MessageType {
     LOGIN_REQUEST,
-    CHOOSE,
+    CHOOSE_STUDENT,
     GENERIC,
     ASK_CARD,
     SUCCESS,

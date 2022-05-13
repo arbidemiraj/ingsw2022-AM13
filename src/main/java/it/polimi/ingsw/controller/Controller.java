@@ -113,7 +113,7 @@ public class Controller {
      * @param color     the color of the student the player wants to move
      * @param to        the movable object where the player wants to move the student
      */
-    public void moveStudent(Movable from, Student color, Movable to){
+    public static void moveStudent(Movable from, Student color, Movable to){
         to.addStudent(from.removeStudent(color));
     }
 
