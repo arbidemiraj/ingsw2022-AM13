@@ -7,7 +7,6 @@ public enum MessageType {
     LOGIN_REQUEST,
     CHOOSE,
     SUCCESS,
-    JOIN_GAME,
     TOWER_COLOR_CHOOSE,
     TOWER_COLOR_ASK,
     LOGIN_REPLY,
