@@ -76,18 +76,5 @@ public class MessageControl implements Serializable {
         }
         return false;
     }
-    /*private boolean moveCheck(Message message) {
-        VirtualView virtualView = virtualViewMap.get(message.getNickname());
-        PositionMessage positionMessage = ((PositionMessage) message);
-        Position chosenDest = positionMessage.getPositionList().get(0);
-        List<Position> possibleMovePositions = gameController.getTurnController().getActiveWorker().getPossibleMoves();
 
-        if (!positionMessage.getPositionList().isEmpty() && possibleMovePositions.contains(chosenDest)) {
-            return true;
-        } else {
-            virtualView.showGenericMessage("You didn't provided a valid Destination. Retry.");
-            virtualView.askMove(gameController.getTurnController().getActiveWorker().getPossibleMoves());
-            return false;
-        }
-    }*/
 }
