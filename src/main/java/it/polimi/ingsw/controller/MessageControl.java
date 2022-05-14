@@ -10,10 +10,12 @@ public class MessageControl implements Serializable {
 
     public void messageRecieved (Message message){
         switch (message.getMessageType()) {
+
             case ACTIVATE_CHARACTER -> {
                 ActivateCharacterMessage activateCharacterMessage = (ActivateCharacterMessage) message;
                 controller.activateStudentCharacter(activateCharacterMessage.getEffectId(),activateCharacterMessage.getUsername());
             }
+
             case CLOUD -> {
                 ChooseCloudMessage chooseCloudMessage = (ChooseCloudMessage) message;
                 controller.moveStudentsFromCloud (chooseCloudMessage.getCloudId());
@@ -35,7 +37,7 @@ public class MessageControl implements Serializable {
 
             case ISLAND_EFFECT -> {
                 IslandEffectMessage islandEffectMessage = (IslandEffectMessage) message;
-                getChoosenIsland (islandEffectMessage.getChosenIsland(message));
+                getChoosenIsland (islandEffectMessage.getChosenIsland());
             }
 
             case MOVE_MOTHERNATURE -> {
@@ -47,10 +49,22 @@ public class MessageControl implements Serializable {
                 MoveStudentMessage studentMessage = (MoveStudentMessage) message;
                 controller.moveStudent (studentMessage.getFrom(),studentMessage.getColor(),studentMessage.getTo());
             }
-            case SELECT_ISLAND->{}
-            case PLAY_CARD -> {}
-            case STUDENT_EFFECT -> {}
-            case TOWER_COLOR -> {}
+
+            case PLAY_CARD -> {
+                PlayCardMessage playCardMessage = (PlayCardMessage) message;
+                controller.playCard (playCardMessage.getUsername(), playCardMessage.getAssistantcardId());
+            }
+
+            case STUDENT_EFFECT -> {
+                StudentEffectMessage studentEffectMessage = (StudentEffectMessage) message;
+                controller.studentEffect (studentEffectMessage.getUsername(),studentEffectMessage.getChosenStudent());
+            }
+
+            case TOWER_COLOR -> {
+                TowerColorMessage towerColorMessage = (TowerColorMessage) message;
+                .towerColor (towerColorMessage.getChosenTowerColor());
+            }
+
         }
     }
 }*/
