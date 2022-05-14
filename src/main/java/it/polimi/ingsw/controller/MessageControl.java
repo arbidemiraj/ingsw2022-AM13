@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.clientmsg.*;
 
@@ -18,36 +19,39 @@ public class MessageControl implements Serializable {
 
             case ACTIVATE_CHARACTER -> {
                 ActivateCharacterMessage activateCharacterMessage = (ActivateCharacterMessage) message;
-                controller.activateStudentCharacter(activateCharacterMessage.getEffectId(),activateCharacterMessage.getUsername());
+                //controller.activateStudentCharacter(activateCharacterMessage.getEffectId());
             }
 
             case CLOUD -> {
                 ChooseCloudMessage chooseCloudMessage = (ChooseCloudMessage) message;
-                controller.moveStudentsFromCloud (chooseCloudMessage.getCloudId());
+                controller.moveStudentsFromCloud (chooseCloudMessage);
             }
 
             case TOWER_COLOR_CHOOSE -> {
                 TowerColorMessage towerColorMessage = (TowerColorMessage) message;
-                controller.towerColor (towerColorMessage.getChosenTowerColor());
+                controller.getGame().getPlayerByUsername(towerColorMessage.getUsername())
+                        .setTowerColor(towerColorMessage.getChosenTowerColor());
             }
             case DISCONNECTED -> {
                 DisconnectMessage disconnectMessage = (DisconnectMessage) message;
-                controller.getUsername();
-
             }
             case GAME_INFO -> {
                 GameInfo gameInfo = (GameInfo) message;
-                controller.getGame(gameInfo.getUsername());
+                controller.getGame();
             }
 
             case ISLAND_EFFECT -> {
                 IslandEffectMessage islandEffectMessage = (IslandEffectMessage) message;
-                getChoosenIsland (islandEffectMessage.getChosenIsland());
+                //controller.activateIslandCharacter (islandEffectMessage.getChosenIsland());
             }
 
             case MOVE_MOTHERNATURE -> {
                 MoveMotherNatureMessage moveMotherNatureMessage = (MoveMotherNatureMessage) message;
-                controller.moveMotherNature (moveMotherNatureMessage.getSteps());
+                try {
+                    controller.moveMotherNature (moveMotherNatureMessage.getSteps());
+                } catch (InvalidMotherNatureMovesException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             case MOVE_STUDENT -> {
@@ -57,19 +61,8 @@ public class MessageControl implements Serializable {
 
             case PLAY_CARD -> {
                 PlayCardMessage playCardMessage = (PlayCardMessage) message;
-                controller.playCard (playCardMessage.getUsername(), playCardMessage.getAssistantcardId());
+                //controller.playCard (playCardMessage.getAssistantcardId());
             }
-
-            case STUDENT_EFFECT -> {
-                StudentEffectMessage studentEffectMessage = (StudentEffectMessage) message;
-                controller.studentEffect (studentEffectMessage.getUsername(),studentEffectMessage.getChosenStudent());
-            }
-
-            case TOWER_COLOR -> {
-                TowerColorMessage towerColorMessage = (TowerColorMessage) message;
-                .towerColor (towerColorMessage.getChosenTowerColor());
-            }
-
         }
     }
 }
