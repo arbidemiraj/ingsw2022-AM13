@@ -23,6 +23,7 @@ public class Controller {
     private String currentPlayer;
     private final ArrayList<String> usernameQueue;
     private ArrayList<AssistantCard> turnCardsPlayed;
+    private MessageControl messageControl;
 
     /**
      * Default constructor
@@ -33,6 +34,7 @@ public class Controller {
         this.model = model;
         this.usernameQueue = new ArrayList<>(model.getUsernames());
         turnCardsPlayed = new ArrayList<>();
+        messageControl = new MessageControl(this);
     }
 
     public static void removePlayer(String username) {

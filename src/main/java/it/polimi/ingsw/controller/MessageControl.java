@@ -4,10 +4,15 @@ import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.clientmsg.*;
 
 import java.io.Serializable;
-/*
+
 public class MessageControl implements Serializable {
     private static final long serialVersionUID = 1321929544794429579L;
 
+    private final Controller controller;
+
+    public MessageControl(Controller controller){
+        this.controller = controller;
+    }
     public void messageRecieved (Message message){
         switch (message.getMessageType()) {
 
@@ -67,4 +72,4 @@ public class MessageControl implements Serializable {
 
         }
     }
-}*/
+}
