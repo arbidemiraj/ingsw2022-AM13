@@ -4,8 +4,6 @@ import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
-import it.polimi.ingsw.network.message.clientmsg.TowerColorMessage;
-import it.polimi.ingsw.network.message.servermsg.AskTowerColor;
 import it.polimi.ingsw.network.message.servermsg.StartGame;
 
 import java.util.logging.Logger;
