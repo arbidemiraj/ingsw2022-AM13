@@ -87,7 +87,7 @@ class ControllerTest {
         currentPlayer.getPlayerBoard().getEntrance().clear();
 
         ChooseCloudMessage cloudMessage = new ChooseCloudMessage(testController.getCurrentPlayerUsername(), 0);
-        testController.moveStudentsFromCloud(cloudMessage);
+        testController.moveStudentsFromCloud(cloudMessage.getCloudId());
 
         assertEquals(currentPlayer.getPlayerBoard().getEntrance(), students);
         assertTrue(cloud.getStudents().isEmpty());

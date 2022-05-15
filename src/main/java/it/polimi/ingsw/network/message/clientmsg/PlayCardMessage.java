@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.message.clientmsg;
 
 
+import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.MessageType;
 
@@ -11,24 +12,22 @@ import it.polimi.ingsw.network.message.MessageType;
 
 public class PlayCardMessage extends Message{
 
-    private int assistantcardId;
+    private AssistantCard assistantCard;
 
-    public PlayCardMessage(String username, int assistantcardId ) {
+    public PlayCardMessage(String username, AssistantCard assistantCard ) {
         super(username, MessageType.PLAY_CARD);
-        this.assistantcardId = assistantcardId;
+        this.assistantCard = assistantCard;
     }
 
-    public int getAssistantcardId() {
-        return assistantcardId;
+    public AssistantCard getAssistantCard() {
+        return assistantCard;
     }
 
     @Override
     public String toString() {
         return "PlayCardMessage{" +
                 "username=" + getUsername() +
-                ", assistantcardId=" + assistantcardId +
+                ", assistantcardId=" + assistantCard +
                 '}';
-
-
     }
 }

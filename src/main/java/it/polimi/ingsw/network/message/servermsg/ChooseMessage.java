@@ -6,7 +6,7 @@ import it.polimi.ingsw.network.message.MessageType;
 public class ChooseMessage extends Message {
 
     public ChooseMessage() {
-        super("Server", MessageType.CHOOSE);
+        super("Server", MessageType.CHOOSE_GAME_OPTIONS);
     }
 
     @Override

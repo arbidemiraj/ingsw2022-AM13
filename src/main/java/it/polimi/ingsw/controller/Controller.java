@@ -8,16 +8,20 @@ import it.polimi.ingsw.model.exceptions.EmptyCloudException;
 import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
 import it.polimi.ingsw.network.message.MessageType;
-import it.polimi.ingsw.network.message.clientmsg.ChooseCloudMessage;
+import it.polimi.ingsw.network.message.clientmsg.*;
 import it.polimi.ingsw.network.message.Message;
-import it.polimi.ingsw.network.message.clientmsg.MoveStudentMessage;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Controller class
  */
-public class Controller {
+public class Controller implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 743913880093540550L;
 
     private final Game model;
     private String currentPlayer;
@@ -248,20 +252,57 @@ public class Controller {
         return turnCardsPlayed;
     }
 
-    public void messageReceived(Message receivedMessage) {
-
-    }
-
-    public void moveStudentsFromCloud(ChooseCloudMessage cloudMessage) {
+    public void moveStudentsFromCloud(int cloudId) {
         ArrayList<Student> students = new ArrayList<>();
 
         Cloud[] clouds = model.getBoard().getClouds();
         try {
-            students = clouds[cloudMessage.getCloudId()].getStudentsFromCloud();
+            students = clouds[cloudId].getStudentsFromCloud();
         } catch (EmptyCloudException e) {
             e.printStackTrace();
         }
 
         getCurrentPlayer().getPlayerBoard().fillEntrance(students);
+    }
+
+
+    public void messageReceived (Message message){
+        switch (message.getMessageType()) {
+            case CLOUD -> {
+                ChooseCloudMessage chooseCloudMessage = (ChooseCloudMessage) message;
+                moveStudentsFromCloud (chooseCloudMessage.getCloudId());
+            }
+
+            case TOWER_COLOR_CHOOSE -> {
+                TowerColorMessage towerColorMessage = (TowerColorMessage) message;
+                getGame().getPlayerByUsername(towerColorMessage.getUsername())
+                        .setTowerColor(towerColorMessage.getChosenTowerColor());
+            }
+
+            case MOVE_MOTHERNATURE -> {
+                MoveMotherNatureMessage moveMotherNatureMessage = (MoveMotherNatureMessage) message;
+                try {
+                    moveMotherNature(moveMotherNatureMessage.getSteps());
+                } catch (InvalidMotherNatureMovesException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            case MOVE_STUDENT -> {
+                MoveStudentMessage studentMessage = (MoveStudentMessage) message;
+                moveStudent(studentMessage.getFrom(),studentMessage.getColor(),studentMessage.getTo());
+            }
+
+            case PLAY_CARD -> {
+                PlayCardMessage playCardMessage = (PlayCardMessage) message;
+
+                try {
+                    playCard(playCardMessage.getAssistantCard());
+                }catch (CardAlreadyPlayedException e){
+                    e.printStackTrace();
+                }
+            }
+
+        }
     }
 }

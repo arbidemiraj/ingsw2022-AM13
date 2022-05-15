@@ -7,6 +7,7 @@ public enum MessageType {
     LOGIN_REQUEST,
     CHOOSE_STUDENT,
     GENERIC,
+    CHOOSE_GAME_OPTIONS,
     ASK_CARD,
     SUCCESS,
     TOWER_COLOR_CHOOSE,

@@ -11,7 +11,7 @@ public class ReloadGameMessage extends Message {
 
 
     public ReloadGameMessage(String username) {
-        super(username, MessageType.LOAD_GAME);
+        super(username, MessageType.RELOAD_GAME);
     }
 
 
