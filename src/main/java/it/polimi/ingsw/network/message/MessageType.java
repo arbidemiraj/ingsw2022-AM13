@@ -36,5 +36,6 @@ public enum MessageType {
     PLAY_CARD,
     ACTIVATE_CHARACTER,
     ISLAND_EFFECT,
-    STUDENT_EFFECT;
+    STUDENT_EFFECT,
+    LOAD_GAME;
 }
