@@ -5,9 +5,12 @@ import it.polimi.ingsw.model.AssistantCard;
 import java.util.List;
 
 public interface View {
-    void askExpertMode();
 
-    void askNumberOfPlayers();
+    void askCreateOrJoin();
+
+    void askUsername();
+
+    void askGameSettings();
 
     void askTowerColor();
 
@@ -28,5 +31,4 @@ public interface View {
     void askStudentToMove();
 
     void askIslandToMove();
-
 }

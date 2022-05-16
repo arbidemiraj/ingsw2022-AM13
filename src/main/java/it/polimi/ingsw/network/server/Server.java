@@ -116,7 +116,6 @@ public class Server {
     }
 
     public Message getLobby(){
-        LobbyMessage lobbyMessage = new LobbyMessage(lobbyHandler.printLobby());
-        return lobbyMessage;
+        return new LobbyMessage(lobbyHandler.printLobby());
     }
 }

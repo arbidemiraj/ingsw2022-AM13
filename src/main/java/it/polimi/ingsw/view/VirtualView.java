@@ -1,14 +1,16 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.AssistantCard;
+import it.polimi.ingsw.network.message.ErrorType;
 import it.polimi.ingsw.network.message.GenericMessage;
-import it.polimi.ingsw.network.message.clientmsg.DisconnectMessage;
+import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.servermsg.*;
 import it.polimi.ingsw.network.server.ClientHandler;
+import it.polimi.ingsw.observer.Observer;
 
 import java.util.List;
 
-public class VirtualView implements View{
+public class VirtualView implements View, Observer {
 
     private final ClientHandler clientHandler;
 
@@ -21,13 +23,18 @@ public class VirtualView implements View{
     }
 
     @Override
-    public void askExpertMode() {
-        clientHandler.sendMessage(new GenericMessage("Insert \n[1] for expert mode ON \n[2] for expert mode OFF "));
+    public void askCreateOrJoin() {
+        clientHandler.sendMessage(new ChooseMessage());
     }
 
     @Override
-    public void askNumberOfPlayers() {
-        clientHandler.sendMessage(new GenericMessage("Insert number of players: "));
+    public void askUsername() {
+
+    }
+
+    @Override
+    public void askGameSettings() {
+
     }
 
     @Override
@@ -47,7 +54,7 @@ public class VirtualView implements View{
 
     @Override
     public void error(String error) {
-        clientHandler.sendMessage(new ErrorMessage(error));
+        clientHandler.sendMessage(new ErrorMessage(error, ErrorType.GENERIC));
     }
 
     @Override
@@ -78,5 +85,10 @@ public class VirtualView implements View{
     @Override
     public void askIslandToMove() {
         clientHandler.sendMessage(new AskIsland());
+    }
+
+    @Override
+    public void update(Message message) {
+        clientHandler.sendMessage(message);
     }
 }

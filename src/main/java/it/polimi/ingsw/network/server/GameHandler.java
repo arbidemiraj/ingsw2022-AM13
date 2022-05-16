@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.server;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.network.message.clientmsg.ChooseTowerColorMessage;
 import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
 import it.polimi.ingsw.network.message.servermsg.StartGame;
 
@@ -83,7 +84,7 @@ public class GameHandler {
     public void receivedMessage(Message message){
         switch (message.getMessageType()){
             case TOWER_COLOR ->{
-                TowerColorMessage towerColorMessage = (TowerColorMessage) message;
+                ChooseTowerColorMessage towerColorMessage = (ChooseTowerColorMessage) message;
 
                 game.getPlayerByUsername(message.getUsername())
                         .setTowerColor((towerColorMessage.getChosenTowerColor()));

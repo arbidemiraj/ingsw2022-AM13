@@ -1,6 +1,8 @@
 package it.polimi.ingsw.network;
 
 
+import it.polimi.ingsw.controller.ClientController;
+import it.polimi.ingsw.network.client.CLI;
 import it.polimi.ingsw.network.client.SocketClient;
 import it.polimi.ingsw.network.message.clientmsg.JoinGameMessage;
 import it.polimi.ingsw.network.message.clientmsg.LoginMessage;
@@ -18,59 +20,65 @@ public class ClientApp {
 
     public static void main(String[] args) throws IOException {
 
-        SocketClient client = new SocketClient("127.0.0.1" ,12345 );
+            CLI view = new CLI();
+            ClientController clientController = new ClientController(view);
+            view.addObserver(clientController);
+            view.init();
 
-        client.enablePing(true);
+            /*
+            SocketClient client = new SocketClient("127.0.0.1" ,12345 );
 
-        Scanner scanner = new Scanner(System.in);
+            client.enablePing(true);
 
-        System.out.println("Insert username: ");
-        System.out.printf("> ");
-        String username;
+            Scanner scanner = new Scanner(System.in);
 
-        username = scanner.nextLine();
-
-        LoginMessage login = new LoginMessage(username);
-
-        client.sendMessage(login);
-
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(System.in));
-
-        int choice = Integer.parseInt(reader.readLine());
-        System.out.flush();
-
-        switch (choice){
-            case 1 -> {
-                System.out.flush();
-                System.out.println("Insert number of players: ");
-                System.out.printf("> ");
-            int maxPlayers = scanner.nextInt();
-
-            System.out.println("Insert \n[1] for expert mode ON \n[2] for expert mode OFF ");
+            System.out.println("Insert username: ");
             System.out.printf("> ");
-            int expertMode = scanner.nextInt();
+            String username;
 
-            boolean expertModeBoolean = false;
+            username = scanner.nextLine();
 
-            if(expertMode == 1) expertModeBoolean = true;
+            LoginMessage login = new LoginMessage(username);
 
-            NewGameMessage newGameMessage = new NewGameMessage(username, maxPlayers, expertModeBoolean);
+            client.sendMessage(login);
 
-            client.sendMessage(newGameMessage);}
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(System.in));
 
-            case 2 -> {
-                System.out.println("Insert the id of the game you want to join: ");
+            int choice = Integer.parseInt(reader.readLine());
+            System.out.flush();
+
+            switch (choice){
+                case 1 -> {
+                    System.out.flush();
+                    System.out.println("Insert number of players: ");
+                    System.out.printf("> ");
+                int maxPlayers = scanner.nextInt();
+
+                System.out.println("Insert \n[1] for expert mode ON \n[2] for expert mode OFF ");
                 System.out.printf("> ");
+                int expertMode = scanner.nextInt();
 
-                int gameId = scanner.nextInt();
+                boolean expertModeBoolean = false;
 
-                JoinGameMessage joinGameMessage = new JoinGameMessage(username, gameId);
-                client.sendMessage(joinGameMessage);
+                if(expertMode == 1) expertModeBoolean = true;
+
+                NewGameMessage newGameMessage = new NewGameMessage(username, maxPlayers, expertModeBoolean);
+
+                client.sendMessage(newGameMessage);}
+
+                case 2 -> {
+                    System.out.println("Insert the id of the game you want to join: ");
+                    System.out.printf("> ");
+
+                    int gameId = scanner.nextInt();
+
+                    JoinGameMessage joinGameMessage = new JoinGameMessage(username, gameId);
+                    client.sendMessage(joinGameMessage);
+                }
             }
-        }
 
-
+        */
 
 
 

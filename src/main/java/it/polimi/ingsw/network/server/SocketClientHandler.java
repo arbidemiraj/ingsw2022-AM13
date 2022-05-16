@@ -2,9 +2,8 @@ package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.model.exceptions.DuplicateUsernameException;
 import it.polimi.ingsw.network.message.*;
-import it.polimi.ingsw.network.message.servermsg.ChooseMessage;
-import it.polimi.ingsw.network.message.servermsg.ErrorMessage;
-import it.polimi.ingsw.network.message.servermsg.SuccessMessage;
+import it.polimi.ingsw.network.message.clientmsg.CreateOrJoinAnswer;
+import it.polimi.ingsw.network.message.servermsg.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -70,7 +69,6 @@ public class SocketClientHandler implements ClientHandler, Runnable {
                     Message message = (Message) input.readObject();
                     SuccessMessage successMessage = new SuccessMessage();
 
-                    //se riceve un ping risponde con un ping
                     if(message != null && message.getMessageType() == MessageType.PING){
                         sendMessage(new Ping());
                     }
@@ -80,12 +78,20 @@ public class SocketClientHandler implements ClientHandler, Runnable {
                                 socketServer.addClient(message.getUsername(), this);
                                 sendMessage(new ChooseMessage());
                             } catch (DuplicateUsernameException e) {
-                                sendMessage(new ErrorMessage(e.getError()));
+                                sendMessage(new ErrorMessage(e.getError(), ErrorType.DUPLICATE_USERNAME));
                             }
 
-
                             Server.LOGGER.info(() -> "New user -> username: " + message.getUsername());
+                        }
+                        else if (message.getMessageType() == MessageType.CREATE_JOIN_ANSWER){
+                            CreateOrJoinAnswer createOrJoinAnswer = (CreateOrJoinAnswer) message;
+                            if(createOrJoinAnswer.getChoice() == 2){
+                                sendMessage(new LobbyMessage(socketServer.getLobby().toString()));
+                            }
 
+                            if(createOrJoinAnswer.getChoice() == 1){
+                                sendMessage(new AskGameSettings());
+                            }
                         }
                         else {
                             Server.LOGGER.info(() -> "Received: " + message);

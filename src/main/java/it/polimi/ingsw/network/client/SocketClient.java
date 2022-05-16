@@ -9,10 +9,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import static it.polimi.ingsw.network.message.ErrorType.CONNECTION_LOST;
+import static it.polimi.ingsw.network.message.ErrorType.DISCONNECTION;
 
 /**
 * This class represents a socket client implementation.
@@ -42,17 +46,22 @@ public class SocketClient extends Client {
 
                 while (!readExecutionQueue.isShutdown()) {
                     Message message;
+
+                    try {
+                        socket.setSoTimeout(5000);
+                    } catch (SocketException e) {
+                        e.printStackTrace();
+                    }
+
                     try {
                         message = (Message) input.readObject();
-
-                        if(message != null && message.getMessageType() != MessageType.PING){
-                            System.out.println(message);
-                        }
                     } catch (IOException | ClassNotFoundException e) {
-                        System.out.println(new ErrorMessage("Connection lost with the server."));
+                        message = new ErrorMessage("Connection lost with the server.", CONNECTION_LOST);
                         disconnect();
                         readExecutionQueue.shutdownNow();
                     }
+
+                    notifyObserver(message);
                 }
             });
         }
@@ -80,7 +89,7 @@ public class SocketClient extends Client {
                 socket.close();
             }
         } catch (IOException e) {
-            ErrorMessage message = new ErrorMessage("you've got disconnected");
+            ErrorMessage message = new ErrorMessage("you've got disconnected", DISCONNECTION);
             sendMessage(message);
         }
     }

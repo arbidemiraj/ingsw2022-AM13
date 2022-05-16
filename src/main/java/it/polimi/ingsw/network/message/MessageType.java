@@ -8,6 +8,7 @@ public enum MessageType {
     CHOOSE_STUDENT,
     GENERIC,
     CHOOSE_GAME_OPTIONS,
+    ASK_GAME_SETTINGS,
     ASK_CARD,
     SUCCESS,
     TOWER_COLOR_CHOOSE,
@@ -37,5 +38,5 @@ public enum MessageType {
     ACTIVATE_CHARACTER,
     ISLAND_EFFECT,
     STUDENT_EFFECT,
-    LOAD_GAME;
+    LOAD_GAME, CREATE_JOIN_ANSWER;
 }

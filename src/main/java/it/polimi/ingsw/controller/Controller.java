@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
 import it.polimi.ingsw.network.message.MessageType;
 import it.polimi.ingsw.network.message.clientmsg.*;
 import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.observer.Observer;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 /**
  * Controller class
  */
-public class Controller implements Serializable {
+public class Controller implements Serializable, Observer {
 
     @Serial
     private static final long serialVersionUID = 743913880093540550L;
@@ -27,7 +28,6 @@ public class Controller implements Serializable {
     private String currentPlayer;
     private final ArrayList<String> usernameQueue;
     private ArrayList<AssistantCard> turnCardsPlayed;
-    private MessageControl messageControl;
 
     /**
      * Default constructor
@@ -38,7 +38,6 @@ public class Controller implements Serializable {
         this.model = model;
         this.usernameQueue = new ArrayList<>(model.getUsernames());
         turnCardsPlayed = new ArrayList<>();
-        messageControl = new MessageControl(this);
     }
 
     public static void removePlayer(String username) {
@@ -273,12 +272,6 @@ public class Controller implements Serializable {
                 moveStudentsFromCloud (chooseCloudMessage.getCloudId());
             }
 
-            case TOWER_COLOR_CHOOSE -> {
-                TowerColorMessage towerColorMessage = (TowerColorMessage) message;
-                getGame().getPlayerByUsername(towerColorMessage.getUsername())
-                        .setTowerColor(towerColorMessage.getChosenTowerColor());
-            }
-
             case MOVE_MOTHERNATURE -> {
                 MoveMotherNatureMessage moveMotherNatureMessage = (MoveMotherNatureMessage) message;
                 try {
@@ -304,5 +297,10 @@ public class Controller implements Serializable {
             }
 
         }
+    }
+
+    @Override
+    public void update(Message message) {
+
     }
 }

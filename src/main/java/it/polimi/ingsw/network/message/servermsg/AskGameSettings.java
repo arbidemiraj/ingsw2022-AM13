@@ -3,14 +3,14 @@ package it.polimi.ingsw.network.message.servermsg;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.MessageType;
 
-public class ChooseMessage extends Message {
+public class AskGameSettings extends Message {
 
-    public ChooseMessage() {
-        super("Server", MessageType.CHOOSE_GAME_OPTIONS);
+    public AskGameSettings() {
+        super("Server", MessageType.ASK_GAME_SETTINGS);
     }
 
     @Override
     public String toString() {
-        return "\n [1] to create a new game \n [2] to join a game";
+        return "AskGameSettings{}";
     }
 }

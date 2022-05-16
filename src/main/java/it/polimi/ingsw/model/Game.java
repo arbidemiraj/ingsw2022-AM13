@@ -4,14 +4,16 @@ import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.model.maps.ColorIntMap;
+import it.polimi.ingsw.observer.Observable;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * This class manages the game logic
  */
-public class Game {
+public class Game extends Observable {
 
 	private int currentPlayer; //represents the position of currentPlayer in players Array
 
