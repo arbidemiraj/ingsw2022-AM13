@@ -72,6 +72,7 @@ public class SocketClientHandler implements ClientHandler, Runnable {
                     if(message != null && message.getMessageType() == MessageType.PING){
                         sendMessage(new Ping());
                     }
+
                     if (message != null && message.getMessageType() != MessageType.PING) {
                         if (message.getMessageType() == MessageType.LOGIN_REQUEST) {
                             try {
@@ -80,7 +81,6 @@ public class SocketClientHandler implements ClientHandler, Runnable {
                             } catch (DuplicateUsernameException e) {
                                 sendMessage(new ErrorMessage(e.getError(), ErrorType.DUPLICATE_USERNAME));
                             }
-
                             Server.LOGGER.info(() -> "New user -> username: " + message.getUsername());
                         }
                         else if (message.getMessageType() == MessageType.CREATE_JOIN_ANSWER){
@@ -96,7 +96,6 @@ public class SocketClientHandler implements ClientHandler, Runnable {
                         else {
                             Server.LOGGER.info(() -> "Received: " + message);
                             socketServer.MessageReceived(message);
-                            sendMessage(socketServer.getLobby());
                         }
                     }
                 }

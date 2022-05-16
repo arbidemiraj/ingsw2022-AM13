@@ -1,17 +1,22 @@
 package it.polimi.ingsw.network.server;
 
-import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.enumerations.TowerColor;
+import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.clientmsg.ChooseTowerColorMessage;
 import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
+import it.polimi.ingsw.network.message.servermsg.AskTowerColor;
 import it.polimi.ingsw.network.message.servermsg.StartGame;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class GameHandler {
-    private final Controller controller;
+    private final GameController gameController;
     private final Server server;
+    private ArrayList<TowerColor> towerColors;
     private final Game game;
     private int numPlayers;
     private final Logger logger = Logger.getLogger(getClass().getName());
@@ -24,23 +29,25 @@ public class GameHandler {
         started = false;
         maxPlayers = newGameMessage.getMaxPlayers();
         game = new Game(maxPlayers, newGameMessage.isExpertMode());
-        controller = new Controller(game);
+        gameController = new GameController(game, this);
         numPlayers = 0;
         this.gameId = gameId;
+        towerColors = new ArrayList<>();
+        towerColors.add(TowerColor.BLACK);
+        towerColors.add(TowerColor.GRAY);
+        towerColors.add(TowerColor.WHITE);
     }
 
     public void startGame(){
         started = true;
 
-        StartGame startGame = new StartGame();
-
-        sendMessageToAll(startGame);
-
-        gameSetup();
-
+        sendMessageToAll(new StartGame());
         game.getBoard().prepareGame();
 
-        controller.firstPlayer();
+        gameController.firstPlayer();
+        gameSetup();
+
+        gameController.startGame();
     }
 
     public boolean isStarted(){
@@ -48,7 +55,7 @@ public class GameHandler {
     }
 
     public void addPlayer(String username){
-        game.addPlayer(username);
+        gameController.addPlayer(username);
         this.numPlayers++;
         if(numPlayers == maxPlayers) startGame();
     }
@@ -62,7 +69,12 @@ public class GameHandler {
     }
 
     public void gameSetup(){
+        askTowerColor(gameController.getCurrentPlayerUsername());
+    }
 
+    private void askTowerColor(String currentPlayerUsername) {
+        sendMessageToAllExcept(new GenericMessage(currentPlayerUsername + " is choosing his tower color ..."), currentPlayerUsername);
+        sendMessage(new AskTowerColor(), currentPlayerUsername);
     }
 
     public int getGameId() {
@@ -88,6 +100,15 @@ public class GameHandler {
 
                 game.getPlayerByUsername(message.getUsername())
                         .setTowerColor((towerColorMessage.getChosenTowerColor()));
+
+                GenericMessage genericMessage = new GenericMessage("\nYou have chosen " + towerColorMessage.getChosenTowerColor() + " ... waiting other players to join ...");
+                sendMessage(genericMessage, message.getUsername());
+
+                if((towerColors.size()!=0 && numPlayers == 3) || (towerColors.size() > 1 && numPlayers == 2)){
+                    gameController.nextPlayer();
+
+                    askTowerColor(gameController.getCurrentPlayerUsername());
+                }
             }
         }
     }
@@ -97,8 +118,14 @@ public class GameHandler {
     }
 
     public void sendMessageToAll(Message message){
-        for(String username : controller.getGame().getUsernames()){
+        for(String username : gameController.getGame().getUsernames()){
             sendMessage(message, username);
+        }
+    }
+
+    public void sendMessageToAllExcept(Message message, String user){
+        for(String username : gameController.getGame().getUsernames()){
+            if(username != user) sendMessage(message, username);
         }
     }
 }

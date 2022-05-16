@@ -1,9 +1,8 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.enumerations.Student;
-import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
 import org.junit.jupiter.api.Test;
 
@@ -160,18 +159,18 @@ class GameTest {
         Player player = game.getPlayers().get(0);
 
 
-        Controller controller = new Controller(game);
+        GameController gameController = new GameController(game, null);
 
         Character character = new Character(game, 8, 2);
         game.getCharacters()[0] = character;
 
 
 
-        controller.setCurrentPlayer("FirstPlayer");
+        gameController.setCurrentPlayer("FirstPlayer");
 
-        controller.getCurrentPlayer().setNumCoins(character.getCost());
+        gameController.getCurrentPlayer().setNumCoins(character.getCost());
 
-        controller.activateCharacter(8);
+        gameController.activateCharacter(8);
         game.getActivatedCharacters().add(8);
 
         game.influence(game.getBoard().getMotherNatureIsland());
@@ -206,7 +205,7 @@ class GameTest {
         game.addPlayer("SecondPlayer");
 
         game.getBoard().prepareGame();
-        Controller controller = new Controller(game);
+        GameController gameController = new GameController(game, null);
 
         Player player1, player2;
         player1 = game.getPlayers().get(0);
@@ -217,8 +216,8 @@ class GameTest {
 
         character.setOwner(player1);
         player1.setNumCoins(character.getCost());
-        controller.setCurrentPlayer("FirstPlayer");
-        controller.activateCharacter(2);
+        gameController.setCurrentPlayer("FirstPlayer");
+        gameController.activateCharacter(2);
 
         Student s1 = Student.BLUE;
         ArrayList<Student> students1 = new ArrayList<>();

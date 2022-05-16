@@ -5,6 +5,7 @@ import it.polimi.ingsw.network.client.SocketClient;
 import it.polimi.ingsw.network.message.*;
 import it.polimi.ingsw.network.message.clientmsg.JoinGameMessage;
 import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
+import it.polimi.ingsw.network.message.servermsg.AskTowerColor;
 import it.polimi.ingsw.network.message.servermsg.LobbyMessage;
 
 import java.util.ArrayList;
@@ -43,8 +44,11 @@ public class Server {
      *this creates a new player profile
      */
     public void addClient(String username, ClientHandler clientHandler) throws DuplicateUsernameException {
-        if(getUsernameFromClientHandler(clientHandler) != null) throw new DuplicateUsernameException();
-        else clientHandlerMap.put(username, clientHandler);
+        if(!isUnique(username)) throw new DuplicateUsernameException();
+        else {
+            clientHandlerMap.put(username, clientHandler);
+            lobbyHandler.login(username);
+        }
     }
 
 
@@ -54,8 +58,8 @@ public class Server {
      * @return boolean      true if it is unique, false if it isn't
      */
     private boolean isUnique (String username) {
-        if(clientHandlerMap.containsKey(username)) return true;
-        else return false;
+        if(lobbyHandler.getUsernameQueue() != null && lobbyHandler.getUsernameQueue().contains(username)) return false;
+        else return true;
     }
 
     /**
@@ -75,11 +79,8 @@ public class Server {
                 clientHandlerMap.get(message.getUsername()).setGameId(nextGameId);
                 createNewGame((NewGameMessage) message);
                 lobbyHandler.getGames().get(nextGameId - 1).addPlayer(message.getUsername());
-
             }
             case JOIN_GAME -> {
-                LobbyMessage lobbyMessage = new LobbyMessage(lobbyHandler.printLobby());
-                clientHandlerMap.get(message.getUsername()).sendMessage(lobbyMessage);
                 JoinGameMessage joinGameMessage = (JoinGameMessage) message;
                 clientHandlerMap.get(message.getUsername()).setGameId(joinGameMessage.getGameId());
                 lobbyHandler.getGames().get(joinGameMessage.getGameId()).addPlayer(message.getUsername());

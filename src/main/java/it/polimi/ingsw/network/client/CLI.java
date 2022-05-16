@@ -1,13 +1,17 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.model.AssistantCard;
+import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.view.View;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 public class CLI extends ViewObservable implements View {
     private Scanner input = new Scanner(System.in);
@@ -111,11 +115,20 @@ public class CLI extends ViewObservable implements View {
 
         notifyObserver(viewObserver -> viewObserver.onUpdateNewGame(numPlayers, finalExpertModeBoolean));
 
+        output.println("\nWaiting for players to join... ");
     }
 
 
     @Override
     public void askTowerColor() {
+        output.println("\nYou have to choose a tower color [BLACK | GRAY | WHITE]: ");
+        output.print("> ");
+
+        String chosenTowerColor = input.nextLine();
+
+        output.println(chosenTowerColor);
+
+        //notifyObserver(viewObserver -> viewObserver.onUpdateTowerColor());
     }
 
     @Override
@@ -177,5 +190,19 @@ public class CLI extends ViewObservable implements View {
 
     public void printLine(){
         output.println("\n-----------------------------------------------------------");
+    }
+
+    public void connectionLost(){
+        output.println("\nConnection lost with the server");
+    }
+
+    @Override
+    public void startGame() {
+        output.println("The game is starting...");
+    }
+
+    @Override
+    public void showGenericMessage(String message) {
+        output.println(message);
     }
 }

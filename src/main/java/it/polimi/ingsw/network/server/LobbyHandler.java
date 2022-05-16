@@ -8,9 +8,11 @@ import java.util.stream.Collectors;
 
 public class LobbyHandler {
     private List<GameHandler> games;
+    private List<String> usernameQueue;
 
     public LobbyHandler() {
         this.games = new ArrayList<>();
+        this.usernameQueue = new ArrayList<>();
     }
 
     public void newGame(GameHandler newGame){
@@ -51,5 +53,13 @@ public class LobbyHandler {
 
     public List<GameHandler> getGames() {
         return games;
+    }
+
+    public void login(String username){
+        usernameQueue.add(username);
+    }
+
+    public List<String> getUsernameQueue() {
+        return usernameQueue;
     }
 }

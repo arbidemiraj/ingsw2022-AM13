@@ -28,7 +28,5 @@ public class ActivateCharacterMessage extends Message {
                 "username=" + getUsername() +
                 ", effectId=" + effectId +
                 '}';
-
-
     }
 }

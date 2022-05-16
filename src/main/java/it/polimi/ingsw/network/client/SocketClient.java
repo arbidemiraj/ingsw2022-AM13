@@ -38,20 +38,12 @@ public class SocketClient extends Client {
         this.pinger = Executors.newSingleThreadScheduledExecutor();
     }
 
-
-
         @Override
         public void readMessage() {
             readExecutionQueue.execute(() -> {
 
                 while (!readExecutionQueue.isShutdown()) {
                     Message message;
-
-                    try {
-                        socket.setSoTimeout(5000);
-                    } catch (SocketException e) {
-                        e.printStackTrace();
-                    }
 
                     try {
                         message = (Message) input.readObject();
@@ -71,7 +63,6 @@ public class SocketClient extends Client {
         try {
             output.writeObject(message);
             output.reset();
-            readMessage(); //reads answer
         } catch (IOException e) {
             disconnect();
         }

@@ -13,9 +13,9 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ControllerTest {
+class GameControllerTest {
     Game testGame;
-    Controller testController;
+    GameController testGameController;
     
     void prepareTestGame(boolean expertMode){
         testGame = new Game(2, expertMode);
@@ -24,7 +24,7 @@ class ControllerTest {
 
         testGame.getBoard().prepareGame();
 
-        testController = new Controller(testGame);
+        testGameController = new GameController(testGame, null);
     }
 
     @Test
@@ -33,7 +33,7 @@ class ControllerTest {
 
         testGame.getBoard().getBag().clear();
 
-        assertTrue(testController.endingConditionCheck());
+        assertTrue(testGameController.endingConditionCheck());
     }
 
     @Test
@@ -42,7 +42,7 @@ class ControllerTest {
 
         testGame.getPlayers().get(0).setNumTowers(0);
 
-        assertTrue(testController.endingConditionCheck());
+        assertTrue(testGameController.endingConditionCheck());
     }
 
     @Test
@@ -55,7 +55,7 @@ class ControllerTest {
         island.getStudents().clear();
         island.addStudent(student);
 
-        testController.moveStudent(island, Student.BLUE, playerBoard);
+        testGameController.moveStudent(island, Student.BLUE, playerBoard);
 
         assertTrue(playerBoard.getEntrance().contains(Student.BLUE));
     }
@@ -64,10 +64,10 @@ class ControllerTest {
     void firstPlayer() {
         prepareTestGame(false);
 
-        testController.firstPlayer();
+        testGameController.firstPlayer();
 
-        assertTrue(testController.currentPlayer() != null);
-        assertTrue(testGame.getPlayers().contains(testGame.getPlayerByUsername(testController.getCurrentPlayerUsername())));
+        assertTrue(testGameController.currentPlayer() != null);
+        assertTrue(testGame.getPlayers().contains(testGame.getPlayerByUsername(testGameController.getCurrentPlayerUsername())));
     }
 
     @Test
@@ -75,8 +75,8 @@ class ControllerTest {
         prepareTestGame(false);
         Cloud cloud;
 
-        testController.setCurrentPlayer();
-        Player currentPlayer = testController.getCurrentPlayer();
+        testGameController.setCurrentPlayer();
+        Player currentPlayer = testGameController.getCurrentPlayer();
 
         cloud = testGame.getBoard().getClouds()[0];
 
@@ -86,8 +86,8 @@ class ControllerTest {
 
         currentPlayer.getPlayerBoard().getEntrance().clear();
 
-        ChooseCloudMessage cloudMessage = new ChooseCloudMessage(testController.getCurrentPlayerUsername(), 0);
-        testController.moveStudentsFromCloud(cloudMessage.getCloudId());
+        ChooseCloudMessage cloudMessage = new ChooseCloudMessage(testGameController.getCurrentPlayerUsername(), 0);
+        testGameController.moveStudentsFromCloud(cloudMessage.getCloudId());
 
         assertEquals(currentPlayer.getPlayerBoard().getEntrance(), students);
         assertTrue(cloud.getStudents().isEmpty());
@@ -97,35 +97,35 @@ class ControllerTest {
     void nextPlayer() {
         prepareTestGame(false);
 
-        testController.setCurrentPlayer("FirstPlayer");
+        testGameController.setCurrentPlayer("FirstPlayer");
 
-        testController.nextPlayer();
+        testGameController.nextPlayer();
 
-        assertEquals("SecondPlayer", testController.getCurrentPlayerUsername());
+        assertEquals("SecondPlayer", testGameController.getCurrentPlayerUsername());
 
-        testController.nextPlayer();
+        testGameController.nextPlayer();
 
-        assertEquals("FirstPlayer", testController.getCurrentPlayerUsername());
+        assertEquals("FirstPlayer", testGameController.getCurrentPlayerUsername());
     }
 
     @Test
     void playCard(){
         prepareTestGame(false);
 
-        testController.setCurrentPlayer("FirstPlayer");
+        testGameController.setCurrentPlayer("FirstPlayer");
 
-        Player player = testController.getCurrentPlayer();
+        Player player = testGameController.getCurrentPlayer();
 
         AssistantCard assistantCard = player.getDeck().get(0);
 
         try {
-            testController.playCard(assistantCard);
+            testGameController.playCard(assistantCard);
         }catch (CardAlreadyPlayedException e){
             e.printStackTrace();
         }
 
         assertEquals(9, player.getDeck().size());
-        assertEquals(assistantCard, testController.getTurnCardsPlayed().get(0));
+        assertEquals(assistantCard, testGameController.getTurnCardsPlayed().get(0));
     }
 
     @Test
@@ -138,10 +138,10 @@ class ControllerTest {
 
         player.setNumCoins(cost);
 
-        testController.setCurrentPlayer(player.getUsername());
+        testGameController.setCurrentPlayer(player.getUsername());
 
         try{
-            testController.activateCharacter(character.getEffectId());
+            testGameController.activateCharacter(character.getEffectId());
         } catch (NotEnoughCoinException e) {
             e.printStackTrace();
         }
@@ -160,10 +160,10 @@ class ControllerTest {
         Player player = testGame.getPlayers().get(0);
         player.setNumCoins(0);
 
-        testController.setCurrentPlayer(player.getUsername());
+        testGameController.setCurrentPlayer(player.getUsername());
 
         try {
-            testController.activateCharacter(character.getEffectId());
+            testGameController.activateCharacter(character.getEffectId());
         }
         catch(NotEnoughCoinException e) {
         }
@@ -185,10 +185,10 @@ class ControllerTest {
         Player player = testGame.getPlayers().get(0);
         player.setNumCoins(character.getCost());
 
-        testController.setCurrentPlayer(player.getUsername());
+        testGameController.setCurrentPlayer(player.getUsername());
 
         try {
-            testController.activateIslandCharacter(3, chosenIsland);
+            testGameController.activateIslandCharacter(3, chosenIsland);
         }
         catch(NotEnoughCoinException e) {
         }
@@ -210,10 +210,10 @@ class ControllerTest {
         Player player = testGame.getPlayers().get(0);
         player.setNumCoins(character.getCost());
 
-        testController.setCurrentPlayer(player.getUsername());
+        testGameController.setCurrentPlayer(player.getUsername());
 
         try {
-            testController.activateStudentCharacter(1, chosenStudent);
+            testGameController.activateStudentCharacter(1, chosenStudent);
         }
         catch(NotEnoughCoinException e) {
         }
@@ -234,10 +234,10 @@ class ControllerTest {
         AssistantCard assistantCard1 = player1.getDeck().get(1);
         AssistantCard assistantCard2 = player2.getDeck().get(5);
 
-        testController.setCurrentPlayer("FirstPlayer");
+        testGameController.setCurrentPlayer("FirstPlayer");
 
         try {
-            testController.playCard(assistantCard1);
+            testGameController.playCard(assistantCard1);
         }catch (CardAlreadyPlayedException e){
             e.printStackTrace();
         }
@@ -245,13 +245,13 @@ class ControllerTest {
         nextPlayer();
 
         try {
-            testController.playCard(assistantCard2);
+            testGameController.playCard(assistantCard2);
         }catch (CardAlreadyPlayedException e){
             e.printStackTrace();
         }
 
-        testController.setCurrentPlayer();
-        assertEquals("FirstPlayer", testController.getCurrentPlayerUsername());
+        testGameController.setCurrentPlayer();
+        assertEquals("FirstPlayer", testGameController.getCurrentPlayerUsername());
     }
 
     @Test
@@ -260,12 +260,12 @@ class ControllerTest {
 
         Player player = testGame.getPlayers().get(0);
 
-        testController.setCurrentPlayer(player.getUsername());
+        testGameController.setCurrentPlayer(player.getUsername());
 
         AssistantCard assistantCard = player.getDeck().get(0);
 
         try {
-            testController.playCard(assistantCard);
+            testGameController.playCard(assistantCard);
         }catch (CardAlreadyPlayedException e){
             e.printStackTrace();
         }
@@ -273,7 +273,7 @@ class ControllerTest {
         int prevMotherNature = testGame.getBoard().getMotherNature();
 
         try {
-            testController.moveMotherNature(assistantCard.getMaxMotherNatureMoves()-1);
+            testGameController.moveMotherNature(assistantCard.getMaxMotherNatureMoves()-1);
         } catch (InvalidMotherNatureMovesException e) {
             e.printStackTrace();
         }
@@ -290,10 +290,10 @@ class ControllerTest {
 
         AssistantCard assistantCard = player.getDeck().get(0);
 
-        testController.setCurrentPlayer(player.getUsername());
+        testGameController.setCurrentPlayer(player.getUsername());
 
         try {
-            testController.playCard(assistantCard);
+            testGameController.playCard(assistantCard);
         }catch (CardAlreadyPlayedException e){
             e.printStackTrace();
         }
@@ -301,7 +301,7 @@ class ControllerTest {
         int prevMotherNature = testGame.getBoard().getMotherNature();
 
         try {
-            testController.moveMotherNature(assistantCard.getMaxMotherNatureMoves()+1);
+            testGameController.moveMotherNature(assistantCard.getMaxMotherNatureMoves()+1);
         } catch (InvalidMotherNatureMovesException e) {
         }
 

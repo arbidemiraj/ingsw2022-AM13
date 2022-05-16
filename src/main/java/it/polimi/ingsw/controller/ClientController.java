@@ -6,11 +6,9 @@ import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.client.SocketClient;
+import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.Message;
-import it.polimi.ingsw.network.message.clientmsg.CreateOrJoinAnswer;
-import it.polimi.ingsw.network.message.clientmsg.JoinGameMessage;
-import it.polimi.ingsw.network.message.clientmsg.LoginMessage;
-import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
+import it.polimi.ingsw.network.message.clientmsg.*;
 import it.polimi.ingsw.network.message.servermsg.ChooseMessage;
 import it.polimi.ingsw.network.message.servermsg.ErrorMessage;
 import it.polimi.ingsw.network.message.servermsg.LobbyMessage;
@@ -43,7 +41,12 @@ public class ClientController implements ViewObserver, Observer {
                 ErrorMessage errorMessage = (ErrorMessage) message;
                 switch(errorMessage.getErrorType()){
                     case DUPLICATE_USERNAME -> taskQueue.execute(view::askUsername);
+                    case CONNECTION_LOST -> taskQueue.execute(view::connectionLost);
                 }
+            }
+            case GENERIC -> {
+                GenericMessage genericMessage = (GenericMessage) message;
+                taskQueue.execute(() -> view.showGenericMessage(genericMessage.toString()));
             }
             case CHOOSE_GAME_OPTIONS -> {
                 taskQueue.execute(view::askCreateOrJoin);
@@ -56,7 +59,12 @@ public class ClientController implements ViewObserver, Observer {
                 String s = lobbyMessage.toString();
                 taskQueue.execute(() -> view.showLobby(s));
             }
-
+            case START_GAME -> {
+                taskQueue.execute(view::startGame);
+            }
+            case TOWER_COLOR_ASK -> {
+                taskQueue.execute(view::askTowerColor);
+            }
         }
     }
 
@@ -94,7 +102,7 @@ public class ClientController implements ViewObserver, Observer {
 
     @Override
     public void onUpdateTowerColor(TowerColor chosenTowerColor) {
-
+        client.sendMessage(new ChooseTowerColorMessage(username, chosenTowerColor));
     }
 
     @Override

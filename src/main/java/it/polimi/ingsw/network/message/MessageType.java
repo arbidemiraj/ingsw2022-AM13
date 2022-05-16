@@ -9,6 +9,7 @@ public enum MessageType {
     GENERIC,
     CHOOSE_GAME_OPTIONS,
     ASK_GAME_SETTINGS,
+    ASK_CLOUD,
     ASK_CARD,
     SUCCESS,
     TOWER_COLOR_CHOOSE,

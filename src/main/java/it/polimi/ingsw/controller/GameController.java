@@ -7,9 +7,10 @@ import it.polimi.ingsw.model.exceptions.CardAlreadyPlayedException;
 import it.polimi.ingsw.model.exceptions.EmptyCloudException;
 import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
-import it.polimi.ingsw.network.message.MessageType;
 import it.polimi.ingsw.network.message.clientmsg.*;
 import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.network.message.servermsg.AskStudent;
+import it.polimi.ingsw.network.server.GameHandler;
 import it.polimi.ingsw.observer.Observer;
 
 import java.io.Serial;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 /**
  * Controller class
  */
-public class Controller implements Serializable, Observer {
+public class GameController implements Serializable, Observer {
 
     @Serial
     private static final long serialVersionUID = 743913880093540550L;
@@ -28,14 +29,19 @@ public class Controller implements Serializable, Observer {
     private String currentPlayer;
     private final ArrayList<String> usernameQueue;
     private ArrayList<AssistantCard> turnCardsPlayed;
+    private TurnController turnController;
+    private GameHandler gameHandler;
+
 
     /**
      * Default constructor
      * @param model
      */
 
-    public Controller(Game model) {
+    public GameController(Game model, GameHandler gameHandler) {
         this.model = model;
+        this.gameHandler = gameHandler;
+        turnController = new TurnController(this, gameHandler);
         this.usernameQueue = new ArrayList<>(model.getUsernames());
         turnCardsPlayed = new ArrayList<>();
     }
@@ -270,6 +276,8 @@ public class Controller implements Serializable, Observer {
             case CLOUD -> {
                 ChooseCloudMessage chooseCloudMessage = (ChooseCloudMessage) message;
                 moveStudentsFromCloud (chooseCloudMessage.getCloudId());
+
+
             }
 
             case MOVE_MOTHERNATURE -> {
@@ -296,11 +304,36 @@ public class Controller implements Serializable, Observer {
                 }
             }
 
+            case ACTIVATE_CHARACTER -> {
+                ActivateCharacterMessage activateCharacterMessage = (ActivateCharacterMessage) message;
+
+                switch (activateCharacterMessage.getEffectId()){
+                    case 1 -> {
+                        gameHandler.sendMessage(new AskStudent(), message.getUsername());
+                    }
+                }
+            }
+
         }
+    }
+
+    public void addPlayer(String username){
+        model.addPlayer(username);
     }
 
     @Override
     public void update(Message message) {
+
+    }
+
+    public void startGame() {
+        do{
+
+            turnController.planningPhase();
+
+            turnController.actionPhase();
+
+        }while(endingConditionCheck());
 
     }
 }

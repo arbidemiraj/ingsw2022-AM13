@@ -31,4 +31,10 @@ public interface View {
     void askStudentToMove();
 
     void askIslandToMove();
+
+    void connectionLost();
+
+    void startGame();
+
+    void showGenericMessage(String message);
 }
