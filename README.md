@@ -9,9 +9,9 @@
 |:-----------------|:--------------------------------------------------:|
 | Basic rules      | 🟢 |  
 | Complete rules   | 🟢 | 
-| Socket           | 🟡 |
+| Socket           | 🟢 |
+| CLI              | 🟡 |
 | GUI              | 🔴 |
-| CLI              | 🔴 |
 | Persistence      | 🔴 |
 | Multiple games   | 🟡 |
 | All Characters   | 🟡 |
