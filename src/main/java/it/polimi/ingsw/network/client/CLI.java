@@ -1,22 +1,20 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.model.AssistantCard;
-import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.view.View;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
 
 public class CLI extends ViewObservable implements View {
     private Scanner input = new Scanner(System.in);
     private final PrintStream output;
     private String username;
+
+    private static final String INV_INP = "Invalid input! ";
 
     public CLI(){
         output = System.out;
@@ -88,24 +86,63 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void askCreateOrJoin(){
-        output.println("\n\nWelcome " + username + " !");
-        output.println("\n\n [1] to create a new game \n [2] to join a game\n");
+        int choice;
+        boolean isValid;
 
-        int choice = input.nextInt();
 
-        notifyObserver(viewObserver -> viewObserver.onUpdateCreateOrJoin(choice));
+        do{
+            output.println("\n\nWelcome " + username + " !");
+            output.println("\n\n [1] to create a new game \n [2] to join a game\n");
+
+            choice = input.nextInt();
+
+            if(choice == 1 || choice == 2) isValid = true;
+            else{
+                isValid = false;
+                output.println(INV_INP);
+            }
+        }while(!isValid);
+
+
+        int finalChoice = choice;
+
+        notifyObserver(viewObserver -> viewObserver.onUpdateCreateOrJoin(finalChoice));
     }
 
     @Override
     public void askGameSettings() {
-        output.println("\nInsert number of players");
-        output.print("> ");
+        boolean isValid;
+        int numPlayers;
 
-        int numPlayers = input.nextInt();
+        do{
+            output.println("\nInsert number of players [ 2 or 3 ]");
+            output.print("> ");
 
-        output.println("\nInsert \n[1] for expert mode ON \n[2] for expert mode OFF ");
-        output.printf("> ");
-        int expertMode = input.nextInt();
+            numPlayers = input.nextInt();
+
+            if(numPlayers == 2 || numPlayers == 3) isValid = true;
+            else {
+                isValid = false;
+                output.println(INV_INP);
+            }
+        }while(!isValid);
+
+        int expertMode;
+
+        do{
+            output.println("\nInsert \n[1] for expert mode ON \n[2] for expert mode OFF ");
+            output.printf("> ");
+            expertMode = input.nextInt();
+
+            if(expertMode == 1 || expertMode == 2) isValid = true;
+            else {
+                isValid = false;
+                output.println(INV_INP);
+            }
+        }while(!isValid);
+
+
+
 
         boolean expertModeBoolean = false;
 
@@ -113,7 +150,9 @@ public class CLI extends ViewObservable implements View {
 
         boolean finalExpertModeBoolean = expertModeBoolean;
 
-        notifyObserver(viewObserver -> viewObserver.onUpdateNewGame(numPlayers, finalExpertModeBoolean));
+        int finalNumPlayers = numPlayers;
+
+        notifyObserver(viewObserver -> viewObserver.onUpdateNewGame(finalNumPlayers, finalExpertModeBoolean));
 
         output.println("\nWaiting for players to join... ");
     }
@@ -121,10 +160,25 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void askTowerColor() {
+        String chosenTowerColor;
+        boolean isValid;
+
         output.println("\nYou have to choose a tower color [BLACK | GRAY | WHITE]: ");
         output.print("> ");
 
-        String chosenTowerColor = input.nextLine();
+        do{
+            output.println("\nYou have to choose a tower color [BLACK | GRAY | WHITE]: ");
+            output.print("> ");
+
+            chosenTowerColor = input.nextLine();
+
+            if( chosenTowerColor.equals("BLACK") || chosenTowerColor.equals("WHITE") || chosenTowerColor.equals("GRAY")) isValid = true;
+            else {
+                isValid = false;
+                output.println(INV_INP);
+            }
+        }while(!isValid);
+
 
         output.println(chosenTowerColor);
 
@@ -143,7 +197,7 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void error(String error) {
-
+        output.println("\n" + error);
     }
 
     @Override

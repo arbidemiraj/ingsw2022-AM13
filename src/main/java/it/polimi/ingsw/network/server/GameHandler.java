@@ -32,6 +32,7 @@ public class GameHandler {
         gameController = new GameController(game, this);
         numPlayers = 0;
         this.gameId = gameId;
+
         towerColors = new ArrayList<>();
         towerColors.add(TowerColor.BLACK);
         towerColors.add(TowerColor.GRAY);
@@ -42,9 +43,9 @@ public class GameHandler {
         started = true;
 
         sendMessageToAll(new StartGame());
+
         game.getBoard().prepareGame();
 
-        gameController.firstPlayer();
         gameSetup();
 
         gameController.startGame();
@@ -69,7 +70,6 @@ public class GameHandler {
     }
 
     public void gameSetup(){
-        askTowerColor(gameController.getCurrentPlayerUsername());
     }
 
     private void askTowerColor(String currentPlayerUsername) {
@@ -103,12 +103,6 @@ public class GameHandler {
 
                 GenericMessage genericMessage = new GenericMessage("\nYou have chosen " + towerColorMessage.getChosenTowerColor() + " ... waiting other players to join ...");
                 sendMessage(genericMessage, message.getUsername());
-
-                if((towerColors.size()!=0 && numPlayers == 3) || (towerColors.size() > 1 && numPlayers == 2)){
-                    gameController.nextPlayer();
-
-                    askTowerColor(gameController.getCurrentPlayerUsername());
-                }
             }
         }
     }

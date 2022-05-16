@@ -39,8 +39,13 @@ public class ClientController implements ViewObserver, Observer {
         switch (message.getMessageType()){
             case ERROR -> {
                 ErrorMessage errorMessage = (ErrorMessage) message;
+                String error = errorMessage.getError();
+
+                taskQueue.execute(() -> view.error(error));
                 switch(errorMessage.getErrorType()){
-                    case DUPLICATE_USERNAME -> taskQueue.execute(view::askUsername);
+                    case DUPLICATE_USERNAME -> {
+                        taskQueue.execute(view::askUsername);
+                    }
                     case CONNECTION_LOST -> taskQueue.execute(view::connectionLost);
                 }
             }

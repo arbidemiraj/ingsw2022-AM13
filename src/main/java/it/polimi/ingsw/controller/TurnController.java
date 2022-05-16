@@ -21,8 +21,6 @@ public class TurnController implements Serializable {
     }
 
     public void planningPhase() {
-        gameHandler.sendMessage(new AskCloud(), gameController.getCurrentPlayerUsername());
-
     }
 
     public void actionPhase() {

@@ -31,9 +31,6 @@ public class SocketClientHandler implements ClientHandler, Runnable {
 
     private final ScheduledExecutorService ping;
 
-    private static final int SOCKET_TIMEOUT = 10000;
-
-
     public SocketClientHandler(SocketServer socketServer, Socket client) {
         this.socketServer = socketServer;
         this.client = client;

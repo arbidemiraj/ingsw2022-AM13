@@ -276,8 +276,6 @@ public class GameController implements Serializable, Observer {
             case CLOUD -> {
                 ChooseCloudMessage chooseCloudMessage = (ChooseCloudMessage) message;
                 moveStudentsFromCloud (chooseCloudMessage.getCloudId());
-
-
             }
 
             case MOVE_MOTHERNATURE -> {
