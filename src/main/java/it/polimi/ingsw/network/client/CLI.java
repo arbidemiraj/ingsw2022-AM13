@@ -1,20 +1,28 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.model.AssistantCard;
+import it.polimi.ingsw.model.Cloud;
+import it.polimi.ingsw.model.Movable;
+import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.view.View;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CLI extends ViewObservable implements View {
     private Scanner input = new Scanner(System.in);
     private final PrintStream output;
     private String username;
+    public static final Logger LOGGER = Logger.getLogger(CLI.class.getName());
 
-    private static final String INV_INP = "Invalid input! ";
+    private final String INV_INP = "Invalid input! ";
 
     public CLI(){
         output = System.out;
@@ -141,9 +149,6 @@ public class CLI extends ViewObservable implements View {
             }
         }while(!isValid);
 
-
-
-
         boolean expertModeBoolean = false;
 
         if(expertMode == 1) expertModeBoolean = true;
@@ -153,26 +158,26 @@ public class CLI extends ViewObservable implements View {
         int finalNumPlayers = numPlayers;
 
         notifyObserver(viewObserver -> viewObserver.onUpdateNewGame(finalNumPlayers, finalExpertModeBoolean));
-
-        output.println("\nWaiting for players to join... ");
     }
 
 
     @Override
-    public void askTowerColor() {
+    public void askTowerColor(List<TowerColor> availableColors) {
         String chosenTowerColor;
         boolean isValid;
 
-        output.println("\nYou have to choose a tower color [BLACK | GRAY | WHITE]: ");
-        output.print("> ");
-
         do{
-            output.println("\nYou have to choose a tower color [BLACK | GRAY | WHITE]: ");
+
+            output.println("\nYou have to choose a tower color " + availableColors );
             output.print("> ");
 
+            String bug = input.nextLine(); //??????
             chosenTowerColor = input.nextLine();
 
-            if( chosenTowerColor.equals("BLACK") || chosenTowerColor.equals("WHITE") || chosenTowerColor.equals("GRAY")) isValid = true;
+            chosenTowerColor.toUpperCase(Locale.ROOT);
+            if( chosenTowerColor.equals("BLACK") || chosenTowerColor.equals("WHITE") || chosenTowerColor.equals("GRAY")){
+                isValid = true;
+            }
             else {
                 isValid = false;
                 output.println(INV_INP);
@@ -180,9 +185,16 @@ public class CLI extends ViewObservable implements View {
         }while(!isValid);
 
 
-        output.println(chosenTowerColor);
+        String finalChosenTowerColor = chosenTowerColor;
 
-        //notifyObserver(viewObserver -> viewObserver.onUpdateTowerColor());
+        notifyObserver(viewObserver -> viewObserver.onUpdateTowerColor(finalChosenTowerColor));
+    }
+
+    @Override
+    public void startTurn() {
+    }
+
+    private void showBoard() {
     }
 
     @Override
@@ -218,18 +230,77 @@ public class CLI extends ViewObservable implements View {
     }
 
     @Override
-    public void askCardToPlay(List<AssistantCard> assistantCards) {
+    public void askCardToPlay(List<AssistantCard> assistantCards, List<AssistantCard> cardsPlayed) {
+        output.println("This is your deck -> " + printDeck(assistantCards));
+        output.println("These are the cards that have been played this turn -> " + cardsPlayed);
 
+        output.println("Choose the card you want to play this turn! ");
+        output.println("[ insert the number of the card ]");
+        output.println("> ");
+
+
+        int cloud = input.nextInt();
+
+        notifyObserver(viewObserver -> viewObserver.onUpdateCloud(cloud));
+    }
+
+    private String printDeck(List<AssistantCard> assistantCards) {
+        String deck = "";
+
+        for(AssistantCard assistantCard : assistantCards){
+            deck += " Card  " + assistantCard.getValue() +
+                    " [ Value = " + assistantCard.getValue() + " ] " +
+                    " [ Moves = " + assistantCard.getMaxMotherNatureMoves() + " ]     ";
+        }
+
+        return deck;
     }
 
     @Override
-    public void askCloud() {
+    public void askCloud(List<Cloud> clouds) {
+        output.println("Choose the cloud you want to fill with the extracted students");
+        output.println("[ insert the number of the cloud ]");
+        output.print("> ");
 
+        int cloud = input.nextInt();
+
+        notifyObserver(viewObserver -> viewObserver.onUpdateCloud(cloud));
     }
 
     @Override
-    public void askStudentToMove() {
+    public void askStudentToMove(List<Movable> possibleMoves) {
+        output.println("Select the student you want to move");
+        output.println("[ insert his color and position (HALL | ISLAND | ENTRANCE | CLOUD) ]");
+        output.print("> ");
 
+        String inputString = input.nextLine().toUpperCase();
+
+        String[] temp = inputString.split("\\s+");
+
+        String student = temp[0];
+        String from = temp[1];
+
+        if(from == "ISLAND"){
+            output.println("Select the island where the student is");
+            output.print("> ");
+
+            int islandIdFrom = input.nextInt();
+
+        }
+
+        output.println("Select where you want to move the student");
+        output.print("> ");
+
+        String to = input.nextLine();
+
+        if(to == "ISLAND"){
+            output.println("Select the island where you want to move");
+
+            output.print("> ");
+            int islandIdTo = input.nextInt();
+        }
+
+       // notifyObserver(viewObserver -> viewObserver.onUpdateStudent(from, student, to));
     }
 
     @Override
@@ -238,8 +309,20 @@ public class CLI extends ViewObservable implements View {
     }
 
     public void clearCli(){
-        output.print("\033[H\033[2J");
-        output.flush();
+            try{
+                if(System.getProperty("os.name").contains("Windows")){
+                    new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                }
+                else
+                    Runtime.getRuntime().exec("clear");
+            }
+            catch (IOException | InterruptedException e){
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                Thread.currentThread().interrupt();
+            }
+
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
     }
 
     public void printLine(){
@@ -252,7 +335,8 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void startGame() {
-        output.println("The game is starting...");
+        clearCli();
+        output.println("\nThe game is starting...");
     }
 
     @Override

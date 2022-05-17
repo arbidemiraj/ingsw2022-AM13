@@ -9,15 +9,20 @@ import java.util.List;
 
 public class AskCard extends Message {
     private final List<AssistantCard> assistantCards;
+    private final List<AssistantCard> cardsPlayed;
 
-
-    public AskCard(List<AssistantCard> assistantCards) {
+    public AskCard(List<AssistantCard> assistantCards, List<AssistantCard> cardsPlayed) {
         super("Server", MessageType.ASK_CARD);
         this.assistantCards = assistantCards;
+        this.cardsPlayed = cardsPlayed;
     }
 
     public List<AssistantCard> getAssistantCards() {
         return assistantCards;
+    }
+
+    public List<AssistantCard> getCardsPlayed() {
+        return cardsPlayed;
     }
 
     @Override

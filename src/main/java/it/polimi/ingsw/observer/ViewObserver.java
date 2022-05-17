@@ -20,7 +20,7 @@ public interface ViewObserver {
 
     void onUpdateCloud(int cloudId);
 
-    void onUpdateTowerColor(TowerColor chosenTowerColor);
+    void onUpdateTowerColor(String chosenTowerColor);
 
     void onUpdateDisconnect();
 

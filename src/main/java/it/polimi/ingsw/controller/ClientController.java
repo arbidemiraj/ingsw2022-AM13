@@ -9,7 +9,8 @@ import it.polimi.ingsw.network.client.SocketClient;
 import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.clientmsg.*;
-import it.polimi.ingsw.network.message.servermsg.ChooseMessage;
+import it.polimi.ingsw.network.message.servermsg.AskCard;
+import it.polimi.ingsw.network.message.servermsg.AskTowerColor;
 import it.polimi.ingsw.network.message.servermsg.ErrorMessage;
 import it.polimi.ingsw.network.message.servermsg.LobbyMessage;
 import it.polimi.ingsw.observer.Observer;
@@ -68,7 +69,13 @@ public class ClientController implements ViewObserver, Observer {
                 taskQueue.execute(view::startGame);
             }
             case TOWER_COLOR_ASK -> {
-                taskQueue.execute(view::askTowerColor);
+                AskTowerColor askTowerColor = (AskTowerColor) message;
+                taskQueue.execute(() -> view.askTowerColor(askTowerColor.getAvailableColors()));
+            }
+
+            case ASK_CARD -> {
+                AskCard msg = (AskCard) message;
+                taskQueue.execute(() -> view.askCardToPlay(msg.getAssistantCards(), msg.getCardsPlayed()));
             }
         }
     }
@@ -106,8 +113,14 @@ public class ClientController implements ViewObserver, Observer {
     }
 
     @Override
-    public void onUpdateTowerColor(TowerColor chosenTowerColor) {
-        client.sendMessage(new ChooseTowerColorMessage(username, chosenTowerColor));
+    public void onUpdateTowerColor(String chosenTowerColor) {
+        TowerColor sendTowerColor = null;
+        
+        if(chosenTowerColor.equals("BLACK")) sendTowerColor = TowerColor.BLACK;
+        if(chosenTowerColor.equals("WHITE")) sendTowerColor = TowerColor.WHITE;
+        if(chosenTowerColor.equals("GRAY")) sendTowerColor = TowerColor.GRAY;
+        
+        client.sendMessage(new ChooseTowerColorMessage(username, sendTowerColor));
     }
 
     @Override

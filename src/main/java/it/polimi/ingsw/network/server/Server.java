@@ -79,11 +79,17 @@ public class Server {
                 clientHandlerMap.get(message.getUsername()).setGameId(nextGameId);
                 createNewGame((NewGameMessage) message);
                 lobbyHandler.getGames().get(nextGameId - 1).addPlayer(message.getUsername());
+                lobbyHandler.joinGame(message.getUsername(), nextGameId - 1);
             }
             case JOIN_GAME -> {
                 JoinGameMessage joinGameMessage = (JoinGameMessage) message;
                 clientHandlerMap.get(message.getUsername()).setGameId(joinGameMessage.getGameId());
                 lobbyHandler.getGames().get(joinGameMessage.getGameId()).addPlayer(message.getUsername());
+                lobbyHandler.joinGame(message.getUsername(), joinGameMessage.getGameId());
+            }
+
+            default -> {
+                lobbyHandler.receivedMessage(message, lobbyHandler.getGameIdFromUsername(message.getUsername()));
             }
         }
     }

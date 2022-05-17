@@ -3,16 +3,20 @@ package it.polimi.ingsw.network.server;
 import it.polimi.ingsw.network.message.Message;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class LobbyHandler {
     private List<GameHandler> games;
     private List<String> usernameQueue;
+    private Map<String, Integer> gameIdUsernameMap;
 
     public LobbyHandler() {
         this.games = new ArrayList<>();
         this.usernameQueue = new ArrayList<>();
+        gameIdUsernameMap = new HashMap<>();
     }
 
     public void newGame(GameHandler newGame){
@@ -51,12 +55,19 @@ public class LobbyHandler {
         game.receivedMessage(receivedMessage);
     }
 
+    public int getGameIdFromUsername(String username){
+        return gameIdUsernameMap.get(username);
+    }
     public List<GameHandler> getGames() {
         return games;
     }
 
     public void login(String username){
         usernameQueue.add(username);
+    }
+
+    public void joinGame(String username, int gameId){
+        gameIdUsernameMap.put(username, gameId);
     }
 
     public List<String> getUsernameQueue() {

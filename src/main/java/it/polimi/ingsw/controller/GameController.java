@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
 import it.polimi.ingsw.network.message.clientmsg.*;
 import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.network.message.servermsg.AskCard;
 import it.polimi.ingsw.network.message.servermsg.AskStudent;
 import it.polimi.ingsw.network.server.GameHandler;
 import it.polimi.ingsw.observer.Observer;
@@ -325,13 +326,6 @@ public class GameController implements Serializable, Observer {
     }
 
     public void startGame() {
-        do{
-
-            turnController.planningPhase();
-
-            turnController.actionPhase();
-
-        }while(endingConditionCheck());
-
+        gameHandler.sendMessage(new AskCard(getCurrentPlayer().getDeck(), getTurnCardsPlayed()), getCurrentPlayerUsername());
     }
 }

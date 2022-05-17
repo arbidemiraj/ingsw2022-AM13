@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.network.message.clientmsg.ChooseCloudMessage;
 import it.polimi.ingsw.network.message.clientmsg.ChooseTowerColorMessage;
 import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
 import it.polimi.ingsw.network.message.servermsg.AskTowerColor;
@@ -57,6 +58,8 @@ public class GameHandler {
 
     public void addPlayer(String username){
         gameController.addPlayer(username);
+        askTowerColor(username);
+
         this.numPlayers++;
         if(numPlayers == maxPlayers) startGame();
     }
@@ -70,11 +73,14 @@ public class GameHandler {
     }
 
     public void gameSetup(){
+        gameController.firstPlayer();
+
+        sendMessage(new GenericMessage("\n You are the first player! "), gameController.getCurrentPlayerUsername());
+        sendMessageToAllExcept(new GenericMessage("\n Wait... " + gameController.getCurrentPlayerUsername() + " is playing his turn! "), gameController.getCurrentPlayerUsername());
     }
 
-    private void askTowerColor(String currentPlayerUsername) {
-        sendMessageToAllExcept(new GenericMessage(currentPlayerUsername + " is choosing his tower color ..."), currentPlayerUsername);
-        sendMessage(new AskTowerColor(), currentPlayerUsername);
+    private void askTowerColor(String username) {
+        sendMessage(new AskTowerColor(towerColors), username);
     }
 
     public int getGameId() {
@@ -95,14 +101,16 @@ public class GameHandler {
 
     public void receivedMessage(Message message){
         switch (message.getMessageType()){
-            case TOWER_COLOR ->{
+            case TOWER_COLOR_CHOOSE -> {
                 ChooseTowerColorMessage towerColorMessage = (ChooseTowerColorMessage) message;
+                towerColors.remove(towerColorMessage.getChosenTowerColor());
 
                 game.getPlayerByUsername(message.getUsername())
                         .setTowerColor((towerColorMessage.getChosenTowerColor()));
+            }
 
-                GenericMessage genericMessage = new GenericMessage("\nYou have chosen " + towerColorMessage.getChosenTowerColor() + " ... waiting other players to join ...");
-                sendMessage(genericMessage, message.getUsername());
+            default -> {
+                gameController.messageReceived(message);
             }
         }
     }
@@ -122,6 +130,8 @@ public class GameHandler {
             if(username != user) sendMessage(message, username);
         }
     }
+
+
 }
 
 

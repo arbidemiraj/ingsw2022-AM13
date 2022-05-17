@@ -1,6 +1,9 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.AssistantCard;
+import it.polimi.ingsw.model.Cloud;
+import it.polimi.ingsw.model.Movable;
+import it.polimi.ingsw.model.enumerations.TowerColor;
 
 import java.util.List;
 
@@ -12,7 +15,9 @@ public interface View {
 
     void askGameSettings();
 
-    void askTowerColor();
+    void askTowerColor(List<TowerColor> availableColors);
+
+    void startTurn();
 
     void successMessage();
 
@@ -24,11 +29,11 @@ public interface View {
 
     void winMessage();
 
-    void askCardToPlay(List<AssistantCard> assistantCards);
+    void askCardToPlay(List<AssistantCard> assistantCards,  List<AssistantCard> cardsPlayed);
 
-    void askCloud();
+    void askCloud(List<Cloud> clouds);
 
-    void askStudentToMove();
+    void askStudentToMove(List<Movable> possibleMoves);
 
     void askIslandToMove();
 

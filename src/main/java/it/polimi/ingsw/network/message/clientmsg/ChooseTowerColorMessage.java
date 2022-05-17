@@ -22,7 +22,7 @@ public class ChooseTowerColorMessage extends Message {
     @Override
     public String toString() {
         return "ChooseTowerColorMessage{" +
-                "username="+ getUsername()+
-                "chosenTowerColor=" + chosenTowerColor;
+                "chosenTowerColor=" + chosenTowerColor +
+                '}';
     }
 }
