@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.exceptions.CardAlreadyPlayedException;
 import it.polimi.ingsw.model.exceptions.EmptyCloudException;
 import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
+import it.polimi.ingsw.network.client.reducedModel.ReducedCharacter;
 import it.polimi.ingsw.network.message.clientmsg.*;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.servermsg.*;
@@ -354,7 +355,21 @@ public class GameController implements Serializable, Observer {
 
     public void startGame() {
         gameHandler.sendMessageToAll(new BoardMessage(model.getBoard()));
-        
+
+        ReducedCharacter[] reducedCharacters = null;
+
+        if(model.isExpertMode()){
+            reducedCharacters = new ReducedCharacter[3];
+            int i = 0;
+
+            for(Character character : model.getCharacters()){
+                reducedCharacters[i] = new ReducedCharacter(character.getCost(), character.getEffectId(), character.getDesc());
+                i++;
+            }
+        }
+
+        gameHandler.sendMessageToAll(new ReducedModelMessage(model.getUsernames(), reducedCharacters, currentPlayer));
+
         newTurn();
     }
 

@@ -80,7 +80,9 @@ public class Server {
                 createNewGame((NewGameMessage) message);
                 lobbyHandler.getGames().get(nextGameId - 1).addPlayer(message.getUsername());
                 lobbyHandler.joinGame(message.getUsername(), nextGameId - 1);
+                clientHandlerMap.get(message.getUsername()).sendMessage(new GenericMessage("\n Waiting players to join ..."));
             }
+
             case JOIN_GAME -> {
                 JoinGameMessage joinGameMessage = (JoinGameMessage) message;
                 clientHandlerMap.get(message.getUsername()).setGameId(joinGameMessage.getGameId());

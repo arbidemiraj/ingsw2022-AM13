@@ -45,4 +45,6 @@ public interface View {
     void showGenericMessage(String message);
 
     void createBoard(ReducedBoard reducedBoard);
+
+    void askStudentToMove();
 }

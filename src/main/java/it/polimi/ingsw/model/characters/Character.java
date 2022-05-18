@@ -13,6 +13,8 @@ public class Character {
 
 	private Actionable effect;
 
+	private String desc;
+
 	private final int effectId;
 
 	private boolean isActivated;
@@ -83,6 +85,9 @@ public class Character {
 		return cost;
 	}
 
+	public String getDesc(){
+		return desc;
+	}
 	//method for the cards that needs a chosenStudent to apply the effect
 	public void applyEffect(Student chosenStudent){
 		isActivated = true;

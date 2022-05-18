@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,12 +22,14 @@ public class CLI extends ViewObservable implements View {
     private final PrintStream output;
     private String username;
     public static final Logger LOGGER = Logger.getLogger(CLI.class.getName());
+    private boolean activatingCharacter;
+    private String infos;
 
     private final String INV_INP = "Invalid input! ";
 
     public CLI(){
         output = System.out;
-
+        activatingCharacter = false;
     }
     public void init(){
         output.println(" ________           _                   _                   \n" +
@@ -204,6 +205,8 @@ public class CLI extends ViewObservable implements View {
 
     public void showBoard() {
         output.println(reducedBoard.printIslands());
+
+        output.println(infos);
     }
 
     @Override
@@ -250,7 +253,7 @@ public class CLI extends ViewObservable implements View {
         output.println("> ");
 
 
-        int cardId = input.nextInt();
+        int cardId = Integer.parseInt(readLine());
 
         notifyObserver(viewObserver -> viewObserver.onUpdateCard(cardId));
     }
@@ -273,9 +276,19 @@ public class CLI extends ViewObservable implements View {
         output.println("[ insert the number of the cloud ]");
         output.print("> ");
 
-        int cloud = input.nextInt();
+        int cloud = 0;
 
-        notifyObserver(viewObserver -> viewObserver.onUpdateCloud(cloud));
+        String read = readLine();
+
+        if(read == null){
+            activatingCharacter = true;
+        }
+        else{
+            cloud = input.nextInt();
+        }
+
+        int finalCloud = cloud;
+        notifyObserver(viewObserver -> viewObserver.onUpdateCloud(finalCloud));
     }
 
     @Override
@@ -347,11 +360,34 @@ public class CLI extends ViewObservable implements View {
     @Override
     public void startGame() {
         clearCli();
+
         output.println("\nThe game is starting...");
+
+        showBoard();
     }
 
     @Override
     public void showGenericMessage(String message) {
         output.println(message);
+    }
+
+    public String readLine(){
+        String read = input.nextLine();
+
+
+        if(read.contains("CHARACTER")){
+            String[] temp = read.split("\\s+");
+
+            int effectId = Integer.parseInt(temp[1]);
+            notifyObserver(viewObserver -> viewObserver.onUpdateCharacter(effectId));
+
+            return null;
+        }
+
+        else return read;
+    }
+
+    public void askStudentToMove(){
+
     }
 }

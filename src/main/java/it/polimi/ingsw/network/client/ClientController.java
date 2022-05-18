@@ -62,9 +62,13 @@ public class ClientController implements ViewObserver, Observer {
                 String s = lobbyMessage.toString();
                 taskQueue.execute(() -> view.showLobby(s));
             }
+            case CHOOSE_STUDENT -> {
+                taskQueue.execute(view::askStudentToMove);
+            }
             case START_GAME -> {
                 taskQueue.execute(view::startGame);
             }
+
             case TOWER_COLOR_ASK -> {
                 AskTowerColor askTowerColor = (AskTowerColor) message;
                 taskQueue.execute(() -> view.askTowerColor(askTowerColor.getAvailableColors()));
@@ -110,7 +114,7 @@ public class ClientController implements ViewObserver, Observer {
 
     @Override
     public void onUpdateCharacter(int effectId) {
-
+        client.sendMessage(new ActivateCharacterMessage(username, effectId));
     }
 
     @Override
