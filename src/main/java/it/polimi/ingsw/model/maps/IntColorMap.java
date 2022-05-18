@@ -2,10 +2,14 @@ package it.polimi.ingsw.model.maps;
 
 import it.polimi.ingsw.model.enumerations.Student;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class IntColorMap {
-    private HashMap<Integer, Student> map = new HashMap<Integer, Student>();
+public class IntColorMap implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -7465717978198819076L;
+    private HashMap<Integer, Student> map = new HashMap<>();
 
     public IntColorMap() {
         map.put(0, Student.YELLOW);

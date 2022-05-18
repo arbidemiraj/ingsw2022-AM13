@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.Cloud;
 import it.polimi.ingsw.model.Movable;
 import it.polimi.ingsw.model.enumerations.TowerColor;
+import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.view.View;
 
@@ -18,6 +19,7 @@ import java.util.logging.Logger;
 
 public class CLI extends ViewObservable implements View {
     private Scanner input = new Scanner(System.in);
+    private ReducedBoard reducedBoard;
     private final PrintStream output;
     private String username;
     public static final Logger LOGGER = Logger.getLogger(CLI.class.getName());
@@ -26,6 +28,7 @@ public class CLI extends ViewObservable implements View {
 
     public CLI(){
         output = System.out;
+
     }
     public void init(){
         output.println(" ________           _                   _                   \n" +
@@ -165,16 +168,17 @@ public class CLI extends ViewObservable implements View {
     public void askTowerColor(List<TowerColor> availableColors) {
         String chosenTowerColor;
         boolean isValid;
+        String bug = input.nextLine(); //??????
 
         do{
 
             output.println("\nYou have to choose a tower color " + availableColors );
             output.print("> ");
 
-            String bug = input.nextLine(); //??????
+
             chosenTowerColor = input.nextLine();
 
-            chosenTowerColor.toUpperCase(Locale.ROOT);
+            chosenTowerColor.toUpperCase();
             if( chosenTowerColor.equals("BLACK") || chosenTowerColor.equals("WHITE") || chosenTowerColor.equals("GRAY")){
                 isValid = true;
             }
@@ -194,7 +198,12 @@ public class CLI extends ViewObservable implements View {
     public void startTurn() {
     }
 
-    private void showBoard() {
+    public void createBoard(ReducedBoard reducedBoard){
+        this.reducedBoard = reducedBoard;
+    }
+
+    public void showBoard() {
+        output.println(reducedBoard.printIslands());
     }
 
     @Override
@@ -231,6 +240,8 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void askCardToPlay(List<AssistantCard> assistantCards, List<AssistantCard> cardsPlayed) {
+        showBoard();
+
         output.println("This is your deck -> " + printDeck(assistantCards));
         output.println("These are the cards that have been played this turn -> " + cardsPlayed);
 
@@ -239,25 +250,25 @@ public class CLI extends ViewObservable implements View {
         output.println("> ");
 
 
-        int cloud = input.nextInt();
+        int cardId = input.nextInt();
 
-        notifyObserver(viewObserver -> viewObserver.onUpdateCloud(cloud));
+        notifyObserver(viewObserver -> viewObserver.onUpdateCard(cardId));
     }
 
     private String printDeck(List<AssistantCard> assistantCards) {
         String deck = "";
 
         for(AssistantCard assistantCard : assistantCards){
-            deck += " Card  " + assistantCard.getValue() +
-                    " [ Value = " + assistantCard.getValue() + " ] " +
-                    " [ Moves = " + assistantCard.getMaxMotherNatureMoves() + " ]     ";
+            deck += "\n Card  " + assistantCard.getValue() +
+                    " [ V = " + assistantCard.getValue() + " ] " +
+                    " [ M = " + assistantCard.getMaxMotherNatureMoves() + " ] ";
         }
 
         return deck;
     }
 
     @Override
-    public void askCloud(List<Cloud> clouds) {
+    public void askCloud() {
         output.println("Choose the cloud you want to fill with the extracted students");
         output.println("[ insert the number of the cloud ]");
         output.print("> ");

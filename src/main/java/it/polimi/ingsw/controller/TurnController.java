@@ -16,6 +16,7 @@ public class TurnController implements Serializable {
     private GameController gameController;
     private GameHandler gameHandler;
 
+
     public TurnController(GameController gameController, GameHandler gameHandler) {
         this.gameController = gameController;
         this.gameHandler = gameHandler;

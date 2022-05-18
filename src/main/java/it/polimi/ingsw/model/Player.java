@@ -13,6 +13,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Player {
 
@@ -150,4 +151,12 @@ public class Player {
 		if(towerColor != null) return true;
 		else return false;
 	}
+
+    public AssistantCard getAssistantCardById(int assistantCardId) {
+		return deck
+				.stream()
+				.filter(a -> a.getValue() == assistantCardId)
+				.collect(Collectors.toList())
+				.get(0);
+    }
 }

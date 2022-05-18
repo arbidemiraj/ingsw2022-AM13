@@ -1,9 +1,16 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * This classes manages the assistant cards
  */
-public class AssistantCard {
+public class AssistantCard implements Serializable {
+
+
+	@Serial
+	private static final long serialVersionUID = 9031182714517267067L;
 
 	private int value;
 

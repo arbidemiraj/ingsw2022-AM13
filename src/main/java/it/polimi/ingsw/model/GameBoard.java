@@ -3,13 +3,18 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.maps.IntColorMap;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * This classes manages the game components
  */
-public class GameBoard {
+public class GameBoard implements Serializable {
+
+	@Serial
+	private static final long serialVersionUID = 2728402814716070089L;
 
 	private int currentNumPlayers;
 
@@ -173,6 +178,10 @@ public class GameBoard {
 
 	public void moveMotherNature(int steps) {
 		motherNature += steps;
+
+		if(motherNature >= 12){
+			motherNature = motherNature - 12;
+		}
 	}
 
 	public Island getMotherNatureIsland() {

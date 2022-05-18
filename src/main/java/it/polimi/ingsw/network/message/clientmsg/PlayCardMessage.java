@@ -12,14 +12,14 @@ import it.polimi.ingsw.network.message.MessageType;
 
 public class PlayCardMessage extends Message{
 
-    private AssistantCard assistantCard;
+    private int assistantCard;
 
-    public PlayCardMessage(String username, AssistantCard assistantCard ) {
+    public PlayCardMessage(String username, int assistantCardId ) {
         super(username, MessageType.PLAY_CARD);
-        this.assistantCard = assistantCard;
+        this.assistantCard = assistantCardId;
     }
 
-    public AssistantCard getAssistantCard() {
+    public int getAssistantCard() {
         return assistantCard;
     }
 

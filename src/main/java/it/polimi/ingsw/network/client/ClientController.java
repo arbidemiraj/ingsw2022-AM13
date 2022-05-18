@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.Movable;
@@ -9,10 +9,7 @@ import it.polimi.ingsw.network.client.SocketClient;
 import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.clientmsg.*;
-import it.polimi.ingsw.network.message.servermsg.AskCard;
-import it.polimi.ingsw.network.message.servermsg.AskTowerColor;
-import it.polimi.ingsw.network.message.servermsg.ErrorMessage;
-import it.polimi.ingsw.network.message.servermsg.LobbyMessage;
+import it.polimi.ingsw.network.message.servermsg.*;
 import it.polimi.ingsw.observer.Observer;
 import it.polimi.ingsw.observer.ViewObserver;
 import it.polimi.ingsw.view.View;
@@ -77,6 +74,16 @@ public class ClientController implements ViewObserver, Observer {
                 AskCard msg = (AskCard) message;
                 taskQueue.execute(() -> view.askCardToPlay(msg.getAssistantCards(), msg.getCardsPlayed()));
             }
+
+            case BOARD_MESSAGE -> {
+                BoardMessage msg = (BoardMessage) message;
+
+                taskQueue.execute(() -> view.createBoard(msg.getReducedBoard()));
+            }
+
+            case ASK_CLOUD -> {
+                taskQueue.execute(view::askCloud);
+            }
         }
     }
 
@@ -84,7 +91,6 @@ public class ClientController implements ViewObserver, Observer {
     public void onUpdateServerInfo(List<String> serverInfo) {
 
         try {
-
             client = new SocketClient(serverInfo.get(0), Integer.parseInt(serverInfo.get(1)));
             client.addObserver(this);
             client.readMessage();
@@ -160,8 +166,8 @@ public class ClientController implements ViewObserver, Observer {
     }
 
     @Override
-    public void onUpdateCard(int assistantcardId) {
-
+    public void onUpdateCard(int assistantCardId) {
+        client.sendMessage(new PlayCardMessage(username, assistantCardId));
     }
 
     @Override

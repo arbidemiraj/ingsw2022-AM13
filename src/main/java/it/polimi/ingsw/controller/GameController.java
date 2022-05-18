@@ -9,8 +9,7 @@ import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
 import it.polimi.ingsw.network.message.clientmsg.*;
 import it.polimi.ingsw.network.message.Message;
-import it.polimi.ingsw.network.message.servermsg.AskCard;
-import it.polimi.ingsw.network.message.servermsg.AskStudent;
+import it.polimi.ingsw.network.message.servermsg.*;
 import it.polimi.ingsw.network.server.GameHandler;
 import it.polimi.ingsw.observer.Observer;
 
@@ -28,10 +27,12 @@ public class GameController implements Serializable, Observer {
 
     private final Game model;
     private String currentPlayer;
-    private final ArrayList<String> usernameQueue;
+    private final ArrayList<String> activePlayers;
     private ArrayList<AssistantCard> turnCardsPlayed;
     private TurnController turnController;
     private GameHandler gameHandler;
+    private int phase;
+    private int playerTurn;
 
 
     /**
@@ -43,8 +44,10 @@ public class GameController implements Serializable, Observer {
         this.model = model;
         this.gameHandler = gameHandler;
         turnController = new TurnController(this, gameHandler);
-        this.usernameQueue = new ArrayList<>(model.getUsernames());
+        this.activePlayers = new ArrayList<>(model.getUsernames());
         turnCardsPlayed = new ArrayList<>();
+        phase = 0;
+        playerTurn = 0;
     }
 
     public static void removePlayer(String username) {
@@ -58,7 +61,7 @@ public class GameController implements Serializable, Observer {
      * @throws NotEnoughCoinException       when the player hasn't enough coins to activate the character
      */
     public void activateIslandCharacter(int id, Island chosenIsland) throws NotEnoughCoinException {
-        Player player = model.getPlayerByUsername(currentPlayer);
+        Player player = getCurrentPlayer();
 
         Character character = model.getCharacter(id);
 
@@ -81,7 +84,7 @@ public class GameController implements Serializable, Observer {
      * @throws NotEnoughCoinException       when the player hasn't enough coins to activate the character
      */
     public void activateStudentCharacter(int id, Student chosenStudent) throws NotEnoughCoinException {
-        Player player = model.getPlayerByUsername(currentPlayer);
+        Player player = getCurrentPlayer();
 
         Character character = model.getCharacter(id);
 
@@ -104,7 +107,7 @@ public class GameController implements Serializable, Observer {
      * @throws NotEnoughCoinException       when the player hasn't enough coins to activate the character
      */
     public void activateCharacter(int id) throws NotEnoughCoinException {
-        Player player = model.getPlayerByUsername(currentPlayer);
+        Player player = getCurrentPlayer();
 
         Character character = model.getCharacter(id);
 
@@ -157,7 +160,7 @@ public class GameController implements Serializable, Observer {
         int maxValuePos = values.indexOf(maxValue);
 
         currentPlayer = model.getPlayers().get(maxValuePos).getUsername();
-        model.setCurrentPlayer(usernameQueue.indexOf(currentPlayer));
+        model.setCurrentPlayer(activePlayers.indexOf(currentPlayer));
     }
 
 
@@ -173,13 +176,13 @@ public class GameController implements Serializable, Observer {
      * Used on each phase to advance to another player turn
      */
     public void nextPlayer() {
-        int currentPlayerIndex = usernameQueue.indexOf(currentPlayer);
+        int currentPlayerIndex = activePlayers.indexOf(currentPlayer);
 
         if((currentPlayerIndex + 1) < model.getNumPlayers()) currentPlayerIndex++;
         else currentPlayerIndex = 0;
 
-        currentPlayer = usernameQueue.get(currentPlayerIndex);
-        model.setCurrentPlayer(usernameQueue.indexOf(currentPlayer));
+        currentPlayer = activePlayers.get(currentPlayerIndex);
+        model.setCurrentPlayer(activePlayers.indexOf(currentPlayer));
     }
 
     /**
@@ -277,6 +280,8 @@ public class GameController implements Serializable, Observer {
             case CLOUD -> {
                 ChooseCloudMessage chooseCloudMessage = (ChooseCloudMessage) message;
                 moveStudentsFromCloud (chooseCloudMessage.getCloudId());
+
+                gameHandler.sendMessage(new AskCard(getCurrentPlayer().getDeck(), turnCardsPlayed), currentPlayer);
             }
 
             case MOVE_MOTHERNATURE -> {
@@ -286,20 +291,42 @@ public class GameController implements Serializable, Observer {
                 } catch (InvalidMotherNatureMovesException e) {
                     e.printStackTrace();
                 }
+
+                playerTurn++;
+                if(playerTurn < model.getNumPlayers()){
+                    gameHandler.sendMessage(new AskCloud(), currentPlayer);
+                } else {
+                    playerTurn = 0;
+                    phase = 0;
+                    newTurn();
+                }
             }
 
             case MOVE_STUDENT -> {
                 MoveStudentMessage studentMessage = (MoveStudentMessage) message;
                 moveStudent(studentMessage.getFrom(),studentMessage.getColor(),studentMessage.getTo());
+
+                gameHandler.sendMessage(new AskMotherNature(), currentPlayer);
             }
 
             case PLAY_CARD -> {
-                PlayCardMessage playCardMessage = (PlayCardMessage) message;
-
+                PlayCardMessage msg = (PlayCardMessage) message;
+                AssistantCard assistantCard = model.getPlayerByUsername(msg.getUsername()).getAssistantCardById(msg.getAssistantCard());
                 try {
-                    playCard(playCardMessage.getAssistantCard());
+                    playCard(assistantCard);
                 }catch (CardAlreadyPlayedException e){
                     e.printStackTrace();
+                }
+
+                playerTurn++;
+
+                if(playerTurn < model.getNumPlayers()){
+                    nextPlayer();
+                }else{
+                    playerTurn = 0;
+                    phase++;
+                    nextPlayer();
+                    actionPhase();
                 }
             }
 
@@ -308,7 +335,7 @@ public class GameController implements Serializable, Observer {
 
                 switch (activateCharacterMessage.getEffectId()){
                     case 1 -> {
-                        gameHandler.sendMessage(new AskStudent(), message.getUsername());
+                        gameHandler.sendMessage(new AskStudent(1), message.getUsername());
                     }
                 }
             }
@@ -326,6 +353,18 @@ public class GameController implements Serializable, Observer {
     }
 
     public void startGame() {
-        gameHandler.sendMessage(new AskCard(getCurrentPlayer().getDeck(), getTurnCardsPlayed()), getCurrentPlayerUsername());
+        gameHandler.sendMessageToAll(new BoardMessage(model.getBoard()));
+        
+        newTurn();
     }
+
+    private void newTurn() {
+        gameHandler.sendMessage(new AskCloud(), currentPlayer);
+    }
+
+    private void actionPhase(){
+        gameHandler.sendMessage(new AskStudent(3), currentPlayer);
+    }
+
+
 }

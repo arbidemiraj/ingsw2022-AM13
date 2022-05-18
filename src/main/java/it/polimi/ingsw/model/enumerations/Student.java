@@ -6,6 +6,4 @@ public enum Student {
 	GREEN,
 	PINK,
 	RED;
-
-	public int position;
 }

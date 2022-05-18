@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.Cloud;
 import it.polimi.ingsw.model.Movable;
 import it.polimi.ingsw.model.enumerations.TowerColor;
+import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public interface View {
 
     void askCardToPlay(List<AssistantCard> assistantCards,  List<AssistantCard> cardsPlayed);
 
-    void askCloud(List<Cloud> clouds);
+    void askCloud();
 
     void askStudentToMove(List<Movable> possibleMoves);
 
@@ -42,4 +43,6 @@ public interface View {
     void startGame();
 
     void showGenericMessage(String message);
+
+    void createBoard(ReducedBoard reducedBoard);
 }
