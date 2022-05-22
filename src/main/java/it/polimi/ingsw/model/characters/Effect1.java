@@ -10,9 +10,11 @@ public class Effect1 implements Actionable {
 
 	private ArrayList<Student> students;
 	private Student chosenStudent;
+	private String desc;
 
 	public Effect1(ArrayList<Student> students) {
 		this.students = students;
+		desc = "Take 1 student from this card and place it on an Island of your choice";
 	}
 
 	public ArrayList<Student> getStudents() {
@@ -29,6 +31,10 @@ public class Effect1 implements Actionable {
 		chosenIsland.addStudent(chosenStudent);
 		students.remove(chosenStudent);
 		students.add(game.getBoard().extractStudents(1).get(0));
+	}
+
+	public String getDesc() {
+		return desc;
 	}
 
 	@Override

@@ -13,34 +13,28 @@ public class ReducedBoard implements Serializable {
     private static final long serialVersionUID = -6983972997025348137L;
     private Cloud[] clouds;
     private int motherNature;
+    private int numStudents[];
+    private String[] owner;
     private ArrayList<ReducedIsland> islands;
-    private ArrayList<ReducedPlayerBoard> playerBoards;
+    private ReducedPlayerBoard playerBoard;
 
-    public ReducedBoard(GameBoard gameBoard) {
+    public ReducedBoard(int[] numStudents, Cloud[] clouds, String[] owner, ReducedPlayerBoard reducedPlayerBoard, int motherNature) {
         islands = new ArrayList<>();
-        int numStudents[];
-        String owner;
-        for(int i = 0; i < 12; i ++){
-            numStudents = gameBoard.getIslands().get(i).getNumStudents();
-            if(gameBoard.getIslands().get(i).getOwner()!=null)
-            {
-                owner = gameBoard.getIslands().get(i).getOwner().getUsername();
-            }
-            else owner = "No owner";
 
-            islands.add(new ReducedIsland(numStudents, owner));
+        this.clouds = clouds;
+        this.numStudents = numStudents;
+        this.owner = owner;
+        this.playerBoard = reducedPlayerBoard;
+
+        for(int i = 0; i < 12; i ++){
+            islands.add(new ReducedIsland(numStudents, owner[i]));
         }
 
-        this.motherNature = gameBoard.getMotherNature();
+        this.motherNature = motherNature;
+
+        islands.get(motherNature).setMotherNature(true);
     }
 
-    public void setPlayerBoards(ArrayList<ReducedPlayerBoard> playerBoards) {
-        this.playerBoards = playerBoards;
-    }
-
-    public void addPlayerBoard(ReducedPlayerBoard playerBoard){
-        playerBoards.add(playerBoard);
-    }
 
     public int getMotherNature() {
         return motherNature;
@@ -50,25 +44,19 @@ public class ReducedBoard implements Serializable {
         this.motherNature = motherNature;
     }
 
-    public String printIslands() {
+    public String[] printIslands() {
         String printedIslands = "";
-        int i = 1;
-
-        for(ReducedIsland island : islands){
-            printedIslands += "\n Island " + i + "\n" +
-                    "  ------- \n |      |" +
-                    "\n |      |" +
-                    "Y:" + island.getNumStudents()[0] +
-                    "  B:" + island.getNumStudents()[1] +
-                    "  G:" + island.getNumStudents()[2] +
-                    "  P:" + island.getNumStudents()[3] +
-                    "  R:" + island.getNumStudents()[4] +
-                    "\n |      |" +
-                    "\n _______ \n";
-
-            i++;
+        
+        for(int i = 0; i < 12; i++){
+            printedIslands += islands.get(i).printIsland() + "\n";
         }
 
-        return printedIslands;
+        String[] spacePrinted = printedIslands.split("\n");
+
+        return spacePrinted;
+    }
+
+    public String printPlayerBoard(){
+        return playerBoard.print();
     }
 }

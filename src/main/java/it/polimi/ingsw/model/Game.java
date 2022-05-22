@@ -64,8 +64,6 @@ public class Game extends Observable {
 		activatedCharacters = new ArrayList<>();
 
 		if(expertMode){
-
-			board.prepareGame();
 			setupExpertMode();
 			for(Player player : players) player.addCoin();
 		}
@@ -413,5 +411,16 @@ public class Game extends Observable {
 
 	public boolean isExpertMode() {
 		return expertMode;
+	}
+
+	public void startGame(){
+		int numStudents;
+
+		if(players.size() == 2) numStudents = 7;
+		else numStudents = 9;
+
+		for(Player player : players){
+			player.getPlayerBoard().fillEntrance(board.extractStudents(numStudents));
+		}
 	}
 }

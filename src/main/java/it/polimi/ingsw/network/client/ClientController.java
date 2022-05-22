@@ -1,11 +1,8 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.model.Island;
-import it.polimi.ingsw.model.Movable;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
-import it.polimi.ingsw.network.client.Client;
-import it.polimi.ingsw.network.client.SocketClient;
 import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.clientmsg.*;
@@ -44,7 +41,6 @@ public class ClientController implements ViewObserver, Observer {
                     case DUPLICATE_USERNAME -> {
                         taskQueue.execute(view::askUsername);
                     }
-                    case CONNECTION_LOST -> taskQueue.execute(view::connectionLost);
                 }
             }
             case GENERIC -> {
@@ -62,8 +58,9 @@ public class ClientController implements ViewObserver, Observer {
                 String s = lobbyMessage.toString();
                 taskQueue.execute(() -> view.showLobby(s));
             }
-            case CHOOSE_STUDENT -> {
-                taskQueue.execute(view::askStudentToMove);
+
+            case ASK_MN -> {
+                taskQueue.execute(view::askMotherNatureMove);
             }
             case START_GAME -> {
                 taskQueue.execute(view::startGame);
@@ -87,6 +84,18 @@ public class ClientController implements ViewObserver, Observer {
 
             case ASK_CLOUD -> {
                 taskQueue.execute(view::askCloud);
+            }
+
+            case REDUCED_MODEL -> {
+                ReducedModelMessage msg = (ReducedModelMessage) message;
+
+                taskQueue.execute(()-> view.createModel(msg.getReducedModel()));
+            }
+
+            case ASK_STUDENT -> {
+                AskStudent msg = (AskStudent) message;
+
+                taskQueue.execute(() -> view.askStudentToMove(msg.getNumStudent()));
             }
         }
     }
@@ -160,8 +169,8 @@ public class ClientController implements ViewObserver, Observer {
     }
 
     @Override
-    public void onUpdateStudent(Movable from, Student color, Movable to) {
-
+    public void onUpdateStudent(String[] from, String[] color, String[] to, int[] id) {
+        client.sendMessage(new MoveStudentMessage(username, from, color, to, id));
     }
 
     @Override

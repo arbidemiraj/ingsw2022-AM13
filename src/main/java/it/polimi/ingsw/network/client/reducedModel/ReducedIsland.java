@@ -11,6 +11,7 @@ public class ReducedIsland implements Serializable {
     @Serial
     private static final long serialVersionUID = -4207476138481288015L;
     private int[] numStudents;
+    private int id;
     private String owner;
     private ColorIntMap studentColorMap = new ColorIntMap();
     private HashMap<Student, Integer> studentColor = studentColorMap.getMap();
@@ -43,5 +44,26 @@ public class ReducedIsland implements Serializable {
 
     public int[] getNumStudents() {
         return numStudents;
+    }
+
+    public String printIsland(){
+        String print = "";
+
+        print += "Island " + id +
+                "\n ------- \n" +
+                " |       | \n";
+
+        if(isMotherNature){
+            print += "   [MN]    \n";
+        }
+
+                print += " Y: " + numStudents[0] +
+                "\n B: " + numStudents[1] +
+                "\n G: " + numStudents[2] +
+                "\n P: " + numStudents[3] +
+                "\n R: " + numStudents[4] +
+                "\n ------- \n";
+
+        return print;
     }
 }

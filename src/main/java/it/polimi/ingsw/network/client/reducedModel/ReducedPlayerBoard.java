@@ -36,5 +36,46 @@ public class ReducedPlayerBoard implements Serializable {
 
     }
 
+    public String print(){
+        String pb = "";
+        pb += "\n---------------------------------------------------------------------\n" +
+                "| Y: ";
+        for(int i = 0; i < entranceStudents[0]; i++) pb+= "*";
+        pb+= " |   Y: ";
+        for(int i = 0; i < hallStudents[0]; i++) pb+= "*";
+
+        pb+="\n---------------------------------------------------------------------\n";
+        pb+="| B: ";
+        for(int i = 0; i < entranceStudents[1]; i++) pb+= "*";
+        pb+= " |   B: ";
+        for(int i = 0; i < hallStudents[1]; i++) pb+= "*";
+
+        pb+="\n---------------------------------------------------------------------\n";
+
+        pb+="| G: ";
+        for(int i = 0; i < entranceStudents[2]; i++) pb+= "*";
+        pb+= " |   G: ";
+        for(int i = 0; i < hallStudents[2]; i++) pb+= "*";
+
+        pb+="\n---------------------------------------------------------------------\n";
+
+        pb+="| P: ";
+        for(int i = 0; i < entranceStudents[3]; i++) pb+= "*";
+        pb+= " |   P: ";
+        for(int i = 0; i < hallStudents[3]; i++) pb+= "*";
+
+        pb+="\n---------------------------------------------------------------------\n";
+
+        pb+="| R: ";
+        for(int i = 0; i < entranceStudents[4]; i++) pb+= "*";
+        pb+= " |   R: ";
+        for(int i = 0; i < hallStudents[4]; i++) pb+= "*";
+
+        pb+="\n---------------------------------------------------------------------\n";
+
+
+        return pb;
+    }
+
 
 }

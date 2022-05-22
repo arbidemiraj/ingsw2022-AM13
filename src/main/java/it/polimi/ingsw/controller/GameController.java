@@ -7,7 +7,9 @@ import it.polimi.ingsw.model.exceptions.CardAlreadyPlayedException;
 import it.polimi.ingsw.model.exceptions.EmptyCloudException;
 import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
+import it.polimi.ingsw.model.maps.ColorIntMap;
 import it.polimi.ingsw.network.client.reducedModel.ReducedCharacter;
+import it.polimi.ingsw.network.client.reducedModel.ReducedPlayerBoard;
 import it.polimi.ingsw.network.message.clientmsg.*;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.servermsg.*;
@@ -17,6 +19,8 @@ import it.polimi.ingsw.observer.Observer;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Controller class
@@ -34,6 +38,7 @@ public class GameController implements Serializable, Observer {
     private GameHandler gameHandler;
     private int phase;
     private int playerTurn;
+    private int turn = 0;
 
 
     /**
@@ -129,8 +134,12 @@ public class GameController implements Serializable, Observer {
      * @param color     the color of the student the player wants to move
      * @param to        the movable object where the player wants to move the student
      */
-    public static void moveStudent(Movable from, Student color, Movable to){
+    public void moveStudent(Movable from, Student color, Movable to, boolean profCheck){
         to.addStudent(from.removeStudent(color));
+
+        if(profCheck){
+            model.professorCheck(color);
+        }
     }
 
     /**
@@ -280,9 +289,9 @@ public class GameController implements Serializable, Observer {
         switch (message.getMessageType()) {
             case CLOUD -> {
                 ChooseCloudMessage chooseCloudMessage = (ChooseCloudMessage) message;
-                moveStudentsFromCloud (chooseCloudMessage.getCloudId());
 
-                gameHandler.sendMessage(new AskCard(getCurrentPlayer().getDeck(), turnCardsPlayed), currentPlayer);
+                moveStudentsFromCloud (chooseCloudMessage.getCloudId());
+                newTurn();
             }
 
             case MOVE_MOTHERNATURE -> {
@@ -305,12 +314,14 @@ public class GameController implements Serializable, Observer {
 
             case MOVE_STUDENT -> {
                 MoveStudentMessage studentMessage = (MoveStudentMessage) message;
-                moveStudent(studentMessage.getFrom(),studentMessage.getColor(),studentMessage.getTo());
+                parseParametersStudent(studentMessage, 3);
 
                 gameHandler.sendMessage(new AskMotherNature(), currentPlayer);
             }
 
             case PLAY_CARD -> {
+                if(playerTurn == 0) turnCardsPlayed.removeAll(turnCardsPlayed);
+
                 PlayCardMessage msg = (PlayCardMessage) message;
                 AssistantCard assistantCard = model.getPlayerByUsername(msg.getUsername()).getAssistantCardById(msg.getAssistantCard());
                 try {
@@ -323,6 +334,8 @@ public class GameController implements Serializable, Observer {
 
                 if(playerTurn < model.getNumPlayers()){
                     nextPlayer();
+                    gameHandler.sendMessage(new AskCard(getCurrentPlayer().getDeck(), turnCardsPlayed), currentPlayer);
+
                 }else{
                     playerTurn = 0;
                     phase++;
@@ -341,11 +354,64 @@ public class GameController implements Serializable, Observer {
                 }
             }
 
+
         }
+    }
+
+    private void parseParametersStudent(MoveStudentMessage studentMessage, int numStudents) {
+        Movable from = null;
+        Student student = null;
+        Movable to = null;
+        boolean checkProf = false;
+
+        for(int i = 0; i < numStudents; i ++){
+            switch (studentMessage.getFrom()[i]){
+                case "entrance" -> {
+                    from = model.getPlayerByUsername(studentMessage.getUsername()).getPlayerBoard();
+                }
+            }
+
+            switch (studentMessage.getColor()[i]){
+                case "yellow" -> {
+                    student = Student.YELLOW;
+                }
+                case "blue" -> {
+                    student = Student.BLUE;
+                }
+                case "pink" -> {
+                    student = Student.PINK;
+                }
+                case "red" -> {
+                    student = Student.RED;
+                }
+                case "green" -> {
+                    student = Student.GREEN;
+                }
+            }
+
+            switch (studentMessage.getTo()[i]){
+                case "HALL" -> {
+                    ColorIntMap cMap = new ColorIntMap();
+                    HashMap<Student, Integer> map = cMap.getMap();
+
+                    to = model.getPlayerByUsername(studentMessage.getUsername()).getPlayerBoard().getDinnerRoom()[map.get(student)];
+
+                    checkProf = true;
+                }
+
+                case "ISLAND" -> {
+                    to = model.getBoard().getIslands().get(studentMessage.getId()[i]);
+                }
+            }
+
+            moveStudent(from, student, to, checkProf);
+        }
+
     }
 
     public void addPlayer(String username){
         model.addPlayer(username);
+        activePlayers.add(username);
     }
 
     @Override
@@ -354,27 +420,70 @@ public class GameController implements Serializable, Observer {
     }
 
     public void startGame() {
-        gameHandler.sendMessageToAll(new BoardMessage(model.getBoard()));
-
-        ReducedCharacter[] reducedCharacters = null;
-
         if(model.isExpertMode()){
-            reducedCharacters = new ReducedCharacter[3];
+            ReducedCharacter[] reducedCharacters = new ReducedCharacter[3];
             int i = 0;
 
             for(Character character : model.getCharacters()){
                 reducedCharacters[i] = new ReducedCharacter(character.getCost(), character.getEffectId(), character.getDesc());
                 i++;
             }
+
+            for(Player player : model.getPlayers()){
+                gameHandler.sendMessage(new ReducedModelMessage(player.getUsername(), player.getTowerColor(), reducedCharacters), player.getUsername());
+            }
+        }
+        else{
+            for(Player player : model.getPlayers()){
+                gameHandler.sendMessage(new ReducedModelMessage(player.getUsername(), player.getTowerColor()), player.getUsername());
+            }
+        }
+        int[] numStudents = new int[12];
+        String[] owner = new String[12];
+
+        for(int i = 0; i < 12; i++){
+            numStudents = model.getBoard().getIslands().get(i).getNumStudents();
+            if(model.getBoard().getIslands().get(i).getOwner()!=null)
+            {
+                owner[i] = model.getBoard().getIslands().get(i).getOwner().getUsername();
+            }
+            else owner[i] = "No owner";
         }
 
-        gameHandler.sendMessageToAll(new ReducedModelMessage(model.getUsernames(), reducedCharacters, currentPlayer));
+        for(Player player : model.getPlayers()){
+            int[] entrance = new int[5];
+            int[] hall = new int[5];
+
+            for(int i = 0; i < 5; i++){
+                entrance = player.getPlayerBoard().getEntranceStudents();
+                hall[i] = player.getPlayerBoard().getDinnerRoom()[i].getNumStudents();
+            }
+
+            ReducedPlayerBoard reducedPlayerBoard = new ReducedPlayerBoard(entrance, hall);
+
+            gameHandler.sendMessage(new BoardMessage(numStudents, model.getBoard().getClouds(), owner, reducedPlayerBoard, model.getBoard().getMotherNature()), player.getUsername());
+        }
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        gameHandler.sendMessageToAll(new StartGame());
 
         newTurn();
     }
 
     private void newTurn() {
-        gameHandler.sendMessage(new AskCloud(), currentPlayer);
+        if(model.isExpertMode()) model.getActivatedCharacters().clear();
+
+
+
+        if(turn == 1) firstPlayer();
+        else setCurrentPlayer();
+        turnCardsPlayed.clear();
+
+        gameHandler.sendMessage(new AskCard(getCurrentPlayer().getDeck(), turnCardsPlayed), currentPlayer);
     }
 
     private void actionPhase(){

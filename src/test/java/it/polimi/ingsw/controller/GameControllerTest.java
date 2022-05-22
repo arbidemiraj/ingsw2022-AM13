@@ -55,7 +55,7 @@ class GameControllerTest {
         island.getStudents().clear();
         island.addStudent(student);
 
-        testGameController.moveStudent(island, Student.BLUE, playerBoard);
+        testGameController.moveStudent(island, Student.BLUE, playerBoard, false);
 
         assertTrue(playerBoard.getEntrance().contains(Student.BLUE));
     }

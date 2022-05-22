@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.Cloud;
 import it.polimi.ingsw.model.Movable;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
+import it.polimi.ingsw.network.client.reducedModel.ReducedCharacter;
+import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.view.View;
 
@@ -20,10 +22,11 @@ public class CLI extends ViewObservable implements View {
     private Scanner input = new Scanner(System.in);
     private ReducedBoard reducedBoard;
     private final PrintStream output;
+    private String status;
     private String username;
     public static final Logger LOGGER = Logger.getLogger(CLI.class.getName());
     private boolean activatingCharacter;
-    private String infos;
+    private ReducedModel reducedModel;
 
     private final String INV_INP = "Invalid input! ";
 
@@ -204,11 +207,30 @@ public class CLI extends ViewObservable implements View {
     }
 
     public void showBoard() {
-        output.println(reducedBoard.printIslands());
+        output.println(reducedBoard.printPlayerBoard());
 
-        output.println(infos);
+        output.println("\n");
+        String infos = "";
+        String menu = "";
+
+        infos +="\nType CHARACTER <CharacterId> to activate the effect " +
+                "\nType DESC <CharacterId> to see a desc of the character effect" +
+                "\n\nCHARACTERS: ";
+
+        for(ReducedCharacter character : reducedModel.getReducedCharacters()){
+            infos +=
+                    "\nID: " + character.getEffectId() +
+                            "\nCOST: " + character.getCost();
+        }
+
+        output.print(infos + "\n\n");
+
+        output.println(reducedBoard.printIslands());
     }
 
+    public void updateBoard(){
+
+    }
     @Override
     public void successMessage() {
 
@@ -243,7 +265,6 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void askCardToPlay(List<AssistantCard> assistantCards, List<AssistantCard> cardsPlayed) {
-        showBoard();
 
         output.println("This is your deck -> " + printDeck(assistantCards));
         output.println("These are the cards that have been played this turn -> " + cardsPlayed);
@@ -272,7 +293,7 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void askCloud() {
-        output.println("Choose the cloud you want to fill with the extracted students");
+        output.println("Choose the cloud you want to get the students from");
         output.println("[ insert the number of the cloud ]");
         output.print("> ");
 
@@ -292,76 +313,62 @@ public class CLI extends ViewObservable implements View {
     }
 
     @Override
-    public void askStudentToMove(List<Movable> possibleMoves) {
-        output.println("Select the student you want to move");
-        output.println("[ insert his color and position (HALL | ISLAND | ENTRANCE | CLOUD) ]");
-        output.print("> ");
+    public void askStudentToMove(int numStudents) {
+        String[] from = new String[numStudents];
+        String[] student = new String[numStudents];
+        String[] to = new String[numStudents];
+        int[] id = new int[numStudents];
 
-        String inputString = input.nextLine().toUpperCase();
-
-        String[] temp = inputString.split("\\s+");
-
-        String student = temp[0];
-        String from = temp[1];
-
-        if(from == "ISLAND"){
-            output.println("Select the island where the student is");
+        for(int i = 0; i < numStudents; i++) {
+            output.println("Select the student you want to move");
+            output.println("[ insert his color and where you want to move it (HALL | ISLAND) ]");
             output.print("> ");
 
-            int islandIdFrom = input.nextInt();
+            String inputString = input.nextLine();
 
+            String[] temp = inputString.split("\\s+");
+
+            student[i] = temp[0];
+            to[i] = temp[1];
+
+            int islandId = 0;
+
+            if(to[i] == "island"){
+                output.println("Select the island where you want to move the student \n[Insert the ID]");
+                output.print("> ");
+
+                id[i] = input.nextInt();
+
+            }
+
+            notifyObserver(viewObserver -> viewObserver.onUpdateStudent(from, student, to, id));
         }
-
-        output.println("Select where you want to move the student");
-        output.print("> ");
-
-        String to = input.nextLine();
-
-        if(to == "ISLAND"){
-            output.println("Select the island where you want to move");
-
-            output.print("> ");
-            int islandIdTo = input.nextInt();
-        }
-
-       // notifyObserver(viewObserver -> viewObserver.onUpdateStudent(from, student, to));
     }
+
 
     @Override
     public void askIslandToMove() {
 
     }
 
-    public void clearCli(){
-            try{
-                if(System.getProperty("os.name").contains("Windows")){
-                    new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-                }
-                else
-                    Runtime.getRuntime().exec("clear");
-            }
-            catch (IOException | InterruptedException e){
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
-                Thread.currentThread().interrupt();
-            }
+    @Override
+    public void connectionLost() {
 
-            System.out.print("\033[H\033[2J");
-            System.out.flush();
+    }
+
+    public void clearCli(){
     }
 
     public void printLine(){
         output.println("\n-----------------------------------------------------------");
     }
 
-    public void connectionLost(){
-        output.println("\nConnection lost with the server");
-    }
-
     @Override
     public void startGame() {
         clearCli();
 
-        output.println("\nThe game is starting...");
+        output.println("\nThe game is starting...\n\n");
+        printLine();
 
         showBoard();
     }
@@ -387,7 +394,40 @@ public class CLI extends ViewObservable implements View {
         else return read;
     }
 
-    public void askStudentToMove(){
+    public void createModel(ReducedModel reducedModel){
+        this.reducedModel = reducedModel;
+    }
 
+    public String[] sideMenu(){
+        String sideMenu = "";
+
+        sideMenu += "\n\n-----------------------------------" +
+                "\n USERNAME " +
+                "\n-----------------------------------\n" +
+                reducedModel.getUsername() +
+                "\n-----------------------------------\n" +
+                "\n COLOR " +
+                "\n-----------------------------------\n" +
+                reducedModel.getColor() +
+                "\n-----------------------------------\n" +
+                "\n STATUS" +
+                "\n-----------------------------------\n" +
+                status;
+
+
+        String[] sideMenuRows = sideMenu.split("\n");
+
+
+        return sideMenuRows;
+    }
+
+    @Override
+    public void askMotherNatureMove() {
+        output.println("\nEnter the number of steps you want to move motherNature");
+        output.print("> ");
+
+        int steps = input.nextInt();
+
+        notifyObserver(viewObserver -> viewObserver.onUpdateMotherNature(steps));
     }
 }

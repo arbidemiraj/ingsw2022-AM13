@@ -3,11 +3,15 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.EmptyCloudException;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Cloud {
+public class Cloud implements Serializable {
+	@Serial
+	private static final long serialVersionUID = -2908368553595866575L;
 	private ArrayList<Student> students;
 
 	public Cloud(int numPlayers) {

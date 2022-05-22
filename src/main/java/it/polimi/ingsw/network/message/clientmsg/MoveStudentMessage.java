@@ -12,27 +12,34 @@ import it.polimi.ingsw.network.message.MessageType;
 
 public class MoveStudentMessage extends Message {
 
-    private Movable from;
-    private Student color;
-    private Movable to;
+    private String[] from;
+    private String[] color;
+    private String[] to;
+    private int[] id;
 
-    public MoveStudentMessage(String username, Movable from, Student color, Movable to) {
+
+    public MoveStudentMessage(String username, String[] from, String[] color, String[] to, int[] id) {
         super(username, MessageType.MOVE_STUDENT);
         this.from = from;
         this.color = color;
         this.to = to;
+        this.id = id;
     }
 
-    public Movable getFrom() {
+    public String[] getFrom() {
         return from;
     }
 
-    public Student getColor() {
+    public String[] getColor() {
         return color;
     }
 
-    public Movable getTo() {
+    public String[] getTo() {
         return to;
+    }
+
+    public int[] getId() {
+        return id;
     }
 
     @Override

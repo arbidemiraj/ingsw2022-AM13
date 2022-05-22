@@ -15,4 +15,16 @@ public class ReducedCharacter implements Serializable {
         this.effectId = effectId;
         this.characterDesc = characterDesc;
     }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public int getEffectId() {
+        return effectId;
+    }
+
+    public String getCharacterDesc() {
+        return characterDesc;
+    }
 }

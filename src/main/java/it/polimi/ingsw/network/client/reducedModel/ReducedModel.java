@@ -1,24 +1,51 @@
 package it.polimi.ingsw.network.client.reducedModel;
 
+import it.polimi.ingsw.model.enumerations.TowerColor;
+
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ReducedModel implements Serializable {
-    private ArrayList<String> players;
-    private Map<String, String> playerColor;
+    private String username;
+    private TowerColor color;
     private ReducedCharacter[] reducedCharacters;
     private String currentPlayer;
+    private boolean isExpertMode;
+    private boolean isActive;
 
-    public ReducedModel(ArrayList<String> players, ReducedCharacter[] reducedCharacters, String currentPlayer) {
-        this.players = players;
-        playerColor = new HashMap<>();
+    public ReducedModel(String username, TowerColor color, ReducedCharacter[] reducedCharacters) {
+        this.username = username;
+        this.color = color;
         this.reducedCharacters = reducedCharacters;
+        isExpertMode = true;
+    }
+
+    public ReducedModel(String username, TowerColor color){
+        this.username = username;
+        this.color = color;
+        isExpertMode = false;
+    }
+
+    public boolean isExpertMode() {
+        return isExpertMode;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setCurrentPlayer(String currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
-    public void addColor(String username, String color){
-        playerColor.put(color, username);
+    public String getUsername() {
+        return username;
+    }
+
+    public TowerColor getColor() {
+        return color;
+    }
+
+    public ReducedCharacter[] getReducedCharacters() {
+        return reducedCharacters;
     }
 }

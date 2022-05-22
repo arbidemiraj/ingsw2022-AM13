@@ -43,9 +43,8 @@ public class GameHandler {
     public void startGame(){
         started = true;
 
-        sendMessageToAll(new StartGame());
-
         game.getBoard().prepareGame();
+        game.startGame();
 
         gameSetup();
 

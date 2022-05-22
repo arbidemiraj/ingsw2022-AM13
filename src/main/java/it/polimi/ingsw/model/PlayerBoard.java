@@ -46,6 +46,17 @@ public class PlayerBoard implements Movable {
 		return entrance;
 	}
 
+	public int[] getEntranceStudents(){
+		ColorIntMap studentColorMap = new ColorIntMap();
+		HashMap<Student, Integer> studentColor = studentColorMap.getMap();
+		int[] entranceStud = {0, 0, 0, 0, 0};
+
+		for(Student student : entrance){
+			entranceStud[studentColor.get(student)]++;
+		}
+
+		return entranceStud;
+	}
 	@Override
 	public Student removeStudent(Student color) {
 		Student student = null;

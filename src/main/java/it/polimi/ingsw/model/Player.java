@@ -159,4 +159,8 @@ public class Player {
 				.collect(Collectors.toList())
 				.get(0);
     }
+
+	public TowerColor getTowerColor() {
+		return towerColor;
+	}
 }

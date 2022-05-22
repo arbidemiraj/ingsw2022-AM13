@@ -80,7 +80,6 @@ public class GameBoard implements Serializable {
 		fillClouds();
 
 		//fill entrance for each player
-
 	}
 
 	private void fillClouds() {
@@ -194,5 +193,8 @@ public class GameBoard implements Serializable {
 
 	public void putStudentInBag(Student student){
 		bag.add(student);
+	}
+
+	public void fillCloud(int cloudId) {
 	}
 }
