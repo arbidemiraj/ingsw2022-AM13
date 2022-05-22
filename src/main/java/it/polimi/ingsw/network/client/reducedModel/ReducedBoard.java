@@ -44,16 +44,14 @@ public class ReducedBoard implements Serializable {
         this.motherNature = motherNature;
     }
 
-    public String[] printIslands() {
+    public String printIslands() {
         String printedIslands = "";
         
         for(int i = 0; i < 12; i++){
             printedIslands += islands.get(i).printIsland() + "\n";
         }
 
-        String[] spacePrinted = printedIslands.split("\n");
-
-        return spacePrinted;
+        return printedIslands;
     }
 
     public String printPlayerBoard(){

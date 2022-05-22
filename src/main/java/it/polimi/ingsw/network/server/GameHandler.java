@@ -42,10 +42,7 @@ public class GameHandler {
 
     public void startGame(){
         started = true;
-
-        game.getBoard().prepareGame();
         game.startGame();
-
         gameSetup();
 
         gameController.startGame();
@@ -68,7 +65,6 @@ public class GameHandler {
     }
 
     public void endGame(){
-
     }
 
     public void gameSetup(){

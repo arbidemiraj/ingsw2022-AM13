@@ -64,8 +64,12 @@ public class Game extends Observable {
 		activatedCharacters = new ArrayList<>();
 
 		if(expertMode){
+			board.prepareGame();
 			setupExpertMode();
 			for(Player player : players) player.addCoin();
+		}
+		else{
+			board.prepareGame();
 		}
 	}
 

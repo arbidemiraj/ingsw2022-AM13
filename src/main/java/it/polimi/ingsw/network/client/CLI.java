@@ -207,7 +207,15 @@ public class CLI extends ViewObservable implements View {
     }
 
     public void showBoard() {
-        output.println(reducedBoard.printPlayerBoard());
+        output.println("\n\n-----------------------------------\n" +
+                        "USERNAME" +
+                        "\n-----------------------------------\n" +
+                        reducedModel.getUsername() +
+                        "\n-----------------------------------\n" +
+                        "COLOR" +
+                        "\n-----------------------------------\n" +
+                        reducedModel.getColor() +
+                        reducedBoard.printPlayerBoard());
 
         output.println("\n");
         String infos = "";
