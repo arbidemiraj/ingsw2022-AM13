@@ -371,23 +371,7 @@ public class GameController implements Serializable, Observer {
                 }
             }
 
-            switch (studentMessage.getColor()[i]){
-                case "yellow" -> {
-                    student = Student.YELLOW;
-                }
-                case "blue" -> {
-                    student = Student.BLUE;
-                }
-                case "pink" -> {
-                    student = Student.PINK;
-                }
-                case "red" -> {
-                    student = Student.RED;
-                }
-                case "green" -> {
-                    student = Student.GREEN;
-                }
-            }
+            student = Student.valueOf(studentMessage.getColor()[i]);
 
             switch (studentMessage.getTo()[i]){
                 case "HALL" -> {

@@ -2,7 +2,8 @@ package it.polimi.ingsw.network;
 
 
 import it.polimi.ingsw.network.client.ClientController;
-import it.polimi.ingsw.network.client.CLI;
+import it.polimi.ingsw.view.cli.CLI;
+import it.polimi.ingsw.view.gui.scene.BoardHandler;
 
 import java.io.IOException;
 
@@ -12,7 +13,6 @@ import java.io.IOException;
 public class ClientApp {
 
     public static void main(String[] args) throws IOException {
-
             CLI view = new CLI();
             ClientController clientController = new ClientController(view);
             view.addObserver(clientController);

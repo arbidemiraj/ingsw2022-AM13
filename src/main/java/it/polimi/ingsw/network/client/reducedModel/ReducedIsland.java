@@ -17,9 +17,10 @@ public class ReducedIsland implements Serializable {
     private HashMap<Student, Integer> studentColor = studentColorMap.getMap();
     private boolean isMotherNature;
 
-    public ReducedIsland(int numStudents[], String owner) {
+    public ReducedIsland(int numStudents[], String owner, int id) {
         this.numStudents = numStudents;
         this.owner = owner;
+        this.id = id;
     }
 
     public String getOwner() {

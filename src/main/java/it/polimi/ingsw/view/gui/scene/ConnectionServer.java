@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.scene;
+package it.polimi.ingsw.view.gui.scene;
 
 import it.polimi.ingsw.observer.ViewObservable;
 import javafx.event.Event;
@@ -10,29 +10,23 @@ import javafx.scene.input.MouseEvent;
 public class ConnectionServer extends ViewObservable{
 
     private TextField serverAddress;
-
-    private int serverPort;
+    private TextField serverPort;
 
     @FXML
-    private Button joinBtn;
+    private Button connectBtn;
 
     @FXML
     public void initialize() {
-        joinBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onJoinBtnClick);
+        connectBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onConnectBtnClick);
 
 
     }
 
 
-    private void onJoinBtnClick(Event event) {
-
-
-        String Address = serverAddress.getText();
+    private void onConnectBtnClick(Event event) {
+        String address = serverAddress.getText();
         int port = Integer.parseInt(serverPort.getText());
-
     }
-
-
 
 
 }

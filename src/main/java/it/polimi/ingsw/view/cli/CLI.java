@@ -1,8 +1,6 @@
-package it.polimi.ingsw.network.client;
+package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.model.AssistantCard;
-import it.polimi.ingsw.model.Cloud;
-import it.polimi.ingsw.model.Movable;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
 import it.polimi.ingsw.network.client.reducedModel.ReducedCharacter;
@@ -10,12 +8,10 @@ import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.view.View;
 
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CLI extends ViewObservable implements View {
@@ -208,13 +204,11 @@ public class CLI extends ViewObservable implements View {
 
     public void showBoard() {
         output.println("\n\n-----------------------------------\n" +
-                        "USERNAME" +
-                        "\n-----------------------------------\n" +
+                        "USERNAME: " +
                         reducedModel.getUsername() +
-                        "\n-----------------------------------\n" +
-                        "COLOR" +
-                        "\n-----------------------------------\n" +
+                        "COLOR: " +
                         reducedModel.getColor() +
+                        "\nPLAYER BOARD\n" +
                         reducedBoard.printPlayerBoard());
 
         output.println("\n");
@@ -241,7 +235,7 @@ public class CLI extends ViewObservable implements View {
     }
     @Override
     public void successMessage() {
-
+        output.println("Operation successfully completed! ");
     }
 
     @Override
@@ -341,7 +335,7 @@ public class CLI extends ViewObservable implements View {
 
             int islandId = 0;
 
-            if(to[i] == "island"){
+            if(to[i].equals("ISLAND")){
                 output.println("Select the island where you want to move the student \n[Insert the ID]");
                 output.print("> ");
 
@@ -356,7 +350,12 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void askIslandToMove() {
+        output.println("Insert the id of the chosen Island: ");
+        output.print("> ");
 
+        int islandId = input.nextInt();
+
+        notifyObserver(viewObserver -> viewObserver.onUpdateIslandEffect(islandId));
     }
 
     @Override

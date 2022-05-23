@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.scene;
+package it.polimi.ingsw.view.gui.scene;
 
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.observer.ViewObserver;

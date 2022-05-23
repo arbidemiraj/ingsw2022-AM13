@@ -11,21 +11,22 @@ import it.polimi.ingsw.network.message.MessageType;
 
 public class IslandEffectMessage extends Message {
 
-    private Island chosenIsland;
-    public IslandEffectMessage(String username,Island chosenIsland) {
+    private int chosenIslandId;
+
+    public IslandEffectMessage(String username,int chosenIsland) {
         super(username, MessageType.ISLAND_EFFECT);
-        this.chosenIsland = chosenIsland;
+        this.chosenIslandId = chosenIsland;
     }
 
-    public Island getChosenIsland() {
-        return chosenIsland;
+    public int getChosenIslandId() {
+        return chosenIslandId;
     }
 
     @Override
     public String toString() {
         return "IslandEffectMessage{" +
                 "username=" + getUsername() +
-                ", chosenIsland=" + chosenIsland +
+                ", chosenIsland=" + chosenIslandId +
                 '}';
 
 

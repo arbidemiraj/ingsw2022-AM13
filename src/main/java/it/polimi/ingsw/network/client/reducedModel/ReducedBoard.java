@@ -27,7 +27,7 @@ public class ReducedBoard implements Serializable {
         this.playerBoard = reducedPlayerBoard;
 
         for(int i = 0; i < 12; i ++){
-            islands.add(new ReducedIsland(numStudents, owner[i]));
+            islands.add(new ReducedIsland(numStudents, owner[i], i));
         }
 
         this.motherNature = motherNature;

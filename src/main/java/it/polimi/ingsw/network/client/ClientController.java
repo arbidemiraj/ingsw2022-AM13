@@ -128,17 +128,12 @@ public class ClientController implements ViewObserver, Observer {
 
     @Override
     public void onUpdateCloud(int cloudId) {
-
+        client.sendMessage(new ChooseCloudMessage(username, cloudId));
     }
 
     @Override
     public void onUpdateTowerColor(String chosenTowerColor) {
-        TowerColor sendTowerColor = null;
-        
-        if(chosenTowerColor.equals("BLACK")) sendTowerColor = TowerColor.BLACK;
-        if(chosenTowerColor.equals("WHITE")) sendTowerColor = TowerColor.WHITE;
-        if(chosenTowerColor.equals("GRAY")) sendTowerColor = TowerColor.GRAY;
-        
+        TowerColor sendTowerColor = TowerColor.valueOf(chosenTowerColor);
         client.sendMessage(new ChooseTowerColorMessage(username, sendTowerColor));
     }
 
@@ -148,8 +143,8 @@ public class ClientController implements ViewObserver, Observer {
     }
 
     @Override
-    public void onUpdateIslandEffect(Island chosenIsland) {
-
+    public void onUpdateIslandEffect(int chosenIsland) {
+        client.sendMessage(new IslandEffectMessage(username, chosenIsland));
     }
 
     @Override
@@ -165,7 +160,7 @@ public class ClientController implements ViewObserver, Observer {
 
     @Override
     public void onUpdateMotherNature(int steps) {
-
+        client.sendMessage(new MoveMotherNatureMessage(username, steps));
     }
 
     @Override
@@ -189,7 +184,7 @@ public class ClientController implements ViewObserver, Observer {
     }
 
     @Override
-    public void onUpdateStudentEffect(Student chosenStudent) {
-
+    public void onUpdateStudentEffect(String chosenStudent) {
+        client.sendMessage(new StudentEffectMessage(username, Student.valueOf(chosenStudent)));
     }
 }

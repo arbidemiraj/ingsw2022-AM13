@@ -24,7 +24,7 @@ public interface ViewObserver {
 
     void onUpdateDisconnect();
 
-    void onUpdateIslandEffect(Island chosenIsland);
+    void onUpdateIslandEffect(int chosenIsland);
 
     void onUpdateJoinGame(int gameId);
 
@@ -40,7 +40,7 @@ public interface ViewObserver {
 
     void onUpdateReloadGame();
 
-    void onUpdateStudentEffect(Student chosenStudent);
+    void onUpdateStudentEffect(String chosenStudent);
 
 
 }
