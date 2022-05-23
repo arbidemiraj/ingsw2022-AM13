@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.scene;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,6 +21,4 @@ public class BoardHandler extends Application {
     public void main(String[] args) {
         launch(args);
     }
-
-
 }
