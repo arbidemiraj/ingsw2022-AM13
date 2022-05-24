@@ -26,8 +26,9 @@ public class SocketClient extends Client {
     private final ObjectOutputStream output;
     private final ObjectInputStream input;
     private final ExecutorService readExecutionQueue;
-    private final ScheduledExecutorService pinger;
-    private static final int SOCKET_TIMEOUT = 10000;
+    private final ExecutorService pingExecutionQueue;
+    private final ScheduledExecutorService ping;
+    private static final int SOCKET_TIMEOUT = 3000;
 
     public SocketClient(String address, int port) throws IOException {
         this.socket = new Socket();
@@ -35,12 +36,18 @@ public class SocketClient extends Client {
         this.output = new ObjectOutputStream(socket.getOutputStream());
         this.input = new ObjectInputStream(socket.getInputStream());
         this.readExecutionQueue = Executors.newSingleThreadExecutor();
-        this.pinger = Executors.newSingleThreadScheduledExecutor();
+        this.pingExecutionQueue = Executors.newSingleThreadExecutor();
+        this.ping = Executors.newSingleThreadScheduledExecutor();
     }
 
         @Override
         public void readMessage() {
             readExecutionQueue.execute(() -> {
+                try {
+                    socket.setSoTimeout(3000);
+                } catch (SocketException e) {
+                    e.printStackTrace();
+                }
 
                 while (!readExecutionQueue.isShutdown()) {
                     Message message;
@@ -90,11 +97,14 @@ public class SocketClient extends Client {
      */
     public void enablePing(boolean enabled) {
             if (enabled) {
-                pinger.scheduleAtFixedRate(() -> sendMessage(new Ping()), 0, 1000, TimeUnit.MILLISECONDS);
+                ping.scheduleAtFixedRate(() -> ping(), 0, 1000, TimeUnit.MILLISECONDS);
             } else {
-                pinger.shutdownNow();
+                ping.shutdownNow();
             }
     }
 
+    public void ping(){
+        sendMessage(new Ping());
+    }
 }
 

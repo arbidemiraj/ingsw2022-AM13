@@ -11,7 +11,7 @@ public class Eriantys {
         System.out.println("Welcome to Eriantys! What do you want to launch? ");
         System.out.println("[1] SERVER  [2] CLIENT (CLI INTERFACE)");
 
-        System.out.print(">");
+        System.out.print("> ");
         Scanner scanner = new Scanner(System.in);
         int input = 0;
 

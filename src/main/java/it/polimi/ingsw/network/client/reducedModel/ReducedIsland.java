@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.client.reducedModel;
 
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.maps.ColorIntMap;
+import it.polimi.ingsw.view.cli.Color;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -51,19 +52,19 @@ public class ReducedIsland implements Serializable {
         String print = "";
 
         print += "Island " + id +
-                "\n ------- \n" +
-                " |       | \n";
+                "\n ------- \n";
 
         if(isMotherNature){
             print += "   [MN]    \n";
         }
 
-                print += " Y: " + numStudents[0] +
-                "\n B: " + numStudents[1] +
-                "\n G: " + numStudents[2] +
-                "\n P: " + numStudents[3] +
-                "\n R: " + numStudents[4] +
-                "\n ------- \n";
+                print += Color.ANSI_YELLOW + " Y: " + numStudents[0] +
+                        Color.ANSI_BLUE + "\n B: " + numStudents[1] +
+                        Color.ANSI_GREEN +"\n G: " + numStudents[2] +
+                        Color.ANSI_PINK +"\n P: " + numStudents[3] +
+                        Color.ANSI_RED +"\n R: " + numStudents[4] +
+                        Color.RESET +
+                        "\n ------- \n";
 
         return print;
     }

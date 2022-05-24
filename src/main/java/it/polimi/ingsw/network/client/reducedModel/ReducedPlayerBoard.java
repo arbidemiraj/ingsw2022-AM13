@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.client.reducedModel;
 
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.maps.IntColorMap;
+import it.polimi.ingsw.view.cli.Color;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -38,13 +39,13 @@ public class ReducedPlayerBoard implements Serializable {
 
     public String print(){
         String pb = "";
-        pb += "\n---------------------------------------------------------------------\n" +
+        pb += Color.ANSI_YELLOW + "\n---------------------------------------------------------------------\n" +
                 "| Y: ";
         for(int i = 0; i < entranceStudents[0]; i++) pb+= "*";
         pb+= " |   Y: ";
         for(int i = 0; i < hallStudents[0]; i++) pb+= "*";
 
-        pb+="\n---------------------------------------------------------------------\n";
+        pb+= Color.ANSI_BLUE + "\n---------------------------------------------------------------------\n";
         pb+="| B: ";
         for(int i = 0; i < entranceStudents[1]; i++) pb+= "*";
         pb+= " |   B: ";
@@ -52,26 +53,26 @@ public class ReducedPlayerBoard implements Serializable {
 
         pb+="\n---------------------------------------------------------------------\n";
 
-        pb+="| G: ";
+        pb+= Color.ANSI_GREEN + "| G: ";
         for(int i = 0; i < entranceStudents[2]; i++) pb+= "*";
         pb+= " |   G: ";
         for(int i = 0; i < hallStudents[2]; i++) pb+= "*";
 
         pb+="\n---------------------------------------------------------------------\n";
 
-        pb+="| P: ";
+        pb+= Color.ANSI_PINK + "| P: ";
         for(int i = 0; i < entranceStudents[3]; i++) pb+= "*";
         pb+= " |   P: ";
         for(int i = 0; i < hallStudents[3]; i++) pb+= "*";
 
         pb+="\n---------------------------------------------------------------------\n";
 
-        pb+="| R: ";
+        pb+= Color.ANSI_RED + "| R: ";
         for(int i = 0; i < entranceStudents[4]; i++) pb+= "*";
         pb+= " |   R: ";
         for(int i = 0; i < hallStudents[4]; i++) pb+= "*";
 
-        pb+="\n---------------------------------------------------------------------\n";
+        pb+="\n---------------------------------------------------------------------\n" + Color.RESET ;
 
 
         return pb;

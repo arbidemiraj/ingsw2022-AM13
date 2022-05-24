@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 public class CLI extends ViewObservable implements View {
     private Scanner input = new Scanner(System.in);
     private Color color;
-    private ReducedBoard reducedBoard;
     private final PrintStream output;
     private String status;
     private String username;
@@ -200,17 +199,17 @@ public class CLI extends ViewObservable implements View {
     }
 
     public void createBoard(ReducedBoard reducedBoard){
-        this.reducedBoard = reducedBoard;
+        this.reducedModel.setReducedBoard(reducedBoard);
     }
 
     public void showBoard() {
         output.println("\n\n-----------------------------------\n" +
                         "USERNAME: " +
                         reducedModel.getUsername() +
-                        "COLOR: " +
+                        "\nCOLOR: " +
                         reducedModel.getColor() +
-                        "\nPLAYER BOARD\n" +
-                        reducedBoard.printPlayerBoard());
+                        "\n\nPLAYER BOARD\n" +
+                        reducedModel.getReducedBoard().printPlayerBoard());
 
         output.println("\n");
         String infos = "";
@@ -229,7 +228,7 @@ public class CLI extends ViewObservable implements View {
 
         output.print(infos + "\n\n");
 
-        output.println(reducedBoard.printIslands());
+        output.println(reducedModel.getReducedBoard().printIslands());
     }
 
     public void updateBoard(){
@@ -301,7 +300,7 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void askCloud() {
-        output.println(reducedBoard.printClouds());
+        output.println(reducedModel.getReducedBoard().printClouds());
 
         output.println("Choose the cloud you want to get the students from");
         output.println("[ insert the number of the cloud ]");
