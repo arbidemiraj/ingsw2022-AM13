@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 
 public class CLI extends ViewObservable implements View {
     private Scanner input = new Scanner(System.in);
+    private Color color;
     private ReducedBoard reducedBoard;
     private final PrintStream output;
     private String status;

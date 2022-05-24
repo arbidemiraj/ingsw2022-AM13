@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.gui.scene;
+package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.observer.ViewObservable;
 import javafx.event.Event;
@@ -11,7 +11,7 @@ public class ConnectionServer extends ViewObservable{
 
     private TextField serverAddress;
     private TextField serverPort;
-
+    
     @FXML
     private Button connectBtn;
 
