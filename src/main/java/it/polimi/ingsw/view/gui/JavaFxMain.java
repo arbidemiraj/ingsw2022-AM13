@@ -12,15 +12,15 @@ public class JavaFxMain extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader();
 
-        fxmlLoader.setLocation(getClass().getResource("/fxml/playerBoard.fxml"));
+        fxmlLoader.setLocation(getClass().getResource("/fxml/playerBoard2p.fxml"));
 
         Parent root = fxmlLoader.load();
 
         Scene scene = new Scene(root);
 
         stage.setScene(scene);
-        stage.setWidth(1280d);
-        stage.setHeight(720d);
+        stage.setWidth(1920d);
+        stage.setHeight(1080d);
         stage.setResizable(false);
         stage.setMaximized(true);
         stage.setFullScreen(true);
