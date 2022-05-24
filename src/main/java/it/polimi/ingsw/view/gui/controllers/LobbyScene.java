@@ -1,15 +1,11 @@
-package it.polimi.ingsw.view.gui.scene;
+package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.observer.ViewObservable;
-import it.polimi.ingsw.observer.ViewObserver;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-
-import java.util.List;
 
 
 public class LobbyScene extends ViewObservable{

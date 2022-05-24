@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 public class ReducedModel implements Serializable {
     private String username;
+    private ReducedBoard reducedBoard;
     private TowerColor color;
     private ReducedCharacter[] reducedCharacters;
     private String currentPlayer;
@@ -47,5 +48,13 @@ public class ReducedModel implements Serializable {
 
     public ReducedCharacter[] getReducedCharacters() {
         return reducedCharacters;
+    }
+
+    public ReducedBoard getReducedBoard() {
+        return reducedBoard;
+    }
+
+    public void setReducedBoard(ReducedBoard reducedBoard) {
+        this.reducedBoard = reducedBoard;
     }
 }
