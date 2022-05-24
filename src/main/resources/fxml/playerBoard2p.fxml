@@ -7,18 +7,17 @@
 
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.JavaFxMain">
    <children>
-      <ImageView fx:id="plancia" fitHeight="800.0" fitWidth="540.0" layoutY="1080.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="plancia" fitHeight="800.0" fitWidth="540.0" layoutX="6.0" layoutY="631.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Graphical_Assets/PLANCIA.png" />
          </image>
       </ImageView>
-      <Button fx:id="dropSTudent" layoutX="87.0" layoutY="1095.0" mnemonicParsing="false" opacity="0.5" prefHeight="204.0" prefWidth="286.0" text="dropSTudent" />
-      <ImageView fx:id="plancia1" fitHeight="800.0" fitWidth="540.0" layoutX="540.0" layoutY="1080.0" pickOnBounds="true" preserveRatio="true">
+      <Button fx:id="dropSTudent" layoutX="93.0" layoutY="646.0" mnemonicParsing="false" opacity="0.5" prefHeight="204.0" prefWidth="286.0" text="dropSTudent" />
+      <ImageView fx:id="plancia1" fitHeight="800.0" fitWidth="540.0" layoutX="546.0" layoutY="631.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Graphical_Assets/PLANCIA.png" />
          </image>
       </ImageView>
-      <Button fx:id="dropSTudent1" layoutX="627.0" layoutY="1095.0" mnemonicParsing="false" opacity="0.5" prefHeight="204.0" prefWidth="286.0" text="dropSTudent" />
       <ImageView fx:id="singleIsland" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Graphical_Assets/island.jpg" />
@@ -79,5 +78,15 @@
             <Image url="@../Graphical_Assets/island.jpg" />
          </image>
       </ImageView>
+      <Button layoutX="6.0" layoutY="922.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" text="asssistenti" />
+      <Button layoutX="106.0" layoutY="922.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" text="asssistenti" />
+      <Button layoutX="206.0" layoutY="922.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" text="asssistenti" />
+      <Button layoutX="306.0" layoutY="922.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" text="asssistenti" />
+      <Button layoutX="406.0" layoutY="922.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" text="asssistenti" />
+      <Button layoutX="506.0" layoutY="922.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" text="asssistenti" />
+      <Button layoutX="606.0" layoutY="922.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" text="asssistenti" />
+      <Button layoutX="706.0" layoutY="922.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" text="asssistenti" />
+      <Button layoutX="806.0" layoutY="922.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" text="asssistenti" />
+      <Button layoutX="906.0" layoutY="922.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="100.0" text="asssistenti" />
    </children>
 </AnchorPane>

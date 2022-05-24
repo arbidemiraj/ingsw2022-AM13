@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.JavaFxMain">
+   <children>
+      <ImageView fitHeight="452.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/sky.jpg" />
+         </image>
+      </ImageView>
+      <Label alignment="CENTER" layoutX="732.0" layoutY="42.0" prefHeight="41.0" prefWidth="68.0" style="-fx-background-color: grey;" text="player1" textAlignment="CENTER" />
+      <Label alignment="CENTER" layoutX="732.0" prefHeight="41.0" prefWidth="68.0" style="-fx-background-color: grey;" text="turn" textAlignment="CENTER" />
+      <Label alignment="CENTER" layoutX="732.0" layoutY="236.0" prefHeight="30.0" prefWidth="68.0" style="-fx-background-color: grey;" text="player2" textAlignment="CENTER" />
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="52.0" layoutY="427.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/MN.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="137.0" layoutX="697.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/assistenti/Assistente%20(1).png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="697.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/assistenti/Assistente%20(2).png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
