@@ -278,7 +278,6 @@ class GameTest {
         game.addPlayer("FirstPlayer");
         game.addPlayer("SecondPlayer");
 
-        game.getBoard().prepareGame();
         game.setupPhase();
 
         assertEquals(2, game.getPlayers().size());
@@ -300,7 +299,6 @@ class GameTest {
         game.addPlayer("SecondPlayer");
         game.addPlayer("ThirdPlayer");
 
-        game.getBoard().prepareGame();
         game.setupPhase();
 
         assertEquals(3, game.getPlayers().size());

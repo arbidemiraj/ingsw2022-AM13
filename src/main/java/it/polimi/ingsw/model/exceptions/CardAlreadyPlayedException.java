@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.exceptions;
 
 public class CardAlreadyPlayedException extends Exception{
-    public void printError(){
+    @Override
+    public String getMessage() {
+        return "Card already played! You have to play another card";
     }
 }

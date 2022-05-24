@@ -49,7 +49,6 @@ class GameBoardTest {
         game.addPlayer("FirstPlayer");
         game.addPlayer("SecondPlayer");
 
-        game.getBoard().prepareGame();
         int motherNature = game.getBoard().getMotherNature();
 
         for(int i = 0; i < 12; i++) {

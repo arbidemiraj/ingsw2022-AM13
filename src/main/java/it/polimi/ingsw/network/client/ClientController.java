@@ -41,6 +41,10 @@ public class ClientController implements ViewObserver, Observer {
                     case DUPLICATE_USERNAME -> {
                         taskQueue.execute(view::askUsername);
                     }
+
+                    case DUPLICATE_CARD -> {
+                        taskQueue.execute(() -> view.error(error));
+                    }
                 }
             }
             case GENERIC -> {

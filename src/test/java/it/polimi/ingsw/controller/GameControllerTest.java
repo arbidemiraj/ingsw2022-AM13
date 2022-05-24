@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.CardAlreadyPlayedException;
 import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
+import it.polimi.ingsw.model.exceptions.InvalidMoveException;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
 import it.polimi.ingsw.network.message.clientmsg.ChooseCloudMessage;
 import org.junit.jupiter.api.Test;
@@ -55,7 +56,11 @@ class GameControllerTest {
         island.getStudents().clear();
         island.addStudent(student);
 
-        testGameController.moveStudent(island, Student.BLUE, playerBoard, false);
+        try {
+            testGameController.moveStudent(island, Student.BLUE, playerBoard, false);
+        } catch (InvalidMoveException e) {
+            e.printStackTrace();
+        }
 
         assertTrue(playerBoard.getEntrance().contains(Student.BLUE));
     }

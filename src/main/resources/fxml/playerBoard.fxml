@@ -8,12 +8,12 @@
    <children>
       <ImageView fx:id="plancia" fitHeight="471.0" fitWidth="1080.0" layoutY="605.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@Graphical_Assets/PLANCIA GIOCO_2.png" />
+            <Image url="@../Graphical_Assets/PLANCIA GIOCO_2.png" />
          </image>
       </ImageView>
       <ImageView fx:id="isola" fitHeight="241.0" fitWidth="452.0" layoutX="-10.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@Graphical_Assets/reameB_1.png" />
+            <Image url="@../Graphical_Assets/reameB_1.png" />
          </image>
       </ImageView>
    </children>

@@ -3,13 +3,12 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.enumerations.Student;
-import it.polimi.ingsw.model.exceptions.CardAlreadyPlayedException;
-import it.polimi.ingsw.model.exceptions.EmptyCloudException;
-import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
-import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
+import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.maps.ColorIntMap;
 import it.polimi.ingsw.network.client.reducedModel.ReducedCharacter;
 import it.polimi.ingsw.network.client.reducedModel.ReducedPlayerBoard;
+import it.polimi.ingsw.network.message.ErrorType;
+import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.clientmsg.*;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.servermsg.*;
@@ -134,7 +133,7 @@ public class GameController implements Serializable, Observer {
      * @param color     the color of the student the player wants to move
      * @param to        the movable object where the player wants to move the student
      */
-    public void moveStudent(Movable from, Student color, Movable to, boolean profCheck){
+    public void moveStudent(Movable from, Student color, Movable to, boolean profCheck) throws InvalidMoveException {
         to.addStudent(from.removeStudent(color));
 
         if(profCheck){
@@ -193,6 +192,8 @@ public class GameController implements Serializable, Observer {
 
         currentPlayer = activePlayers.get(currentPlayerIndex);
         model.setCurrentPlayer(activePlayers.indexOf(currentPlayer));
+
+        if(gameHandler != null) gameHandler.sendMessageToAllExcept(new GenericMessage(currentPlayer + "is playing his turn! wait...\n"), currentPlayer);
     }
 
     /**
@@ -296,10 +297,12 @@ public class GameController implements Serializable, Observer {
 
             case MOVE_MOTHERNATURE -> {
                 MoveMotherNatureMessage moveMotherNatureMessage = (MoveMotherNatureMessage) message;
+
                 try {
                     moveMotherNature(moveMotherNatureMessage.getSteps());
                 } catch (InvalidMotherNatureMovesException e) {
-                    e.printStackTrace();
+                    gameHandler.sendMessage(new ErrorMessage("Invalid mother nature move", ErrorType.INVALID_MOVE), currentPlayer);
+                    gameHandler.sendMessage(new AskMotherNature(), currentPlayer);
                 }
 
                 playerTurn++;
@@ -327,7 +330,8 @@ public class GameController implements Serializable, Observer {
                 try {
                     playCard(assistantCard);
                 }catch (CardAlreadyPlayedException e){
-                    e.printStackTrace();
+                    gameHandler.sendMessage(new ErrorMessage(e.getMessage(), ErrorType.DUPLICATE_CARD), message.getUsername());
+                    gameHandler.sendMessage(new AskCard(getCurrentPlayer().getDeck(), turnCardsPlayed), currentPlayer);
                 }
 
                 playerTurn++;
@@ -388,7 +392,17 @@ public class GameController implements Serializable, Observer {
                 }
             }
 
-            moveStudent(from, student, to, checkProf);
+            try {
+                moveStudent(from, student, to, checkProf);
+            } catch (InvalidMoveException e) {
+                String fromString = studentMessage.getFrom()[i];
+                String toString = studentMessage.getTo()[i];
+                String studentString = studentMessage.getColor()[i];
+                gameHandler.sendMessage(new ErrorMessage("Invalid move! You can't move " + studentString + " from " +
+                        fromString + " to " + toString, ErrorType.INVALID_MOVE ), currentPlayer);
+
+                gameHandler.sendMessage(new AskStudent(1), currentPlayer);
+            }
         }
 
     }
@@ -422,11 +436,12 @@ public class GameController implements Serializable, Observer {
                 gameHandler.sendMessage(new ReducedModelMessage(player.getUsername(), player.getTowerColor()), player.getUsername());
             }
         }
-        int[] numStudents = new int[12];
+
         String[] owner = new String[12];
+        int[][] numStudents = new int[12][5];
 
         for(int i = 0; i < 12; i++){
-            numStudents = model.getBoard().getIslands().get(i).getNumStudents();
+            numStudents[i] = model.getBoard().getIslands().get(i).getNumStudents();
             if(model.getBoard().getIslands().get(i).getOwner()!=null)
             {
                 owner[i] = model.getBoard().getIslands().get(i).getOwner().getUsername();
@@ -453,6 +468,7 @@ public class GameController implements Serializable, Observer {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         gameHandler.sendMessageToAll(new StartGame());
 
         newTurn();
@@ -467,6 +483,9 @@ public class GameController implements Serializable, Observer {
         else setCurrentPlayer();
         turnCardsPlayed.clear();
 
+
+        gameHandler.sendMessageToAllExcept(new GenericMessage(currentPlayer + " is playing his turn! wait...\n"), currentPlayer);
+        gameHandler.sendMessage(new GenericMessage("Clouds have been filled! \n"), currentPlayer);
         gameHandler.sendMessage(new AskCard(getCurrentPlayer().getDeck(), turnCardsPlayed), currentPlayer);
     }
 
