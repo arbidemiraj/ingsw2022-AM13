@@ -18,10 +18,7 @@ public class ConnectionServer extends ViewObservable{
     @FXML
     public void initialize() {
         connectBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onConnectBtnClick);
-
-
     }
-
 
     private void onConnectBtnClick(Event event) {
         String address = serverAddress.getText();

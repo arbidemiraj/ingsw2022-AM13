@@ -217,12 +217,13 @@ public class CLI extends ViewObservable implements View {
 
         infos +="\nType CHARACTER <CharacterId> to activate the effect " +
                 "\nType DESC <CharacterId> to see a desc of the character effect" +
-                "\n\nCHARACTERS: ";
+                "\n\nCHARACTERS: \n";
 
         for(ReducedCharacter character : reducedModel.getReducedCharacters()){
             infos +=
                     "\nID: " + character.getEffectId() +
-                            "\nCOST: " + character.getCost();
+                            "\nCOST: " + character.getCost() +"\n--------\n";
+
         }
 
         output.print(infos + "\n\n");
@@ -268,12 +269,16 @@ public class CLI extends ViewObservable implements View {
     @Override
     public void askCardToPlay(List<AssistantCard> assistantCards, List<AssistantCard> cardsPlayed) {
 
-        output.println("This is your deck -> " + printDeck(assistantCards));
-        output.println("These are the cards that have been played this turn -> " + cardsPlayed);
+        output.println("\n\nThis is your deck -> " + printDeck(assistantCards));
+        output.print("\nThese are the cards that have been played this turn -> ");
+        for(AssistantCard assistantCard : cardsPlayed){
+            output.print(assistantCard.getValue() + "   ");
+        }
 
+        output.print("\n");
         output.println("Choose the card you want to play this turn! ");
         output.println("[ insert the number of the card ]");
-        output.println("> ");
+        output.print("> ");
 
 
         int cardId = Integer.parseInt(readLine());
@@ -295,6 +300,8 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void askCloud() {
+        output.println(reducedBoard.printClouds());
+
         output.println("Choose the cloud you want to get the students from");
         output.println("[ insert the number of the cloud ]");
         output.print("> ");
@@ -311,7 +318,7 @@ public class CLI extends ViewObservable implements View {
         }
 
         int finalCloud = cloud;
-        notifyObserver(viewObserver -> viewObserver.onUpdateCloud(finalCloud));
+        notifyObserver(viewObserver -> viewObserver.onUpdateCloud(finalCloud-1));
     }
 
     @Override

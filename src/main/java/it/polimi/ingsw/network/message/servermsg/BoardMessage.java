@@ -10,7 +10,7 @@ import it.polimi.ingsw.network.message.MessageType;
 public class BoardMessage extends Message {
     private ReducedBoard reducedBoard;
 
-    public BoardMessage(int[] numStudents, Cloud[] clouds, String[] owner, ReducedPlayerBoard reducedPlayerBoard, int motherNature) {
+    public BoardMessage(int[][] numStudents, Cloud[] clouds, String[] owner, ReducedPlayerBoard reducedPlayerBoard, int motherNature) {
         super("Server", MessageType.BOARD_MESSAGE);
         this.reducedBoard = new ReducedBoard(numStudents, clouds, owner, reducedPlayerBoard, motherNature);
     }

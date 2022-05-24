@@ -13,12 +13,12 @@ public class ReducedBoard implements Serializable {
     private static final long serialVersionUID = -6983972997025348137L;
     private Cloud[] clouds;
     private int motherNature;
-    private int numStudents[];
+    private int[][] numStudents;
     private String[] owner;
     private ArrayList<ReducedIsland> islands;
     private ReducedPlayerBoard playerBoard;
 
-    public ReducedBoard(int[] numStudents, Cloud[] clouds, String[] owner, ReducedPlayerBoard reducedPlayerBoard, int motherNature) {
+    public ReducedBoard(int[][] numStudents, Cloud[] clouds, String[] owner, ReducedPlayerBoard reducedPlayerBoard, int motherNature) {
         islands = new ArrayList<>();
 
         this.clouds = clouds;
@@ -27,7 +27,7 @@ public class ReducedBoard implements Serializable {
         this.playerBoard = reducedPlayerBoard;
 
         for(int i = 0; i < 12; i ++){
-            islands.add(new ReducedIsland(numStudents, owner[i], i));
+            islands.add(new ReducedIsland(numStudents[i], owner[i], i));
         }
 
         this.motherNature = motherNature;
@@ -56,5 +56,18 @@ public class ReducedBoard implements Serializable {
 
     public String printPlayerBoard(){
         return playerBoard.print();
+    }
+
+    public String printClouds() {
+        String print = "";
+        int i = 1;
+
+        for(Cloud cloud : clouds){
+            print += "Cloud " + i +
+                    "\n[ " + cloud.getStudents() + " ]\n ";
+
+            i++;
+        }
+        return print;
     }
 }
