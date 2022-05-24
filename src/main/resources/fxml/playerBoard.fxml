@@ -1,19 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.JavaFxMain">
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.JavaFxMain">
    <children>
-      <ImageView fx:id="plancia" fitHeight="471.0" fitWidth="1080.0" layoutY="605.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="plancia" fitHeight="800.0" fitWidth="540.0" layoutY="1080.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Graphical_Assets/PLANCIA GIOCO_2.png" />
+            <Image url="@../Graphical_Assets/PLANCIA.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="isola" fitHeight="241.0" fitWidth="452.0" layoutX="-10.0" pickOnBounds="true" preserveRatio="true">
+      <Button fx:id="dropSTudent" layoutX="87.0" layoutY="1095.0" mnemonicParsing="false" opacity="0.5" prefHeight="204.0" prefWidth="286.0" text="dropSTudent" />
+      <ImageView fx:id="plancia1" fitHeight="800.0" fitWidth="540.0" layoutX="540.0" layoutY="1080.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Graphical_Assets/reameB_1.png" />
+            <Image url="@../Graphical_Assets/PLANCIA.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="dropSTudent1" layoutX="627.0" layoutY="1095.0" mnemonicParsing="false" opacity="0.5" prefHeight="204.0" prefWidth="286.0" text="dropSTudent" />
+      <ImageView fx:id="singleIsland" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/island.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="singleIsland1" fitHeight="150.0" fitWidth="200.0" layoutX="172.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/island.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="singleIsland11" fitHeight="150.0" fitWidth="200.0" layoutY="181.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/island.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="singleIsland2" fitHeight="150.0" fitWidth="200.0" layoutX="357.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/island.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="singleIsland12" fitHeight="150.0" fitWidth="200.0" layoutX="529.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/island.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="singleIsland121" fitHeight="150.0" fitWidth="200.0" layoutX="702.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/island.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="singleIsland122" fitHeight="150.0" fitWidth="200.0" layoutX="702.0" layoutY="181.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/island.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="singleIsland3" fitHeight="150.0" fitWidth="200.0" layoutX="6.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/island.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="singleIsland13" fitHeight="150.0" fitWidth="200.0" layoutX="178.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/island.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="singleIsland21" fitHeight="150.0" fitWidth="200.0" layoutX="363.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/island.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="singleIsland123" fitHeight="150.0" fitWidth="200.0" layoutX="535.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/island.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="singleIsland1211" fitHeight="150.0" fitWidth="200.0" layoutX="708.0" layoutY="349.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/island.jpg" />
          </image>
       </ImageView>
    </children>
