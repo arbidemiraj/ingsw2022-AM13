@@ -13,11 +13,11 @@ public class ReducedModel implements Serializable {
     private boolean isExpertMode;
     private boolean isActive;
 
-    public ReducedModel(String username, TowerColor color, ReducedCharacter[] reducedCharacters) {
+    public ReducedModel(String username, TowerColor color, ReducedCharacter[] reducedCharacters, boolean isExpertMode) {
         this.username = username;
         this.color = color;
         this.reducedCharacters = reducedCharacters;
-        isExpertMode = true;
+        this.isExpertMode = isExpertMode;
     }
 
     public ReducedModel(String username, TowerColor color){

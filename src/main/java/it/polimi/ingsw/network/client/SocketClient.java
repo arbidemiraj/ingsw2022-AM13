@@ -28,7 +28,7 @@ public class SocketClient extends Client {
     private final ExecutorService readExecutionQueue;
     private final ExecutorService pingExecutionQueue;
     private final ScheduledExecutorService ping;
-    private static final int SOCKET_TIMEOUT = 3000;
+    private static final int SOCKET_TIMEOUT = 8000;
 
     public SocketClient(String address, int port) throws IOException {
         this.socket = new Socket();
@@ -43,11 +43,6 @@ public class SocketClient extends Client {
         @Override
         public void readMessage() {
             readExecutionQueue.execute(() -> {
-                try {
-                    socket.setSoTimeout(3000);
-                } catch (SocketException e) {
-                    e.printStackTrace();
-                }
 
                 while (!readExecutionQueue.isShutdown()) {
                     Message message;

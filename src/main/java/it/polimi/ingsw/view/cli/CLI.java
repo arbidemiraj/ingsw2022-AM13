@@ -215,18 +215,20 @@ public class CLI extends ViewObservable implements View {
         String infos = "";
         String menu = "";
 
-        infos +="\nType CHARACTER <CharacterId> to activate the effect " +
-                "\nType DESC <CharacterId> to see a desc of the character effect" +
-                "\n\nCHARACTERS: \n";
+        if(reducedModel.isExpertMode()){
+            infos +="\nType CHARACTER <CharacterId> to activate the effect " +
+                    "\nType DESC <CharacterId> to see a desc of the character effect" +
+                    "\n\nCHARACTERS: \n";
 
-        for(ReducedCharacter character : reducedModel.getReducedCharacters()){
-            infos +=
-                    "\nID: " + character.getEffectId() +
-                            "\nCOST: " + character.getCost() +"\n--------\n";
+            for(ReducedCharacter character : reducedModel.getReducedCharacters()){
+                infos +=
+                        "\nID: " + character.getEffectId() +
+                                "\nCOST: " + character.getCost() +"\n--------\n";
 
+            }
+
+            output.print(infos + "\n\n");
         }
-
-        output.print(infos + "\n\n");
 
         output.println(reducedModel.getReducedBoard().printIslands());
     }

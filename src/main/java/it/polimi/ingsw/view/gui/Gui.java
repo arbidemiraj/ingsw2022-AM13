@@ -6,23 +6,31 @@ import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.gui.controllers.SceneController;
+import javafx.application.Platform;
 
-import java.util.List;
+import java.util.*;
 
 public class Gui extends ViewObservable implements View {
+    private SceneController sceneController;
+
+    public Gui(SceneController sceneController){
+        this.sceneController = sceneController;
+    }
+
     @Override
     public void askCreateOrJoin() {
-
+        Platform.runLater(() -> sceneController.changeRoot(observers, "lobby_scene.fxml"));
     }
 
     @Override
     public void askUsername() {
-
+       Platform.runLater(() -> sceneController.changeRoot(observers, "login_scene.fxml"));
     }
 
     @Override
     public void askGameSettings() {
-
+        Platform.runLater(() -> sceneController.changeRoot(observers, "gameSettings_scene.fxml"));
     }
 
     @Override

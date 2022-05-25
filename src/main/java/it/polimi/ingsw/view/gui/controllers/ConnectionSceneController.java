@@ -6,10 +6,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import java.util.ArrayList;
 
-public class ConnectionServer extends ViewObservable{
+public class ConnectionSceneController extends ViewObservable implements GenericSceneController{
 
+    @FXML
     private TextField serverAddress;
+    @FXML
     private TextField serverPort;
     
     @FXML
@@ -20,9 +23,17 @@ public class ConnectionServer extends ViewObservable{
         connectBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onConnectBtnClick);
     }
 
+    @FXML
     private void onConnectBtnClick(Event event) {
         String address = serverAddress.getText();
-        int port = Integer.parseInt(serverPort.getText());
+        String port = serverPort.getText();
+
+        ArrayList<String> serverInfo = new ArrayList<>();
+
+        serverInfo.add(address);
+        serverInfo.add(port);
+
+        notifyObserver(viewObserver -> viewObserver.onUpdateServerInfo(serverInfo));
     }
 
 

@@ -1,5 +1,11 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.network.client.ClientController;
+import it.polimi.ingsw.observer.ViewObservable;
+import it.polimi.ingsw.observer.ViewObserver;
+import it.polimi.ingsw.view.gui.controllers.ConnectionSceneController;
+import it.polimi.ingsw.view.gui.controllers.GenericSceneController;
+import it.polimi.ingsw.view.gui.controllers.SceneController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,25 +13,38 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
+    private Stage stage;
+    private SceneController sceneController;
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader();
+        sceneController = new SceneController(this);
+        this.stage = stage;
+        Gui view = new Gui(sceneController);
+        ClientController clientController = new ClientController(view);
+        view.addObserver(clientController);
 
-        fxmlLoader.setLocation(getClass().getResource("/fxml/playerBoard2p.fxml"));
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/fxml/connection_scene.fxml"));
 
         Parent root = fxmlLoader.load();
+        ConnectionSceneController controller = fxmlLoader.getController();
+        controller.addObserver(clientController);
 
         Scene scene = new Scene(root);
-
         stage.setScene(scene);
-        stage.setWidth(1920d);
-        stage.setHeight(1080d);
-        stage.setResizable(false);
+        stage.setWidth(1280);
+        stage.setHeight(720);
+        stage.setResizable(true);
         stage.setMaximized(true);
-        stage.setFullScreen(true);
         stage.setFullScreenExitHint("");
         stage.setTitle("Eriantys");
+        stage.show();
+    }
+
+    public void changeScene(Scene scene){
+        stage.setScene(scene);
         stage.show();
     }
 }

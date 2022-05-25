@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.Message;
@@ -41,6 +42,14 @@ public class GameHandler {
     }
 
     public void startGame(){
+        boolean color = true;
+
+        while(color){
+            for(Player player : game.getPlayers()){
+                if(player.getTowerColor() != null) color = false;
+            }
+        }
+
         started = true;
         game.startGame();
         gameSetup();
@@ -55,9 +64,6 @@ public class GameHandler {
     public void addPlayer(String username){
         gameController.addPlayer(username);
         askTowerColor(username);
-
-        this.numPlayers++;
-        if(numPlayers == maxPlayers) startGame();
     }
 
     public void removePlayer(String username){
@@ -102,6 +108,10 @@ public class GameHandler {
 
                 game.getPlayerByUsername(message.getUsername())
                         .setTowerColor((towerColorMessage.getChosenTowerColor()));
+
+                this.numPlayers++;
+
+                if(numPlayers == maxPlayers) startGame();
             }
 
             default -> {

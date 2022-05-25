@@ -428,7 +428,7 @@ public class GameController implements Serializable, Observer {
             }
 
             for(Player player : model.getPlayers()){
-                gameHandler.sendMessage(new ReducedModelMessage(player.getUsername(), player.getTowerColor(), reducedCharacters), player.getUsername());
+                gameHandler.sendMessage(new ReducedModelMessage(player.getUsername(), player.getTowerColor(), reducedCharacters, model.isExpertMode()), player.getUsername());
             }
         }
         else{
