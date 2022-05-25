@@ -22,12 +22,12 @@
       </ImageView>
       <ImageView fitHeight="150.0" fitWidth="137.0" layoutX="697.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Graphical_Assets/assistenti/Assistente%20(1).png" />
+            <Image url="@../Graphical_Assets/assistenti/Assistente1.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="697.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Graphical_Assets/assistenti/Assistente%20(2).png" />
+            <Image url="@../Graphical_Assets/assistenti/Assistente2.png" />
          </image>
       </ImageView>
    </children>
