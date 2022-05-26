@@ -5,27 +5,27 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.JavaFxMain">
+<AnchorPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.JavaFxMain">
    <children>
-      <ImageView fitHeight="452.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="695.0" fitWidth="1000.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Graphical_Assets/sky.jpg" />
          </image>
       </ImageView>
-      <Label alignment="CENTER" layoutX="732.0" layoutY="42.0" prefHeight="41.0" prefWidth="68.0" style="-fx-background-color: grey;" text="player1" textAlignment="CENTER" />
-      <Label alignment="CENTER" layoutX="732.0" prefHeight="41.0" prefWidth="68.0" style="-fx-background-color: grey;" text="turn" textAlignment="CENTER" />
-      <Label alignment="CENTER" layoutX="732.0" layoutY="236.0" prefHeight="30.0" prefWidth="68.0" style="-fx-background-color: grey;" text="player2" textAlignment="CENTER" />
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="52.0" layoutY="427.0" pickOnBounds="true" preserveRatio="true">
+      <Label alignment="CENTER" layoutX="932.0" layoutY="42.0" prefHeight="41.0" prefWidth="68.0" style="-fx-background-color: grey;" text="player1" textAlignment="CENTER" />
+      <Label alignment="CENTER" layoutX="932.0" prefHeight="41.0" prefWidth="68.0" style="-fx-background-color: grey;" text="turn" textAlignment="CENTER" />
+      <Label alignment="CENTER" layoutX="932.0" layoutY="236.0" prefHeight="30.0" prefWidth="68.0" style="-fx-background-color: grey;" text="player2" textAlignment="CENTER" />
+      <ImageView fitHeight="77.0" fitWidth="81.0" layoutX="292.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Graphical_Assets/MN.png" />
+            <Image url="@../Graphical_Assets/custom/motherNature.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="150.0" fitWidth="137.0" layoutX="697.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="150.0" fitWidth="137.0" layoutX="897.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Graphical_Assets/assistenti/Assistente1.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="697.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="897.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Graphical_Assets/assistenti/Assistente2.png" />
          </image>

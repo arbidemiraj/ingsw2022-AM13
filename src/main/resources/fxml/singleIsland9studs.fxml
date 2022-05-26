@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.JavaFxMain">
+   <children>
+      <ImageView fx:id="island1type" fitHeight="400.0" fitWidth="484.0" layoutX="18.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/island1.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="123.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/blueStud.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="216.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/blueStud.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="309.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/blueStud.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="123.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/redStud.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="216.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/redStud.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="309.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/redStud.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="123.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/yellowStud.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="216.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/greenStud.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="309.0" layoutY="201.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/pinkStud.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="424.0" layoutY="64.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/greyTower.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
