@@ -41,7 +41,7 @@
                 <Image url="@../Graphical_Assets/custom/redStud.png" />
             </image>
         </ImageView>
-        <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="166.0" layoutY="212.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="166.0" layoutY="193.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../Graphical_Assets/custom/yellowStud.png" />
             </image>
@@ -71,7 +71,7 @@
                 <Image url="@../Graphical_Assets/custom/greenStud.png" />
             </image>
         </ImageView>
-        <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="73.0" layoutY="212.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="73.0" layoutY="193.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../Graphical_Assets/custom/yellowStud.png" />
             </image>

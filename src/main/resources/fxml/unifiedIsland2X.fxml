@@ -11,17 +11,17 @@
                 <Image url="@../Graphical_Assets/custom/unifiedIsland2X.png" />
             </image>
         </ImageView>
-        <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="166.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="172.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../Graphical_Assets/custom/blueStud.png" />
             </image>
         </ImageView>
-        <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="259.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="259.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../Graphical_Assets/custom/blueStud.png" />
             </image>
         </ImageView>
-        <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="352.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="352.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../Graphical_Assets/custom/blueStud.png" />
             </image>
@@ -56,12 +56,12 @@
                 <Image url="@../Graphical_Assets/custom/pinkStud.png" />
             </image>
         </ImageView>
-        <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="469.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="469.0" layoutY="52.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../Graphical_Assets/custom/greyTower.png" />
             </image>
         </ImageView>
-      <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="73.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="73.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Graphical_Assets/custom/blueStud.png" />
          </image>
