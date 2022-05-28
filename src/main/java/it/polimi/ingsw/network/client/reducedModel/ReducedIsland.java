@@ -17,11 +17,13 @@ public class ReducedIsland implements Serializable {
     private ColorIntMap studentColorMap = new ColorIntMap();
     private HashMap<Student, Integer> studentColor = studentColorMap.getMap();
     private boolean isMotherNature;
+    private boolean isNoEntryTile;
 
-    public ReducedIsland(int numStudents[], String owner, int id) {
+    public ReducedIsland(int numStudents[], String owner, int id, boolean isNoEntryTile) {
         this.numStudents = numStudents;
         this.owner = owner;
         this.id = id;
+        this.isNoEntryTile = isNoEntryTile;
     }
 
     public String getOwner() {
@@ -58,6 +60,9 @@ public class ReducedIsland implements Serializable {
             print += "   [MN]    \n";
         }
 
+        if(owner != null){
+            print += "  [ " + owner + " ]   ";
+        }
                 print += Color.ANSI_YELLOW + " Y: " + numStudents[0] +
                         Color.ANSI_BLUE + "\n B: " + numStudents[1] +
                         Color.ANSI_GREEN +"\n G: " + numStudents[2] +

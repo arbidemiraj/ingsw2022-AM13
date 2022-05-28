@@ -8,11 +8,9 @@ import it.polimi.ingsw.network.message.servermsg.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 
 public class SocketClientHandler implements ClientHandler, Runnable {
@@ -64,7 +62,7 @@ public class SocketClientHandler implements ClientHandler, Runnable {
             while (!Thread.currentThread().isInterrupted()) {
                 synchronized (inputLock) {
                     Message message = (Message) input.readObject();
-                    SuccessMessage successMessage = new SuccessMessage();
+                    SuccessMessage successMessage = new SuccessMessage(SuccessType.CONNECTED);
 
                     if(message != null && message.getMessageType() == MessageType.PING){
                         sendMessage(new Ping());
@@ -122,7 +120,7 @@ public class SocketClientHandler implements ClientHandler, Runnable {
             connected = false;
             Thread.currentThread().interrupt();
 
-            socketServer.Disconnect(this);
+            socketServer.disconnect(this);
         }
     }
 

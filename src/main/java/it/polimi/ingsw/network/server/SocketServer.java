@@ -60,7 +60,7 @@ public class SocketServer implements Runnable {
     }
 
 
-    public void Disconnect(ClientHandler clientHandler) {
+    public void disconnect(ClientHandler clientHandler) {
         server.disconnect(clientHandler);
     }
 

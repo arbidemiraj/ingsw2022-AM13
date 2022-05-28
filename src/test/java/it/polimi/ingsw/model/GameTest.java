@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.controller.GameController;
+import it.polimi.ingsw.controller.TurnController;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.NotEnoughCoinException;
@@ -154,21 +155,23 @@ class GameTest {
     @Test
     void influenceCharacter8() throws NotEnoughCoinException {
         Game game = new Game(2, true);
+
         game.addPlayer("FirstPlayer");
         game.getBoard().prepareGame();
         Player player = game.getPlayers().get(0);
 
 
         GameController gameController = new GameController(game, null);
+        TurnController turnController = gameController.getTurnController();
 
         Character character = new Character(game, 8, 2);
         game.getCharacters()[0] = character;
 
 
 
-        gameController.setCurrentPlayer("FirstPlayer");
+        turnController.calcCurrentPlayer("FirstPlayer");
 
-        gameController.getCurrentPlayer().setNumCoins(character.getCost());
+        turnController.getCurrentPlayer().setNumCoins(character.getCost());
 
         gameController.activateCharacter(8);
         game.getActivatedCharacters().add(8);
@@ -206,6 +209,7 @@ class GameTest {
 
         game.getBoard().prepareGame();
         GameController gameController = new GameController(game, null);
+        TurnController turnController = gameController.getTurnController();
 
         Player player1, player2;
         player1 = game.getPlayers().get(0);
@@ -216,7 +220,7 @@ class GameTest {
 
         character.setOwner(player1);
         player1.setNumCoins(character.getCost());
-        gameController.setCurrentPlayer("FirstPlayer");
+        turnController.calcCurrentPlayer("FirstPlayer");
         gameController.activateCharacter(2);
 
         Student s1 = Student.BLUE;

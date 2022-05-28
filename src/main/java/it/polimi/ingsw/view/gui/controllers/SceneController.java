@@ -67,5 +67,8 @@ public class SceneController extends ViewObservable {
         main.changeScene(currentScene);
     }
 
+    public void showAlert(String message){
+        main.showAlert(message);
+    }
 
 }

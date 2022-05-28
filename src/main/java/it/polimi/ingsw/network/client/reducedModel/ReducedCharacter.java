@@ -9,6 +9,7 @@ public class ReducedCharacter implements Serializable {
     private int cost;
     private int effectId;
     private String characterDesc;
+    private boolean isActive;
 
     public ReducedCharacter(int cost, int effectId, String characterDesc) {
         this.cost = cost;
@@ -26,5 +27,9 @@ public class ReducedCharacter implements Serializable {
 
     public String getCharacterDesc() {
         return characterDesc;
+    }
+
+    public void activate() {
+        isActive = true;
     }
 }

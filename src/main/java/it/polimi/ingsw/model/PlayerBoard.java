@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.Student;
+import it.polimi.ingsw.model.exceptions.InvalidMoveException;
 import it.polimi.ingsw.model.maps.ColorIntMap;
 import it.polimi.ingsw.model.maps.IntColorMap;
 
@@ -58,8 +59,10 @@ public class PlayerBoard implements Movable {
 		return entranceStud;
 	}
 	@Override
-	public Student removeStudent(Student color) {
+	public Student removeStudent(Student color) throws InvalidMoveException {
 		Student student = null;
+
+		if(!entrance.contains(color)) throw new InvalidMoveException();
 
 		for(int i = 0; i < entrance.size(); i++){
 			if(entrance.get(i).equals(color)){

@@ -33,7 +33,7 @@ public class ConnectionSceneController extends ViewObservable implements Generic
         serverInfo.add(address);
         serverInfo.add(port);
 
-        notifyObserver(viewObserver -> viewObserver.onUpdateServerInfo(serverInfo));
+        new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateServerInfo(serverInfo))).start();
     }
 
 

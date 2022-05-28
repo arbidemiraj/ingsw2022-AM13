@@ -11,6 +11,7 @@ import it.polimi.ingsw.view.View;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
@@ -81,6 +82,7 @@ public class CLI extends ViewObservable implements View {
         }while(!isValid);
 
         notifyObserver(viewObserver -> viewObserver.onUpdateServerInfo(serverInfo));
+        input.reset();
 
     }
 
@@ -93,6 +95,7 @@ public class CLI extends ViewObservable implements View {
         username = input.nextLine();
 
         notifyObserver(obs -> obs.onUpdateLoginMessage(username));
+        input.reset();
     }
 
     @Override
@@ -118,6 +121,7 @@ public class CLI extends ViewObservable implements View {
         int finalChoice = choice;
 
         notifyObserver(viewObserver -> viewObserver.onUpdateCreateOrJoin(finalChoice));
+        input.reset();
     }
 
     @Override
@@ -161,6 +165,7 @@ public class CLI extends ViewObservable implements View {
         int finalNumPlayers = numPlayers;
 
         notifyObserver(viewObserver -> viewObserver.onUpdateNewGame(finalNumPlayers, finalExpertModeBoolean));
+        input.reset();
     }
 
 
@@ -176,9 +181,8 @@ public class CLI extends ViewObservable implements View {
             output.print("> ");
 
 
-            chosenTowerColor = input.nextLine();
+            chosenTowerColor = input.nextLine().toUpperCase(Locale.ROOT);
 
-            chosenTowerColor.toUpperCase();
             if( chosenTowerColor.equals("BLACK") || chosenTowerColor.equals("WHITE") || chosenTowerColor.equals("GRAY")){
                 isValid = true;
             }
@@ -192,13 +196,15 @@ public class CLI extends ViewObservable implements View {
         String finalChosenTowerColor = chosenTowerColor;
 
         notifyObserver(viewObserver -> viewObserver.onUpdateTowerColor(finalChosenTowerColor));
+        input.reset();
     }
 
     @Override
     public void startTurn() {
     }
 
-    public void createBoard(ReducedBoard reducedBoard){
+    @Override
+    public void setBoard(ReducedBoard reducedBoard){
         this.reducedModel.setReducedBoard(reducedBoard);
     }
 
@@ -236,6 +242,7 @@ public class CLI extends ViewObservable implements View {
     public void updateBoard(){
 
     }
+
     @Override
     public void successMessage() {
         output.println("Operation successfully completed! ");
@@ -261,11 +268,12 @@ public class CLI extends ViewObservable implements View {
         int gameId = input.nextInt();
 
         notifyObserver(viewObserver -> viewObserver.onUpdateJoinGame(gameId));
+        input.reset();
     }
 
     @Override
-    public void winMessage() {
-
+    public void winMessage(String winner) {
+        output.println(winner + " has won!!");
     }
 
     @Override
@@ -286,15 +294,20 @@ public class CLI extends ViewObservable implements View {
         int cardId = Integer.parseInt(readLine());
 
         notifyObserver(viewObserver -> viewObserver.onUpdateCard(cardId));
+        input.reset();
     }
 
     private String printDeck(List<AssistantCard> assistantCards) {
-        String deck = "";
+        String deck = "\n";
+        int i = 0;
 
         for(AssistantCard assistantCard : assistantCards){
-            deck += "\n Card  " + assistantCard.getValue() +
+            deck += " Card  " + assistantCard.getValue() +
                     " [ V = " + assistantCard.getValue() + " ] " +
-                    " [ M = " + assistantCard.getMaxMotherNatureMoves() + " ] ";
+                    " [ M = " + assistantCard.getMaxMotherNatureMoves() + " ] \t";
+
+            if(i == 4) deck += "\n";
+            i++;
         }
 
         return deck;
@@ -317,43 +330,65 @@ public class CLI extends ViewObservable implements View {
         }
         else{
             cloud = input.nextInt();
-        }
 
+        }
         int finalCloud = cloud;
+
         notifyObserver(viewObserver -> viewObserver.onUpdateCloud(finalCloud-1));
+        input.reset();
     }
 
     @Override
-    public void askStudentToMove(int numStudents) {
-        String[] from = new String[numStudents];
-        String[] student = new String[numStudents];
-        String[] to = new String[numStudents];
-        int[] id = new int[numStudents];
+    public void askStudentToMove() {
+        output.flush();
 
-        for(int i = 0; i < numStudents; i++) {
-            output.println("Select the student you want to move");
-            output.println("[ insert his color and where you want to move it (HALL | ISLAND) ]");
+        showBoard();
+
+        String from;
+        String student;
+        String to;
+        int id = 0;
+
+        int i = 0;
+
+        from = "entrance";
+
+        output.println("Select the student you want to move");
+        output.println("[ insert his color and where you want to move it (HALL | ISLAND) ]");
+        output.print("> ");
+        input.reset();
+
+
+        String inputString;
+
+        do{
+            inputString = readLine();
+        }while(inputString == null);
+
+
+        if(inputString == "") inputString=input.nextLine();
+
+        String[] temp = inputString.split("\\s+");
+
+        student = temp[0];
+        to = temp[1];
+
+        int islandId = 0;
+
+        if(to.equals("ISLAND")){
+            output.println("Select the island where you want to move the student \n[Insert the ID]");
             output.print("> ");
 
-            String inputString = input.nextLine();
-
-            String[] temp = inputString.split("\\s+");
-
-            student[i] = temp[0];
-            to[i] = temp[1];
-
-            int islandId = 0;
-
-            if(to[i].equals("ISLAND")){
-                output.println("Select the island where you want to move the student \n[Insert the ID]");
-                output.print("> ");
-
-                id[i] = input.nextInt();
-
-            }
-
-            notifyObserver(viewObserver -> viewObserver.onUpdateStudent(from, student, to, id));
+            id = input.nextInt();
         }
+
+        int finalId = id;
+
+        notifyObserver(viewObserver -> viewObserver.onUpdateStudent(from, student, to, finalId));
+
+        reducedModel.moveStudent(from, student, to, id);
+
+        input.reset();
     }
 
 
@@ -365,6 +400,7 @@ public class CLI extends ViewObservable implements View {
         int islandId = input.nextInt();
 
         notifyObserver(viewObserver -> viewObserver.onUpdateIslandEffect(islandId));
+        input.reset();
     }
 
     @Override
@@ -373,6 +409,7 @@ public class CLI extends ViewObservable implements View {
     }
 
     public void clearCli(){
+        output.flush();
     }
 
     public void printLine(){
@@ -395,18 +432,21 @@ public class CLI extends ViewObservable implements View {
     }
 
     public String readLine(){
-        String read = input.nextLine();
+        String read;
 
+        read = input.nextLine();
+
+        if(read.equals("")) read = input.nextLine();
 
         if(read.contains("CHARACTER")){
             String[] temp = read.split("\\s+");
 
             int effectId = Integer.parseInt(temp[1]);
             notifyObserver(viewObserver -> viewObserver.onUpdateCharacter(effectId));
+            input.reset();
 
             return null;
         }
-
         else return read;
     }
 
@@ -442,8 +482,27 @@ public class CLI extends ViewObservable implements View {
         output.println("\nEnter the number of steps you want to move motherNature");
         output.print("> ");
 
-        int steps = input.nextInt();
+        int steps = Integer.parseInt(readLine());
+
+        moveMotherNature(steps);
 
         notifyObserver(viewObserver -> viewObserver.onUpdateMotherNature(steps));
+        input.reset();
+    }
+
+    @Override
+    public void setTurnInfo(int steps) {
+        reducedModel.setMaxSteps(steps);
+    }
+
+    @Override
+    public void activateCharacter(int id) {
+        reducedModel.activateCharacter(id);
+    }
+
+    private void moveMotherNature(int steps) {
+        if(steps < reducedModel.getMaxSteps()){
+            reducedModel.getReducedBoard().moveMotherNature(steps);
+        }
     }
 }

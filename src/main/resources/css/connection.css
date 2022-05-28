@@ -1,0 +1,14 @@
+.button {
+    -fx-font-family: 'Du Bellay Italic';
+    -fx-font-size: 22;
+    -fx-text-fill: #fff;
+    -fx-alignment: center;
+    -fx-border-radius: 30px;
+    -fx-background-size: cover;
+    -fx-background-image: url("../images/button1.png");
+
+}
+
+.text {
+    -fx-font-family: 'Du Bellay Italic';
+}

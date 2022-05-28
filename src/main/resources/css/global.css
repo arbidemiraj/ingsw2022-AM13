@@ -1,0 +1,31 @@
+@font-face {
+    font-family: 'Du Bellay';
+    src: url("../fonts/dubellay.ttf");
+}
+
+@font-face {
+    font-family: 'Du Bellay Italic';
+    src: url("../fonts/dubellit.ttf");
+}
+
+.customText {
+    -fx-font-family: 'Du Bellay Italic';
+    -fx-text-fill: #fff;
+}
+
+.button {
+    -fx-font-family: 'Du Bellay Italic';
+    -fx-font-size: 22;
+    -fx-text-fill: #fff;
+    -fx-alignment: center;
+    -fx-background-image: url("../images/button1.png");
+}
+
+
+.button:hover {
+    -fx-font-family: 'Du Bellay Italic';
+    -fx-effect: dropshadow(gaussian, #f2e0d6, 20, 0.3, 0, 0);
+    -fx-font-size: 16;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+}

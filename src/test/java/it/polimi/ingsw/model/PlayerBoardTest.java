@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.Student;
+import it.polimi.ingsw.model.exceptions.EmptyBagException;
+import it.polimi.ingsw.model.exceptions.InvalidMoveException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -13,10 +15,14 @@ class PlayerBoardTest {
     void fillEntrance() {
         GameBoard gameBoard = new GameBoard(2);
         gameBoard.prepareGame();
-        ArrayList<Student> students;
+        ArrayList<Student> students = null;
         PlayerBoard playerBoard = new PlayerBoard();
 
-        students = gameBoard.extractStudents(5);
+        try {
+            students = gameBoard.extractStudents(5);
+        } catch (EmptyBagException e) {
+            e.printStackTrace();
+        }
 
         playerBoard.fillEntrance(students);
 
@@ -46,7 +52,13 @@ class PlayerBoardTest {
         PlayerBoard playerBoard = new PlayerBoard();
 
         playerBoard.addStudent(Student.YELLOW);
-        Student student = playerBoard.removeStudent(Student.YELLOW);
+        Student student = null;
+
+        try {
+            student = playerBoard.removeStudent(Student.YELLOW);
+        } catch (InvalidMoveException e) {
+            e.printStackTrace();
+        }
 
         assertEquals(Student.YELLOW, student);
         assertEquals(0, playerBoard.getEntrance().size());

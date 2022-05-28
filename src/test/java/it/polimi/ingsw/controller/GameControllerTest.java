@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameControllerTest {
     Game testGame;
     GameController testGameController;
+    TurnController testTurnController;
     
     void prepareTestGame(boolean expertMode){
         testGame = new Game(2, expertMode);
@@ -26,24 +27,8 @@ class GameControllerTest {
         testGame.getBoard().prepareGame();
 
         testGameController = new GameController(testGame, null);
-    }
-
-    @Test
-    void endingConditionCheck1() {
-        prepareTestGame(false);
-
-        testGame.getBoard().getBag().clear();
-
-        assertTrue(testGameController.endingConditionCheck());
-    }
-
-    @Test
-    void endingConditionCheck2() {
-        prepareTestGame(false);
-
-        testGame.getPlayers().get(0).setNumTowers(0);
-
-        assertTrue(testGameController.endingConditionCheck());
+        testTurnController = new TurnController(testGameController, null);
+        testGameController.setTurnController(testTurnController);
     }
 
     @Test
@@ -65,23 +50,15 @@ class GameControllerTest {
         assertTrue(playerBoard.getEntrance().contains(Student.BLUE));
     }
 
-    @Test
-    void firstPlayer() {
-        prepareTestGame(false);
 
-        testGameController.firstPlayer();
-
-        assertTrue(testGameController.currentPlayer() != null);
-        assertTrue(testGame.getPlayers().contains(testGame.getPlayerByUsername(testGameController.getCurrentPlayerUsername())));
-    }
 
     @Test
     void moveStudentsFromCloud() {
         prepareTestGame(false);
         Cloud cloud;
 
-        testGameController.setCurrentPlayer();
-        Player currentPlayer = testGameController.getCurrentPlayer();
+        testTurnController.fillUsernameQueue();
+        Player currentPlayer = testTurnController.getCurrentPlayer();
 
         cloud = testGame.getBoard().getClouds()[0];
 
@@ -91,35 +68,22 @@ class GameControllerTest {
 
         currentPlayer.getPlayerBoard().getEntrance().clear();
 
-        ChooseCloudMessage cloudMessage = new ChooseCloudMessage(testGameController.getCurrentPlayerUsername(), 0);
+        ChooseCloudMessage cloudMessage = new ChooseCloudMessage(testTurnController.getCurrentPlayerUsername(), 0);
         testGameController.moveStudentsFromCloud(cloudMessage.getCloudId());
 
         assertEquals(currentPlayer.getPlayerBoard().getEntrance(), students);
         assertTrue(cloud.getStudents().isEmpty());
     }
 
-    @Test
-    void nextPlayer() {
-        prepareTestGame(false);
 
-        testGameController.setCurrentPlayer("FirstPlayer");
-
-        testGameController.nextPlayer();
-
-        assertEquals("SecondPlayer", testGameController.getCurrentPlayerUsername());
-
-        testGameController.nextPlayer();
-
-        assertEquals("FirstPlayer", testGameController.getCurrentPlayerUsername());
-    }
 
     @Test
     void playCard(){
         prepareTestGame(false);
 
-        testGameController.setCurrentPlayer("FirstPlayer");
+        testTurnController.calcCurrentPlayer("FirstPlayer");
 
-        Player player = testGameController.getCurrentPlayer();
+        Player player = testTurnController.getCurrentPlayer();
 
         AssistantCard assistantCard = player.getDeck().get(0);
 
@@ -130,7 +94,7 @@ class GameControllerTest {
         }
 
         assertEquals(9, player.getDeck().size());
-        assertEquals(assistantCard, testGameController.getTurnCardsPlayed().get(0));
+        assertEquals(assistantCard, testTurnController.getTurnCardsPlayed().get(0));
     }
 
     @Test
@@ -143,7 +107,7 @@ class GameControllerTest {
 
         player.setNumCoins(cost);
 
-        testGameController.setCurrentPlayer(player.getUsername());
+        testTurnController.calcCurrentPlayer(player.getUsername());
 
         try{
             testGameController.activateCharacter(character.getEffectId());
@@ -165,7 +129,7 @@ class GameControllerTest {
         Player player = testGame.getPlayers().get(0);
         player.setNumCoins(0);
 
-        testGameController.setCurrentPlayer(player.getUsername());
+        testTurnController.calcCurrentPlayer(player.getUsername());
 
         try {
             testGameController.activateCharacter(character.getEffectId());
@@ -188,9 +152,10 @@ class GameControllerTest {
         testGame.getCharacters()[0] = character;
 
         Player player = testGame.getPlayers().get(0);
+        testTurnController.calcCurrentPlayer(player.getUsername());
         player.setNumCoins(character.getCost());
 
-        testGameController.setCurrentPlayer(player.getUsername());
+
 
         try {
             testGameController.activateIslandCharacter(3, chosenIsland);
@@ -215,7 +180,7 @@ class GameControllerTest {
         Player player = testGame.getPlayers().get(0);
         player.setNumCoins(character.getCost());
 
-        testGameController.setCurrentPlayer(player.getUsername());
+        testTurnController.calcCurrentPlayer(player.getUsername());
 
         try {
             testGameController.activateStudentCharacter(1, chosenStudent);
@@ -229,35 +194,7 @@ class GameControllerTest {
         assertTrue(testGame.getActivatedCharacters().contains(1));
     }
 
-    @Test
-    void setCurrentPlayer() {
-        prepareTestGame(false);
 
-        Player player1 = testGame.getPlayers().get(0);
-        Player player2 = testGame.getPlayers().get(1);
-
-        AssistantCard assistantCard1 = player1.getDeck().get(1);
-        AssistantCard assistantCard2 = player2.getDeck().get(5);
-
-        testGameController.setCurrentPlayer("FirstPlayer");
-
-        try {
-            testGameController.playCard(assistantCard1);
-        }catch (CardAlreadyPlayedException e){
-            e.printStackTrace();
-        }
-
-        nextPlayer();
-
-        try {
-            testGameController.playCard(assistantCard2);
-        }catch (CardAlreadyPlayedException e){
-            e.printStackTrace();
-        }
-
-        testGameController.setCurrentPlayer();
-        assertEquals("FirstPlayer", testGameController.getCurrentPlayerUsername());
-    }
 
     @Test
     void moveMotherNature() {
@@ -265,7 +202,7 @@ class GameControllerTest {
 
         Player player = testGame.getPlayers().get(0);
 
-        testGameController.setCurrentPlayer(player.getUsername());
+        testTurnController.calcCurrentPlayer(player.getUsername());
 
         AssistantCard assistantCard = player.getDeck().get(0);
 
@@ -295,7 +232,7 @@ class GameControllerTest {
 
         AssistantCard assistantCard = player.getDeck().get(0);
 
-        testGameController.setCurrentPlayer(player.getUsername());
+        testTurnController.calcCurrentPlayer(player.getUsername());
 
         try {
             testGameController.playCard(assistantCard);

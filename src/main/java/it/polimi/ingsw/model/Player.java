@@ -163,4 +163,8 @@ public class Player {
 	public TowerColor getTowerColor() {
 		return towerColor;
 	}
+
+    public void removeTower() {
+		numTowers--;
+    }
 }

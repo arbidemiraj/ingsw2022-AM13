@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.client.reducedModel;
 import it.polimi.ingsw.model.Cloud;
 import it.polimi.ingsw.model.GameBoard;
 import it.polimi.ingsw.model.PlayerBoard;
+import it.polimi.ingsw.model.enumerations.Student;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,17 +19,13 @@ public class ReducedBoard implements Serializable {
     private ArrayList<ReducedIsland> islands;
     private ReducedPlayerBoard playerBoard;
 
-    public ReducedBoard(int[][] numStudents, Cloud[] clouds, String[] owner, ReducedPlayerBoard reducedPlayerBoard, int motherNature) {
-        islands = new ArrayList<>();
-
+    public ReducedBoard(int[][] numStudents, Cloud[] clouds, String[] owner, ReducedPlayerBoard reducedPlayerBoard, int motherNature, ArrayList<ReducedIsland> islands) {
         this.clouds = clouds;
         this.numStudents = numStudents;
         this.owner = owner;
         this.playerBoard = reducedPlayerBoard;
 
-        for(int i = 0; i < 12; i ++){
-            islands.add(new ReducedIsland(numStudents[i], owner[i], i));
-        }
+        this.islands = islands;
 
         this.motherNature = motherNature;
 
@@ -42,6 +39,14 @@ public class ReducedBoard implements Serializable {
 
     public void setMotherNature(int motherNature) {
         this.motherNature = motherNature;
+    }
+
+    public void removeStudentFromIsland(int id, Student color){
+        islands.get(id).addStudent(color);
+    }
+
+    public void addStudentToIsland(int id, Student color){
+        islands.get(id).addStudent(color);
     }
 
     public String printIslands() {
@@ -69,5 +74,18 @@ public class ReducedBoard implements Serializable {
             i++;
         }
         return print;
+    }
+
+    public void moveMotherNature(int steps){
+        motherNature += steps;
+
+        if(motherNature >= 12){
+            motherNature = motherNature - 12;
+        }
+    }
+
+
+    public ReducedPlayerBoard getPlayerBoard() {
+        return playerBoard;
     }
 }

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.network.client;
 
-import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.message.GenericMessage;
@@ -83,7 +82,7 @@ public class ClientController implements ViewObserver, Observer {
             case BOARD_MESSAGE -> {
                 BoardMessage msg = (BoardMessage) message;
 
-                taskQueue.execute(() -> view.createBoard(msg.getReducedBoard()));
+                taskQueue.execute(() -> view.setBoard(msg.getReducedBoard()));
             }
 
             case ASK_CLOUD -> {
@@ -99,7 +98,27 @@ public class ClientController implements ViewObserver, Observer {
             case ASK_STUDENT -> {
                 AskStudent msg = (AskStudent) message;
 
-                taskQueue.execute(() -> view.askStudentToMove(msg.getNumStudent()));
+                taskQueue.execute(view::askStudentToMove);
+            }
+
+            case TURN_INFO -> {
+                TurnInfo turnInfo = (TurnInfo) message;
+
+                taskQueue.execute(() -> view.setTurnInfo(turnInfo.getSteps()));
+            }
+
+            case CONFIRM_CHARACTER -> {
+                ConfirmCharacterActivation msg = (ConfirmCharacterActivation) message;
+
+                int id = msg.getId();
+
+                taskQueue.execute(() -> view.activateCharacter(id));
+            }
+
+            case WIN -> {
+                WinMessage msg = (WinMessage) message;
+
+                taskQueue.execute(() -> view.winMessage(msg.getWinner()));
             }
         }
     }
@@ -168,7 +187,7 @@ public class ClientController implements ViewObserver, Observer {
     }
 
     @Override
-    public void onUpdateStudent(String[] from, String[] color, String[] to, int[] id) {
+    public void onUpdateStudent(String from, String color, String to, int id) {
         client.sendMessage(new MoveStudentMessage(username, from, color, to, id));
     }
 

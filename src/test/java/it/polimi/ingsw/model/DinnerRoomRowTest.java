@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.DinnerRoomRow;
 import it.polimi.ingsw.model.enumerations.Student;
+import it.polimi.ingsw.model.exceptions.InvalidMoveException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,8 +29,15 @@ class DinnerRoomRowTest {
     void removeStudent() {
         DinnerRoomRow dinnerRoomRow = new DinnerRoomRow(Student.YELLOW);
 
+
         dinnerRoomRow.addStudent(Student.YELLOW);
-        dinnerRoomRow.removeStudent(Student.YELLOW);
+
+        try {
+            dinnerRoomRow.removeStudent(Student.YELLOW);
+        }catch (InvalidMoveException e){
+            e.printStackTrace();
+        }
+
 
         assertEquals(0, dinnerRoomRow.getNumStudents());
     }

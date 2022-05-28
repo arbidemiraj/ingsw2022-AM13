@@ -58,6 +58,7 @@ public class LobbyHandler {
     public int getGameIdFromUsername(String username){
         return gameIdUsernameMap.get(username);
     }
+
     public List<GameHandler> getGames() {
         return games;
     }
@@ -72,5 +73,9 @@ public class LobbyHandler {
 
     public List<String> getUsernameQueue() {
         return usernameQueue;
+    }
+
+    public void disconnect(String username) {
+        games.get(getGameIdFromUsername(username)).endGame(username);
     }
 }

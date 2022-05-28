@@ -8,10 +8,7 @@ import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
 import it.polimi.ingsw.network.message.servermsg.AskTowerColor;
 import it.polimi.ingsw.network.message.servermsg.LobbyMessage;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -80,7 +77,7 @@ public class Server {
                 createNewGame((NewGameMessage) message);
                 lobbyHandler.getGames().get(nextGameId - 1).addPlayer(message.getUsername());
                 lobbyHandler.joinGame(message.getUsername(), nextGameId - 1);
-                clientHandlerMap.get(message.getUsername()).sendMessage(new GenericMessage("\n Waiting players to join ..."));
+                clientHandlerMap.get(message.getUsername()).sendMessage(new GenericMessage("\n Waiting players to join ...", GenericType.GENERIC));
             }
 
             case JOIN_GAME -> {
@@ -100,6 +97,20 @@ public class Server {
      * Handles the disconnection of a client.
      */
     public void disconnect(ClientHandler clientHandler) {
+        lobbyHandler.disconnect(getUsernameFromClientHandler(clientHandler));
+
+        clientHandlerMap.remove(clientHandler);
+
+        List<ClientHandler> clientHandlerList = clientHandlerMap.values().stream().toList();
+
+        for(ClientHandler socketClientHandler : clientHandlerList){
+            if(socketClientHandler.equals(clientHandler)) {
+                socketClientHandler.disconnect();
+                clientHandlerMap.remove(clientHandler);
+            }
+        }
+
+
     }
 
     /**

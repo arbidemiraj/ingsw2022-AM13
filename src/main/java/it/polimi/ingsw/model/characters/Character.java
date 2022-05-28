@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enumerations.Student;
+import it.polimi.ingsw.model.exceptions.EmptyBagException;
 
 import java.util.ArrayList;
 
@@ -31,7 +32,12 @@ public class Character {
 
 		switch(effectId){
 			case 1:
-				ArrayList<Student> students1 = game.getBoard().extractStudents(4);
+				ArrayList<Student> students1 = null;
+				try {
+					students1 = game.getBoard().extractStudents(4);
+				} catch (EmptyBagException e) {
+					e.printStackTrace();
+				}
 				effect = new Effect1(students1);
 				break;
 
@@ -44,14 +50,24 @@ public class Character {
 				break;
 
 			case 7:
-				ArrayList<Student> students7 = game.getBoard().extractStudents(6);
+				ArrayList<Student> students7 = null;
+				try {
+					students7 = game.getBoard().extractStudents(6);
+				} catch (EmptyBagException e) {
+					e.printStackTrace();
+				}
 				effect = new Effect7(students7);
 				break;
 
 			case 9:
 
 			case 11:
-				ArrayList<Student> students11 = game.getBoard().extractStudents(4);
+				ArrayList<Student> students11 = null;
+				try {
+					students11 = game.getBoard().extractStudents(4);
+				} catch (EmptyBagException e) {
+					e.printStackTrace();
+				}
 				effect = new Effect11(students11);
 				break;
 
@@ -89,13 +105,13 @@ public class Character {
 		return desc;
 	}
 	//method for the cards that needs a chosenStudent to apply the effect
-	public void applyEffect(Student chosenStudent){
+	public void applyEffect(Student chosenStudent) throws EmptyBagException {
 		isActivated = true;
 		effect.apply(game, chosenStudent);
 	}
 
 	//method for the cards that needs a chosen Island to apply the effect
-	public void applyEffect(Island chosenIsland){
+	public void applyEffect(Island chosenIsland) throws EmptyBagException {
 		isActivated = true;
 		effect.apply(game, chosenIsland);
 	}

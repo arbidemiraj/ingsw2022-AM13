@@ -1,8 +1,12 @@
 package it.polimi.ingsw.network.client.reducedModel;
 
+import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class ReducedModel implements Serializable {
     private String username;
@@ -11,6 +15,7 @@ public class ReducedModel implements Serializable {
     private ReducedCharacter[] reducedCharacters;
     private String currentPlayer;
     private boolean isExpertMode;
+    private int turnMaxSteps;
     private boolean isActive;
 
     public ReducedModel(String username, TowerColor color, ReducedCharacter[] reducedCharacters, boolean isExpertMode) {
@@ -56,5 +61,28 @@ public class ReducedModel implements Serializable {
 
     public void setReducedBoard(ReducedBoard reducedBoard) {
         this.reducedBoard = reducedBoard;
+    }
+
+    public void setMaxSteps(int steps){
+        this.turnMaxSteps = steps;
+    }
+
+    public int getMaxSteps() {
+        return turnMaxSteps;
+    }
+
+    public void activateCharacter(int id){
+        Arrays.stream(reducedCharacters).filter(reducedCharacter -> reducedCharacter.getEffectId() == id).collect(Collectors.toList())
+                .get(0).activate();
+
+
+    }
+
+    public void moveStudent(String from, String student, String to, int id) {
+        if(from.equals("ENTRANCE")) reducedBoard.getPlayerBoard().removeEntranceStudent(student);
+
+        if(to.equals("ISLAND")) reducedBoard.addStudentToIsland(id, Student.valueOf(student));
+
+        if(to.equals("HALL")) reducedBoard.getPlayerBoard().addHallStudent(student);
     }
 }

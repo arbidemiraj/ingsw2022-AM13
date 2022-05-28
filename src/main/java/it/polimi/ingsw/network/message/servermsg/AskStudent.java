@@ -6,21 +6,14 @@ import it.polimi.ingsw.network.message.MessageType;
 public class AskStudent extends Message {
 
     private static final long serialVersionUID = -4015943428142654524L;
-    private int numStudent;
 
-    public AskStudent(int numStudent) {
+    public AskStudent() {
         super("server", MessageType.ASK_STUDENT);
-        this.numStudent = numStudent;
-    }
-
-    public int getNumStudent() {
-        return numStudent;
     }
 
     @Override
     public String toString() {
         return "AskStudent{" +
-                "numStudent=" + numStudent +
                 '}';
     }
 }

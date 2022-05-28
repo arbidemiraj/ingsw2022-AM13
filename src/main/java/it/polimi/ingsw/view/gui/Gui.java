@@ -55,7 +55,7 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void error(String error) {
-
+        Platform.runLater(() -> sceneController.changeRoot(observers, "gameSettings_scene.fxml"));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class Gui extends ViewObservable implements View {
     }
 
     @Override
-    public void winMessage() {
+    public void winMessage(String winner) {
 
     }
 
@@ -79,7 +79,7 @@ public class Gui extends ViewObservable implements View {
     }
 
     @Override
-    public void askStudentToMove(int numStudents) {
+    public void askStudentToMove() {
 
     }
 
@@ -104,7 +104,7 @@ public class Gui extends ViewObservable implements View {
     }
 
     @Override
-    public void createBoard(ReducedBoard reducedBoard) {
+    public void setBoard(ReducedBoard reducedBoard) {
 
     }
 
@@ -115,6 +115,16 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void askMotherNatureMove() {
+
+    }
+
+    @Override
+    public void setTurnInfo(int steps) {
+
+    }
+
+    @Override
+    public void activateCharacter(int id) {
 
     }
 }

@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.enumerations.Student;
-import it.polimi.ingsw.model.enumerations.TowerColor;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

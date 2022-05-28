@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.message.GenericMessage;
+import it.polimi.ingsw.network.message.GenericType;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.clientmsg.ChooseCloudMessage;
 import it.polimi.ingsw.network.message.clientmsg.ChooseTowerColorMessage;
@@ -25,6 +26,8 @@ public class GameHandler {
     private int gameId;
     private final int maxPlayers;
     private boolean started;
+    private boolean isActive;
+
 
     public GameHandler(Server server, NewGameMessage newGameMessage, int gameId){
         this.server = server;
@@ -52,7 +55,6 @@ public class GameHandler {
 
         started = true;
         game.startGame();
-        gameSetup();
 
         gameController.startGame();
     }
@@ -71,13 +73,15 @@ public class GameHandler {
     }
 
     public void endGame(){
+        isActive = false;
+        started = false;
     }
 
-    public void gameSetup(){
-        gameController.firstPlayer();
+    public void endGame(String username){
+        isActive = false;
+        started = false;
 
-        sendMessage(new GenericMessage("\n You are the first player! "), gameController.getCurrentPlayerUsername());
-        sendMessageToAllExcept(new GenericMessage("\n Wait... " + gameController.getCurrentPlayerUsername() + " is playing his turn! "), gameController.getCurrentPlayerUsername());
+        sendMessageToAllExcept(new GenericMessage("Game has ended because user '" + username + "' disconnected", GenericType.END), username);
     }
 
     private void askTowerColor(String username) {

@@ -1,8 +1,6 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.AssistantCard;
-import it.polimi.ingsw.model.Cloud;
-import it.polimi.ingsw.model.Movable;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
@@ -29,13 +27,13 @@ public interface View {
 
     void showLobby(String lobby);
 
-    void winMessage();
+    void winMessage(String winner);
 
     void askCardToPlay(List<AssistantCard> assistantCards,  List<AssistantCard> cardsPlayed);
 
     void askCloud();
 
-    void askStudentToMove(int numStudents);
+    void askStudentToMove();
 
     void askIslandToMove();
 
@@ -45,9 +43,13 @@ public interface View {
 
     void showGenericMessage(String message);
 
-    void createBoard(ReducedBoard reducedBoard);
+    void setBoard(ReducedBoard reducedBoard);
 
     void createModel(ReducedModel reducedModel);
 
     void askMotherNatureMove();
+
+    void setTurnInfo(int steps);
+
+    void activateCharacter(int id);
 }

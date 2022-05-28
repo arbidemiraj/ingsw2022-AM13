@@ -32,7 +32,7 @@ public interface ViewObserver {
 
     void onUpdateMotherNature(int steps);
 
-    void onUpdateStudent(String[] from, String[] color, String[] to, int[] id);
+    void onUpdateStudent(String from, String color, String to, int id);
 
     void onUpdateNewGame(int maxPlayers, boolean expertMode);
 

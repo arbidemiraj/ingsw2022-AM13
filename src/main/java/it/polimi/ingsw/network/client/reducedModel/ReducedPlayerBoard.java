@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.client.reducedModel;
 
 import it.polimi.ingsw.model.enumerations.Student;
+import it.polimi.ingsw.model.maps.ColorIntMap;
 import it.polimi.ingsw.model.maps.IntColorMap;
 import it.polimi.ingsw.view.cli.Color;
 
@@ -15,26 +16,28 @@ public class ReducedPlayerBoard implements Serializable {
     private int[] hallStudents;
     private IntColorMap studentColorMap = new IntColorMap();
     private HashMap<Integer, Student> studentColor = studentColorMap.getMap();
+    private ColorIntMap intColorMap = new ColorIntMap();
+    private HashMap<Student, Integer> intColor = intColorMap.getMap();
 
     public ReducedPlayerBoard(int[] entranceStudents, int[] hallStudents) {
         this.entranceStudents = entranceStudents;
         this.hallStudents = hallStudents;
     }
 
-    public void addEntranceStudent(){
-
+    public void addEntranceStudent(String student){
+        entranceStudents[intColor.get(student)]++;
     }
 
-    public void removeEntranceStudent(){
-
+    public void removeEntranceStudent(String student){
+        entranceStudents[intColor.get(student)]--;
     }
 
-    public void addHallStudent(){
-
+    public void addHallStudent(String student){
+        hallStudents[intColor.get(student)]++;
     }
 
-    public void removeHallStudent(){
-
+    public void removeHallStudent(String student){
+        hallStudents[intColor.get(student)]--;
     }
 
     public String print(){

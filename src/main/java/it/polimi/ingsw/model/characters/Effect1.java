@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.characters;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.enumerations.Student;
+import it.polimi.ingsw.model.exceptions.EmptyBagException;
 
 import java.util.ArrayList;
 
@@ -27,7 +28,7 @@ public class Effect1 implements Actionable {
 	}
 
 	@Override
-	public void apply(Game game, Island chosenIsland) {
+	public void apply(Game game, Island chosenIsland) throws EmptyBagException {
 		chosenIsland.addStudent(chosenStudent);
 		students.remove(chosenStudent);
 		students.add(game.getBoard().extractStudents(1).get(0));

@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controllers.ConnectionSceneController">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/connection.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controllers.ConnectionSceneController">
    <children>
-      <Button fx:id="connectBtn" layoutX="269.0" layoutY="300.0" mnemonicParsing="false" onAction="#onConnectBtnClick" text="Connect" />
-      <TextField id="serverAddress" fx:id="serverAddress" layoutX="226.0" layoutY="134.0" />
-      <TextField fx:id="serverPort" layoutX="226.0" layoutY="200.0" />
-      <Label layoutX="260.0" layoutY="108.0" text="Server Address" />
-      <Label layoutX="270.0" layoutY="175.0" text="Server Port" />
+      <TextField id="serverAddress" fx:id="serverAddress" layoutX="565.0" layoutY="288.0" />
+      <TextField fx:id="serverPort" layoutX="565.0" layoutY="354.0" />
+      <Label layoutX="599.0" layoutY="262.0" text="Server Address" styleClass="text"/>
+      <Label layoutX="609.0" layoutY="329.0" text="Server Port" styleClass="text"/>
+      <Button fx:id="connectBtn" layoutX="546.0" layoutY="411.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="187.0" styleClass="button" text="Connect" />
    </children>
+   <stylesheets>
+      <URL value="@../css/global.css" />
+      <URL value="@../css/connection.css" />
+   </stylesheets>
 </AnchorPane>

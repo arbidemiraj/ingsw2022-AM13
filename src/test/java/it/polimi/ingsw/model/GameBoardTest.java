@@ -1,10 +1,7 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.enumerations.Student;
-import it.polimi.ingsw.model.enumerations.TowerColor;
+import it.polimi.ingsw.model.exceptions.EmptyBagException;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,7 +24,11 @@ class GameBoardTest {
 
         oldBagSize = (board.getBag().size());
 
-        board.extractStudents(5);
+        try {
+            board.extractStudents(5);
+        } catch (EmptyBagException e) {
+            e.printStackTrace();
+        }
 
         assertEquals( oldBagSize-5, board.getBag().size());
     }

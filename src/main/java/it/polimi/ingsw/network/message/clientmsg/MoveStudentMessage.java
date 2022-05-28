@@ -12,13 +12,13 @@ import it.polimi.ingsw.network.message.MessageType;
 
 public class MoveStudentMessage extends Message {
 
-    private String[] from;
-    private String[] color;
-    private String[] to;
-    private int[] id;
+    private String from;
+    private String color;
+    private String to;
+    private int id;
 
 
-    public MoveStudentMessage(String username, String[] from, String[] color, String[] to, int[] id) {
+    public MoveStudentMessage(String username, String from, String color, String to, int id) {
         super(username, MessageType.MOVE_STUDENT);
         this.from = from;
         this.color = color;
@@ -26,19 +26,19 @@ public class MoveStudentMessage extends Message {
         this.id = id;
     }
 
-    public String[] getFrom() {
+    public String getFrom() {
         return from;
     }
 
-    public String[] getColor() {
+    public String getColor() {
         return color;
     }
 
-    public String[] getTo() {
+    public String getTo() {
         return to;
     }
 
-    public int[] getId() {
+    public int getId() {
         return id;
     }
 

@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 public class JavaFxMain extends Application {
@@ -36,9 +37,7 @@ public class JavaFxMain extends Application {
         stage.setScene(scene);
         stage.setWidth(1280);
         stage.setHeight(720);
-        stage.setResizable(true);
-        stage.setMaximized(true);
-        stage.setFullScreenExitHint("");
+        stage.setResizable(false);
         stage.setTitle("Eriantys");
         stage.show();
     }
@@ -46,5 +45,13 @@ public class JavaFxMain extends Application {
     public void changeScene(Scene scene){
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void showAlert(String message){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+
+        alert.setContentText(message);
+        alert.show();
+
     }
 }

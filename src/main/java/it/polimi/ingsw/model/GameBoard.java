@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.Student;
+import it.polimi.ingsw.model.exceptions.EmptyBagException;
 import it.polimi.ingsw.model.maps.IntColorMap;
 
 import java.io.Serial;
@@ -82,11 +83,14 @@ public class GameBoard implements Serializable {
 		//fill entrance for each player
 	}
 
-	private void fillClouds() {
+	public void fillClouds() {
 		int dim = numPlayers + 1;
 
 		for (Cloud cloud : clouds) {
-			cloud.addStudents(extractStudents(dim));
+			try {
+				cloud.addStudents(extractStudents(dim));
+			} catch (EmptyBagException e) {
+			}
 		}
 	}
 
@@ -122,10 +126,14 @@ public class GameBoard implements Serializable {
 	}
 
 	public void fillIslands() {
-		ArrayList<Student> students;
+		ArrayList<Student> students = new ArrayList<>();
 		int j = 0;
 
-		students = extractStudents(10);
+		try {
+			students = extractStudents(10);
+		} catch (EmptyBagException e) {
+			e.printStackTrace();
+		}
 
 		for (int i = 0; i < 12; i++) {
 			if (i != motherNature && i != getOppositeMotherNature()) {
@@ -149,8 +157,10 @@ public class GameBoard implements Serializable {
 		return professors;
 	}
 
-	public ArrayList<Student> extractStudents(int numStudents) {
+	public ArrayList<Student> extractStudents(int numStudents) throws EmptyBagException {
 		ArrayList<Student> extractedStudents = new ArrayList<>();
+		
+		if(bag.size() != 10 && (bag.size() - numStudents) <= 0) throw new EmptyBagException();
 
 		int random;
 

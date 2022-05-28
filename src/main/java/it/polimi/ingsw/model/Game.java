@@ -2,11 +2,12 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.enumerations.Student;
-import it.polimi.ingsw.model.enumerations.TowerColor;
+import it.polimi.ingsw.model.exceptions.EmptyBagException;
 import it.polimi.ingsw.model.maps.ColorIntMap;
+import it.polimi.ingsw.network.message.GenericMessage;
+import it.polimi.ingsw.network.message.GenericType;
 import it.polimi.ingsw.observer.Observable;
 
-import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,8 +50,8 @@ public class Game extends Observable {
 
 	/**
 	 * Default constructor
-	 * @param numPlayers		max number of players the user chose
-	 * @param expertMode		true if the expert mode is ON
+	 * @param numPlayers        max number of players the user chose
+	 * @param expertMode        true if the expert mode is ON
 	 */
 	public Game(int numPlayers, boolean expertMode){
 		this.expertMode = expertMode;
@@ -216,6 +217,7 @@ public class Game extends Observable {
 
 	/**
 	 * Checks if the current island (the one with mother nature on it) can be merged
+	 * @return
 	 */
 	public void mergeCheck(){
 		Island island1, island2, island3; //indexes of the islands to compare
@@ -235,10 +237,14 @@ public class Game extends Observable {
 			mergeIslands(island2, island1);
 			board.setMotherNature(motherNature - 1);
 			board.getIslands().remove(previous);
+
+			notifyObserver(new GenericMessage("Island [" + previous + "] and [" + motherNature + "] have been merged", GenericType.MERGE));
 		}
 		if(island2.getOwner().equals(island3.getOwner())) {
 			mergeIslands(island2, island3);
 			board.getIslands().remove(next);
+
+			notifyObserver(new GenericMessage("Island [" + next + "] and [" + motherNature + "] have been merged", GenericType.MERGE));
 		}
 	}
 
@@ -259,8 +265,13 @@ public class Game extends Observable {
 	 * @param color		the professor color you want to check
 	 */
 
-	public void professorCheck(Student color){
+	public boolean professorCheck(Student color){
 		int colorPos = createColorIntMap(color);
+		String actualOwner = null;
+
+		if(board.getProfessors()[colorPos].getOwner() != null){
+			actualOwner = board.getProfessors()[colorPos].getOwner().getUsername();
+		}
 
 		int numStud = players
 				.stream()
@@ -283,6 +294,13 @@ public class Game extends Observable {
 			}
 		}
 		else if(playersCheck.size() == 1) board.getProfessors()[colorPos].setOwner(playersCheck.get(0));
+
+		String newOwner = board.getProfessors()[colorPos].getOwner().getUsername();
+
+		if(actualOwner != null && actualOwner.equals(newOwner)){
+			return true;
+		}
+		else return false;
 	}
 
 	/**
@@ -290,22 +308,37 @@ public class Game extends Observable {
 	 * @param color			the color associated to the position you want to know
 	 * @return				the integer associated to the color passed by using the maps
 	 */
-	private int createColorIntMap(Student color) {
+	public int createColorIntMap(Student color) {
 		ColorIntMap studentColorMap = new ColorIntMap();
 		HashMap<Student, Integer> studentColor = studentColorMap.getMap();
 
 		return studentColor.get(color);
 	}
 
+	public boolean checkAfterMotherNature(){
+		if(board.getMotherNatureIsland().getOwner() != null){
+			Player actualOwner = board.getMotherNatureIsland().getOwner();
+		}
+
+		setInfluencePlayer(board.getMotherNatureIsland());
+
+		if(setIslandOwner(board.getMotherNatureIsland())) return true;
+
+		return false;
+	}
 	/**
 	 * After setting the influence player if it is not the actual island owner he conquers it
 	 */
-	public void setIslandOwner(Island island) {
+	public boolean setIslandOwner(Island island) {
 		setInfluencePlayer(island);
 
 		if(influencePlayer != board.getMotherNatureIsland().getOwner()){
 			board.getMotherNatureIsland().setOwner(influencePlayer);
+			influencePlayer.removeTower();
+
+			return true;
 		}
+		return false;
 	}
 
 
@@ -394,8 +427,20 @@ public class Game extends Observable {
 
 	public void setupPhase(){
 		for (Player player : players) {
-			if (numPlayers == 2) player.getPlayerBoard().fillEntrance(board.extractStudents(7));
-			if (numPlayers == 3) player.getPlayerBoard().fillEntrance(board.extractStudents(9));
+			if (numPlayers == 2) {
+				try {
+					player.getPlayerBoard().fillEntrance(board.extractStudents(7));
+				} catch (EmptyBagException e) {
+					e.printStackTrace();
+				}
+			}
+			if (numPlayers == 3) {
+				try {
+					player.getPlayerBoard().fillEntrance(board.extractStudents(9));
+				} catch (EmptyBagException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -424,7 +469,11 @@ public class Game extends Observable {
 		else numStudents = 9;
 
 		for(Player player : players){
-			player.getPlayerBoard().fillEntrance(board.extractStudents(numStudents));
+			try {
+				player.getPlayerBoard().fillEntrance(board.extractStudents(numStudents));
+			} catch (EmptyBagException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

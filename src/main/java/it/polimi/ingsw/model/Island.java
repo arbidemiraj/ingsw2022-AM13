@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.Student;
+import it.polimi.ingsw.model.exceptions.InvalidMoveException;
 import it.polimi.ingsw.model.maps.ColorIntMap;
 
 import java.util.ArrayList;
@@ -40,8 +41,10 @@ public class Island implements Movable {
 	}
 
 	@Override
-	public Student removeStudent(Student color) {
+	public Student removeStudent(Student color) throws InvalidMoveException {
 		Student student;
+
+		if(!students.contains(color)) throw new InvalidMoveException();
 
 		for(int i = 0; i < students.size(); i ++){
 			student = students.get(i);
