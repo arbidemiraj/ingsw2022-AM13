@@ -6,31 +6,188 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.JavaFxMain">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.JavaFxMain">
    <children>
-      <ImageView fitHeight="695.0" fitWidth="1000.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Graphical_Assets/sky.jpg" />
          </image>
       </ImageView>
-      <Label alignment="CENTER" layoutX="932.0" layoutY="42.0" prefHeight="41.0" prefWidth="68.0" style="-fx-background-color: grey;" text="player1" textAlignment="CENTER" />
-      <Label alignment="CENTER" layoutX="932.0" prefHeight="41.0" prefWidth="68.0" style="-fx-background-color: grey;" text="turn" textAlignment="CENTER" />
-      <Label alignment="CENTER" layoutX="932.0" layoutY="236.0" prefHeight="30.0" prefWidth="68.0" style="-fx-background-color: grey;" text="player2" textAlignment="CENTER" />
-      <ImageView fitHeight="77.0" fitWidth="81.0" layoutX="292.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true">
+      <Label alignment="CENTER" layoutX="1212.0" layoutY="77.0" prefHeight="41.0" prefWidth="68.0" style="-fx-background-color: grey;" text="player1" textAlignment="CENTER" />
+      <Label alignment="CENTER" layoutX="1212.0" layoutY="35.0" prefHeight="41.0" prefWidth="68.0" style="-fx-background-color: grey;" text="turn" textAlignment="CENTER" />
+      <ImageView fitHeight="73.0" fitWidth="91.0" layoutX="547.0" layoutY="302.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Graphical_Assets/custom/motherNature.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="150.0" fitWidth="137.0" layoutX="897.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="140.0" fitWidth="87.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Graphical_Assets/assistenti/Assistente1.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="897.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="140.0" fitWidth="87.0" layoutX="87.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Graphical_Assets/assistenti/Assistente2.png" />
          </image>
       </ImageView>
-      <Button layoutX="687.0" layoutY="84.0" mnemonicParsing="false" prefHeight="150.0" prefWidth="137.0" styleClass="assistant1" text="Button" />
+      <ImageView fitHeight="140.0" fitWidth="87.0" layoutX="161.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/assistenti/Assistente3.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="140.0" fitWidth="87.0" layoutX="248.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/assistenti/Assistente4.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="140.0" fitWidth="87.0" layoutX="333.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/assistenti/Assistente5.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="140.0" fitWidth="87.0" layoutX="420.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/assistenti/Assistente6.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="140.0" fitWidth="87.0" layoutX="494.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/assistenti/Assistente7.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="140.0" fitWidth="87.0" layoutX="581.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/assistenti/Assistente8.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="140.0" fitWidth="87.0" layoutX="668.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/assistenti/Assistente9.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="140.0" fitWidth="87.0" layoutX="755.0" layoutY="592.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/assistenti/Assistente10.png" />
+         </image>
+      </ImageView>
+      <Label alignment="CENTER" layoutX="1212.0" layoutY="240.0" prefHeight="41.0" prefWidth="68.0" style="-fx-background-color: grey;" text="player2" textAlignment="CENTER" />
+      <Label alignment="CENTER" layoutX="842.0" layoutY="592.0" prefHeight="42.0" prefWidth="81.0" style="-fx-background-color: grey;" text="monete: X" textAlignment="CENTER" />
+      <ImageView fitHeight="81.0" fitWidth="87.0" layoutX="842.0" layoutY="638.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/coin.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="140.0" fitWidth="87.0" layoutX="1192.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/assistenti/Assistente1.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="140.0" fitWidth="87.0" layoutX="1192.0" layoutY="282.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/assistenti/Assistente2.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="125.0" fitWidth="125.0" layoutX="37.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/island1.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="783.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/personaggi/CarteTOT_front.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="125.0" fitWidth="125.0" layoutX="175.0" layoutY="191.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/cloud.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="125.0" fitWidth="125.0" layoutX="174.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/island2.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="125.0" fitWidth="125.0" layoutX="319.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/island3.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="125.0" fitWidth="125.0" layoutX="456.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/island1.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="125.0" fitWidth="125.0" layoutX="597.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/island2.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="125.0" fitWidth="125.0" layoutX="605.0" layoutY="204.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/island3.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="125.0" fitWidth="125.0" layoutX="39.0" layoutY="375.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/island2.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="125.0" fitWidth="125.0" layoutX="176.0" layoutY="376.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/island1.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="125.0" fitWidth="125.0" layoutX="321.0" layoutY="378.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/island3.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="125.0" fitWidth="125.0" layoutX="458.0" layoutY="380.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/island2.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="125.0" fitWidth="125.0" layoutX="599.0" layoutY="382.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/island1.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="125.0" fitWidth="125.0" layoutX="37.0" layoutY="199.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/island3.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="897.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/personaggi/CarteTOT_front2.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1013.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/personaggi/CarteTOT_front11.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="125.0" fitWidth="125.0" layoutX="313.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/cloud.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="125.0" fitWidth="125.0" layoutX="457.0" layoutY="193.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/custom/cloud.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="110.0" fitWidth="250.0" layoutX="763.0" layoutY="256.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/plancia.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="110.0" fitWidth="250.0" layoutX="763.0" layoutY="379.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Graphical_Assets/plancia.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="1199.0" layoutY="592.0" mnemonicParsing="false" text="END TURN" />
+      <Button layoutX="1211.0" layoutY="-3.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="68.0" text="QUIT" />
    </children>
 </AnchorPane>
