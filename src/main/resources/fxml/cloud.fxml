@@ -11,7 +11,7 @@
    <children>
       <ImageView fitHeight="400.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Graphical_Assets/custom/cloud.png" />
+            <Image url="@../assets/custom/cloud.png" />
          </image>
       </ImageView>
       <GridPane layoutX="100.0" layoutY="150.0">
