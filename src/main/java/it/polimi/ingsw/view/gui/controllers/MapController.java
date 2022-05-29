@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import java.awt.*;
 
 public class MapController {
+    public ImageView assistantCard;
     @FXML
     private Button quitButton;
     @FXML
@@ -33,7 +34,7 @@ public class MapController {
             stage.close();
         }
     }
-    public ImageView assistantCard;
+
 
     @FXML
     public void initialize() {
