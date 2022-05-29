@@ -4,6 +4,7 @@ import it.polimi.ingsw.observer.ViewObservable;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
@@ -12,10 +13,7 @@ public class GameSettingsSceneController extends ViewObservable implements Gener
     private TextField numPlayers;
 
     @FXML
-    private TextField towerColor;
-
-    @FXML
-    private TextField expertMode;
+    private CheckBox expertMode;
 
     @FXML
     private Button joinGameBtn;
@@ -28,15 +26,8 @@ public class GameSettingsSceneController extends ViewObservable implements Gener
     @FXML
     private void onJoinGame(Event event) {
         int nPlayers = Integer.parseInt(numPlayers.getText());
-        String tColor = towerColor.getText();
-        int eMode = Integer.parseInt(expertMode.getText());
-
-        boolean expert;
-
-        if(eMode == 1) expert = true;
-        else expert = false;
+        boolean expert = expertMode.isSelected();
 
         notifyObserver(viewObserver -> viewObserver.onUpdateNewGame(nPlayers, expert));
-        notifyObserver(viewObserver -> viewObserver.onUpdateTowerColor(tColor));
     }
 }

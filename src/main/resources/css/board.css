@@ -1,0 +1,44 @@
+@font-face {
+    font-family: 'Du Bellay';
+    src: url("../fonts/dubellay.ttf");
+}
+
+@font-face {
+    font-family: 'Du Bellay Italic';
+    src: url("../fonts/dubellit.ttf");
+}
+
+.island{
+    -fx-background-image: url("../assets/custom/island1.png");
+}
+
+ImageView:hover{
+    -fx-effect: dropshadow(gaussian, #f2e0d6, 20, 0.3, 0, 0);
+    -fx-cursor: hand;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+    -fx-scale-z: 1.2;
+}
+
+AnchorPane {
+    -fx-background-image: url("../assets/sky.jpg");
+    -fx-background-size: cover;
+    -fx-font-family: 'Du Bellay Italic';
+    -fx-text-fill: #fff;
+}
+
+.button:hover {
+    -fx-font-family: 'Du Bellay Italic';
+    -fx-effect: dropshadow(gaussian, #f2e0d6, 20, 0.3, 0, 0);
+    -fx-font-size: 16;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+}
+
+.button {
+    -fx-font-family: 'Du Bellay Italic';
+    -fx-font-size: 22;
+    -fx-text-fill: #fff;
+    -fx-alignment: center;
+    -fx-background-image: url("../images/button1.png");
+}

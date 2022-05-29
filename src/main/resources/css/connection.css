@@ -1,3 +1,27 @@
+AnchorPane {
+    -fx-background-image: url("../images/eriantys.jpg");
+    -fx-text-fill: #fff;
+    -fx-background-size: cover;
+    -fx-max-height: 720;
+    -fx-max-width: 1280;
+    -fx-background-attachment: fixed;
+    -fx-background-position: center;
+}
+
+ChoiceBox{
+    -fx-font-size: 14;
+    -fx-text-fill: #000;
+}
+
+Label {
+    -fx-font-size: 24;
+    -fx-text-fill: #fff;
+}
+
+TextField{
+    -fx-font-family: 'Du Bellay Italic';
+}
+
 .button {
     -fx-font-family: 'Du Bellay Italic';
     -fx-font-size: 22;

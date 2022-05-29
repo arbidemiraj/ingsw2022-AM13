@@ -32,6 +32,13 @@ public class ReducedBoard implements Serializable {
         islands.get(motherNature).setMotherNature(true);
     }
 
+    public Cloud[] getClouds() {
+        return clouds;
+    }
+
+    public ArrayList<ReducedIsland> getIslands() {
+        return islands;
+    }
 
     public int getMotherNature() {
         return motherNature;
@@ -88,4 +95,5 @@ public class ReducedBoard implements Serializable {
     public ReducedPlayerBoard getPlayerBoard() {
         return playerBoard;
     }
+
 }

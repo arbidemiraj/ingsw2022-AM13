@@ -11,12 +11,12 @@
    <children>
       <ImageView fx:id="island1type" fitHeight="400.0" fitWidth="484.0" layoutX="18.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Graphical_Assets/custom/island1.png" />
+            <Image url="@../assets/custom/island1.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="113.0" fitWidth="93.0" layoutX="377.0" layoutY="144.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Graphical_Assets/custom/greyTower.png" />
+            <Image url="@../assets/custom/greyTower.png" />
          </image>
       </ImageView>
       <GridPane id="students" alignment="CENTER" layoutX="77.0" layoutY="51.0" prefHeight="300.0" prefWidth="300.0">

@@ -209,8 +209,7 @@ public class CLI extends ViewObservable implements View {
     }
 
     public void showBoard() {
-        output.println("\n\n-----------------------------------\n" +
-                        "USERNAME: " +
+        output.println("\n\nUSERNAME: " +
                         reducedModel.getUsername() +
                         "\nCOLOR: " +
                         reducedModel.getColor() +
@@ -237,10 +236,6 @@ public class CLI extends ViewObservable implements View {
         }
 
         output.println(reducedModel.getReducedBoard().printIslands());
-    }
-
-    public void updateBoard(){
-
     }
 
     @Override
@@ -278,22 +273,29 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void askCardToPlay(List<AssistantCard> assistantCards, List<AssistantCard> cardsPlayed) {
+        int cardId;
 
-        output.println("\n\nThis is your deck -> " + printDeck(assistantCards));
-        output.print("\nThese are the cards that have been played this turn -> ");
-        for(AssistantCard assistantCard : cardsPlayed){
-            output.print(assistantCard.getValue() + "   ");
-        }
+        do {
+            output.println("\n\nThis is your deck -> " + printDeck(assistantCards));
+            output.print("\nThese are the cards that have been played this turn -> ");
+            for (AssistantCard assistantCard : cardsPlayed) {
+                output.print(assistantCard.getValue() + "   ");
+            }
 
-        output.print("\n");
-        output.println("Choose the card you want to play this turn! ");
-        output.println("[ insert the number of the card ]");
-        output.print("> ");
+            output.print("\n");
+            output.println("Choose the card you want to play this turn! ");
+            output.println("[ insert the number of the card ]");
+            output.print("> ");
 
 
-        int cardId = Integer.parseInt(readLine());
+            cardId = Integer.parseInt(readLine());
 
-        notifyObserver(viewObserver -> viewObserver.onUpdateCard(cardId));
+        }while(cardId < 0 || cardId > 10);
+
+
+        int finalCardId = cardId;
+
+        notifyObserver(viewObserver -> viewObserver.onUpdateCard(finalCardId));
         input.reset();
     }
 
@@ -316,27 +318,34 @@ public class CLI extends ViewObservable implements View {
     @Override
     public void askCloud() {
         output.println(reducedModel.getReducedBoard().printClouds());
-
-        output.println("Choose the cloud you want to get the students from");
-        output.println("[ insert the number of the cloud ]");
-        output.print("> ");
-
+        boolean isValid = false;
         int cloud = 0;
 
-        String read = readLine();
+        do {
+            output.println("Choose the cloud you want to get the students from");
+            output.println("[ insert the number of the cloud ]");
+            output.print("> ");
 
-        if(read == null){
-            activatingCharacter = true;
-        }
-        else{
-            cloud = input.nextInt();
+            String read = readLine();
 
-        }
-        int finalCloud = cloud;
+            if (read == null) {
+                activatingCharacter = true;
+            } else {
+                cloud = input.nextInt();
 
-        notifyObserver(viewObserver -> viewObserver.onUpdateCloud(finalCloud-1));
-        input.reset();
+            }
+
+            if (cloud == 1 || cloud == 2 || cloud == 3) isValid = true;
+
+        }while (!isValid) ;
+
+            int finalCloud = cloud;
+
+            notifyObserver(viewObserver -> viewObserver.onUpdateCloud(finalCloud - 1));
+            input.reset();
+
     }
+
 
     @Override
     public void askStudentToMove() {

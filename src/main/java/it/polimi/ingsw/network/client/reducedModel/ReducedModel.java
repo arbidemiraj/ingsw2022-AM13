@@ -1,11 +1,12 @@
 package it.polimi.ingsw.network.client.reducedModel;
 
+import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ReducedModel implements Serializable {
@@ -17,6 +18,8 @@ public class ReducedModel implements Serializable {
     private boolean isExpertMode;
     private int turnMaxSteps;
     private boolean isActive;
+    private List<AssistantCard> deck;
+    private List<AssistantCard> turnCards;
 
     public ReducedModel(String username, TowerColor color, ReducedCharacter[] reducedCharacters, boolean isExpertMode) {
         this.username = username;
@@ -30,6 +33,8 @@ public class ReducedModel implements Serializable {
         this.color = color;
         isExpertMode = false;
     }
+
+
 
     public boolean isExpertMode() {
         return isExpertMode;
@@ -85,4 +90,22 @@ public class ReducedModel implements Serializable {
 
         if(to.equals("HALL")) reducedBoard.getPlayerBoard().addHallStudent(student);
     }
+
+    public void setDeck(List<AssistantCard> assistantCards) {
+        this.deck = assistantCards;
+    }
+
+    public List<AssistantCard> getDeck() {
+        return deck;
+    }
+
+    public List<AssistantCard> getTurnCards() {
+        return turnCards;
+    }
+
+    public void setTurnCards(List<AssistantCard> turnCards) {
+        this.turnCards = turnCards;
+    }
+
+
 }

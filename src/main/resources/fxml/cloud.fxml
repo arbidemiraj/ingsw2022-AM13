@@ -7,27 +7,27 @@
    <children>
       <ImageView fitHeight="400.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Graphical_Assets/custom/cloud.png" />
+            <Image url="@../assets/custom/cloud.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="140.0" fitWidth="128.0" layoutX="72.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Graphical_Assets/custom/greenStud.png" />
+            <Image url="@../assets/custom/greenStud.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="140.0" fitWidth="128.0" layoutX="200.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Graphical_Assets/custom/redStud.png" />
+            <Image url="@../assets/custom/redStud.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="140.0" fitWidth="128.0" layoutX="200.0" layoutY="189.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Graphical_Assets/custom/pinkStud.png" />
+            <Image url="@../assets/custom/pinkStud.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="140.0" fitWidth="128.0" layoutX="72.0" layoutY="189.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../Graphical_Assets/custom/blueStud.png" />
+            <Image url="@../assets/custom/blueStud.png" />
          </image>
       </ImageView>
    </children>

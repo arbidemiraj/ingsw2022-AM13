@@ -6,21 +6,25 @@ import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.gui.controllers.SceneController;
+import it.polimi.ingsw.view.gui.controllers.BoardController;
+import it.polimi.ingsw.view.gui.controllers.LobbySceneController;
+import it.polimi.ingsw.view.gui.controllers.TowerColorController;
 import javafx.application.Platform;
 
 import java.util.*;
 
-public class Gui extends ViewObservable implements View {
+public class GUI extends ViewObservable implements View {
     private SceneController sceneController;
+    private BoardController controller;
+    private ReducedModel reducedModel;
 
-    public Gui(SceneController sceneController){
+    public GUI(SceneController sceneController){
         this.sceneController = sceneController;
     }
 
     @Override
     public void askCreateOrJoin() {
-        Platform.runLater(() -> sceneController.changeRoot(observers, "lobby_scene.fxml"));
+        Platform.runLater(() -> sceneController.changeRoot(observers, "choice_scene.fxml"));
     }
 
     @Override
@@ -30,11 +34,23 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void askGameSettings() {
-        Platform.runLater(() -> sceneController.changeRoot(observers, "gameSettings_scene.fxml"));
+        Platform.runLater(() -> sceneController.changeRoot(observers, "game_settings_scene.fxml"));
     }
 
     @Override
     public void askTowerColor(List<TowerColor> availableColors) {
+        TowerColorController towerColorController = new TowerColorController();
+        towerColorController.addAllObservers(observers);
+
+        List<String> colors = new ArrayList<>();
+
+        for(TowerColor towerColor : availableColors){
+            colors.add(towerColor.toString());
+        }
+
+        towerColorController.addColorOptions(colors);
+
+        Platform.runLater(() -> sceneController.changeRoot(towerColorController, "tower_color_scene.fxml"));
 
     }
 
@@ -55,12 +71,17 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void error(String error) {
-        Platform.runLater(() -> sceneController.changeRoot(observers, "gameSettings_scene.fxml"));
+        Platform.runLater(() -> sceneController.showAlert(error));
     }
 
     @Override
     public void showLobby(String lobby) {
+        LobbySceneController lobbySceneController = new LobbySceneController();
 
+        lobbySceneController.addAllObservers(observers);
+        lobbySceneController.addGames(lobby);
+
+        Platform.runLater(() -> sceneController.changeRoot(lobbySceneController, "lobby_scene.fxml"));
     }
 
     @Override
@@ -70,7 +91,8 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void askCardToPlay(List<AssistantCard> assistantCards, List<AssistantCard> cardsPlayed) {
-
+        reducedModel.setDeck(assistantCards);
+        reducedModel.setTurnCards(cardsPlayed);
     }
 
     @Override
@@ -95,22 +117,26 @@ public class Gui extends ViewObservable implements View {
 
     @Override
     public void startGame() {
+        controller = new BoardController();
+        controller.addAllObservers(observers);
+        controller.setReducedModel(reducedModel);
 
+        Platform.runLater(() -> sceneController.startGame(controller, "board.fxml"));
     }
 
     @Override
     public void showGenericMessage(String message) {
-
+        Platform.runLater(() -> sceneController.showGenericAlert(message));
     }
 
     @Override
     public void setBoard(ReducedBoard reducedBoard) {
-
+        this.reducedModel.setReducedBoard(reducedBoard);
     }
 
     @Override
     public void createModel(ReducedModel reducedModel) {
-
+        this.reducedModel = reducedModel;
     }
 
     @Override

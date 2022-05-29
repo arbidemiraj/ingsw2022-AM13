@@ -21,6 +21,10 @@
     -fx-background-image: url("../images/button1.png");
 }
 
+ChoiceBox{
+    -fx-font-size: 14;
+    -fx-text-fill: #000;
+}
 
 .button:hover {
     -fx-font-family: 'Du Bellay Italic';
@@ -28,4 +32,20 @@
     -fx-font-size: 16;
     -fx-alignment: center;
     -fx-cursor: hand;
+}
+
+AnchorPane {
+    -fx-background-image: url("../images/Eriantys.jpg");
+    -fx-text-fill: #fff;
+    -fx-background-size: cover;
+}
+
+Label {
+    -fx-font-size: 24;
+    -fx-text-fill: #fff;
+}
+
+
+.text {
+    -fx-font-family: 'Du Bellay Italic';
 }

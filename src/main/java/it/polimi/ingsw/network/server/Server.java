@@ -97,7 +97,7 @@ public class Server {
      * Handles the disconnection of a client.
      */
     public void disconnect(ClientHandler clientHandler) {
-        lobbyHandler.disconnect(getUsernameFromClientHandler(clientHandler));
+        if(lobbyHandler.getUsernameQueue().contains(clientHandlerMap.get(clientHandler))) lobbyHandler.disconnect(getUsernameFromClientHandler(clientHandler));
 
         clientHandlerMap.remove(clientHandler);
 

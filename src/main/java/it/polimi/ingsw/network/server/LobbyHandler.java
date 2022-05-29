@@ -76,6 +76,6 @@ public class LobbyHandler {
     }
 
     public void disconnect(String username) {
-        games.get(getGameIdFromUsername(username)).endGame(username);
+        if(games.get(getGameIdFromUsername(username)).isStarted()) games.get(getGameIdFromUsername(username)).endGame(username);
     }
 }

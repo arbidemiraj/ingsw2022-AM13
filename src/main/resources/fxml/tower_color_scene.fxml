@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="selectBtn" layoutX="580.0" layoutY="481.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="160.0" text="Select" />
+      <ChoiceBox fx:id="towerColors" layoutX="555.0" layoutY="386.0" prefHeight="54.0" prefWidth="212.0" styleClass="choiceBox" />
+   </children>
+    <stylesheets>
+        <URL value="@../css/global.css" />
+        <URL value="@../css/connection.css" />
+    </stylesheets>
+</AnchorPane>

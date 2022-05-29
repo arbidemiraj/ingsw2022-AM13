@@ -71,6 +71,7 @@ public class ClientController implements ViewObserver, Observer {
 
             case TOWER_COLOR_ASK -> {
                 AskTowerColor askTowerColor = (AskTowerColor) message;
+
                 taskQueue.execute(() -> view.askTowerColor(askTowerColor.getAvailableColors()));
             }
 

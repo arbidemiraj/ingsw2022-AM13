@@ -211,6 +211,8 @@ public class GameController implements Serializable, Observer {
             if(gameHandler != null){
                 gameHandler.sendMessage(new GenericMessage("You are now the owner of the " + model.getBoard().getMotherNature() + " island", GenericType.ISLAND_OWNER), islandOwner);
                 gameHandler.sendMessageToAllExcept(new GenericMessage(islandOwner + " is now the owner of the " + model.getBoard().getMotherNature() + " island", GenericType.ISLAND_OWNER), islandOwner);
+
+                updateReducedBoard();
             }
 
         }
@@ -400,7 +402,16 @@ public class GameController implements Serializable, Observer {
 
     @Override
     public void update(Message message) {
-
+        switch (message.getMessageType()){
+            case GENERIC -> {
+                GenericMessage genericMessage = (GenericMessage) message;
+                switch (genericMessage.getGenericType()){
+                    case MERGE -> {
+                        updateReducedBoard();
+                    }
+                }
+            }
+        }
     }
 
     public void startGame() {
@@ -448,15 +459,15 @@ public class GameController implements Serializable, Observer {
         int[][] numStudents = new int[12][5];
         ArrayList<ReducedIsland> islands = new ArrayList<>();
 
-        for(int i = 0; i < 12; i ++){
-            islands.add(new ReducedIsland(numStudents[i], owner[i], i, false));
-        }
-
         for (int i = 0; i < 12; i++) {
             numStudents[i] = model.getBoard().getIslands().get(i).getNumStudents();
             if (model.getBoard().getIslands().get(i).getOwner() != null) {
                 owner[i] = model.getBoard().getIslands().get(i).getOwner().getUsername();
             } else owner[i] = "No owner";
+        }
+
+        for(int i = 0; i < 12; i ++){
+            islands.add(new ReducedIsland(numStudents[i], owner[i], i, false));
         }
 
         for (Player player : model.getPlayers()) {
