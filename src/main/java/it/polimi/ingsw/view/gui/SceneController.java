@@ -57,7 +57,7 @@ public class SceneController extends ViewObservable {
             controller = loader.getController();
             ((ViewObservable) controller).addAllObservers(observers);
 
-            currentController = (GenericSceneController) controller;
+            currentController = controller;
             Scene scene = new Scene(root);
             currentScene = scene;
 
@@ -75,8 +75,10 @@ public class SceneController extends ViewObservable {
             currentController = genericSceneController;
 
             Parent root = loader.load();
+            root.setId("pane");
             Scene scene = new Scene(root);
             currentScene = scene;
+
 
         } catch (IOException e) {
             Client.LOGGER.severe(e.getMessage());
@@ -88,6 +90,7 @@ public class SceneController extends ViewObservable {
     public void showAlert(String message){
         main.showAlert(message);
     }
+
 
     public void startGame(BoardController controller, String fxml) {
         try {

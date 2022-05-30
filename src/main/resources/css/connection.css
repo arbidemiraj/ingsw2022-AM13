@@ -2,9 +2,6 @@ AnchorPane {
     -fx-background-image: url("../images/eriantys.jpg");
     -fx-text-fill: #fff;
     -fx-background-size: cover;
-    -fx-max-height: 720;
-    -fx-max-width: 1280;
-    -fx-background-attachment: fixed;
     -fx-background-position: center;
 }
 

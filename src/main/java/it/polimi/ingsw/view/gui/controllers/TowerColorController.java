@@ -16,7 +16,7 @@ public class TowerColorController extends ViewObservable implements GenericScene
     @FXML
     private Button selectBtn;
 
-    List<String> col = new ArrayList<>();
+    private List<String> col = new ArrayList<>();
 
     @FXML
     private ChoiceBox<String> towerColors;

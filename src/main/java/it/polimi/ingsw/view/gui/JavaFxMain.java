@@ -36,17 +36,15 @@ public class JavaFxMain extends Application {
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setWidth(1280);
-        stage.setHeight(720);
         stage.setResizable(false);
         stage.setTitle("Eriantys");
         stage.show();
     }
 
     public void changeScene(Scene scene){
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
-
     }
 
 
@@ -55,11 +53,10 @@ public class JavaFxMain extends Application {
 
         alert.setContentText(message);
         alert.showAndWait();
-
     }
 
     public void startGame(Scene scene) {
-        stage.setFullScreen(true);
+        stage.setFullScreen(false);
         stage.setWidth(1280);
         stage.setHeight(720);
         stage.setResizable(true);

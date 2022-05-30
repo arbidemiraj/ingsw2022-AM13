@@ -61,6 +61,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     }
 
     public void initIslands(){
+        int pos = 0;
         for(int i = 0; i < 5; i ++){
             islandsGridPane.add(new ImageView(new Image(String.valueOf(getClass().getResource("/assets/custom/island1.png")))),i ,0);
         }
