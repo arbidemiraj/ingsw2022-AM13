@@ -8,6 +8,7 @@ import it.polimi.ingsw.network.message.MessageType;
 
 import java.io.Serial;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ReducedModelMessage extends Message {
@@ -16,12 +17,12 @@ public class ReducedModelMessage extends Message {
     private static final long serialVersionUID = -5661595295706856012L;
     private ReducedModel reducedModel;
 
-    public ReducedModelMessage(String username, TowerColor color, ReducedCharacter[] reducedCharacters, boolean isExpertMode) {
+    public ReducedModelMessage(List<String> username, TowerColor color, ReducedCharacter[] reducedCharacters, boolean isExpertMode) {
         super("Server", MessageType.REDUCED_MODEL);
         this.reducedModel = new ReducedModel(username,color, reducedCharacters, isExpertMode);
     }
 
-    public ReducedModelMessage(String username, TowerColor color) {
+    public ReducedModelMessage(List<String> username, TowerColor color) {
         super("Server", MessageType.REDUCED_MODEL);
         this.reducedModel = new ReducedModel(username,color);
     }

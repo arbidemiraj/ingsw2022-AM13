@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ReducedModel implements Serializable {
-    private String username;
+    private List<String> username;
     private ReducedBoard reducedBoard;
     private TowerColor color;
     private ReducedCharacter[] reducedCharacters;
@@ -21,14 +21,14 @@ public class ReducedModel implements Serializable {
     private List<AssistantCard> deck;
     private List<AssistantCard> turnCards;
 
-    public ReducedModel(String username, TowerColor color, ReducedCharacter[] reducedCharacters, boolean isExpertMode) {
+    public ReducedModel(List<String> username, TowerColor color, ReducedCharacter[] reducedCharacters, boolean isExpertMode) {
         this.username = username;
         this.color = color;
         this.reducedCharacters = reducedCharacters;
         this.isExpertMode = isExpertMode;
     }
 
-    public ReducedModel(String username, TowerColor color){
+    public ReducedModel(List<String> username, TowerColor color){
         this.username = username;
         this.color = color;
         isExpertMode = false;
@@ -48,7 +48,7 @@ public class ReducedModel implements Serializable {
         this.currentPlayer = currentPlayer;
     }
 
-    public String getUsername() {
+    public List<String> getUsername() {
         return username;
     }
 

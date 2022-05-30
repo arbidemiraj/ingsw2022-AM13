@@ -6,24 +6,40 @@ import it.polimi.ingsw.view.cli.Color;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ReducedIsland implements Serializable {
     @Serial
     private static final long serialVersionUID = -4207476138481288015L;
-    private int[] numStudents;
+    private List<Student> students;
     private int id;
     private String owner;
     private ColorIntMap studentColorMap = new ColorIntMap();
     private HashMap<Student, Integer> studentColor = studentColorMap.getMap();
     private boolean isMotherNature;
     private boolean isNoEntryTile;
+    private int[] numStudents;
 
-    public ReducedIsland(int numStudents[], String owner, int id, boolean isNoEntryTile) {
-        this.numStudents = numStudents;
+    public ReducedIsland(List<Student> students, String owner, int id, boolean isNoEntryTile) {
+        this.students = students;
         this.owner = owner;
         this.id = id;
         this.isNoEntryTile = isNoEntryTile;
+
+        numStudents = new int[]{0, 0, 0, 0, 0};
+
+        setNumStudents();
+    }
+
+    public void setNumStudents(){
+        ColorIntMap studentColorMap = new ColorIntMap();
+        HashMap<Student, Integer> studentColor = studentColorMap.getMap();
+
+        for (Student student : students) {
+            numStudents[studentColor.get(student)]++;
+        }
     }
 
     public String getOwner() {
@@ -31,11 +47,11 @@ public class ReducedIsland implements Serializable {
     }
 
     public void addStudent(Student color){
-        numStudents[studentColor.get(color)]++;
+       students.add(color);
     }
 
     public void removeStudent(Student color){
-        numStudents[studentColor.get(color)]--;
+        students.remove(color);
     }
 
     public void setMotherNature(boolean motherNature) {
@@ -46,8 +62,8 @@ public class ReducedIsland implements Serializable {
         return isMotherNature;
     }
 
-    public int[] getNumStudents() {
-        return numStudents;
+    public List<Student> getStudents() {
+        return students;
     }
 
     public String printIsland(){
@@ -72,5 +88,9 @@ public class ReducedIsland implements Serializable {
                         "\n ------- \n";
 
         return print;
+    }
+
+    public void setStudents(ArrayList<Student> students) {
+        this.students = students;
     }
 }

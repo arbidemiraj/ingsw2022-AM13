@@ -431,12 +431,12 @@ public class GameController implements Serializable, Observer {
             }
 
             for(Player player : model.getPlayers()){
-                gameHandler.sendMessage(new ReducedModelMessage(player.getUsername(), player.getTowerColor(), reducedCharacters, model.isExpertMode()), player.getUsername());
+                gameHandler.sendMessage(new ReducedModelMessage(model.getUsernames(), player.getTowerColor(), reducedCharacters, model.isExpertMode()), player.getUsername());
             }
         }
         else{
             for(Player player : model.getPlayers()){
-                gameHandler.sendMessage(new ReducedModelMessage(player.getUsername(), player.getTowerColor()), player.getUsername());
+                gameHandler.sendMessage(new ReducedModelMessage(model.getUsernames(), player.getTowerColor()), player.getUsername());
             }
         }
 
@@ -456,18 +456,15 @@ public class GameController implements Serializable, Observer {
 
     public void updateReducedBoard() {
         String[] owner = new String[12];
-        int[][] numStudents = new int[12][5];
+        ArrayList<Student> students = new ArrayList<>();
         ArrayList<ReducedIsland> islands = new ArrayList<>();
 
         for (int i = 0; i < 12; i++) {
-            numStudents[i] = model.getBoard().getIslands().get(i).getNumStudents();
+            students = model.getBoard().getIslands().get(i).getStudents();
             if (model.getBoard().getIslands().get(i).getOwner() != null) {
                 owner[i] = model.getBoard().getIslands().get(i).getOwner().getUsername();
             } else owner[i] = "No owner";
-        }
-
-        for(int i = 0; i < 12; i ++){
-            islands.add(new ReducedIsland(numStudents[i], owner[i], i, false));
+            islands.add(new ReducedIsland(students, owner[i], i, false));
         }
 
         for (Player player : model.getPlayers()) {
@@ -482,7 +479,7 @@ public class GameController implements Serializable, Observer {
             ReducedPlayerBoard reducedPlayerBoard = new ReducedPlayerBoard(entrance, hall);
 
             if(gameHandler != null){
-                gameHandler.sendMessage(new BoardMessage(numStudents, model.getBoard().getClouds(), owner, reducedPlayerBoard, model.getBoard().getMotherNature(), islands), player.getUsername());
+                gameHandler.sendMessage(new BoardMessage(model.getBoard().getClouds(), owner, reducedPlayerBoard, model.getBoard().getMotherNature(), islands), player.getUsername());
             }
         }
     }

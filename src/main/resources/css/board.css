@@ -12,6 +12,12 @@
     -fx-background-image: url("../assets/custom/island1.png");
 }
 
+Label{
+    -fx-background-image: none;
+    -fx-text-fill: #fff;
+    -fx-font-size: 20;
+}
+
 ImageView:hover{
     -fx-effect: dropshadow(gaussian, #f2e0d6, 20, 0.3, 0, 0);
     -fx-cursor: hand;

@@ -7,6 +7,7 @@ import it.polimi.ingsw.view.cli.Color;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ReducedPlayerBoard implements Serializable {
@@ -18,10 +19,27 @@ public class ReducedPlayerBoard implements Serializable {
     private HashMap<Integer, Student> studentColor = studentColorMap.getMap();
     private ColorIntMap intColorMap = new ColorIntMap();
     private HashMap<Student, Integer> intColor = intColorMap.getMap();
+    private ArrayList<Student> students = new ArrayList<>();
+
 
     public ReducedPlayerBoard(int[] entranceStudents, int[] hallStudents) {
         this.entranceStudents = entranceStudents;
         this.hallStudents = hallStudents;
+
+        for(int i = 0; i < 5; i++){
+            for(int j = 0; j < entranceStudents[i]; j++){
+                students.add(studentColor.get(i));
+            }
+        }
+
+    }
+
+    public ArrayList<Student> getStudents() {
+        return students;
+    }
+
+    public int[] getHallStudents() {
+        return hallStudents;
     }
 
     public void addEntranceStudent(String student){

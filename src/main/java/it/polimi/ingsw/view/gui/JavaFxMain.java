@@ -20,6 +20,8 @@ public class JavaFxMain extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        System.setProperty("prism.allowhidpi", "false");
+
         sceneController = new SceneController(this);
         this.stage = stage;
         GUI view = new GUI(sceneController);
@@ -56,19 +58,13 @@ public class JavaFxMain extends Application {
     }
 
     public void startGame(Scene scene) {
-        stage.setFullScreen(false);
-        stage.setWidth(1280);
-        stage.setHeight(720);
         stage.setResizable(true);
+        stage.setWidth(1920);
+        stage.setHeight(1080);
         stage.setScene(scene);
         stage.show();
     }
 
     public void showGenericAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-
-        alert.setContentText(message);
-
-        alert.showAndWait();
     }
 }

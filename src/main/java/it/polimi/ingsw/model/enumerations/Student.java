@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model.enumerations;
 
-public enum Student {
+import java.io.Serializable;
+
+public enum Student implements Serializable {
 	YELLOW,
 	BLUE,
 	GREEN,
 	PINK,
-	RED;
+	RED
 }

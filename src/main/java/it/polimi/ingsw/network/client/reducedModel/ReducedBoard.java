@@ -1,8 +1,6 @@
 package it.polimi.ingsw.network.client.reducedModel;
 
 import it.polimi.ingsw.model.Cloud;
-import it.polimi.ingsw.model.GameBoard;
-import it.polimi.ingsw.model.PlayerBoard;
 import it.polimi.ingsw.model.enumerations.Student;
 
 import java.io.Serial;
@@ -14,14 +12,12 @@ public class ReducedBoard implements Serializable {
     private static final long serialVersionUID = -6983972997025348137L;
     private Cloud[] clouds;
     private int motherNature;
-    private int[][] numStudents;
     private String[] owner;
     private ArrayList<ReducedIsland> islands;
     private ReducedPlayerBoard playerBoard;
 
-    public ReducedBoard(int[][] numStudents, Cloud[] clouds, String[] owner, ReducedPlayerBoard reducedPlayerBoard, int motherNature, ArrayList<ReducedIsland> islands) {
+    public ReducedBoard(Cloud[] clouds, String[] owner, ReducedPlayerBoard reducedPlayerBoard, int motherNature, ArrayList<ReducedIsland> islands) {
         this.clouds = clouds;
-        this.numStudents = numStudents;
         this.owner = owner;
         this.playerBoard = reducedPlayerBoard;
 
