@@ -111,7 +111,7 @@ public class GUI extends ViewObservable implements View {
 
     @Override
     public void askStudentToMove() {
-
+        controller.askStudent();
     }
 
     @Override
@@ -125,12 +125,12 @@ public class GUI extends ViewObservable implements View {
     }
 
     @Override
-    public void startGame(String firstPlayer) {
+    public void startGame(String firstPlayer, ReducedModel reducedModel) {
         controller = new BoardController();
+        this.reducedModel = reducedModel;
         controller.addAllObservers(observers);
         controller.setReducedModel(reducedModel);
         controller.setFirstPlayer(playerUsername, firstPlayer);
-        this.firstPlayer = firstPlayer;
 
         Platform.runLater(() -> sceneController.startGame(controller, "board.fxml"));
     }

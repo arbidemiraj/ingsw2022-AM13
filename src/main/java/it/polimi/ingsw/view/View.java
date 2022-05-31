@@ -39,7 +39,7 @@ public interface View {
 
     void connectionLost();
 
-    void startGame(String firstPlayer);
+    void startGame(String firstPlayer, ReducedModel reducedModel);
 
     void showGenericMessage(String message);
 

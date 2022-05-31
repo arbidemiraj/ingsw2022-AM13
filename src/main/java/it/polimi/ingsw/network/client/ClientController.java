@@ -72,7 +72,7 @@ public class ClientController implements ViewObserver, Observer {
             case START_GAME -> {
                 StartGame msg = (StartGame) message;
 
-                taskQueue.execute(() -> view.startGame(msg.getFirstPlayer()));
+                taskQueue.execute(() -> view.startGame(msg.getFirstPlayer(), msg.getReducedModel()));
             }
 
             case TOWER_COLOR_ASK -> {

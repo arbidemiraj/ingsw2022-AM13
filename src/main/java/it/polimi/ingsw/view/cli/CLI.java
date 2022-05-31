@@ -418,22 +418,24 @@ public class CLI extends ViewObservable implements View {
 
     }
 
-    public void clearCli(){
-        output.flush();
-    }
-
-    public void printLine(){
-        output.println("\n-----------------------------------------------------------");
-    }
-
     @Override
-    public void startGame(String firstPlayer) {
+    public void startGame(String firstPlayer, ReducedModel reducedModel) {
+        this.reducedModel = reducedModel;
+
         clearCli();
 
         output.println("\nThe game is starting...\n\n");
         printLine();
 
         showBoard();
+    }
+
+    public void clearCli(){
+        output.flush();
+    }
+
+    public void printLine(){
+        output.println("\n-----------------------------------------------------------");
     }
 
     @Override

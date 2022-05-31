@@ -5,10 +5,7 @@ import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.maps.ColorIntMap;
-import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
-import it.polimi.ingsw.network.client.reducedModel.ReducedCharacter;
-import it.polimi.ingsw.network.client.reducedModel.ReducedIsland;
-import it.polimi.ingsw.network.client.reducedModel.ReducedPlayerBoard;
+import it.polimi.ingsw.network.client.reducedModel.*;
 import it.polimi.ingsw.network.message.*;
 import it.polimi.ingsw.network.message.clientmsg.*;
 import it.polimi.ingsw.network.message.servermsg.*;
@@ -411,6 +408,8 @@ public class GameController implements Serializable, Observer {
     }
 
     public void startGame() {
+        ReducedModel reducedModel = null;
+        
         turnController.firstPlayer();
         turnController.firstUsernameQueue();
 
@@ -427,30 +426,18 @@ public class GameController implements Serializable, Observer {
             }
 
             for(Player player : model.getPlayers()){
-                gameHandler.sendMessage(new ReducedModelMessage(model.getUsernames(), player.getTowerColor(), reducedCharacters, model.isExpertMode()), player.getUsername());
+                reducedModel = new ReducedModel(model.getUsernames(), player.getTowerColor(), reducedCharacters, model.isExpertMode());
             }
         }
         else{
             for(Player player : model.getPlayers()){
-                gameHandler.sendMessage(new ReducedModelMessage(model.getUsernames(), player.getTowerColor()), player.getUsername());
+                reducedModel = new ReducedModel(model.getUsernames(), player.getTowerColor());
             }
         }
 
+        gameHandler.sendMessageToAll(new StartGame(turnController.getCurrentPlayerUsername(), reducedModel));
+
         updateReducedBoard();
-
-        try {
-            TimeUnit.MILLISECONDS.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        gameHandler.sendMessageToAll(new StartGame(turnController.getCurrentPlayerUsername()));
-
-        try {
-            TimeUnit.MILLISECONDS.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         gameHandler.sendMessage(new AskCard(turnController.getCurrentPlayer().getDeck(), turnController.getTurnCardsPlayed()), turnController.getCurrentPlayerUsername());
 

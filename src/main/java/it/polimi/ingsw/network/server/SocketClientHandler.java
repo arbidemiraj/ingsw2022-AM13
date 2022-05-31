@@ -60,7 +60,7 @@ public class SocketClientHandler implements ClientHandler, Runnable {
 
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                synchronized (inputLock) {
+
                     Message message = (Message) input.readObject();
                     SuccessMessage successMessage = new SuccessMessage(SuccessType.CONNECTED);
 
@@ -92,7 +92,7 @@ public class SocketClientHandler implements ClientHandler, Runnable {
                             Server.LOGGER.info(() -> "Received: " + message);
                             socketServer.MessageReceived(message);
                         }
-                    }
+
                 }
             }
         } catch (ClassCastException | ClassNotFoundException e) {

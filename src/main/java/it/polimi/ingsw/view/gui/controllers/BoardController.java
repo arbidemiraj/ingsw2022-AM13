@@ -90,22 +90,6 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     public void initialize() {
         button.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onButtonClick);
 
-        deck.setOnMouseClicked(e -> {
-            Node node = (Node) e.getTarget();
-            int column = GridPane.getColumnIndex(node);
-            playCard(column);
-        });
-
-    }
-
-    private void playCard(int id) {
-        new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateCard((id + 1)))).start();
-    }
-
-
-    @FXML
-    private void onButtonClick(Event event) {
-
         if(!reducedModel.isExpertMode()){
             coinText.setText("");
             characters.setText("");
@@ -152,6 +136,22 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         cards = new ArrayList<>();
 
         button.setDisable(true);
+
+        deck.setOnMouseClicked(e -> {
+            Node node = (Node) e.getTarget();
+            int column = GridPane.getColumnIndex(node);
+            playCard(column);
+        });
+
+    }
+
+    private void playCard(int id) {
+        new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateCard((id + 1)))).start();
+    }
+
+
+    @FXML
+    private void onButtonClick(Event event) {
     }
 
     private void showPlayerBoard() {
@@ -269,4 +269,17 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     }
 
+    public void askStudent() {
+        turnInfo.setText("Select a student from entrance");
+
+        playerBoardEntrance.setOnMouseClicked(e -> {
+            Node node = (Node) e.getTarget();
+
+            ImageView student = (ImageView) node;
+            student.getImage().getUrl();
+            int row = GridPane.getRowIndex(playerBoardEntrance);
+            int column = GridPane.getColumnIndex(playerBoardEntrance);
+        });
+
+    }
 }
