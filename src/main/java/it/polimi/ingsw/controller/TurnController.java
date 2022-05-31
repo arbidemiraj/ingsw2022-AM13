@@ -44,6 +44,7 @@ public class TurnController {
         gameController.checkBag();
         game.getBoard().fillClouds();
         gameController.updateReducedBoard();
+
         numTurn++;
 
         if(game.isExpertMode()) game.getActivatedCharacters().clear();
@@ -52,7 +53,7 @@ public class TurnController {
 
         gameHandler.sendMessageToAllExcept(new GenericMessage(currentPlayer + " is playing his turn! wait...\n", GenericType.GENERIC), currentPlayer);
         gameHandler.sendMessage(new GenericMessage("Clouds have been filled! \n", GenericType.GENERIC), currentPlayer);
-        gameHandler.sendMessage(new AskCard(getCurrentPlayer().getDeck(), turnCardsPlayed), currentPlayer);
+        gameHandler.sendMessage(new AskCard(getCurrentPlayer().getDeck(), turnCardsPlayed), usernameQueue.get(0));
     }
 
     public void actionPhase(){
@@ -79,17 +80,19 @@ public class TurnController {
     /**
      * Used on each phase to advance to another player turn
      */
-    public void nextPlayer() {
+    public boolean nextPlayer() {
         gameController.updateReducedBoard();
         int currentPlayerIndex = usernameQueue.indexOf(currentPlayer);
 
         if((currentPlayerIndex + 1) < usernameQueue.size()) currentPlayerIndex++;
-        else currentPlayerIndex = 0;
+        else return false;
 
         currentPlayer = usernameQueue.get(currentPlayerIndex);
         game.setCurrentPlayer(usernameQueue.indexOf(currentPlayer));
 
         if(gameHandler != null) gameHandler.sendMessageToAllExcept(new GenericMessage(currentPlayer + " is playing his turn! wait...\n", GenericType.GENERIC), currentPlayer);
+
+        return true;
     }
 
 

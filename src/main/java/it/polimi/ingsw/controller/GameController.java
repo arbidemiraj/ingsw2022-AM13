@@ -269,8 +269,8 @@ public class GameController implements Serializable, Observer {
 
                 playerTurn++;
 
-                if(playerTurn < model.getNumPlayers()){
-                    turnController.nextPlayer();
+                if(turnController.nextPlayer()){
+                    movenStudents = 0;
                     gameHandler.sendMessage(new AskStudent(), turnController.getCurrentPlayerUsername());
                 }else{
                     playerTurn = 0;
@@ -296,21 +296,9 @@ public class GameController implements Serializable, Observer {
             case MOVE_STUDENT -> {
                 MoveStudentMessage studentMessage = (MoveStudentMessage) message;
                 parseParametersStudent(studentMessage);
-
-
-                if(movenStudents < 3){
-                    gameHandler.sendMessage(new AskStudent(), turnController.getCurrentPlayerUsername());
-                }
-                else {
-                    updateReducedBoard();
-
-                    gameHandler.sendMessage(new AskMotherNature(), turnController.getCurrentPlayerUsername());
-                }
             }
 
             case PLAY_CARD -> {
-                if(playerTurn == 0) turnController.getTurnCardsPlayed().clear();
-
                 PlayCardMessage msg = (PlayCardMessage) message;
                 AssistantCard assistantCard = model.getPlayerByUsername(msg.getUsername()).getAssistantCardById(msg.getAssistantCard());
 
@@ -321,13 +309,12 @@ public class GameController implements Serializable, Observer {
                     gameHandler.sendMessage(new AskCard(turnController.getCurrentPlayer().getDeck(), turnController.getTurnCardsPlayed()), turnController.getCurrentPlayerUsername());
                 }
 
-                playerTurn++;
-
-                if(playerTurn < model.getNumPlayers()){
-                    turnController.nextPlayer();
+                if(turnController.nextPlayer()){
                     gameHandler.sendMessage(new AskCard(turnController.getCurrentPlayer().getDeck(), turnController.getTurnCardsPlayed()), turnController.getCurrentPlayerUsername());
-                }else{
+                }
+                else{
                     playerTurn = 0;
+                    movenStudents = 0;
                     turnController.actionPhase();
                 }
             }
@@ -380,6 +367,15 @@ public class GameController implements Serializable, Observer {
                 moveStudent(from, student, to, checkProf);
 
                 movenStudents++;
+
+                if(movenStudents < 3){
+                    gameHandler.sendMessage(new AskStudent(), turnController.getCurrentPlayerUsername());
+                }
+                else {
+                    updateReducedBoard();
+
+                    gameHandler.sendMessage(new AskMotherNature(), turnController.getCurrentPlayerUsername());
+                }
 
                 gameHandler.sendMessage(new SuccessMessage(SuccessType.MOVE), turnController.getCurrentPlayerUsername());
             } catch (InvalidMoveException e) {
@@ -448,7 +444,13 @@ public class GameController implements Serializable, Observer {
             e.printStackTrace();
         }
 
-        gameHandler.sendMessageToAll(new StartGame());
+        gameHandler.sendMessageToAll(new StartGame(turnController.getCurrentPlayerUsername()));
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         gameHandler.sendMessage(new AskCard(turnController.getCurrentPlayer().getDeck(), turnController.getTurnCardsPlayed()), turnController.getCurrentPlayerUsername());
 
@@ -456,7 +458,7 @@ public class GameController implements Serializable, Observer {
 
     public void updateReducedBoard() {
         String[] owner = new String[12];
-        ArrayList<Student> students = new ArrayList<>();
+        ArrayList<Student> students;
         ArrayList<ReducedIsland> islands = new ArrayList<>();
 
         for (int i = 0; i < 12; i++) {
@@ -476,7 +478,7 @@ public class GameController implements Serializable, Observer {
                 hall[i] = player.getPlayerBoard().getDinnerRoom()[i].getNumStudents();
             }
 
-            ReducedPlayerBoard reducedPlayerBoard = new ReducedPlayerBoard(entrance, hall);
+            ReducedPlayerBoard reducedPlayerBoard = new ReducedPlayerBoard(entrance, hall, player.getNumTowers());
 
             if(gameHandler != null){
                 gameHandler.sendMessage(new BoardMessage(model.getBoard().getClouds(), owner, reducedPlayerBoard, model.getBoard().getMotherNature(), islands), player.getUsername());

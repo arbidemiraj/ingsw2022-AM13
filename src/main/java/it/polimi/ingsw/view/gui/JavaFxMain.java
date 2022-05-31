@@ -59,6 +59,7 @@ public class JavaFxMain extends Application {
 
     public void startGame(Scene scene) {
         stage.setResizable(true);
+        stage.setFullScreen(true);
         stage.setWidth(1920);
         stage.setHeight(1080);
         stage.setScene(scene);

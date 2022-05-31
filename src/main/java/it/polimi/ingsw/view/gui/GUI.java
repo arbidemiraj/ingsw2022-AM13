@@ -14,9 +14,11 @@ import javafx.application.Platform;
 import java.util.*;
 
 public class GUI extends ViewObservable implements View {
-    private SceneController sceneController;
+    private final SceneController sceneController;
     private BoardController controller;
     private ReducedModel reducedModel;
+    private String playerUsername;
+    private String firstPlayer;
 
     public GUI(SceneController sceneController){
         this.sceneController = sceneController;
@@ -91,8 +93,15 @@ public class GUI extends ViewObservable implements View {
 
     @Override
     public void askCardToPlay(List<AssistantCard> assistantCards, List<AssistantCard> cardsPlayed) {
+        if(playerUsername == firstPlayer){
+            Platform.runLater(() -> controller.showGenericText("You are the first player! Play an assistant card"));
+        } else {
+            Platform.runLater(() -> controller.showGenericText("Wait... other players are playing their turn"));
+        }
+
         reducedModel.setDeck(assistantCards);
         reducedModel.setTurnCards(cardsPlayed);
+
     }
 
     @Override
@@ -116,10 +125,12 @@ public class GUI extends ViewObservable implements View {
     }
 
     @Override
-    public void startGame() {
+    public void startGame(String firstPlayer) {
         controller = new BoardController();
         controller.addAllObservers(observers);
         controller.setReducedModel(reducedModel);
+        controller.setFirstPlayer(playerUsername, firstPlayer);
+        this.firstPlayer = firstPlayer;
 
         Platform.runLater(() -> sceneController.startGame(controller, "board.fxml"));
     }
@@ -151,6 +162,16 @@ public class GUI extends ViewObservable implements View {
 
     @Override
     public void activateCharacter(int id) {
+
+    }
+
+    @Override
+    public void setUsername(String username) {
+        this.playerUsername = username;
+    }
+
+    @Override
+    public void mergeIsland() {
 
     }
 }

@@ -15,6 +15,7 @@ public class ReducedPlayerBoard implements Serializable {
     private static final long serialVersionUID = -7603520844991327878L;
     private int[] entranceStudents;
     private int[] hallStudents;
+    private int numTowers;
     private IntColorMap studentColorMap = new IntColorMap();
     private HashMap<Integer, Student> studentColor = studentColorMap.getMap();
     private ColorIntMap intColorMap = new ColorIntMap();
@@ -22,9 +23,10 @@ public class ReducedPlayerBoard implements Serializable {
     private ArrayList<Student> students = new ArrayList<>();
 
 
-    public ReducedPlayerBoard(int[] entranceStudents, int[] hallStudents) {
+    public ReducedPlayerBoard(int[] entranceStudents, int[] hallStudents, int numTowers) {
         this.entranceStudents = entranceStudents;
         this.hallStudents = hallStudents;
+        this.numTowers = numTowers;
 
         for(int i = 0; i < 5; i++){
             for(int j = 0; j < entranceStudents[i]; j++){
@@ -32,6 +34,14 @@ public class ReducedPlayerBoard implements Serializable {
             }
         }
 
+    }
+
+    public int getNumTowers() {
+        return numTowers;
+    }
+
+    public void setNumTowers(int numTowers) {
+        this.numTowers = numTowers;
     }
 
     public ArrayList<Student> getStudents() {

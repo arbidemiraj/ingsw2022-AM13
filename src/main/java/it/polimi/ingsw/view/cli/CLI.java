@@ -26,6 +26,7 @@ public class CLI extends ViewObservable implements View {
     private ReducedModel reducedModel;
 
     private final String INV_INP = "Invalid input! ";
+    private String playerUsername;
 
     public CLI(){
         output = System.out;
@@ -426,7 +427,7 @@ public class CLI extends ViewObservable implements View {
     }
 
     @Override
-    public void startGame() {
+    public void startGame(String firstPlayer) {
         clearCli();
 
         output.println("\nThe game is starting...\n\n");
@@ -441,6 +442,8 @@ public class CLI extends ViewObservable implements View {
     }
 
     public String readLine(){
+        input.reset();
+
         String read;
 
         read = input.nextLine();
@@ -507,6 +510,16 @@ public class CLI extends ViewObservable implements View {
     @Override
     public void activateCharacter(int id) {
         reducedModel.activateCharacter(id);
+    }
+
+    @Override
+    public void setUsername(String username) {
+        this.playerUsername = username;
+    }
+
+    @Override
+    public void mergeIsland() {
+
     }
 
     private void moveMotherNature(int steps) {

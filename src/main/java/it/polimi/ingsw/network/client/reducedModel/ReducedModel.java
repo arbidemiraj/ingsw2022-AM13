@@ -20,12 +20,14 @@ public class ReducedModel implements Serializable {
     private boolean isActive;
     private List<AssistantCard> deck;
     private List<AssistantCard> turnCards;
+    private int numCoins;
 
     public ReducedModel(List<String> username, TowerColor color, ReducedCharacter[] reducedCharacters, boolean isExpertMode) {
         this.username = username;
         this.color = color;
         this.reducedCharacters = reducedCharacters;
         this.isExpertMode = isExpertMode;
+        numCoins = 3;
     }
 
     public ReducedModel(List<String> username, TowerColor color){
@@ -34,7 +36,17 @@ public class ReducedModel implements Serializable {
         isExpertMode = false;
     }
 
+    public int getNumCoins() {
+        return this.numCoins;
+    }
 
+    public void addCoin(){
+        this.numCoins++;
+    }
+
+    public void removeCoin(){
+        this.numCoins--;
+    }
 
     public boolean isExpertMode() {
         return isExpertMode;
@@ -66,6 +78,9 @@ public class ReducedModel implements Serializable {
 
     public void setReducedBoard(ReducedBoard reducedBoard) {
         this.reducedBoard = reducedBoard;
+
+        if(username.size() == 2) reducedBoard.getPlayerBoard().setNumTowers(8);
+        else reducedBoard.getPlayerBoard().setNumTowers(6);
     }
 
     public void setMaxSteps(int steps){

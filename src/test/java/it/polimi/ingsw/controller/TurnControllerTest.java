@@ -37,16 +37,6 @@ class TurnControllerTest {
 
     @Test
     void nextPlayer() {
-        prepareTestGame(false);
 
-        testTurnController.calcCurrentPlayer("FirstPlayer");
-
-        testTurnController.nextPlayer();
-
-        assertEquals("SecondPlayer", testTurnController.getCurrentPlayerUsername());
-
-        testTurnController.nextPlayer();
-
-        assertEquals("FirstPlayer", testTurnController.getCurrentPlayerUsername());
     }
 }

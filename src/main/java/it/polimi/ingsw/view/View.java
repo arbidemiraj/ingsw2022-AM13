@@ -39,7 +39,7 @@ public interface View {
 
     void connectionLost();
 
-    void startGame();
+    void startGame(String firstPlayer);
 
     void showGenericMessage(String message);
 
@@ -52,4 +52,8 @@ public interface View {
     void setTurnInfo(int steps);
 
     void activateCharacter(int id);
+
+    void setUsername(String username);
+
+    void mergeIsland();
 }

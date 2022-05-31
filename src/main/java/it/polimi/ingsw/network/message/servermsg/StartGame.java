@@ -5,12 +5,22 @@ import it.polimi.ingsw.network.message.MessageType;
 
 public class StartGame extends Message {
 
-    public StartGame() {
+    private String firstPlayer;
+
+    public StartGame(String firstPlayer) {
         super("Server", MessageType.START_GAME);
+
+        this.firstPlayer = firstPlayer;
+    }
+
+    public String getFirstPlayer() {
+        return firstPlayer;
     }
 
     @Override
     public String toString() {
-        return "The game has started! ";
+        return "StartGame{" +
+                "firstPlayer='" + firstPlayer + '\'' +
+                '}';
     }
 }

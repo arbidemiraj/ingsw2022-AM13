@@ -77,7 +77,7 @@ public class ReducedIsland implements Serializable {
         }
 
         if(owner != null){
-            print += "  [ " + owner + " ]   ";
+            print += "  [ " + owner + " ]   \n";
         }
                 print += Color.ANSI_YELLOW + " Y: " + numStudents[0] +
                         Color.ANSI_BLUE + "\n B: " + numStudents[1] +

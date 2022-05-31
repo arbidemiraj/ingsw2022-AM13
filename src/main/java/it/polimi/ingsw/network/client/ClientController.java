@@ -49,6 +49,10 @@ public class ClientController implements ViewObserver, Observer {
             case GENERIC -> {
                 GenericMessage genericMessage = (GenericMessage) message;
                 taskQueue.execute(() -> view.showGenericMessage(genericMessage.toString()));
+
+                switch (genericMessage.getGenericType()){
+                    case MERGE -> taskQueue.execute(() -> view.mergeIsland());
+                }
             }
             case CHOOSE_GAME_OPTIONS -> {
                 taskQueue.execute(view::askCreateOrJoin);
@@ -66,7 +70,9 @@ public class ClientController implements ViewObserver, Observer {
                 taskQueue.execute(view::askMotherNatureMove);
             }
             case START_GAME -> {
-                taskQueue.execute(view::startGame);
+                StartGame msg = (StartGame) message;
+
+                taskQueue.execute(() -> view.startGame(msg.getFirstPlayer()));
             }
 
             case TOWER_COLOR_ASK -> {
@@ -179,6 +185,7 @@ public class ClientController implements ViewObserver, Observer {
     @Override
     public void onUpdateLoginMessage(String username) {
         this.username = username;
+        taskQueue.execute(() -> view.setUsername(username));
         client.sendMessage(new LoginMessage(username));
     }
 
