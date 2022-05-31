@@ -215,7 +215,6 @@ public class BoardController extends ViewObservable implements GenericSceneContr
             for(Student student : students){
                 cloudsPane.get(k).getChildren().add(new ImageView(new Image(studentsImages.get(student))));
             }
-
             k++;
         }
     }

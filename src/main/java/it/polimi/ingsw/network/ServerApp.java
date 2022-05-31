@@ -14,7 +14,6 @@ public class ServerApp {
         Server server = new Server();
 
         SocketServer socketServer = new SocketServer(server, serverPort);
-        Thread thread = new Thread(socketServer, "socketserver_");
-        thread.start();
+        socketServer.run();
     }
 }

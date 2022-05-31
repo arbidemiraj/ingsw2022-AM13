@@ -97,20 +97,21 @@ public class Server {
      * Handles the disconnection of a client.
      */
     public void disconnect(ClientHandler clientHandler) {
-        if(lobbyHandler.getUsernameQueue().contains(clientHandlerMap.get(clientHandler))) lobbyHandler.disconnect(getUsernameFromClientHandler(clientHandler));
+        synchronized (lock) {
+            if (lobbyHandler.getUsernameQueue().contains(clientHandlerMap.get(clientHandler)))
+                lobbyHandler.disconnect(getUsernameFromClientHandler(clientHandler));
 
-        clientHandlerMap.remove(clientHandler);
+            clientHandlerMap.remove(clientHandler);
 
-        List<ClientHandler> clientHandlerList = clientHandlerMap.values().stream().toList();
+            List<ClientHandler> clientHandlerList = clientHandlerMap.values().stream().toList();
 
-        for(ClientHandler socketClientHandler : clientHandlerList){
-            if(socketClientHandler.equals(clientHandler)) {
-                socketClientHandler.disconnect();
-                clientHandlerMap.remove(clientHandler);
+            for (ClientHandler socketClientHandler : clientHandlerList) {
+                if (socketClientHandler.equals(clientHandler)) {
+                    socketClientHandler.disconnect();
+                    clientHandlerMap.remove(clientHandler);
+                }
             }
         }
-
-
     }
 
     /**

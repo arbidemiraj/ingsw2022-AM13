@@ -9,7 +9,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 
-public class SocketServer implements Runnable {
+public class SocketServer {
     private final Server server;
     private final int port;
     ServerSocket serverSocket;
