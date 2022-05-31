@@ -413,9 +413,6 @@ public class GameController implements Serializable, Observer {
         turnController.firstPlayer();
         turnController.firstUsernameQueue();
 
-        gameHandler.sendMessage(new GenericMessage("\n You are the first player! ", GenericType.GENERIC), turnController.getCurrentPlayerUsername());
-        gameHandler.sendMessageToAllExcept(new GenericMessage("\n Wait... " + turnController.getCurrentPlayerUsername() + " is playing his turn! ", GenericType.GENERIC), turnController.getCurrentPlayerUsername());
-
         if(model.isExpertMode()){
             ReducedCharacter[] reducedCharacters = new ReducedCharacter[3];
             int i = 0;
@@ -426,25 +423,33 @@ public class GameController implements Serializable, Observer {
             }
 
             for(Player player : model.getPlayers()){
-                reducedModel = new ReducedModel(model.getUsernames(), player.getTowerColor(), reducedCharacters, model.isExpertMode());
+                ReducedBoard reducedBoard = createBoard(player);
+                reducedModel = new ReducedModel(model.getUsernames(), player.getTowerColor(), reducedCharacters,reducedBoard, model.isExpertMode());
             }
         }
         else{
             for(Player player : model.getPlayers()){
-                reducedModel = new ReducedModel(model.getUsernames(), player.getTowerColor());
+                ReducedBoard reducedBoard = createBoard(player);
+                reducedModel = new ReducedModel(model.getUsernames(), player.getTowerColor(), reducedBoard);
             }
         }
 
         gameHandler.sendMessageToAll(new StartGame(turnController.getCurrentPlayerUsername(), reducedModel));
 
-        updateReducedBoard();
+        gameHandler.sendMessage(new GenericMessage("\n You are the first player! ", GenericType.GENERIC), turnController.getCurrentPlayerUsername());
+        gameHandler.sendMessageToAllExcept(new GenericMessage("\n Wait... " + turnController.getCurrentPlayerUsername() + " is playing his turn! ", GenericType.GENERIC), turnController.getCurrentPlayerUsername());
 
         gameHandler.sendMessage(new AskCard(turnController.getCurrentPlayer().getDeck(), turnController.getTurnCardsPlayed()), turnController.getCurrentPlayerUsername());
 
     }
 
-    public void updateReducedBoard() {
+    private ReducedBoard createBoard(Player player) {
+
         String[] owner = new String[12];
+
+        int[] entrance = new int[5];
+        int[] hall = new int[5];
+
         ArrayList<Student> students;
         ArrayList<ReducedIsland> islands = new ArrayList<>();
 
@@ -456,20 +461,21 @@ public class GameController implements Serializable, Observer {
             islands.add(new ReducedIsland(students, owner[i], i, false));
         }
 
-        for (Player player : model.getPlayers()) {
-            int[] entrance = new int[5];
-            int[] hall = new int[5];
+        for (int i = 0; i < 5; i++) {
+            entrance = player.getPlayerBoard().getEntranceStudents();
+            hall[i] = player.getPlayerBoard().getDinnerRoom()[i].getNumStudents();
+        }
 
-            for (int i = 0; i < 5; i++) {
-                entrance = player.getPlayerBoard().getEntranceStudents();
-                hall[i] = player.getPlayerBoard().getDinnerRoom()[i].getNumStudents();
-            }
+        ReducedPlayerBoard reducedPlayerBoard = new ReducedPlayerBoard(entrance, hall, player.getNumTowers());
 
-            ReducedPlayerBoard reducedPlayerBoard = new ReducedPlayerBoard(entrance, hall, player.getNumTowers());
+        return new ReducedBoard(model.getBoard().getClouds(), owner, reducedPlayerBoard, model.getBoard().getMotherNature(), islands);
+    }
 
-            if(gameHandler != null){
-                gameHandler.sendMessage(new BoardMessage(model.getBoard().getClouds(), owner, reducedPlayerBoard, model.getBoard().getMotherNature(), islands), player.getUsername());
-            }
+    public void updateReducedBoard() {
+        for(Player player : model.getPlayers()){
+            ReducedBoard reducedBoard = createBoard(player);
+
+            gameHandler.sendMessage(new BoardMessage(reducedBoard), player.getUsername());
         }
     }
 

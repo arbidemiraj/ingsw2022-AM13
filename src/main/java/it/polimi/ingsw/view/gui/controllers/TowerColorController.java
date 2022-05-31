@@ -22,6 +22,9 @@ public class TowerColorController extends ViewObservable implements GenericScene
     private ChoiceBox<String> towerColors;
 
     @FXML
+    private Label info;
+
+    @FXML
     public void initialize() {
         selectBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onSelectBtnClick);
 
@@ -31,6 +34,10 @@ public class TowerColorController extends ViewObservable implements GenericScene
     @FXML
     private void onSelectBtnClick(Event event) {
         String color = towerColors.getValue();
+
+        info.setText("You chose " + color + " wait for other players to join...");
+        selectBtn.setDisable(true);
+        towerColors.hide();
 
         new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateTowerColor(color))).start();
     }

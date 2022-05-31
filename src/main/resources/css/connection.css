@@ -1,6 +1,5 @@
 AnchorPane {
     -fx-background-image: url("../images/eriantys.jpg");
-    -fx-text-fill: #fff;
     -fx-background-size: cover;
     -fx-background-position: center;
 }
@@ -17,6 +16,7 @@ Label {
 
 TextField{
     -fx-font-family: 'Du Bellay Italic';
+    -fx-background-color: rgba(256, 256, 256, 0.5);
 }
 
 .button {
@@ -27,6 +27,7 @@ TextField{
     -fx-border-radius: 30px;
     -fx-background-size: cover;
     -fx-background-image: url("../images/button1.png");
+    -fx-background-radius: 5em;
 
 }
 

@@ -93,15 +93,11 @@ public class GUI extends ViewObservable implements View {
 
     @Override
     public void askCardToPlay(List<AssistantCard> assistantCards, List<AssistantCard> cardsPlayed) {
-        if(playerUsername == firstPlayer){
-            Platform.runLater(() -> controller.showGenericText("You are the first player! Play an assistant card"));
-        } else {
-            Platform.runLater(() -> controller.showGenericText("Wait... other players are playing their turn"));
-        }
 
         reducedModel.setDeck(assistantCards);
         reducedModel.setTurnCards(cardsPlayed);
 
+        Platform.runLater(() -> controller.askCard());
     }
 
     @Override
@@ -111,7 +107,7 @@ public class GUI extends ViewObservable implements View {
 
     @Override
     public void askStudentToMove() {
-        controller.askStudent();
+        Platform.runLater(() -> controller.askStudent());
     }
 
     @Override
@@ -130,9 +126,9 @@ public class GUI extends ViewObservable implements View {
         this.reducedModel = reducedModel;
         controller.addAllObservers(observers);
         controller.setReducedModel(reducedModel);
-        controller.setFirstPlayer(playerUsername, firstPlayer);
 
         Platform.runLater(() -> sceneController.startGame(controller, "board.fxml"));
+        Platform.runLater(() -> controller.setFirstPlayer(playerUsername, firstPlayer));
     }
 
     @Override

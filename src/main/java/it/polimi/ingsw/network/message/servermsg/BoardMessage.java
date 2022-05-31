@@ -16,9 +16,9 @@ public class BoardMessage extends Message {
 
     private ReducedBoard reducedBoard;
 
-    public BoardMessage(Cloud[] clouds, String[] owner, ReducedPlayerBoard reducedPlayerBoard, int motherNature, ArrayList<ReducedIsland> islands) {
+    public BoardMessage(ReducedBoard reducedBoard) {
         super("Server", MessageType.BOARD_MESSAGE);
-        this.reducedBoard = new ReducedBoard(clouds, owner, reducedPlayerBoard, motherNature, islands);
+        this.reducedBoard = reducedBoard;
     }
 
     public ReducedBoard getReducedBoard() {

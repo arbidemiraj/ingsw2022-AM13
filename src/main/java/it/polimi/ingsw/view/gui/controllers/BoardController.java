@@ -1,13 +1,14 @@
 package it.polimi.ingsw.view.gui.controllers;
 
+import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.Cloud;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.model.maps.IntColorMap;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.observer.ViewObservable;
+import javafx.application.Platform;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -47,9 +48,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     @FXML
     private Label turnInfo;
     @FXML
-    private Button turnAction;
-    @FXML
-    private TilePane playerTowers;
+    private GridPane playerBoardTowers;
     @FXML
     private Label characters;
     @FXML
@@ -61,9 +60,13 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     @FXML
     private Label player3;
     @FXML
-    private Button button;
-    @FXML
     private ImageView playerBoard;
+    @FXML
+    private ImageView lastCard1;
+    @FXML
+    private ImageView lastCard2;
+    @FXML
+    private ImageView lastCard3;
     @FXML
     private GridPane playerBoardEntrance;
 
@@ -72,6 +75,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     private List<GridPane> islands;
 
     private List<TilePane> cloudsPane;
+
+    private List<TilePane> dinnerRoom;
 
     private List<ImageView> cards;
 
@@ -89,11 +94,11 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     private Map<String, TowerColor> imagesTower = new HashMap<>();
     private Map<String, Student> imagesProfessor = new HashMap<>();
 
+    private List<String> moveStudentParameters;
+
 
     @FXML
     public void initialize() {
-        button.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onButtonClick);
-
         if(!reducedModel.isExpertMode()){
             coinText.setText("");
             characters.setText("");
@@ -108,6 +113,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         cloudsPane = new ArrayList<>();
 
         islands = new ArrayList<>();
+        dinnerRoom = new ArrayList<>();
 
         islands.add(island1);
         islands.add(island2);
@@ -126,6 +132,12 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         cloudsPane.add(cloud1);
         cloudsPane.add(cloud2);
 
+        dinnerRoom.add(greenStudents);
+        dinnerRoom.add(redStudents);
+        dinnerRoom.add(yellowStudents);
+        dinnerRoom.add(pinkStudents);
+        dinnerRoom.add(blueStudents);
+
         initMaps();
         initIslands();
         showDeck();
@@ -138,24 +150,12 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         else player3.setText("");
 
         cards = new ArrayList<>();
-
-        button.setDisable(true);
-
-        deck.setOnMouseClicked(e -> {
-            Node node = (Node) e.getTarget();
-            int column = GridPane.getColumnIndex(node);
-            playCard(column);
-        });
-
     }
 
     private void playCard(int id) {
+        deck.setOnMouseClicked(e -> {showGenericText("Wait... it's not your turn!");});
+
         new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateCard((id + 1)))).start();
-    }
-
-
-    @FXML
-    private void onButtonClick(Event event) {
     }
 
     private void showPlayerBoard() {
@@ -164,6 +164,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         for(Student student : reducedModel.getReducedBoard().getPlayerBoard().getStudents()){
             ImageView imageView = new ImageView(new Image(studentsImages.get(student)));
 
+            imageView.getStyleClass().set(0, "clickable");
             imageView.setScaleX(2);
             imageView.setScaleY(2);
 
@@ -178,13 +179,20 @@ public class BoardController extends ViewObservable implements GenericSceneContr
             }
         }
 
+        i = 0;
+        j = 0;
+
         for(int h = 0; h < reducedModel.getReducedBoard().getPlayerBoard().getNumTowers(); h++){
             ImageView imageView = new ImageView(new Image(towerImages.get(reducedModel.getColor())));
 
-            imageView.setScaleX(0.5);
-            imageView.setScaleY(0.5);
+            playerBoardTowers.add(imageView, i, j);
 
-            playerTowers.getChildren().add(imageView);
+            if(j == 1){
+                j = 0;
+                i++;
+            }else{
+                j++;
+            }
         }
     }
 
@@ -284,6 +292,11 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     }
 
     public void setFirstPlayer(String playerUsername, String firstPlayer) {
+        if(playerUsername == firstPlayer){
+           showGenericText("You are the first player! Play an assistant card");
+        } else {
+            showGenericText("Wait... other players are playing their turn");
+        }
     }
 
     private void disableClickable() {
@@ -297,10 +310,76 @@ public class BoardController extends ViewObservable implements GenericSceneContr
             Node node = (Node) e.getTarget();
 
             ImageView student = (ImageView) node;
-            student.getImage().getUrl();
-            int row = GridPane.getRowIndex(playerBoardEntrance);
-            int column = GridPane.getColumnIndex(playerBoardEntrance);
+            String studentString = String.valueOf(imagesStudent.get(student.getImage().getUrl()));
+
+            moveStudentParameters.add(studentString);
+
+            turnInfo.setText("Select where you want to move the student [ Hall or Island ]");
+
+            askWhere(student.getImage().getUrl());
         });
 
+    }
+
+    private void askWhere(String url) {
+
+        for(GridPane island : islands){
+            island.setOnMouseClicked(e -> {
+                Node source = (Node)e.getSource() ;
+                Integer colIndex = GridPane.getColumnIndex(source);
+                Integer rowIndex = GridPane.getRowIndex(source);
+
+                island.add(new ImageView(new Image(url)), colIndex, rowIndex);
+
+                new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudent("entrance", String.valueOf(imagesStudent.get(url)), "island", islands.indexOf(island) + 1)));
+            });
+        }
+
+        for(TilePane dinner : dinnerRoom){
+            dinner.setOnMouseClicked(e -> {
+                addStudentToDinner(dinner, url);
+
+                new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudent("entrance", String.valueOf(imagesStudent.get(url)), "hall", 0)));
+            });
+        }
+    }
+
+    private void addStudentToDinner(TilePane dinner, String url) {
+        dinner.getChildren().add(new ImageView(new Image(url)));
+    }
+
+    public void askCard(){
+        if(!reducedModel.getTurnCards().isEmpty()){
+            int id = reducedModel.getTurnCards().get(0).getValue();
+
+            lastCard2.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id + 1) +".png"))));
+
+            if(reducedModel.getTurnCards().size() == 2){
+                lastCard3.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id + 1) +".png"))));
+            }
+        }
+
+        deck.setOnMouseClicked(e -> {
+            Node node = (Node) e.getTarget();
+            int id = GridPane.getColumnIndex(node);
+
+            boolean isValid;
+
+            for(AssistantCard assistantCard : reducedModel.getTurnCards()){
+                if(assistantCard.getValue() == id + 1){
+                    isValid = false;
+                }
+            }
+
+            if(isValid = true){
+                ImageView imageView = (ImageView) node;
+
+                imageView.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/retro1.png"))));
+
+                playCard(id);
+
+                lastCard1.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id + 1) +".png"))));
+            }
+        });
     }
 }

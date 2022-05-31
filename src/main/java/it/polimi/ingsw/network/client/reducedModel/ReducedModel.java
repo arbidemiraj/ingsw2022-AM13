@@ -22,15 +22,16 @@ public class ReducedModel implements Serializable {
     private List<AssistantCard> turnCards;
     private int numCoins;
 
-    public ReducedModel(List<String> username, TowerColor color, ReducedCharacter[] reducedCharacters, boolean isExpertMode) {
+    public ReducedModel(List<String> username, TowerColor color, ReducedCharacter[] reducedCharacters,ReducedBoard reducedBoard, boolean isExpertMode) {
         this.username = username;
         this.color = color;
         this.reducedCharacters = reducedCharacters;
+        this.reducedBoard = reducedBoard;
         this.isExpertMode = isExpertMode;
         numCoins = 3;
     }
 
-    public ReducedModel(List<String> username, TowerColor color){
+    public ReducedModel(List<String> username, TowerColor color, ReducedBoard reducedBoard){
         this.username = username;
         this.color = color;
         isExpertMode = false;
