@@ -85,6 +85,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     private Map<TowerColor, String> towerImages = new HashMap<>();
     private Map<Student, String> professorImages = new HashMap<>();
 
+    private Map<String, Student> imagesStudent = new HashMap<>();
+    private Map<String, TowerColor> imagesTower = new HashMap<>();
+    private Map<String, Student> imagesProfessor = new HashMap<>();
+
 
     @FXML
     public void initialize() {
@@ -217,6 +221,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     }
 
     public void initMaps(){
+        //map var to image
         studentsImages.put(Student.RED, String.valueOf(getClass().getResource("/assets/custom/redStud.png")));
         studentsImages.put(Student.YELLOW, String.valueOf(getClass().getResource("/assets/custom/yellowStud.png")));
         studentsImages.put(Student.PINK, String.valueOf(getClass().getResource("/assets/custom/pinkStud.png")));
@@ -232,6 +237,23 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         professorImages.put(Student.PINK, String.valueOf(getClass().getResource("/assets/custom/pinkProf.png")));
         professorImages.put(Student.GREEN, String.valueOf(getClass().getResource("/assets/custom/greenProf.png")));
         professorImages.put(Student.BLUE, String.valueOf(getClass().getResource("/assets/custom/blueProf.png")));
+
+        //map image to var
+        imagesStudent.put(String.valueOf(getClass().getResource("/assets/custom/redStud.png")), Student.RED);
+        imagesStudent.put(String.valueOf(getClass().getResource("/assets/custom/yellowStud.png")), Student.YELLOW);
+        imagesStudent.put(String.valueOf(getClass().getResource("/assets/custom/pinkStud.png")), Student.PINK);
+        imagesStudent.put(String.valueOf(getClass().getResource("/assets/custom/greenStud.png")), Student.GREEN);
+        imagesStudent.put(String.valueOf(getClass().getResource("/assets/custom/blueStud.png")), Student.BLUE);
+
+        imagesTower.put(String.valueOf(getClass().getResource("/assets/custom/blackTower.png")),TowerColor.BLACK);
+        imagesTower.put(String.valueOf(getClass().getResource("/assets/custom/grayTower.png")),TowerColor.GRAY);
+        imagesTower.put(String.valueOf(getClass().getResource("/assets/custom/whiteTower.png")),TowerColor.WHITE);
+
+        imagesProfessor.put(String.valueOf(getClass().getResource("/assets/custom/redProf.png")),Student.RED);
+        imagesProfessor.put(String.valueOf(getClass().getResource("/assets/custom/yellowStud.png")), Student.YELLOW);
+        imagesProfessor.put(String.valueOf(getClass().getResource("/assets/custom/pinkStud.png")), Student.PINK);
+        imagesProfessor.put(String.valueOf(getClass().getResource("/assets/custom/greenStud.png")), Student.GREEN);
+        imagesProfessor.put(String.valueOf(getClass().getResource("/assets/custom/blueStud.png")), Student.BLUE);
     }
 
     public void setReducedModel(ReducedModel reducedModel){
