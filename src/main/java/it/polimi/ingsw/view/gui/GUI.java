@@ -111,7 +111,7 @@ public class GUI extends ViewObservable implements View {
 
     @Override
     public void askStudentToMove() {
-
+        controller.askStudent();
     }
 
     @Override

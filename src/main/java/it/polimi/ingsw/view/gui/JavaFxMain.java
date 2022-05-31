@@ -38,7 +38,7 @@ public class JavaFxMain extends Application {
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setResizable(false);
+        stage.setResizable(true);
         stage.setTitle("Eriantys");
         stage.show();
     }
