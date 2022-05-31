@@ -58,13 +58,9 @@ public class CLI extends ViewObservable implements View {
             output.print("\n\nEnter the server address [ Default = " + defaultAddress + "] : ");
             String address = input.nextLine();
 
-            if(address.equals("")){
-                serverInfo.add(defaultAddress);
-                isValid = true;
-            } else{
-                output.println("Invalid address");
-                isValid = false;
-            }
+            if(address.equals("")) serverInfo.add(defaultAddress);
+            else serverInfo.add(address);
+            isValid = true;
 
         }while(!isValid);
 
