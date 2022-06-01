@@ -5,7 +5,6 @@ import it.polimi.ingsw.network.client.SocketClient;
 import it.polimi.ingsw.network.message.*;
 import it.polimi.ingsw.network.message.clientmsg.JoinGameMessage;
 import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
-import it.polimi.ingsw.network.message.servermsg.AskTowerColor;
 import it.polimi.ingsw.network.message.servermsg.LobbyMessage;
 
 import java.util.*;
@@ -97,19 +96,15 @@ public class Server {
      * Handles the disconnection of a client.
      */
     public void disconnect(ClientHandler clientHandler) {
-        synchronized (lock) {
-            if (lobbyHandler.getUsernameQueue().contains(clientHandlerMap.get(clientHandler)))
-                lobbyHandler.disconnect(getUsernameFromClientHandler(clientHandler));
+        if (lobbyHandler.getUsernameQueue().contains(clientHandlerMap.get(clientHandler)))
+            lobbyHandler.disconnect(getUsernameFromClientHandler(clientHandler));
+        clientHandlerMap.remove(clientHandler);
 
-            clientHandlerMap.remove(clientHandler);
-
-            List<ClientHandler> clientHandlerList = clientHandlerMap.values().stream().toList();
-
-            for (ClientHandler socketClientHandler : clientHandlerList) {
-                if (socketClientHandler.equals(clientHandler)) {
-                    socketClientHandler.disconnect();
-                    clientHandlerMap.remove(clientHandler);
-                }
+        List<ClientHandler> clientHandlerList = clientHandlerMap.values().stream().toList();
+        for (ClientHandler socketClientHandler : clientHandlerList) {
+            if (socketClientHandler.equals(clientHandler)) {
+                socketClientHandler.disconnect();
+                clientHandlerMap.remove(clientHandler);
             }
         }
     }
