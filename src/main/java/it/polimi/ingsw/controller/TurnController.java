@@ -7,6 +7,7 @@ import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.GenericType;
 import it.polimi.ingsw.network.message.servermsg.AskCard;
 import it.polimi.ingsw.network.message.servermsg.AskStudent;
+import it.polimi.ingsw.network.message.servermsg.UpdateModelMessage;
 import it.polimi.ingsw.network.server.GameHandler;
 
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ public class TurnController {
     public void actionPhase(){
         fillUsernameQueue();
 
+        gameHandler.sendMessageToAll(new UpdateModelMessage(game.getPlayerByUsername(usernameQueue.get(0)).getLastCard().getMaxMotherNatureMoves()));
         gameHandler.sendMessage(new AskStudent(), currentPlayer);
     }
 

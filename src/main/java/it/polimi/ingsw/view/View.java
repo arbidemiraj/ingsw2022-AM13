@@ -56,4 +56,6 @@ public interface View {
     void setUsername(String username);
 
     void mergeIsland();
+
+    void updateModel(List<AssistantCard> turnCardsPlayed);
 }

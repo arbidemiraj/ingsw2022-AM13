@@ -41,9 +41,9 @@ public class JavaFxMain extends Application {
         stage.setResizable(true);
         stage.setTitle("Eriantys");
         stage.show();
-        Media media = new Media("resources/Spitfires.mp3"); //replace /Movies/test.mp3 with your file
+    /*    Media media = new Media(String.valueOf(getClass().getResource("/Spitfires.mp3")));
         MediaPlayer music = new MediaPlayer(media);
-        music.play();
+        music.play(); */
     }
 
     public void changeScene(Scene scene){

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 public class ReducedModel implements Serializable {
     private List<String> username;
     private ReducedBoard reducedBoard;
+    private String playerUsername;
     private TowerColor color;
     private ReducedCharacter[] reducedCharacters;
     private String currentPlayer;
@@ -124,4 +125,15 @@ public class ReducedModel implements Serializable {
     }
 
 
+    public void setUsername(String playerUsername) {
+        this.playerUsername = playerUsername;
+    }
+
+    public String getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public String getPlayerUsername() {
+        return playerUsername;
+    }
 }

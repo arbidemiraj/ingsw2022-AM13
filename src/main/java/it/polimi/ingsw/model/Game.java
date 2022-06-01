@@ -316,6 +316,14 @@ public class Game extends Observable {
 	}
 
 	public boolean checkAfterMotherNature(){
+		boolean isValid = false;
+
+		for(int i = 0; i < board.getIslands().size(); i++){
+			if(board.getIslands().get(i).getOwner() != null) isValid = true;
+		}
+
+		if(isValid == false) return false;
+
 		if(board.getMotherNatureIsland().getOwner() != null){
 			Player actualOwner = board.getMotherNatureIsland().getOwner();
 		}

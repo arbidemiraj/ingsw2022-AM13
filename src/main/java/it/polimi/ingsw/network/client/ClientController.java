@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
+import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.clientmsg.*;
@@ -19,6 +20,7 @@ public class ClientController implements ViewObserver, Observer {
     private final View view;
     private Client client;
     private String username;
+    private ReducedModel reducedModel;
 
     private final ExecutorService taskQueue;
 
@@ -71,6 +73,7 @@ public class ClientController implements ViewObserver, Observer {
             }
             case START_GAME -> {
                 StartGame msg = (StartGame) message;
+                this.reducedModel = msg.getReducedModel();
 
                 taskQueue.execute(() -> view.startGame(msg.getFirstPlayer(), msg.getReducedModel()));
             }
@@ -126,6 +129,16 @@ public class ClientController implements ViewObserver, Observer {
                 WinMessage msg = (WinMessage) message;
 
                 taskQueue.execute(() -> view.winMessage(msg.getWinner()));
+            }
+
+            case UPDATE_MODEL -> {
+                UpdateModelMessage msg = (UpdateModelMessage) message;
+
+                switch (msg.getUpdateType()){
+                    case TURN_CARDS -> reducedModel.setTurnCards(msg.getTurnCardsPlayed());
+
+                    case MAX_STEPS -> reducedModel.setMaxSteps(msg.getMaxSteps());
+                }
             }
         }
     }

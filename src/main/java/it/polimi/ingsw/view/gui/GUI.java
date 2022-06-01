@@ -102,7 +102,7 @@ public class GUI extends ViewObservable implements View {
 
     @Override
     public void askCloud() {
-
+        Platform.runLater(() -> controller.askCloud());
     }
 
     @Override
@@ -124,11 +124,12 @@ public class GUI extends ViewObservable implements View {
     public void startGame(String firstPlayer, ReducedModel reducedModel) {
         controller = new BoardController();
         this.reducedModel = reducedModel;
+        reducedModel.setUsername(playerUsername);
+        reducedModel.setCurrentPlayer(firstPlayer);
         controller.addAllObservers(observers);
         controller.setReducedModel(reducedModel);
 
         Platform.runLater(() -> sceneController.startGame(controller, "board.fxml"));
-        Platform.runLater(() -> controller.setFirstPlayer(playerUsername, firstPlayer));
     }
 
     @Override
@@ -148,12 +149,12 @@ public class GUI extends ViewObservable implements View {
 
     @Override
     public void askMotherNatureMove() {
-
+        Platform.runLater(() -> controller.askMotherNature());
     }
 
     @Override
     public void setTurnInfo(int steps) {
-
+        reducedModel.setMaxSteps(steps);
     }
 
     @Override
@@ -168,6 +169,14 @@ public class GUI extends ViewObservable implements View {
 
     @Override
     public void mergeIsland() {
+
+    }
+
+    @Override
+    public void updateModel(List<AssistantCard> turnCardsPlayed) {
+        reducedModel.setTurnCards(turnCardsPlayed);
+
+        Platform.runLater(() -> controller.setTurnCards(turnCardsPlayed));
 
     }
 }

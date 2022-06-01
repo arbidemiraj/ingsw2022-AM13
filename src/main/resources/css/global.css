@@ -37,8 +37,33 @@ ChoiceBox{
 
 CheckBox{
     -fx-font-family: 'Du Bellay Italic';
+}
+
+TextArea{
+    -fx-font-family: 'Du Bellay Italic';
+    -fx-font-size: 18;
+    -fx-background-color: rgba(53,89,119,0.4);
+    -fx-text-fill: #fff;
+}
+
+TextArea .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+TextArea .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+
+
+TextArea .scroll-pane .content{
+    -fx-background-color: transparent;
+}
+
+CheckBox .box {
+    -fx-font-family: 'Du Bellay Italic';
     -fx-background-color: rgba(256, 256, 256, 0.5);
 }
+
 .button:hover {
     -fx-font-family: 'Du Bellay Italic';
     -fx-effect: dropshadow(gaussian, #f2e0d6, 20, 0.3, 0, 0);

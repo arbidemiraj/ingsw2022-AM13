@@ -328,8 +328,7 @@ public class CLI extends ViewObservable implements View {
             if (read == null) {
                 activatingCharacter = true;
             } else {
-                cloud = input.nextInt();
-
+                cloud = Integer.parseInt(read);
             }
 
             if (cloud == 1 || cloud == 2 || cloud == 3) isValid = true;
@@ -517,6 +516,11 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void mergeIsland() {
+
+    }
+
+    @Override
+    public void updateModel(List<AssistantCard> turnCardsPlayed) {
 
     }
 

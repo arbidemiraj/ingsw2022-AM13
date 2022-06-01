@@ -306,12 +306,15 @@ public class GameController implements Serializable, Observer {
                     gameHandler.sendMessage(new AskCard(turnController.getCurrentPlayer().getDeck(), turnController.getTurnCardsPlayed()), turnController.getCurrentPlayerUsername());
                 }
 
+                gameHandler.sendMessageToAllExcept(new UpdateModelMessage(turnController.getTurnCardsPlayed()), msg.getUsername());
+
                 if(turnController.nextPlayer()){
                     gameHandler.sendMessage(new AskCard(turnController.getCurrentPlayer().getDeck(), turnController.getTurnCardsPlayed()), turnController.getCurrentPlayerUsername());
                 }
                 else{
                     playerTurn = 0;
                     movenStudents = 0;
+
                     turnController.actionPhase();
                 }
             }
@@ -346,7 +349,7 @@ public class GameController implements Serializable, Observer {
             student = Student.valueOf(studentMessage.getColor());
 
             switch (studentMessage.getTo()){
-                case "HALL" -> {
+                case "DINNER" -> {
                     ColorIntMap cMap = new ColorIntMap();
                     HashMap<Student, Integer> map = cMap.getMap();
 
@@ -408,7 +411,7 @@ public class GameController implements Serializable, Observer {
     }
 
     public void startGame() {
-        ReducedModel reducedModel = null;
+        ReducedModel reducedModel;
         
         turnController.firstPlayer();
         turnController.firstUsernameQueue();
@@ -425,16 +428,16 @@ public class GameController implements Serializable, Observer {
             for(Player player : model.getPlayers()){
                 ReducedBoard reducedBoard = createBoard(player);
                 reducedModel = new ReducedModel(model.getUsernames(), player.getTowerColor(), reducedCharacters,reducedBoard, model.isExpertMode());
+                gameHandler.sendMessage(new StartGame(turnController.getCurrentPlayerUsername(), reducedModel), player.getUsername());
             }
         }
         else{
             for(Player player : model.getPlayers()){
                 ReducedBoard reducedBoard = createBoard(player);
                 reducedModel = new ReducedModel(model.getUsernames(), player.getTowerColor(), reducedBoard);
+                gameHandler.sendMessage(new StartGame(turnController.getCurrentPlayerUsername(), reducedModel), player.getUsername());
             }
         }
-
-        gameHandler.sendMessageToAll(new StartGame(turnController.getCurrentPlayerUsername(), reducedModel));
 
         gameHandler.sendMessage(new GenericMessage("\n You are the first player! ", GenericType.GENERIC), turnController.getCurrentPlayerUsername());
         gameHandler.sendMessageToAllExcept(new GenericMessage("\n Wait... " + turnController.getCurrentPlayerUsername() + " is playing his turn! ", GenericType.GENERIC), turnController.getCurrentPlayerUsername());

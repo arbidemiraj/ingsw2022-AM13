@@ -45,11 +45,10 @@ public class MoveStudentMessage extends Message {
     @Override
     public String toString() {
         return "MoveStudentMessage{" +
-                "username=" + getUsername() +
-                ", from=" + from +
-                ", color=" + color +
-                ", to=" + to +
+                "from='" + from + '\'' +
+                ", color='" + color + '\'' +
+                ", to='" + to + '\'' +
+                ", id=" + id +
                 '}';
     }
-
 }

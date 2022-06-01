@@ -19,6 +19,12 @@ TextField{
     -fx-background-color: rgba(256, 256, 256, 0.5);
 }
 
+TextArea{
+    -fx-font-family: 'Du Bellay Italic';
+    -fx-font-size: 18;
+    -fx-background-color: transparent;
+}
+
 .button {
     -fx-font-family: 'Du Bellay Italic';
     -fx-font-size: 22;

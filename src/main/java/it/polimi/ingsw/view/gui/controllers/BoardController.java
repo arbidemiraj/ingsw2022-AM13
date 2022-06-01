@@ -4,18 +4,16 @@ import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.Cloud;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
+import it.polimi.ingsw.model.maps.ColorIntMap;
 import it.polimi.ingsw.model.maps.IntColorMap;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.observer.ViewObservable;
-import javafx.application.Platform;
-import javafx.event.Event;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
 
@@ -36,7 +34,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     @FXML
     private ImageView character3;
     @FXML
-    private ImageView cloud3;
+    private ImageView estud1, estud2, estud3, estud4, estud5, estud6, estud7, estud8, estud9;
     @FXML
     private GridPane deck;
     @FXML
@@ -66,9 +64,13 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     @FXML
     private ImageView lastCard2;
     @FXML
-    private ImageView lastCard3;
+    private ImageView cloud3;
     @FXML
-    private GridPane playerBoardEntrance;
+    private TilePane cloud3pane;
+    @FXML
+    private Label turnPlayer;
+    @FXML
+    private ImageView lastCard3;
 
     private ReducedModel reducedModel;
 
@@ -84,8 +86,16 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     private List<Node> islandComponents;
 
+    private List<ImageView> entrance;
+
+    private int studentsCount = 0;
+
     private IntColorMap intColorMap = new IntColorMap();
     private Map<Integer, Student> getStudentFromInt = intColorMap.getMap();
+    private ColorIntMap colorIntMap = new ColorIntMap();
+    private Map<Student, Integer> getIntFromStudent = colorIntMap.getMap();
+    private Map<Student, Integer> positionMap = new HashMap<>();
+
     private Map<Student, String> studentsImages = new HashMap<>();
     private Map<TowerColor, String> towerImages = new HashMap<>();
     private Map<Student, String> professorImages = new HashMap<>();
@@ -111,9 +121,20 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
 
         cloudsPane = new ArrayList<>();
-
+        entrance = new ArrayList<>();
         islands = new ArrayList<>();
         dinnerRoom = new ArrayList<>();
+
+        moveStudentParameters = new ArrayList<>();
+        entrance.add(estud1);
+        entrance.add(estud2);
+        entrance.add(estud3);
+        entrance.add(estud4);
+        entrance.add(estud5);
+        entrance.add(estud6);
+        entrance.add(estud7);
+        entrance.add(estud8);
+        entrance.add(estud9);
 
         islands.add(island1);
         islands.add(island2);
@@ -128,9 +149,12 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         islands.add(island11);
         islands.add(island12);
 
-
         cloudsPane.add(cloud1);
         cloudsPane.add(cloud2);
+
+        if(reducedModel.getUsername().size() == 3){
+            cloudsPane.add(cloud3pane);
+        }
 
         dinnerRoom.add(greenStudents);
         dinnerRoom.add(redStudents);
@@ -153,30 +177,18 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     }
 
     private void playCard(int id) {
-        deck.setOnMouseClicked(e -> {showGenericText("Wait... it's not your turn!");});
+        deck.setOnMouseClicked(e -> {showGenericText("You can't play a card now!");});
 
         new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateCard((id + 1)))).start();
     }
 
     private void showPlayerBoard() {
-        int i = 0, j = 1;
+        int i = 0, j = 0;
 
         for(Student student : reducedModel.getReducedBoard().getPlayerBoard().getStudents()){
-            ImageView imageView = new ImageView(new Image(studentsImages.get(student)));
+            entrance.get(i).setImage(new Image(studentsImages.get(student)));
 
-            imageView.getStyleClass().set(0, "clickable");
-            imageView.setScaleX(2);
-            imageView.setScaleY(2);
-
-            playerBoardEntrance.add(imageView, i, j);
-
-            if(i == 1){
-                i = 0;
-                j++;
-            }
-            else{
-                i++;
-            }
+            i++;
         }
 
         i = 0;
@@ -185,7 +197,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         for(int h = 0; h < reducedModel.getReducedBoard().getPlayerBoard().getNumTowers(); h++){
             ImageView imageView = new ImageView(new Image(towerImages.get(reducedModel.getColor())));
 
-            playerBoardTowers.add(imageView, i, j);
+            playerBoardTowers.add(imageView, j, i);
 
             if(j == 1){
                 j = 0;
@@ -200,12 +212,18 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     public void initIslands(){
         int i = 0;
 
+
+
         for(GridPane island : islands ){
             List<Student> students = reducedModel.getReducedBoard().getIslands().get(i).getStudents();
+            int numStudents[] = reducedModel.getReducedBoard().getIslands().get(i).getNumStudents();
+            int j = 0;
 
-            for(Student student : students){
+            for(Student student : Student.values()){
                 Image image = new Image(studentsImages.get(student));
-                island.add(new ImageView(image), 2, 2);
+                island.add(new ImageView(image), 2, getIntFromStudent.get(student));
+                island.add(new Label(" : " + numStudents[j]), 3, getIntFromStudent.get(student));
+                j++;
             }
 
             if(reducedModel.getReducedBoard().getIslands().get(i).isMotherNature()) island.add(new ImageView(new Image(String.valueOf(getClass().getResource("/assets/custom/motherNature.png")))), 1, 1);
@@ -261,6 +279,12 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         imagesProfessor.put(String.valueOf(getClass().getResource("/assets/custom/pinkStud.png")), Student.PINK);
         imagesProfessor.put(String.valueOf(getClass().getResource("/assets/custom/greenStud.png")), Student.GREEN);
         imagesProfessor.put(String.valueOf(getClass().getResource("/assets/custom/blueStud.png")), Student.BLUE);
+
+        positionMap.put(Student.GREEN, 0);
+        positionMap.put(Student.RED, 1);
+        positionMap.put(Student.YELLOW, 2);
+        positionMap.put(Student.PINK, 3);
+        positionMap.put(Student.BLUE, 4);
     }
 
     public void setReducedModel(ReducedModel reducedModel){
@@ -291,14 +315,6 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         turnInfo.setText(text);
     }
 
-    public void setFirstPlayer(String playerUsername, String firstPlayer) {
-        if(playerUsername == firstPlayer){
-           showGenericText("You are the first player! Play an assistant card");
-        } else {
-            showGenericText("Wait... other players are playing their turn");
-        }
-    }
-
     private void disableClickable() {
 
     }
@@ -306,19 +322,26 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     public void askStudent() {
         turnInfo.setText("Select a student from entrance");
 
-        playerBoardEntrance.setOnMouseClicked(e -> {
-            Node node = (Node) e.getTarget();
+        for (ImageView singleStud : entrance) {
+            singleStud.getStyleClass().set(0, "clickable");
 
-            ImageView student = (ImageView) node;
-            String studentString = String.valueOf(imagesStudent.get(student.getImage().getUrl()));
+            singleStud.setOnMouseClicked(e -> {
+                Node node = (Node) e.getTarget();
 
-            moveStudentParameters.add(studentString);
+                ImageView student = (ImageView) node;
 
-            turnInfo.setText("Select where you want to move the student [ Hall or Island ]");
+                String studentString = String.valueOf(imagesStudent.get(student.getImage().getUrl()));
 
-            askWhere(student.getImage().getUrl());
-        });
+                moveStudentParameters.add(studentString);
 
+                turnInfo.setText("Select where you want to move the student [ Dinner or Island ]");
+
+                askWhere(student.getImage().getUrl());
+
+                student.setImage(null);
+            });
+
+        }
     }
 
     private void askWhere(String url) {
@@ -326,20 +349,46 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         for(GridPane island : islands){
             island.setOnMouseClicked(e -> {
                 Node source = (Node)e.getSource() ;
-                Integer colIndex = GridPane.getColumnIndex(source);
-                Integer rowIndex = GridPane.getRowIndex(source);
 
-                island.add(new ImageView(new Image(url)), colIndex, rowIndex);
+                reducedModel.getReducedBoard().getIslands().get(islands.indexOf(island)).addStudent(imagesStudent.get(url));
 
-                new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudent("entrance", String.valueOf(imagesStudent.get(url)), "island", islands.indexOf(island) + 1)));
+                updateIsland(island, imagesStudent.get(url));
+
+                studentsCount++;
+
+                if(studentsCount == 2){
+                    disableStudents();
+                    studentsCount = 0;
+                }
+
+                new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudent("entrance", String.valueOf(imagesStudent.get(url)), "ISLAND", islands.indexOf(island)))).start();
             });
         }
 
         for(TilePane dinner : dinnerRoom){
             dinner.setOnMouseClicked(e -> {
-                addStudentToDinner(dinner, url);
+                addStudentToDinner(dinnerRoom.get(positionMap.get(imagesStudent.get(url))), url);
 
-                new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudent("entrance", String.valueOf(imagesStudent.get(url)), "hall", 0)));
+                studentsCount++;
+
+                if(studentsCount == 2) disableStudents();
+
+                new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudent("entrance", String.valueOf(imagesStudent.get(url)), "DINNER", 0))).start();
+            });
+        }
+    }
+
+    private void updateIsland(GridPane island, Student student) {
+        int numStudents = reducedModel.getReducedBoard().getIslands().get(islands.indexOf(island)).getNumStudents()[getIntFromStudent.get(student)];
+
+        island.add(new Label(" : " + numStudents), 3, getIntFromStudent.get(student));
+    }
+
+    private void disableStudents() {
+        for(ImageView singleStud : entrance) {
+            singleStud.setOnMouseClicked(e -> {
+                singleStud.getStyleClass().set(0, "");
+                turnInfo.setText("You can't move a student!");
             });
         }
     }
@@ -349,13 +398,21 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     }
 
     public void askCard(){
+        if(reducedModel.getCurrentPlayer().equals(reducedModel.getPlayerUsername())){
+            showGenericText("You are the first player! Select an assistant card to play");
+        } else {
+            showGenericText("Wait... other players are playing their turn");
+        }
+
+        turnPlayer.setText("Current Player: " + reducedModel.getCurrentPlayer());
+
         if(!reducedModel.getTurnCards().isEmpty()){
             int id = reducedModel.getTurnCards().get(0).getValue();
 
-            lastCard2.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id + 1) +".png"))));
+            lastCard2.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id) +".png"))));
 
             if(reducedModel.getTurnCards().size() == 2){
-                lastCard3.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id + 1) +".png"))));
+                lastCard3.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id) +".png"))));
             }
         }
 
@@ -363,7 +420,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
             Node node = (Node) e.getTarget();
             int id = GridPane.getColumnIndex(node);
 
-            boolean isValid;
+            boolean isValid = true;
 
             for(AssistantCard assistantCard : reducedModel.getTurnCards()){
                 if(assistantCard.getValue() == id + 1){
@@ -381,5 +438,83 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 lastCard1.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id + 1) +".png"))));
             }
         });
+    }
+
+    public void setTurnCards(List<AssistantCard> turnCardsPlayed) {
+
+        if(turnCardsPlayed.size() == 3){
+            int id = turnCardsPlayed.get(2).getValue();
+            lastCard3.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id) +".png"))));
+        }else if(turnCardsPlayed.size() == 2){
+            int id = turnCardsPlayed.get(0).getValue();
+            lastCard2.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id) +".png"))));
+        }
+    }
+
+    public void askMotherNature() {
+        turnInfo.setText("Select the island where you want to move mother nature");
+
+        for(GridPane island : islands){
+            island.setOnMouseClicked(e -> {
+
+                int steps = islands.indexOf(island) - reducedModel.getReducedBoard().getMotherNature();
+
+                if(steps < (reducedModel).getMaxSteps()) {
+                    ObservableList<Node> childrens = islands.get(reducedModel.getReducedBoard().getMotherNature()).getChildren();
+
+                    for (Node node : childrens) {
+                        if(island.getRowIndex(node) != null && island.getColumnIndex(node) != null) {
+                            if(island.getRowIndex(node) == 1 && island.getColumnIndex(node) == 1) {
+                            ImageView image = (ImageView) node;
+                            image.setImage(null);
+                        }
+                        }
+                    }
+
+                    island.add(new ImageView(new Image(String.valueOf(getClass().getResource("/assets/custom/motherNature.png")))), 1, 1);
+
+                    new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateMotherNature(steps))).start();
+                }
+                else {
+                    turnInfo.setText("Invalid move! Retry");
+                }
+            });
+        }
+
+    }
+
+    public void askCloud() {
+        turnInfo.setText("Choose the cloud you want to get the students from");
+
+        setCloudClickable(true);
+
+        for(TilePane cloud : cloudsPane){
+            cloud.setOnMouseClicked(e -> {
+                Node node = (Node) e.getTarget();
+
+                new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateCloud(cloudsPane.indexOf(cloud))));
+
+                setCloudClickable(false);
+                cloud.getChildren().removeAll();
+            });
+        }
+    }
+
+    private void setCloudClickable(boolean b) {
+        if(true) {
+            cloud1.getStyleClass().set(0, "clickable");
+            cloud2.getStyleClass().set(0, "clickable");
+
+            if(reducedModel.getUsername().size() == 3){
+                cloud3.getStyleClass().set(0, "clickable");
+            }
+        } else {
+            cloud1.getStyleClass().set(0, "");
+            cloud2.getStyleClass().set(0, "");
+
+            if(reducedModel.getUsername().size() == 3){
+                cloud3.getStyleClass().set(0, "");
+            }
+        }
     }
 }

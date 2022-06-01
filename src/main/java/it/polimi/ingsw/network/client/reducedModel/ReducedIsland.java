@@ -42,6 +42,10 @@ public class ReducedIsland implements Serializable {
         }
     }
 
+    public int[] getNumStudents() {
+        return numStudents;
+    }
+
     public String getOwner() {
         return owner;
     }
