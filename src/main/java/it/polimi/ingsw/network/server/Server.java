@@ -41,10 +41,12 @@ public class Server {
      *this creates a new player profile
      */
     public void addClient(String username, ClientHandler clientHandler) throws DuplicateUsernameException {
-        if(!isUnique(username)) throw new DuplicateUsernameException();
-        else {
-            clientHandlerMap.put(username, clientHandler);
-            lobbyHandler.login(username);
+        synchronized (lock){
+            if(!isUnique(username)) throw new DuplicateUsernameException();
+            else {
+                clientHandlerMap.put(username, clientHandler);
+                lobbyHandler.login(username);
+            }
         }
     }
 
