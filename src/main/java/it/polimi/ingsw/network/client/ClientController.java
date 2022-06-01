@@ -51,10 +51,6 @@ public class ClientController implements ViewObserver, Observer {
             case GENERIC -> {
                 GenericMessage genericMessage = (GenericMessage) message;
                 taskQueue.execute(() -> view.showGenericMessage(genericMessage.toString()));
-
-                switch (genericMessage.getGenericType()){
-                    case MERGE -> taskQueue.execute(() -> view.mergeIsland());
-                }
             }
             case CHOOSE_GAME_OPTIONS -> {
                 taskQueue.execute(view::askCreateOrJoin);
@@ -138,6 +134,18 @@ public class ClientController implements ViewObserver, Observer {
                     case TURN_CARDS -> reducedModel.setTurnCards(msg.getTurnCardsPlayed());
 
                     case MAX_STEPS -> reducedModel.setMaxSteps(msg.getMaxSteps());
+
+                    case PROFESSOR -> {
+                        taskQueue.execute(() -> view.changeProfOwner(msg.getProfessorOwner(), msg.getColor()));
+                    }
+
+                    case MERGE -> {
+                        taskQueue.execute(() -> view.mergeIsland(msg.getIsland1(), msg.getIsland2()));
+                    }
+
+                    case CONQUER -> {
+                        taskQueue.execute(() -> view.conquerIsland(msg.getIsland(), msg.getTowerColor()));
+                    }
                 }
             }
         }

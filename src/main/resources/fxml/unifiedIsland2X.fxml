@@ -11,7 +11,7 @@
     <children>
         <ImageView fx:id="island1type" fitHeight="400.0" fitWidth="550.0" layoutX="18.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
             <image>
-                <Image url="@../assets/custom/unifiedIsland2X.png" />
+                <Image url="@../assets/custom/2islands.png" />
             </image>
         </ImageView>
       <GridPane id="students" layoutX="32.0" layoutY="85.0" prefHeight="200.0" prefWidth="400.0">

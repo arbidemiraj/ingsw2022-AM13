@@ -36,6 +36,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     @FXML
     private ImageView estud1, estud2, estud3, estud4, estud5, estud6, estud7, estud8, estud9;
     @FXML
+    private Label greenProfOwner, redProfOwner, yellowProfOwner, pinkProfOwner, blueProfOwner;
+    @FXML
     private GridPane deck;
     @FXML
     private TilePane test;
@@ -77,6 +79,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     private List<GridPane> islands;
 
     private List<TilePane> cloudsPane;
+
+    private List<Label> professors;
 
     private List<TilePane> dinnerRoom;
 
@@ -124,6 +128,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         entrance = new ArrayList<>();
         islands = new ArrayList<>();
         dinnerRoom = new ArrayList<>();
+        professors = new ArrayList<>();
 
         moveStudentParameters = new ArrayList<>();
         entrance.add(estud1);
@@ -135,6 +140,12 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         entrance.add(estud7);
         entrance.add(estud8);
         entrance.add(estud9);
+
+        professors.add(yellowProfOwner);
+        professors.add(blueProfOwner);
+        professors.add(greenProfOwner);
+        professors.add(pinkProfOwner);
+        professors.add(redProfOwner);
 
         islands.add(island1);
         islands.add(island2);
@@ -514,6 +525,53 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
             if(reducedModel.getUsername().size() == 3){
                 cloud3.getStyleClass().set(0, "");
+            }
+        }
+    }
+
+    public void setProf(String professorOwner, Student color) {
+        professors.get(getIntFromStudent.get(color)).setText(" : " + professorOwner);
+    }
+
+    public void mergeIslands(int island1, int island2) {
+        int numIslands = reducedModel.getReducedBoard().getIslands().get(island1).getNumIslands();
+
+        int numStudents[] = reducedModel.getReducedBoard().getIslands().get(island1).getNumStudents();
+        GridPane island = islands.get(island1);
+        int j = 0;
+
+        ObservableList<Node> childrens = island.getChildren();
+
+        for (Node node : childrens) {
+            if(island.getRowIndex(node) != null && island.getColumnIndex(node) != null) {
+                if(island.getRowIndex(node) == 0 && island.getColumnIndex(node) == 1) {
+                    ImageView image = (ImageView) node;
+                    image.setImage(new Image(String.valueOf(getClass().getResource("/assets/custom/" + numIslands + "islands.png"))));
+                }
+            }
+        }
+
+
+        for(Student student : Student.values()){
+            Image image = new Image(studentsImages.get(student));
+            island.add(new ImageView(image), 2, getIntFromStudent.get(student));
+            island.add(new Label(" : " + numStudents[j]), 3, getIntFromStudent.get(student));
+            j++;
+        }
+    }
+
+    public void conquerIsland(int island, String color) {
+        GridPane islandOwned = islands.get(island);
+        int j = 0;
+
+        ObservableList<Node> childrens = islandOwned.getChildren();
+
+        for (Node node : childrens) {
+            if(islandOwned.getRowIndex(node) != null && islandOwned.getColumnIndex(node) != null) {
+                if(islandOwned.getRowIndex(node) == 0 && islandOwned.getColumnIndex(node) == 4) {
+                    ImageView image = (ImageView) node;
+                    image.setImage(new Image(String.valueOf(getClass().getResource("/assets/custom/" + color + "Tower.png"))));
+                }
             }
         }
     }

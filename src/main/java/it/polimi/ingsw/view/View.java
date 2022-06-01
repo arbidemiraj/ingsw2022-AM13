@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.AssistantCard;
+import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
@@ -55,7 +56,11 @@ public interface View {
 
     void setUsername(String username);
 
-    void mergeIsland();
+    void mergeIsland(int island1, int island2);
 
     void updateModel(List<AssistantCard> turnCardsPlayed);
+
+    void changeProfOwner(String professorOwner, Student color);
+
+    void conquerIsland(int island, String islandOwner);
 }

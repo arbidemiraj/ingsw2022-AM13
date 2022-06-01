@@ -151,6 +151,9 @@ public class GameController implements Serializable, Observer {
                 int colorPos = model.createColorIntMap(color);
                 String professorOwner = model.getBoard().getProfessors()[colorPos].getOwner().getUsername();
 
+                gameHandler.sendMessageToAll(new UpdateModelMessage(professorOwner, color));
+
+                //TODO fix
                 gameHandler.sendMessage(new GenericMessage("You are now the owner of the " + color + " professor", GenericType.PROFESSOR), professorOwner);
                 gameHandler.sendMessageToAllExcept(new GenericMessage(professorOwner + " is now the owner of the " + color + " professor", GenericType.PROFESSOR), professorOwner);
             }
@@ -206,6 +209,7 @@ public class GameController implements Serializable, Observer {
             }
 
             if(gameHandler != null){
+                gameHandler.sendMessageToAll(new UpdateModelMessage(model.getBoard().getMotherNature(), String.valueOf(model.getPlayerByUsername(islandOwner).getTowerColor())));
                 gameHandler.sendMessage(new GenericMessage("You are now the owner of the " + model.getBoard().getMotherNature() + " island", GenericType.ISLAND_OWNER), islandOwner);
                 gameHandler.sendMessageToAllExcept(new GenericMessage(islandOwner + " is now the owner of the " + model.getBoard().getMotherNature() + " island", GenericType.ISLAND_OWNER), islandOwner);
 

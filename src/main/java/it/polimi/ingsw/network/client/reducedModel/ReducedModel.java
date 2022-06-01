@@ -3,10 +3,12 @@ package it.polimi.ingsw.network.client.reducedModel;
 import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
+import it.polimi.ingsw.model.maps.ColorIntMap;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ReducedModel implements Serializable {
@@ -22,12 +24,16 @@ public class ReducedModel implements Serializable {
     private List<AssistantCard> deck;
     private List<AssistantCard> turnCards;
     private int numCoins;
+    private String[] professorOwners;
+    private ColorIntMap colorIntMap = new ColorIntMap();
+    private Map<Student, Integer> getIntFromStudent = colorIntMap.getMap();
 
     public ReducedModel(List<String> username, TowerColor color, ReducedCharacter[] reducedCharacters,ReducedBoard reducedBoard, boolean isExpertMode) {
         this.username = username;
         this.color = color;
         this.reducedCharacters = reducedCharacters;
         this.reducedBoard = reducedBoard;
+        this.professorOwners = new String[5];
         this.isExpertMode = isExpertMode;
         numCoins = 3;
     }
@@ -135,5 +141,9 @@ public class ReducedModel implements Serializable {
 
     public String getPlayerUsername() {
         return playerUsername;
+    }
+
+    public void setProfOwner(String professorOwner, Student color) {
+        professorOwners[getIntFromStudent.get(color)] = professorOwner;
     }
 }
