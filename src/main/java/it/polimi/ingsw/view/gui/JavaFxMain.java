@@ -4,15 +4,14 @@ import it.polimi.ingsw.network.client.ClientController;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.view.gui.controllers.ConnectionSceneController;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-
-import java.util.List;
+import java.io.File;
 
 public class JavaFxMain extends Application {
     private Stage stage;
@@ -42,6 +41,9 @@ public class JavaFxMain extends Application {
         stage.setResizable(true);
         stage.setTitle("Eriantys");
         stage.show();
+        Media media = new Media("resources/Spitfires.mp3"); //replace /Movies/test.mp3 with your file
+        MediaPlayer music = new MediaPlayer(media);
+        music.play();
     }
 
     public void changeScene(Scene scene){
@@ -66,7 +68,6 @@ public class JavaFxMain extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
     public void showGenericAlert(String message) {
     }
 }
