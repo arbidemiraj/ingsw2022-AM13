@@ -55,7 +55,7 @@ public class Player {
 		deck = new ArrayList<>();
 
 		try {
-			File myObj = new File("C:/Users/arbid/IdeaProjects/AM13/src/main/resources/AssistantCards.txt");
+			File myObj = new File("getClass(). getResources(AssistantCard.txt)");
 			Scanner myReader = new Scanner(myObj);
 			String data = myReader.nextLine();
 
