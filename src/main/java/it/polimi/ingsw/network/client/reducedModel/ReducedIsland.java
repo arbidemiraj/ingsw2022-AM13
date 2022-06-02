@@ -21,13 +21,14 @@ public class ReducedIsland implements Serializable {
     private boolean isMotherNature;
     private boolean isNoEntryTile;
     private int[] numStudents;
+    private int numIsland;
 
     public ReducedIsland(List<Student> students, String owner, int id, boolean isNoEntryTile) {
         this.students = students;
         this.owner = owner;
         this.id = id;
         this.isNoEntryTile = isNoEntryTile;
-
+        numIsland = 1;
         numStudents = new int[]{0, 0, 0, 0, 0};
 
         setNumStudents();
@@ -96,5 +97,23 @@ public class ReducedIsland implements Serializable {
 
     public void setStudents(ArrayList<Student> students) {
         this.students = students;
+    }
+
+    public void addIsland() {
+        this.numIsland++;
+    }
+
+    public void mergeStudents(int[] numStudents) {
+        for(int i = 0; i < 5; i++){
+            this.numStudents[i] += numStudents[i];
+        }
+    }
+
+    public int getNumIslands() {
+        return numIsland;
+    }
+
+    public boolean isNoEntryTile() {
+        return isNoEntryTile;
     }
 }

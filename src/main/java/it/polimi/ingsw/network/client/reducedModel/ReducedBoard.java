@@ -2,10 +2,12 @@ package it.polimi.ingsw.network.client.reducedModel;
 
 import it.polimi.ingsw.model.Cloud;
 import it.polimi.ingsw.model.enumerations.Student;
+import it.polimi.ingsw.model.maps.ColorIntMap;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class ReducedBoard implements Serializable {
     @Serial
@@ -20,7 +22,6 @@ public class ReducedBoard implements Serializable {
         this.clouds = clouds;
         this.owner = owner;
         this.playerBoard = reducedPlayerBoard;
-
         this.islands = islands;
 
         this.motherNature = motherNature;
@@ -92,4 +93,9 @@ public class ReducedBoard implements Serializable {
         return playerBoard;
     }
 
+    public void mergeIslands(int island1, int island2) {
+        islands.get(island1).mergeStudents(islands.get(island2).getNumStudents());
+
+        islands.get(island1).addIsland();
+    }
 }

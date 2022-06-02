@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.AssistantCard;
+import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
@@ -168,8 +169,10 @@ public class GUI extends ViewObservable implements View {
     }
 
     @Override
-    public void mergeIsland() {
+    public void mergeIsland(int island1, int island2) {
+        reducedModel.getReducedBoard().mergeIslands(island1, island2);
 
+        Platform.runLater(() -> controller.mergeIslands(island1, island2));
     }
 
     @Override
@@ -178,5 +181,17 @@ public class GUI extends ViewObservable implements View {
 
         Platform.runLater(() -> controller.setTurnCards(turnCardsPlayed));
 
+    }
+
+    @Override
+    public void changeProfOwner(String professorOwner, Student color) {
+        reducedModel.setProfOwner(professorOwner, color);
+
+        Platform.runLater(() -> controller.setProf(professorOwner, color));
+    }
+
+    @Override
+    public void conquerIsland(int island, String islandOwner) {
+        Platform.runLater(() -> controller.conquerIsland(island, islandOwner));
     }
 }

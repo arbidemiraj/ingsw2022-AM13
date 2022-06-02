@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.exceptions.EmptyBagException;
 import it.polimi.ingsw.model.maps.ColorIntMap;
 import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.GenericType;
+import it.polimi.ingsw.network.message.servermsg.UpdateModelMessage;
 import it.polimi.ingsw.observer.Observable;
 
 import java.util.*;
@@ -237,13 +238,14 @@ public class Game extends Observable {
 			mergeIslands(island2, island1);
 			board.setMotherNature(motherNature - 1);
 			board.getIslands().remove(previous);
-
+			notifyObserver(new UpdateModelMessage(previous, motherNature));
 			notifyObserver(new GenericMessage("Island [" + previous + "] and [" + motherNature + "] have been merged", GenericType.MERGE));
 		}
 		if(island2.getOwner().equals(island3.getOwner())) {
 			mergeIslands(island2, island3);
 			board.getIslands().remove(next);
 
+			notifyObserver(new UpdateModelMessage(next, motherNature));
 			notifyObserver(new GenericMessage("Island [" + next + "] and [" + motherNature + "] have been merged", GenericType.MERGE));
 		}
 	}
@@ -316,14 +318,6 @@ public class Game extends Observable {
 	}
 
 	public boolean checkAfterMotherNature(){
-		boolean isValid = false;
-
-		for(int i = 0; i < board.getIslands().size(); i++){
-			if(board.getIslands().get(i).getOwner() != null) isValid = true;
-		}
-
-		if(isValid == false) return false;
-
 		if(board.getMotherNatureIsland().getOwner() != null){
 			Player actualOwner = board.getMotherNatureIsland().getOwner();
 		}
