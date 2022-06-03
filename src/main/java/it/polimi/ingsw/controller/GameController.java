@@ -2,6 +2,9 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.characters.Character;
+import it.polimi.ingsw.model.characters.Effect1;
+import it.polimi.ingsw.model.characters.Effect11;
+import it.polimi.ingsw.model.characters.Effect7;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.maps.ColorIntMap;
@@ -64,16 +67,15 @@ public class GameController implements Serializable, Observer {
      *
      * @param id        the id of the character
      * @param chosenIsland      the island the player choose for applying the effect
-     * @throws NotEnoughCoinException       when the player hasn't enough coins to activate the character
      */
-    public void activateIslandCharacter(int id, Island chosenIsland) throws NotEnoughCoinException {
+    public void activateIslandCharacter(int id, Island chosenIsland) {
         Player player = turnController.getCurrentPlayer();
 
         Character character = model.getCharacter(id);
 
-        if(character.getCost() > player.getNumCoins()) throw new NotEnoughCoinException();
-        else{
+
             character.setOwner(player);
+
             try {
                 character.applyEffect(chosenIsland);
             } catch (EmptyBagException e) {
@@ -84,7 +86,6 @@ public class GameController implements Serializable, Observer {
             model.removeCoins(character.getCost()-1);
             character.setCost(character.getCost()+1);
             model.getActivatedCharacters().add(character.getEffectId());
-        }
     }
 
     /**
@@ -92,49 +93,42 @@ public class GameController implements Serializable, Observer {
      *
      * @param id        the id of the character
      * @param chosenStudent      the student the player choose to move
-     * @throws NotEnoughCoinException       when the player hasn't enough coins to activate the character
      */
-    public void activateStudentCharacter(int id, Student chosenStudent) throws NotEnoughCoinException {
+    public void activateStudentCharacter(int id, Student chosenStudent){
         Player player = turnController.getCurrentPlayer();
 
         Character character = model.getCharacter(id);
 
-        if(character.getCost() > player.getNumCoins()) throw new NotEnoughCoinException();
-        else{
-            character.setOwner(player);
-            try {
-                character.applyEffect(chosenStudent);
-            } catch (EmptyBagException e) {
-                e.printStackTrace();
-            }
-            player.setNumCoins(player.getNumCoins() - character.getCost());
-            model.removeCoins(character.getCost()-1);
-            character.setCost(character.getCost()+1);
-            model.getActivatedCharacters().add(character.getEffectId());
+        character.setOwner(player);
+        try {
+            character.applyEffect(chosenStudent);
+        } catch (EmptyBagException e) {
+            e.printStackTrace();
         }
-
+        player.setNumCoins(player.getNumCoins() - character.getCost());
+        model.removeCoins(character.getCost()-1);
+        character.setCost(character.getCost()+1);
+        model.getActivatedCharacters().add(character.getEffectId());
     }
 
     /**
      * method used to activate the character that don't need parameters
      *
      * @param id        the id of the character
-     * @throws NotEnoughCoinException       when the player hasn't enough coins to activate the character
      */
-    public void activateCharacter(int id) throws NotEnoughCoinException {
+    public void activateCharacter(int id){
         Player player = turnController.getCurrentPlayer();
 
         Character character = model.getCharacter(id);
 
-        if(character.getCost() > player.getNumCoins()) throw new NotEnoughCoinException();
-        else{
-            character.setOwner(player);
-            character.applyEffect();
-            player.setNumCoins(player.getNumCoins() - character.getCost());
-            model.removeCoins(character.getCost()-1);
-            character.setCost(character.getCost()+1);
-            model.getActivatedCharacters().add(character.getEffectId());
-        }
+
+        character.setOwner(player);
+        character.applyEffect();
+        player.setNumCoins(player.getNumCoins() - character.getCost());
+        model.removeCoins(character.getCost()-1);
+        character.setCost(character.getCost()+1);
+        model.getActivatedCharacters().add(character.getEffectId());
+
     }
 
     /**
@@ -326,14 +320,93 @@ public class GameController implements Serializable, Observer {
             case ACTIVATE_CHARACTER -> {
                 ActivateCharacterMessage activateCharacterMessage = (ActivateCharacterMessage) message;
 
-                switch (activateCharacterMessage.getEffectId()){
-                    case 1 -> {
-                        gameHandler.sendMessage(new AskStudent(), message.getUsername());
-                    }
+                int id = activateCharacterMessage.getEffectId();
+
+                try{
+                    activateGenericCharacter(id, message.getUsername());
+                } catch (NotEnoughCoinException e){
+                    gameHandler.sendMessage(new ErrorMessage("You don't have enough coins! ", ErrorType.NOT_ENOUGH_COINS), activateCharacterMessage.getUsername());
                 }
             }
 
+            case STUDENT_EFFECT -> {
+                StudentEffectMessage msg = (StudentEffectMessage) message;
 
+                if(msg.getEffectId() == 1) gameHandler.sendMessage(new AskIsland(), msg.getUsername());
+                else {
+                    activateStudentCharacter(msg.getEffectId(), msg.getChosenStudent());
+                }
+            }
+
+            case ISLAND_EFFECT -> {
+                IslandEffectMessage msg = (IslandEffectMessage) message;
+
+                activateIslandCharacter(msg.getEffectId(), model.getBoard().getIslands().get(msg.getChosenIslandId()));
+            }
+
+            case SWITCH_STUDENTS -> {
+                String username = message.getUsername();
+
+                SwitchStudents msg = (SwitchStudents) message;
+
+                try {
+                    activateEffect10(msg.getStudents(), username);
+                } catch (InvalidMoveException e) {
+                    gameHandler.sendMessage(new ErrorMessage("Invalid move", ErrorType.INVALID_SWITCH), username);
+                }
+            }
+        }
+    }
+
+    private void activateEffect10(ArrayList<Student> students, String username) throws InvalidMoveException {
+        Player player = model.getPlayerByUsername(username);
+
+        Character character = model.getCharacter(10);
+
+        character.setOwner(player);
+
+        player.getPlayerBoard().getDinnerRoom()[model.createColorIntMap(students.get(0))].removeStudent(students.get(2));
+        player.getPlayerBoard().getDinnerRoom()[model.createColorIntMap(students.get(0))].removeStudent(students.get(3));
+
+        player.getPlayerBoard().addStudent(students.get(0));
+        player.getPlayerBoard().addStudent(students.get(1));
+
+        player.setNumCoins(player.getNumCoins() - character.getCost());
+        model.removeCoins(character.getCost() - 1);
+        character.setCost(character.getCost()+1);
+        model.getActivatedCharacters().add(character.getEffectId());
+    }
+
+    private void activateGenericCharacter(int id, String username) throws NotEnoughCoinException {
+        if(model.getCharacter(id).getCost() > model.getPlayerByUsername(username).getNumCoins()) throw new NotEnoughCoinException();
+
+        switch (id) {
+            case 1 -> gameHandler.sendMessage(new StudentsMessage(((Effect1) model.getCharacter(id).getEffect()).getStudents(), id), username);
+
+            case 2,4,6,8 -> {
+                activateCharacter(id);
+            }
+
+            case 3,5 -> {
+                gameHandler.sendMessage(new AskIsland(), username);
+            }
+
+
+            case 7 -> {
+                gameHandler.sendMessage(new StudentsMessage(((Effect7) model.getCharacter(id).getEffect()).getStudents(), id), username);
+            }
+
+            case 9,12 -> {
+                gameHandler.sendMessage(new StudentsMessage(null, id), username);
+            }
+
+            case 10 -> {
+                gameHandler.sendMessage(new AskSwitchStudent(), username);
+            }
+
+            case 11 -> {
+                gameHandler.sendMessage(new StudentsMessage(((Effect11) model.getCharacter(id).getEffect()).getStudents(), id), username);
+            }
         }
     }
 
@@ -345,7 +418,7 @@ public class GameController implements Serializable, Observer {
 
 
             switch (studentMessage.getFrom()){
-                case "entrance" -> {
+                case "ENTRANCE" -> {
                     from = model.getPlayerByUsername(studentMessage.getUsername()).getPlayerBoard();
                 }
             }

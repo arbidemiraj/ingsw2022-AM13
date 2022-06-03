@@ -194,8 +194,12 @@ public class ClientController implements ViewObserver, Observer {
     }
 
     @Override
+    public void onUpdateIslandEffect(int chosenIsland, int effectId) {
+        client.sendMessage(new IslandEffectMessage(username, chosenIsland, effectId));
+    }
+
+    @Override
     public void onUpdateIslandEffect(int chosenIsland) {
-        client.sendMessage(new IslandEffectMessage(username, chosenIsland));
     }
 
     @Override
@@ -237,6 +241,11 @@ public class ClientController implements ViewObserver, Observer {
 
     @Override
     public void onUpdateStudentEffect(String chosenStudent) {
-        client.sendMessage(new StudentEffectMessage(username, Student.valueOf(chosenStudent)));
+
+    }
+
+    @Override
+    public void onUpdateStudentEffect(String chosenStudent, int effectId) {
+        client.sendMessage(new StudentEffectMessage(username, Student.valueOf(chosenStudent), effectId));
     }
 }

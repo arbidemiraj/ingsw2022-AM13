@@ -42,6 +42,8 @@ public class TurnController {
     }
 
     public void newTurn() {
+        fillUsernameQueue();
+
         gameController.checkBag();
         game.getBoard().fillClouds();
         gameController.updateReducedBoard();

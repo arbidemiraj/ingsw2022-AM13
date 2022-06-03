@@ -42,5 +42,9 @@ public interface ViewObserver {
 
     void onUpdateStudentEffect(String chosenStudent);
 
+    void onUpdateIslandEffect(int chosenIsland, int effectId);
+
+    void onUpdateStudentEffect(String chosenStudent, int effectId);
+
 
 }

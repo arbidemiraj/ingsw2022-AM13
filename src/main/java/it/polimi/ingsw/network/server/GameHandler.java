@@ -73,15 +73,24 @@ public class GameHandler {
     }
 
     public void endGame(){
+        for(String username : gameController.getGame().getUsernames()){
+            server.removeClient(username);
+            server.getClientHandlerMap().get(username).disconnect();
+        }
+
         isActive = false;
         started = false;
     }
 
     public void endGame(String username){
+        for(String user : gameController.getGame().getUsernames()){
+            if(user != username) server.getClientHandlerMap().get(user).disconnect();
+
+            server.removeClient(user);
+        }
+
         isActive = false;
         started = false;
-
-        sendMessageToAllExcept(new GenericMessage("Game has ended because user '" + username + "' disconnected", GenericType.END), username);
     }
 
     private void askTowerColor(String username) {

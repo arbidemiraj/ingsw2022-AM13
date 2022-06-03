@@ -41,6 +41,7 @@ public class ReducedModel implements Serializable {
     public ReducedModel(List<String> username, TowerColor color, ReducedBoard reducedBoard){
         this.username = username;
         this.color = color;
+        this.reducedBoard = reducedBoard;
         isExpertMode = false;
     }
 
@@ -111,7 +112,7 @@ public class ReducedModel implements Serializable {
 
         if(to.equals("ISLAND")) reducedBoard.addStudentToIsland(id, Student.valueOf(student));
 
-        if(to.equals("HALL")) reducedBoard.getPlayerBoard().addHallStudent(student);
+        if(to.equals("DINNER")) reducedBoard.getPlayerBoard().addHallStudent(student);
     }
 
     public void setDeck(List<AssistantCard> assistantCards) {

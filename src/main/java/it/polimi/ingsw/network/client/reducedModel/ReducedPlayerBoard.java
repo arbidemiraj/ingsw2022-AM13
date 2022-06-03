@@ -53,23 +53,24 @@ public class ReducedPlayerBoard implements Serializable {
     }
 
     public void addEntranceStudent(String student){
-        entranceStudents[intColor.get(student)]++;
+        entranceStudents[intColor.get(Student.valueOf(student))]++;
     }
 
     public void removeEntranceStudent(String student){
-        entranceStudents[intColor.get(student)]--;
+        entranceStudents[intColor.get(Student.valueOf(student))]--;
     }
 
     public void addHallStudent(String student){
-        hallStudents[intColor.get(student)]++;
+        hallStudents[intColor.get(Student.valueOf(student))]++;
     }
 
     public void removeHallStudent(String student){
-        hallStudents[intColor.get(student)]--;
+        hallStudents[intColor.get(Student.valueOf(student))]--;
     }
 
     public String print(){
         String pb = "";
+
         pb += Color.ANSI_YELLOW + "\n---------------------------------------------------------------------\n" +
                 "| Y: ";
         for(int i = 0; i < entranceStudents[0]; i++) pb+= "*";

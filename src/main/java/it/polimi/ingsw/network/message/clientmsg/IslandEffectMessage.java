@@ -12,10 +12,15 @@ import it.polimi.ingsw.network.message.MessageType;
 public class IslandEffectMessage extends Message {
 
     private int chosenIslandId;
+    private int effectId;
 
-    public IslandEffectMessage(String username,int chosenIsland) {
+    public IslandEffectMessage(String username,int chosenIsland, int effectId) {
         super(username, MessageType.ISLAND_EFFECT);
         this.chosenIslandId = chosenIsland;
+    }
+
+    public int getEffectId() {
+        return effectId;
     }
 
     public int getChosenIslandId() {

@@ -40,14 +40,12 @@ public class Server {
      * Adds a client to be managed by the server instance
      *this creates a new player profile
      */
-    public void addClient(String username, ClientHandler clientHandler) throws DuplicateUsernameException {
-        synchronized (lock){
+    public synchronized void addClient(String username, ClientHandler clientHandler) throws DuplicateUsernameException {
             if(!isUnique(username)) throw new DuplicateUsernameException();
             else {
                 clientHandlerMap.put(username, clientHandler);
                 lobbyHandler.login(username);
             }
-        }
     }
 
 
@@ -64,8 +62,11 @@ public class Server {
     /**
      * Allows to delete a player given his username
      */
-    public void removeClient(String username, boolean notifyEnabled) {
+    public void removeClient(String username) {
         clientHandlerMap.remove(username);
+
+        nextGameId--;
+
         LOGGER.info("Removed " + username + " from the client list.");
     }
 
@@ -98,22 +99,9 @@ public class Server {
     /**
      * Handles the disconnection of a client.
      */
-    public void disconnect(ClientHandler clientHandler) {
-        synchronized (lock) {
-            if (lobbyHandler.getUsernameQueue().contains(clientHandlerMap.get(clientHandler)))
+    public synchronized void disconnect(ClientHandler clientHandler) {
+        if (lobbyHandler.getUsernameQueue().contains(getUsernameFromClientHandler(clientHandler)))
                 lobbyHandler.disconnect(getUsernameFromClientHandler(clientHandler));
-
-            clientHandlerMap.remove(clientHandler);
-
-            List<ClientHandler> clientHandlerList = clientHandlerMap.values().stream().toList();
-
-            for (ClientHandler socketClientHandler : clientHandlerList) {
-                if (socketClientHandler.equals(clientHandler)) {
-                    socketClientHandler.disconnect();
-                    clientHandlerMap.remove(clientHandler);
-                }
-            }
-        }
     }
 
     /**

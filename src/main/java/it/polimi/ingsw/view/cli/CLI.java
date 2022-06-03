@@ -87,10 +87,13 @@ public class CLI extends ViewObservable implements View {
     @Override
     public void askUsername(){
         printLine();
-        output.println("\nEnter username: ");
-        output.print("> ");
 
-        username = input.nextLine();
+        do {
+            output.println("\nEnter username: ");
+            output.print("> ");
+
+            username = input.nextLine();
+        }while(username == "");
 
         notifyObserver(obs -> obs.onUpdateLoginMessage(username));
         input.reset();
@@ -295,6 +298,8 @@ public class CLI extends ViewObservable implements View {
 
         notifyObserver(viewObserver -> viewObserver.onUpdateCard(finalCardId));
         input.reset();
+
+        output.println("Wait... other player is playing his turn");
     }
 
     private String printDeck(List<AssistantCard> assistantCards) {
@@ -357,10 +362,10 @@ public class CLI extends ViewObservable implements View {
 
         int i = 0;
 
-        from = "entrance";
+        from = "ENTRANCE";
 
         output.println("Select the student you want to move");
-        output.println("[ insert his color and where you want to move it (HALL | ISLAND) ]");
+        output.println("[ insert his color and where you want to move it (DINNER | ISLAND) ]");
         output.print("> ");
         input.reset();
 
@@ -376,8 +381,8 @@ public class CLI extends ViewObservable implements View {
 
         String[] temp = inputString.split("\\s+");
 
-        student = temp[0];
-        to = temp[1];
+        student = temp[0].toUpperCase();
+        to = temp[1].toUpperCase();
 
         int islandId = 0;
 
@@ -390,9 +395,9 @@ public class CLI extends ViewObservable implements View {
 
         int finalId = id;
 
-        notifyObserver(viewObserver -> viewObserver.onUpdateStudent(from, student, to, finalId));
-
         reducedModel.moveStudent(from, student, to, id);
+
+        notifyObserver(viewObserver -> viewObserver.onUpdateStudent(from, student, to, finalId));
 
         input.reset();
     }
@@ -470,7 +475,7 @@ public class CLI extends ViewObservable implements View {
         sideMenu += "\n\n-----------------------------------" +
                 "\n USERNAME " +
                 "\n-----------------------------------\n" +
-                reducedModel.getUsername() +
+                reducedModel.getPlayerUsername() +
                 "\n-----------------------------------\n" +
                 "\n COLOR " +
                 "\n-----------------------------------\n" +

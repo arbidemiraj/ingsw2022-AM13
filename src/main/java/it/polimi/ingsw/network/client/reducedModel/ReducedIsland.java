@@ -53,10 +53,12 @@ public class ReducedIsland implements Serializable {
 
     public void addStudent(Student color){
        students.add(color);
+       numStudents[studentColor.get(color)]++;
     }
 
     public void removeStudent(Student color){
         students.remove(color);
+        numStudents[studentColor.get(color)]--;
     }
 
     public void setMotherNature(boolean motherNature) {

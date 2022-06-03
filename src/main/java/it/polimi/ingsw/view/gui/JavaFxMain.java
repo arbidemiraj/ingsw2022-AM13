@@ -11,7 +11,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import java.io.File;
+import java.util.Objects;
 
 public class JavaFxMain extends Application {
     private Stage stage;
@@ -19,6 +22,19 @@ public class JavaFxMain extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        Media media = new Media(String.valueOf(getClass().getResource("/Spitfires.mp3")));
+        MediaPlayer music = new MediaPlayer(media);
+        music.play();
+        Media pick = new Media(Objects.requireNonNull(getClass().getClassLoader()
+                .getResource("Spitfires.mp3")).toExternalForm());
+        MediaPlayer player = new MediaPlayer(pick);
+        player.setAutoPlay(true);
+        player.setCycleCount(MediaPlayer.INDEFINITE);
+        player.setVolume(5);
+        player.setOnEndOfMedia(() -> {
+            player.seek(Duration.ZERO);
+            player.play();
+        });
 
         System.setProperty("prism.allowhidpi", "false");
 
@@ -41,9 +57,7 @@ public class JavaFxMain extends Application {
         stage.setResizable(true);
         stage.setTitle("Eriantys");
         stage.show();
-    /*    Media media = new Media(String.valueOf(getClass().getResource("/Spitfires.mp3")));
-        MediaPlayer music = new MediaPlayer(media);
-        music.play(); */
+
     }
 
     public void changeScene(Scene scene){

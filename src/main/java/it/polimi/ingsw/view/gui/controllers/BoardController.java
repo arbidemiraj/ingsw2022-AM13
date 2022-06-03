@@ -409,11 +409,13 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     }
 
     public void askCard(){
+
+        turnInfo.setText("It's your turn! Select an assistant card to play");
+
         if(reducedModel.getCurrentPlayer().equals(reducedModel.getPlayerUsername())){
             showGenericText("You are the first player! Select an assistant card to play");
-        } else {
-            showGenericText("Wait... other players are playing their turn");
         }
+
 
         turnPlayer.setText("Current Player: " + reducedModel.getCurrentPlayer());
 
@@ -459,6 +461,11 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }else if(turnCardsPlayed.size() == 2){
             int id = turnCardsPlayed.get(0).getValue();
             lastCard2.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id) +".png"))));
+
+            if(lastCard1.getImage().equals(lastCard2.getImage())){
+                id = turnCardsPlayed.get(1).getValue();
+                lastCard2.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id) +".png"))));
+            }
         }
     }
 

@@ -9,6 +9,8 @@ import it.polimi.ingsw.model.maps.ColorIntMap;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,9 +56,10 @@ public class Player {
 	private void createDeck() {
 		deck = new ArrayList<>();
 
-		try {
-			File myObj = new File("getClass(). getResources(AssistantCard.txt)");
-			Scanner myReader = new Scanner(myObj);
+
+			InputStream is = getClass().getClassLoader().getResourceAsStream("AssistantCards.txt");
+
+			Scanner myReader = new Scanner(is);
 			String data = myReader.nextLine();
 
 			Gson gson = new Gson();
@@ -65,10 +68,6 @@ public class Player {
 
 			myReader.close();
 
-		} catch (FileNotFoundException e) {
-			System.out.println("An error occurred.");
-			e.printStackTrace();
-		}
 
 	}
 

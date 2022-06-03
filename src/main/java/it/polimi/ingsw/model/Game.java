@@ -318,13 +318,18 @@ public class Game extends Observable {
 	}
 
 	public boolean checkAfterMotherNature(){
+		boolean isValid = false;
+
 		if(board.getMotherNatureIsland().getOwner() != null){
 			Player actualOwner = board.getMotherNatureIsland().getOwner();
 		}
 
 		setInfluencePlayer(board.getMotherNatureIsland());
 
-		if(setIslandOwner(board.getMotherNatureIsland())) return true;
+		for(Player player : players){
+			if(player.getInfluenceValue() != 0) isValid = true;
+		}
+		if(setIslandOwner(board.getMotherNatureIsland()) && isValid == true) return true;
 
 		return false;
 	}

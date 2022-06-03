@@ -40,4 +40,8 @@ public class Effect7 implements Movable, Actionable {
     public void apply(Game game, Island chosenIsland) {
 
     }
+
+    public ArrayList<Student> getStudents() {
+        return students;
+    }
 }

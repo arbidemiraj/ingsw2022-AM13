@@ -110,37 +110,13 @@ class GameControllerTest {
 
         testTurnController.calcCurrentPlayer(player.getUsername());
 
-        try{
-            testGameController.activateCharacter(character.getEffectId());
-        } catch (NotEnoughCoinException e) {
-            e.printStackTrace();
-        }
+        testGameController.activateCharacter(character.getEffectId());
+
 
 
         assertEquals(character.getOwner(), player);
         assertTrue(character.isActivated());
         assertTrue(testGame.getActivatedCharacters().contains(character.getEffectId()));
-    }
-
-    @Test
-    void activateCharacterFail(){
-        prepareTestGame(true);
-
-        Character character = testGame.getCharacters()[0];
-        Player player = testGame.getPlayers().get(0);
-        player.setNumCoins(0);
-
-        testTurnController.calcCurrentPlayer(player.getUsername());
-
-        try {
-            testGameController.activateCharacter(character.getEffectId());
-        }
-        catch(NotEnoughCoinException e) {
-        }
-
-
-        assertNull(character.getOwner());
-        assertFalse(character.isActivated());
     }
 
     @Test
@@ -158,11 +134,8 @@ class GameControllerTest {
 
 
 
-        try {
-            testGameController.activateIslandCharacter(3, chosenIsland);
-        }
-        catch(NotEnoughCoinException e) {
-        }
+        testGameController.activateIslandCharacter(3, chosenIsland);
+
 
 
         assertEquals(character.getOwner(), player);
@@ -183,11 +156,8 @@ class GameControllerTest {
 
         testTurnController.calcCurrentPlayer(player.getUsername());
 
-        try {
-            testGameController.activateStudentCharacter(1, chosenStudent);
-        }
-        catch(NotEnoughCoinException e) {
-        }
+
+        testGameController.activateStudentCharacter(1, chosenStudent);
 
 
         assertEquals(character.getOwner(), player);

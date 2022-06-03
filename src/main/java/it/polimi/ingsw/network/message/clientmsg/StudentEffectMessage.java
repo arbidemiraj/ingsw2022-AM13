@@ -11,10 +11,16 @@ import it.polimi.ingsw.network.message.MessageType;
 public class StudentEffectMessage extends Message {
 
     private Student chosenStudent;
+    private int effectId;
 
-    public StudentEffectMessage(String username,Student chosenStudent) {
+    public StudentEffectMessage(String username, Student chosenStudent, int effectId) {
         super(username, MessageType.STUDENT_EFFECT);
         this.chosenStudent = chosenStudent;
+        this.effectId = effectId;
+    }
+
+    public int getEffectId() {
+        return effectId;
     }
 
     public Student getChosenStudent() {
