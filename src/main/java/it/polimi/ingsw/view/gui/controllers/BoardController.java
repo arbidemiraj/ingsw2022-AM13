@@ -12,15 +12,12 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
-import jdk.jfr.Event;
 
-import java.awt.event.MouseEvent;
 import java.util.*;
 
 public class BoardController extends ViewObservable implements GenericSceneController {
@@ -77,8 +74,6 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     private Label turnPlayer;
     @FXML
     private ImageView lastCard3;
-    @FXML
-    private Button disconnect;
 
     private ReducedModel reducedModel;
 
@@ -135,7 +130,6 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         islands = new ArrayList<>();
         dinnerRoom = new ArrayList<>();
         professors = new ArrayList<>();
-
 
         moveStudentParameters = new ArrayList<>();
 
@@ -195,8 +189,6 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         cards = new ArrayList<>();
     }
 
-
-
     private void playCard(int id) {
         deck.setOnMouseClicked(e -> {showGenericText("You can't play a card now!");});
 
@@ -232,6 +224,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     public void initIslands(){
         int i = 0;
+
+
 
         for(GridPane island : islands ){
             List<Student> students = reducedModel.getReducedBoard().getIslands().get(i).getStudents();
