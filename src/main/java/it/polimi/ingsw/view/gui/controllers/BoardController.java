@@ -11,13 +11,20 @@ import it.polimi.ingsw.observer.ViewObservable;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
+import javafx.stage.Stage;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class BoardController extends ViewObservable implements GenericSceneController {
 
@@ -73,6 +80,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     private Label turnPlayer;
     @FXML
     private ImageView lastCard3;
+    @FXML
+    private Button quitButton;
+    @FXML
+    private AnchorPane boardPane;
 
     private ReducedModel reducedModel;
 
@@ -110,6 +121,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     private List<String> moveStudentParameters;
 
+    Stage stage;
 
     @FXML
     public void initialize() {
@@ -580,6 +592,18 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                     image.setImage(new Image(String.valueOf(getClass().getResource("/assets/custom/" + color + "Tower.png"))));
                 }
             }
+        }
+    }
+
+    public void quit (ActiveEvent event){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Logout");
+        alert.setContentText("do you want to leave the game?");
+
+        if (alert.showAndWait().get()== ButtonType.OK){
+            stage = (Stage) boardPane.getScene().getWindow();
+            System.out.println("You have quit the game");
+            stage.close();
         }
     }
 }
