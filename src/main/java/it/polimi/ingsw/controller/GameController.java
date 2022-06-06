@@ -23,10 +23,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Controller class
  */
-public class GameController implements Serializable, Observer {
-
-    @Serial
-    private static final long serialVersionUID = 743913880093540550L;
+public class GameController implements Observer {
 
     private final Game model;
     private int movenStudents;
@@ -49,9 +46,6 @@ public class GameController implements Serializable, Observer {
         this.activePlayers = new ArrayList<>(model.getUsernames());
         phase = 0;
         playerTurn = 0;
-    }
-
-    public static void removePlayer(String username) {
     }
 
     public TurnController getTurnController() {

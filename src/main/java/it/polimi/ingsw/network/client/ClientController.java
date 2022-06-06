@@ -210,7 +210,7 @@ public class ClientController implements ViewObserver, Observer {
     @Override
     public void onUpdateLoginMessage(String username) {
         this.username = username;
-        taskQueue.execute(() -> view.setUsername(username));
+        taskQueue.execute(() -> view.setPlayerUsername(username));
         client.sendMessage(new LoginMessage(username));
     }
 

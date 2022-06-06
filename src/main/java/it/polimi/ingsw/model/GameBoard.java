@@ -201,10 +201,6 @@ public class GameBoard implements Serializable {
 		this.numTowers = numTowers;
 	}
 
-	public void putStudentInBag(Student student){
-		bag.add(student);
-	}
-
 	public void fillCloud(int cloudId) {
 	}
 }

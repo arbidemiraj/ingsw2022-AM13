@@ -12,7 +12,7 @@ public class Effect12 implements Actionable{
 
     @Override
     public void apply(Game game, Student chosenStudent) {
-        game.getBoard().putStudentInBag(chosenStudent);
+        game.putStudentInBag(chosenStudent);
     }
 
     @Override

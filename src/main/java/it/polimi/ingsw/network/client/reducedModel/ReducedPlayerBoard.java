@@ -21,7 +21,7 @@ public class ReducedPlayerBoard implements Serializable {
     private ColorIntMap intColorMap = new ColorIntMap();
     private HashMap<Student, Integer> intColor = intColorMap.getMap();
     private ArrayList<Student> students = new ArrayList<>();
-
+    private final String LINE = "\n---------------------------------------------------------------------\n";
 
     public ReducedPlayerBoard(int[] entranceStudents, int[] hallStudents, int numTowers) {
         this.entranceStudents = entranceStudents;
@@ -71,40 +71,40 @@ public class ReducedPlayerBoard implements Serializable {
     public String print(){
         String pb = "";
 
-        pb += Color.ANSI_YELLOW + "\n---------------------------------------------------------------------\n" +
+        pb += Color.ANSI_YELLOW + LINE +
                 "| Y: ";
         for(int i = 0; i < entranceStudents[0]; i++) pb+= "*";
         pb+= " |   Y: ";
         for(int i = 0; i < hallStudents[0]; i++) pb+= "*";
 
-        pb+= Color.ANSI_BLUE + "\n---------------------------------------------------------------------\n";
+        pb+= Color.ANSI_BLUE + LINE;
         pb+="| B: ";
         for(int i = 0; i < entranceStudents[1]; i++) pb+= "*";
         pb+= " |   B: ";
         for(int i = 0; i < hallStudents[1]; i++) pb+= "*";
 
-        pb+="\n---------------------------------------------------------------------\n";
+        pb+=LINE;
 
         pb+= Color.ANSI_GREEN + "| G: ";
         for(int i = 0; i < entranceStudents[2]; i++) pb+= "*";
         pb+= " |   G: ";
         for(int i = 0; i < hallStudents[2]; i++) pb+= "*";
 
-        pb+="\n---------------------------------------------------------------------\n";
+        pb+=LINE;
 
         pb+= Color.ANSI_PINK + "| P: ";
         for(int i = 0; i < entranceStudents[3]; i++) pb+= "*";
         pb+= " |   P: ";
         for(int i = 0; i < hallStudents[3]; i++) pb+= "*";
 
-        pb+="\n---------------------------------------------------------------------\n";
+        pb+=LINE;
 
         pb+= Color.ANSI_RED + "| R: ";
         for(int i = 0; i < entranceStudents[4]; i++) pb+= "*";
         pb+= " |   R: ";
         for(int i = 0; i < hallStudents[4]; i++) pb+= "*";
 
-        pb+="\n---------------------------------------------------------------------\n" + Color.RESET ;
+        pb+=LINE + Color.RESET ;
 
 
         return pb;

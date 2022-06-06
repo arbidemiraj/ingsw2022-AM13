@@ -26,6 +26,8 @@ public class WinMessage extends Message {
 
     @Override
     public String toString() {
-        return null;
+        return "WinMessage{" +
+                "winner='" + winner + '\'' +
+                '}';
     }
 }

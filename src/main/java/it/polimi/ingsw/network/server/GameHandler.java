@@ -84,7 +84,7 @@ public class GameHandler {
 
     public void endGame(String username){
         for(String user : gameController.getGame().getUsernames()){
-            if(user != username) server.getClientHandlerMap().get(user).disconnect();
+            if(!user.equals(username)) server.getClientHandlerMap().get(user).disconnect();
 
             server.removeClient(user);
         }
@@ -145,7 +145,7 @@ public class GameHandler {
 
     public void sendMessageToAllExcept(Message message, String user){
         for(String username : gameController.getGame().getUsernames()){
-            if(username != user) sendMessage(message, username);
+            if(!username.equals(user)) sendMessage(message, username);
         }
     }
 

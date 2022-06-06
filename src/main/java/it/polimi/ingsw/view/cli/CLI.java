@@ -93,7 +93,7 @@ public class CLI extends ViewObservable implements View {
             output.print("> ");
 
             username = input.nextLine();
-        }while(username == "");
+        }while(username.equals(""));
 
         notifyObserver(obs -> obs.onUpdateLoginMessage(username));
         input.reset();
@@ -331,7 +331,7 @@ public class CLI extends ViewObservable implements View {
 
             String read = readLine();
 
-            if (read == null) {
+            if (read.equals(null)) {
                 activatingCharacter = true;
             } else {
                 cloud = Integer.parseInt(read);
@@ -374,10 +374,10 @@ public class CLI extends ViewObservable implements View {
 
         do{
             inputString = readLine();
-        }while(inputString == null);
+        }while(inputString.isEmpty());
 
 
-        if(inputString == "") inputString=input.nextLine();
+        if(inputString.equals("")) inputString=input.nextLine();
 
         String[] temp = inputString.split("\\s+");
 
@@ -516,7 +516,7 @@ public class CLI extends ViewObservable implements View {
     }
 
     @Override
-    public void setUsername(String username) {
+    public void setPlayerUsername(String username) {
         this.playerUsername = username;
     }
 

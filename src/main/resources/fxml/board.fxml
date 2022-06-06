@@ -329,7 +329,7 @@
             <Image url="@../assets/custom/cloud.png" />
          </image>
       </ImageView>
-      <Label fx:id="turnInfo" alignment="CENTER" layoutX="385.0" layoutY="336.0" prefHeight="62.0" prefWidth="655.0" style="-fx-border-color: #fff;" text="Click on prepare board to prepare the game" textAlignment="CENTER" />
+      <Label fx:id="turnInfo" alignment="CENTER" layoutX="385.0" layoutY="336.0" prefHeight="62.0" prefWidth="655.0" style="-fx-border-color: #fff;" textAlignment="CENTER" />
       <ImageView fx:id="pinkProf" fitHeight="50.0" fitWidth="50.0" layoutX="558.0" layoutY="928.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="blueProf" fitHeight="50.0" fitWidth="50.0" layoutX="559.0" layoutY="986.0" pickOnBounds="true" preserveRatio="true" />
       <TilePane fx:id="cloud1" layoutX="478.0" layoutY="214.0" prefHeight="96.0" prefWidth="87.0" />

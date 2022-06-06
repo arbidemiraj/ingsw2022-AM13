@@ -54,7 +54,7 @@ public interface View {
 
     void activateCharacter(int id);
 
-    void setUsername(String username);
+    void setPlayerUsername(String username);
 
     void mergeIsland(int island1, int island2);
 

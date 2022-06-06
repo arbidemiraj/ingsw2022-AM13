@@ -9,14 +9,18 @@ import it.polimi.ingsw.model.maps.IntColorMap;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.observer.ViewObservable;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
+import jdk.jfr.Event;
 
+import java.awt.event.MouseEvent;
 import java.util.*;
 
 public class BoardController extends ViewObservable implements GenericSceneController {
@@ -73,6 +77,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     private Label turnPlayer;
     @FXML
     private ImageView lastCard3;
+    @FXML
+    private Button disconnect;
 
     private ReducedModel reducedModel;
 
@@ -130,16 +136,21 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         dinnerRoom = new ArrayList<>();
         professors = new ArrayList<>();
 
+
         moveStudentParameters = new ArrayList<>();
-        entrance.add(estud1);
-        entrance.add(estud2);
-        entrance.add(estud3);
-        entrance.add(estud4);
-        entrance.add(estud5);
-        entrance.add(estud6);
-        entrance.add(estud7);
-        entrance.add(estud8);
-        entrance.add(estud9);
+
+
+        for(int i = 1; i < 10; i++) {
+            try {
+                try {
+                    entrance.add((ImageView) getClass().getDeclaredField("estud" + i).get(this));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+        }
 
         professors.add(yellowProfOwner);
         professors.add(blueProfOwner);
@@ -147,18 +158,15 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         professors.add(pinkProfOwner);
         professors.add(redProfOwner);
 
-        islands.add(island1);
-        islands.add(island2);
-        islands.add(island3);
-        islands.add(island4);
-        islands.add(island5);
-        islands.add(island6);
-        islands.add(island7);
-        islands.add(island8);
-        islands.add(island9);
-        islands.add(island10);
-        islands.add(island11);
-        islands.add(island12);
+        for(int i = 1; i <= 12; i++) {
+            try {
+                try {
+                    islands.add((GridPane) getClass().getDeclaredField("island" + i).get(this));
+                } catch (IllegalAccessException e) {
+                }
+            } catch (NoSuchFieldException e) {
+            }
+        }
 
         cloudsPane.add(cloud1);
         cloudsPane.add(cloud2);
@@ -186,6 +194,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
         cards = new ArrayList<>();
     }
+
+
 
     private void playCard(int id) {
         deck.setOnMouseClicked(e -> {showGenericText("You can't play a card now!");});
@@ -222,8 +232,6 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     public void initIslands(){
         int i = 0;
-
-
 
         for(GridPane island : islands ){
             List<Student> students = reducedModel.getReducedBoard().getIslands().get(i).getStudents();
@@ -367,12 +375,12 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
                 studentsCount++;
 
-                if(studentsCount == 2){
+                if(studentsCount == 3){
                     disableStudents();
                     studentsCount = 0;
                 }
 
-                new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudent("entrance", String.valueOf(imagesStudent.get(url)), "ISLAND", islands.indexOf(island)))).start();
+                new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudent("ENTRANCE", String.valueOf(imagesStudent.get(url)), "ISLAND", islands.indexOf(island)))).start();
             });
         }
 
@@ -382,9 +390,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
                 studentsCount++;
 
-                if(studentsCount == 2) disableStudents();
+                if(studentsCount == 3) disableStudents();
 
-                new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudent("entrance", String.valueOf(imagesStudent.get(url)), "DINNER", 0))).start();
+                new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudent("ENTRANCE", String.valueOf(imagesStudent.get(url)), "DINNER", 0))).start();
             });
         }
     }
@@ -392,6 +400,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     private void updateIsland(GridPane island, Student student) {
         int numStudents = reducedModel.getReducedBoard().getIslands().get(islands.indexOf(island)).getNumStudents()[getIntFromStudent.get(student)];
 
+        island.getChildren().remove(3, getIntFromStudent.get(student));
         island.add(new Label(" : " + numStudents), 3, getIntFromStudent.get(student));
     }
 

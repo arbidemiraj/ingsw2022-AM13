@@ -164,7 +164,7 @@ public class GUI extends ViewObservable implements View {
     }
 
     @Override
-    public void setUsername(String username) {
+    public void setPlayerUsername(String username) {
         this.playerUsername = username;
     }
 

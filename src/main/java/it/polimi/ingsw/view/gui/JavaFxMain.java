@@ -22,7 +22,7 @@ public class JavaFxMain extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Media media = new Media(String.valueOf(getClass().getResource("/Spitfires.mp3")));
+       /* Media media = new Media(String.valueOf(getClass().getResource("/Spitfires.mp3")));
         MediaPlayer music = new MediaPlayer(media);
         music.play();
         Media pick = new Media(Objects.requireNonNull(getClass().getClassLoader()
@@ -34,7 +34,7 @@ public class JavaFxMain extends Application {
         player.setOnEndOfMedia(() -> {
             player.seek(Duration.ZERO);
             player.play();
-        });
+        });*/
 
         System.setProperty("prism.allowhidpi", "false");
 

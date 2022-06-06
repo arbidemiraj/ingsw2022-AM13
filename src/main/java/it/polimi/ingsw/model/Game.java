@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.EmptyBagException;
+import it.polimi.ingsw.model.exceptions.InvalidMoveException;
 import it.polimi.ingsw.model.maps.ColorIntMap;
 import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.GenericType;
@@ -482,5 +483,26 @@ public class Game extends Observable {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void putStudentInBag(Student student){
+		for(Player player : players){
+			int num = player.getPlayerBoard().getDinnerRoom()[4].getNumStudents();
+
+			if(num > 3) num = 3;
+
+			do{
+				try {
+					player.getPlayerBoard().getDinnerRoom()[4].removeStudent(student);
+				} catch (InvalidMoveException e) {
+					e.printStackTrace();
+				}
+
+				board.getBag().add(student);
+				num --;
+			}while (num > 0);
+
+		}
+
 	}
 }
