@@ -12,13 +12,20 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.TilePane;
+import javafx.stage.Stage;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class BoardController extends ViewObservable implements GenericSceneController {
 
@@ -40,6 +47,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     private Label greenProfOwner, redProfOwner, yellowProfOwner, pinkProfOwner, blueProfOwner;
     @FXML
     private GridPane deck;
+    @FXML
+    private Button quitButton;
+    @FXML
+    private AnchorPane boardPane;
     @FXML
     private TilePane test;
     @FXML
@@ -111,6 +122,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     private List<String> moveStudentParameters;
 
+    private Stage stage;
 
     @FXML
     public void initialize() {
@@ -583,6 +595,18 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                     image.setImage(new Image(String.valueOf(getClass().getResource("/assets/custom/" + color + "Tower.png"))));
                 }
             }
+        }
+    }
+
+    public void quit (ActiveEvent event){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Logout");
+        alert.setContentText("do you want to leave the game?");
+
+        if (alert.showAndWait().get()== ButtonType.OK){
+            stage = (Stage) boardPane.getScene().getWindow();
+            System.out.println("You have quit the game");
+            stage.close();
         }
     }
 }
