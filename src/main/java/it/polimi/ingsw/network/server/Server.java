@@ -65,8 +65,6 @@ public class Server {
     public synchronized void removeClient(String username) {
         clientHandlerMap.remove(username);
 
-        nextGameId--;
-
         LOGGER.info("Removed " + username + " from the client list.");
     }
 

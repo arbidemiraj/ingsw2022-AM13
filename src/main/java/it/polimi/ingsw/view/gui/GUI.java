@@ -199,6 +199,8 @@ public class GUI extends ViewObservable implements View {
     @Override
     public void updateMotherNature(int steps) {
         if(steps <= reducedModel.getMaxSteps()){
+            reducedModel.getReducedBoard().moveMotherNature(steps);
+
             Platform.runLater(() -> controller.updateMotherNature(steps));
         }
     }

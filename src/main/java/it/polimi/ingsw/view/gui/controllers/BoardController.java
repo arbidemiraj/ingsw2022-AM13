@@ -671,8 +671,6 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     }
 
     public void updateMotherNature(int steps) {
-        reducedModel.getReducedBoard().moveMotherNature(steps);
-
         GridPane island = islands.get(reducedModel.getReducedBoard().getMotherNature() - steps);
 
         ObservableList<Node> childrens = island.getChildren();
@@ -722,6 +720,23 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 }
 
                 j++;
+            }
+
+            for (Node node : childrens) {
+                if(island.getRowIndex(node) != null && island.getColumnIndex(node) != null) {
+                    if(island.getRowIndex(node) == 1 && island.getColumnIndex(node) == 1) {
+                        ImageView image = (ImageView) node;
+                        if(image.getImage() != null){
+                            if(i == reducedModel.getReducedBoard().getMotherNature()){
+                                image.setImage(new Image(String.valueOf(getClass().getResource("/assets/custom/motherNature.png"))));
+                            }
+                            else {
+                                image.setImage(null);
+                            }
+                        }
+
+                    }
+                }
             }
 
             i++;
