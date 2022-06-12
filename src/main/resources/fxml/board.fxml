@@ -324,7 +324,7 @@
             </ImageView>
          </children>
       </GridPane>
-      <ImageView fitHeight="147.0" fitWidth="150.0" layoutX="450.0" layoutY="187.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="cloudImage1" fitHeight="147.0" fitWidth="150.0" layoutX="450.0" layoutY="187.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/custom/cloud.png" />
          </image>
@@ -333,7 +333,7 @@
       <ImageView fx:id="pinkProf" fitHeight="50.0" fitWidth="50.0" layoutX="558.0" layoutY="928.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="blueProf" fitHeight="50.0" fitWidth="50.0" layoutX="559.0" layoutY="986.0" pickOnBounds="true" preserveRatio="true" />
       <TilePane fx:id="cloud1" layoutX="478.0" layoutY="214.0" prefHeight="96.0" prefWidth="87.0" />
-      <ImageView fitHeight="147.0" fitWidth="150.0" layoutX="796.0" layoutY="177.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="cloudImage2" fitHeight="147.0" fitWidth="150.0" layoutX="796.0" layoutY="177.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assets/custom/cloud.png" />
          </image>

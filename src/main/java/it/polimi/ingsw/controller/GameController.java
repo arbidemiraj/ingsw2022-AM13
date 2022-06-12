@@ -279,6 +279,8 @@ public class GameController implements Observer {
                     gameHandler.sendMessage(new AskMotherNature(), turnController.getCurrentPlayerUsername());
                 }
 
+                updateIslands();
+
                 gameHandler.sendMessage(new AskCloud(model.getBoard().getClouds()), turnController.getCurrentPlayerUsername());
             }
 
@@ -444,6 +446,7 @@ public class GameController implements Observer {
                 }
                 else {
                     updateReducedBoard();
+                    updateIslands();
 
                     gameHandler.sendMessage(new AskMotherNature(), turnController.getCurrentPlayerUsername());
                 }
@@ -556,6 +559,23 @@ public class GameController implements Observer {
 
     public void checkBag() {
         if(model.getBoard().getBag().isEmpty()) endGame();
+    }
+
+    public void updateIslands(){
+        String[] owner = new String[12];
+
+        ArrayList<Student> students;
+        ArrayList<ReducedIsland> islands = new ArrayList<>();
+
+        for (int i = 0; i < 12; i++) {
+            students = model.getBoard().getIslands().get(i).getStudents();
+            if (model.getBoard().getIslands().get(i).getOwner() != null) {
+                owner[i] = model.getBoard().getIslands().get(i).getOwner().getUsername();
+            } else owner[i] = "No owner";
+            islands.add(new ReducedIsland(students, owner[i], i, false));
+        }
+
+        gameHandler.sendMessageToAll(new UpdateModelMessage(islands));
     }
 
 }

@@ -88,6 +88,9 @@ public class ReducedBoard implements Serializable {
         }
     }
 
+    public void setIslands(ArrayList<ReducedIsland> islands) {
+        this.islands = islands;
+    }
 
     public ReducedPlayerBoard getPlayerBoard() {
         return playerBoard;

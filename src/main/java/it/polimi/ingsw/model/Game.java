@@ -505,4 +505,8 @@ public class Game extends Observable {
 		}
 
 	}
+
+	public void removePlayer(String user) {
+		players.remove(getPlayerByUsername(user));
+	}
 }

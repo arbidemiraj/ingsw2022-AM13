@@ -4,8 +4,10 @@ import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
+import it.polimi.ingsw.network.client.reducedModel.ReducedIsland;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface View {
@@ -63,4 +65,10 @@ public interface View {
     void changeProfOwner(String professorOwner, Student color);
 
     void conquerIsland(int island, String islandOwner);
+
+    void updateMotherNature(int steps);
+
+    void updateBoard();
+
+    void updateIslands(ArrayList<ReducedIsland> islands);
 }

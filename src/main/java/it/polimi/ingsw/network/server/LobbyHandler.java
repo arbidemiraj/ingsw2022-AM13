@@ -78,12 +78,12 @@ public class LobbyHandler {
     }
 
     public void disconnect(String username) {
-
-        games.get(getGameIdFromUsername(username)). sendMessageToAllExcept(new GenericMessage("Game has ended because user '" + username + "' disconnected", GenericType.END), username);
+        games.get(getGameIdFromUsername(username)).sendMessageToAllExcept(new GenericMessage("Game has ended because user '" + username + "' disconnected", GenericType.END), username);
 
         games.get(getGameIdFromUsername(username)).endGame(username);
 
-
         games.remove(getGameIdFromUsername(username));
+
+        gameIdUsernameMap.remove(username);
     }
 }

@@ -75,7 +75,7 @@ public class GameHandler {
     public void endGame(){
         for(String username : gameController.getGame().getUsernames()){
             server.removeClient(username);
-            server.getClientHandlerMap().get(username).disconnect();
+            gameController.getGame().removePlayer(username);
         }
 
         isActive = false;
@@ -84,9 +84,8 @@ public class GameHandler {
 
     public void endGame(String username){
         for(String user : gameController.getGame().getUsernames()){
-            if(!user.equals(username)) server.getClientHandlerMap().get(user).disconnect();
-
             server.removeClient(user);
+            gameController.getGame().removePlayer(user);
         }
 
         isActive = false;

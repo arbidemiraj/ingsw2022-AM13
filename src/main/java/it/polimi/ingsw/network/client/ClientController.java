@@ -146,6 +146,10 @@ public class ClientController implements ViewObserver, Observer {
                     case CONQUER -> {
                         taskQueue.execute(() -> view.conquerIsland(msg.getIsland(), msg.getTowerColor()));
                     }
+
+                    case ISLANDS -> {
+                        taskQueue.execute(() -> view.updateIslands(msg.getIslands()));
+                    }
                 }
             }
         }
@@ -190,7 +194,7 @@ public class ClientController implements ViewObserver, Observer {
 
     @Override
     public void onUpdateDisconnect() {
-
+        client.sendMessage(new DisconnectMessage(username));
     }
 
     @Override
@@ -211,12 +215,15 @@ public class ClientController implements ViewObserver, Observer {
     public void onUpdateLoginMessage(String username) {
         this.username = username;
         taskQueue.execute(() -> view.setPlayerUsername(username));
+
         client.sendMessage(new LoginMessage(username));
     }
 
     @Override
     public void onUpdateMotherNature(int steps) {
         client.sendMessage(new MoveMotherNatureMessage(username, steps));
+
+        taskQueue.execute(() -> view.updateMotherNature(steps));
     }
 
     @Override

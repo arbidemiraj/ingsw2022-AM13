@@ -88,6 +88,10 @@ public class SocketClientHandler implements ClientHandler, Runnable {
                                 sendMessage(new AskGameSettings());
                             }
                         }
+                        else if (message.getMessageType() == MessageType.DISCONNECTED){
+                            disconnect();
+                            client.close();
+                        }
                         else {
                             Server.LOGGER.info(() -> "Received: " + message);
                             socketServer.MessageReceived(message);
@@ -123,7 +127,6 @@ public class SocketClientHandler implements ClientHandler, Runnable {
             socketServer.disconnect(this);
         }
     }
-
 
     @Override
     public void sendMessage(Message message) {

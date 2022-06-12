@@ -42,6 +42,7 @@ public class ReducedModel implements Serializable {
         this.username = username;
         this.color = color;
         this.reducedBoard = reducedBoard;
+        this.professorOwners = new String[5];
         isExpertMode = false;
     }
 
@@ -145,6 +146,6 @@ public class ReducedModel implements Serializable {
     }
 
     public void setProfOwner(String professorOwner, Student color) {
-        professorOwners[getIntFromStudent.get(color)] = professorOwner;
+        this.professorOwners[getIntFromStudent.get(color)] = professorOwner;
     }
 }

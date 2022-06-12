@@ -62,7 +62,7 @@ public class Server {
     /**
      * Allows to delete a player given his username
      */
-    public void removeClient(String username) {
+    public synchronized void removeClient(String username) {
         clientHandlerMap.remove(username);
 
         nextGameId--;
@@ -100,8 +100,7 @@ public class Server {
      * Handles the disconnection of a client.
      */
     public synchronized void disconnect(ClientHandler clientHandler) {
-        if (lobbyHandler.getUsernameQueue().contains(getUsernameFromClientHandler(clientHandler)))
-                lobbyHandler.disconnect(getUsernameFromClientHandler(clientHandler));
+        if (lobbyHandler.getUsernameQueue().contains(getUsernameFromClientHandler(clientHandler))) lobbyHandler.disconnect(getUsernameFromClientHandler(clientHandler));
     }
 
     /**

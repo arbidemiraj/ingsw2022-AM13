@@ -2,15 +2,18 @@ package it.polimi.ingsw.network.message.servermsg;
 
 import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.enumerations.Student;
+import it.polimi.ingsw.network.client.reducedModel.ReducedIsland;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.MessageType;
 import it.polimi.ingsw.network.message.UpdateType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UpdateModelMessage extends Message {
     private int island;
     private String towerColor;
+    private ArrayList<ReducedIsland> islands;
     private int island1;
     private int island2;
     private String professorOwner;
@@ -24,6 +27,12 @@ public class UpdateModelMessage extends Message {
 
         updateType = UpdateType.TURN_CARDS;
         this.turnCardsPlayed = turnCardsPlayed;
+    }
+
+    public UpdateModelMessage(ArrayList<ReducedIsland> islands) {
+        super("Server", MessageType.UPDATE_MODEL);
+        this.updateType = UpdateType.ISLANDS;
+        this.islands = islands;
     }
 
     public UpdateModelMessage(int maxSteps) {
@@ -60,6 +69,10 @@ public class UpdateModelMessage extends Message {
         this.island = island;
         this.towerColor = towerColor;
 
+    }
+
+    public ArrayList<ReducedIsland> getIslands() {
+        return islands;
     }
 
     public int getIsland() {

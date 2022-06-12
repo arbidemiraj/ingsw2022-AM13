@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
 import it.polimi.ingsw.network.client.reducedModel.ReducedCharacter;
+import it.polimi.ingsw.network.client.reducedModel.ReducedIsland;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.view.View;
@@ -537,6 +538,21 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void conquerIsland(int island, String islandOwner) {
+
+    }
+
+    @Override
+    public void updateMotherNature(int steps) {
+
+    }
+
+    @Override
+    public void updateBoard() {
+
+    }
+
+    @Override
+    public void updateIslands(ArrayList<ReducedIsland> islands) {
 
     }
 

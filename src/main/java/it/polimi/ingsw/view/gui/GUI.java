@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
+import it.polimi.ingsw.network.client.reducedModel.ReducedIsland;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.view.View;
@@ -193,5 +194,24 @@ public class GUI extends ViewObservable implements View {
     @Override
     public void conquerIsland(int island, String islandOwner) {
         Platform.runLater(() -> controller.conquerIsland(island, islandOwner));
+    }
+
+    @Override
+    public void updateMotherNature(int steps) {
+        if(steps <= reducedModel.getMaxSteps()){
+            Platform.runLater(() -> controller.updateMotherNature(steps));
+        }
+    }
+
+    @Override
+    public void updateBoard() {
+        Platform.runLater(() -> controller.updateIslands());
+    }
+
+    @Override
+    public void updateIslands(ArrayList<ReducedIsland> islands) {
+        reducedModel.getReducedBoard().setIslands(islands);
+
+        Platform.runLater(() -> controller.updateIslands());
     }
 }
