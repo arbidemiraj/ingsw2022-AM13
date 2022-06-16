@@ -127,11 +127,25 @@ public class ClientController implements ViewObserver, Observer {
                 taskQueue.execute(() -> view.winMessage(msg.getWinner()));
             }
 
+            case UPDATE_CLOUD -> {
+                UpdateClouds msg = (UpdateClouds) message;
+
+                taskQueue.execute(() -> view.updateClouds(msg.getCloudId()));
+            }
+
+            case FILL_CLOUDS -> {
+
+                FillCloudsMessage msg = (FillCloudsMessage) message;
+
+                taskQueue.execute(() -> view.fillClouds(msg.getClouds()));
+            }
             case UPDATE_MODEL -> {
                 UpdateModelMessage msg = (UpdateModelMessage) message;
 
                 switch (msg.getUpdateType()){
-                    case TURN_CARDS -> reducedModel.setTurnCards(msg.getTurnCardsPlayed());
+                    case TURN_CARDS -> {
+                        taskQueue.execute(() -> view.updateModel(msg.getTurnCardsPlayed()));
+                    }
 
                     case MAX_STEPS -> reducedModel.setMaxSteps(msg.getMaxSteps());
 

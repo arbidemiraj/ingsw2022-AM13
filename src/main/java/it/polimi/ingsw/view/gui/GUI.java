@@ -1,8 +1,10 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.AssistantCard;
+import it.polimi.ingsw.model.Cloud;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
+import it.polimi.ingsw.model.exceptions.EmptyCloudException;
 import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
 import it.polimi.ingsw.network.client.reducedModel.ReducedIsland;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
@@ -126,6 +128,7 @@ public class GUI extends ViewObservable implements View {
     public void startGame(String firstPlayer, ReducedModel reducedModel) {
         controller = new BoardController();
         this.reducedModel = reducedModel;
+        reducedModel.setWizardId(reducedModel.getUsername().indexOf(playerUsername) + 1);
         reducedModel.setUsername(playerUsername);
         reducedModel.setCurrentPlayer(firstPlayer);
         controller.addAllObservers(observers);
@@ -177,9 +180,7 @@ public class GUI extends ViewObservable implements View {
     }
 
     @Override
-    public void updateModel(List<AssistantCard> turnCardsPlayed) {
-        reducedModel.setTurnCards(turnCardsPlayed);
-
+    public void updateModel(HashMap<String, Integer> turnCardsPlayed) {
         Platform.runLater(() -> controller.setTurnCards(turnCardsPlayed));
 
     }
@@ -198,11 +199,7 @@ public class GUI extends ViewObservable implements View {
 
     @Override
     public void updateMotherNature(int steps) {
-        if(steps <= reducedModel.getMaxSteps()){
-            reducedModel.getReducedBoard().moveMotherNature(steps);
-
-            Platform.runLater(() -> controller.updateMotherNature(steps));
-        }
+        reducedModel.getReducedBoard().moveMotherNature(steps);
     }
 
     @Override
@@ -212,8 +209,29 @@ public class GUI extends ViewObservable implements View {
 
     @Override
     public void updateIslands(ArrayList<ReducedIsland> islands) {
-        reducedModel.getReducedBoard().setIslands(islands);
-
-        Platform.runLater(() -> controller.updateIslands());
+        Platform.runLater(() -> {
+            reducedModel.getReducedBoard().setIslands(islands);
+            controller.updateIslands();
+        });
     }
+
+    @Override
+    public void updateClouds(int cloudId) {
+        try {
+            reducedModel.getReducedBoard().getClouds()[cloudId].getStudentsFromCloud();
+        } catch (EmptyCloudException e) {
+            e.printStackTrace();
+        }
+
+        Platform.runLater(() -> controller.updateCloud(cloudId));
+    }
+
+    @Override
+    public void fillClouds(Cloud[] clouds) {
+        reducedModel.getReducedBoard().setClouds(clouds);
+
+        Platform.runLater(() -> controller.fillClouds());
+    }
+
+
 }

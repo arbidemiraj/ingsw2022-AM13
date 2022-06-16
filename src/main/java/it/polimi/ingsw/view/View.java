@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.AssistantCard;
+import it.polimi.ingsw.model.Cloud;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
@@ -8,6 +9,7 @@ import it.polimi.ingsw.network.client.reducedModel.ReducedIsland;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public interface View {
@@ -60,7 +62,7 @@ public interface View {
 
     void mergeIsland(int island1, int island2);
 
-    void updateModel(List<AssistantCard> turnCardsPlayed);
+    void updateModel(HashMap<String, Integer> turnCardsPlayed);
 
     void changeProfOwner(String professorOwner, Student color);
 
@@ -71,4 +73,8 @@ public interface View {
     void updateBoard();
 
     void updateIslands(ArrayList<ReducedIsland> islands);
+
+    void updateClouds(int cloudId);
+
+    void fillClouds(Cloud[] clouds);
 }

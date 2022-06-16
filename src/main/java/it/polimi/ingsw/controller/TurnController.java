@@ -7,6 +7,7 @@ import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.GenericType;
 import it.polimi.ingsw.network.message.servermsg.AskCard;
 import it.polimi.ingsw.network.message.servermsg.AskStudent;
+import it.polimi.ingsw.network.message.servermsg.FillCloudsMessage;
 import it.polimi.ingsw.network.message.servermsg.UpdateModelMessage;
 import it.polimi.ingsw.network.server.GameHandler;
 
@@ -55,7 +56,7 @@ public class TurnController {
         turnCardsPlayed.clear();
 
         gameHandler.sendMessageToAllExcept(new GenericMessage(currentPlayer + " is playing his turn! wait...\n", GenericType.GENERIC), currentPlayer);
-        gameHandler.sendMessage(new GenericMessage("Clouds have been filled! \n", GenericType.GENERIC), currentPlayer);
+        gameHandler.sendMessageToAll(new FillCloudsMessage(game.getBoard().getClouds()));
         gameHandler.sendMessage(new AskCard(getCurrentPlayer().getDeck(), turnCardsPlayed), usernameQueue.get(0));
     }
 

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.model.AssistantCard;
+import it.polimi.ingsw.model.Cloud;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
@@ -11,10 +12,7 @@ import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.view.View;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class CLI extends ViewObservable implements View {
@@ -527,7 +525,7 @@ public class CLI extends ViewObservable implements View {
     }
 
     @Override
-    public void updateModel(List<AssistantCard> turnCardsPlayed) {
+    public void updateModel(HashMap<String, Integer> turnCardsPlayed) {
 
     }
 
@@ -560,5 +558,15 @@ public class CLI extends ViewObservable implements View {
         if(steps < reducedModel.getMaxSteps()){
             reducedModel.getReducedBoard().moveMotherNature(steps);
         }
+    }
+
+    @Override
+    public void updateClouds(int cloudId) {
+
+    }
+
+    @Override
+    public void fillClouds(Cloud[] clouds) {
+
     }
 }

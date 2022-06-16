@@ -12,7 +12,7 @@
       <Label layoutX="541.0" layoutY="377.0" prefHeight="38.0" prefWidth="158.0" text="Num Players" />
       <TextField fx:id="numPlayers" layoutX="708.0" layoutY="383.0" prefHeight="26.0" prefWidth="30.0" />
       <Label layoutX="541.0" layoutY="433.0" text="Expert Mode" />
-      <Button fx:id="joinGameBtn" layoutX="535.0" layoutY="510.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="210.0" text="Join game" />
+      <Button fx:id="joinGameBtn" layoutX="535.0" layoutY="510.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="210.0" text="Create game" />
       <CheckBox fx:id="expertMode" layoutX="715.0" layoutY="442.0" mnemonicParsing="false" />
    </children>
    <stylesheets>

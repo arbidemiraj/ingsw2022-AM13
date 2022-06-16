@@ -27,6 +27,8 @@ public class ReducedModel implements Serializable {
     private String[] professorOwners;
     private ColorIntMap colorIntMap = new ColorIntMap();
     private Map<Student, Integer> getIntFromStudent = colorIntMap.getMap();
+    private int wizardId;
+
 
     public ReducedModel(List<String> username, TowerColor color, ReducedCharacter[] reducedCharacters,ReducedBoard reducedBoard, boolean isExpertMode) {
         this.username = username;
@@ -147,5 +149,13 @@ public class ReducedModel implements Serializable {
 
     public void setProfOwner(String professorOwner, Student color) {
         this.professorOwners[getIntFromStudent.get(color)] = professorOwner;
+    }
+
+    public int getWizardId() {
+        return wizardId;
+    }
+
+    public void setWizardId(int wizardId) {
+        this.wizardId = wizardId;
     }
 }

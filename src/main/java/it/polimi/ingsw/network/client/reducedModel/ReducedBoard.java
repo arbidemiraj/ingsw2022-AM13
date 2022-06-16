@@ -101,4 +101,8 @@ public class ReducedBoard implements Serializable {
 
         islands.get(island1).addIsland();
     }
+
+    public void setClouds(Cloud[] clouds) {
+        this.clouds = clouds;
+    }
 }

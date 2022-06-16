@@ -14,19 +14,21 @@ import it.polimi.ingsw.network.message.servermsg.AskTowerColor;
 import it.polimi.ingsw.network.message.servermsg.StartGame;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class GameHandler {
     private final GameController gameController;
     private final Server server;
     private ArrayList<TowerColor> towerColors;
+    private List<Integer> availableWizards;
     private final Game game;
     private int numPlayers;
     private final Logger logger = Logger.getLogger(getClass().getName());
     private int gameId;
     private final int maxPlayers;
     private boolean started;
-    private boolean isActive;
+    private boolean isActive = true;
 
 
     public GameHandler(Server server, NewGameMessage newGameMessage, int gameId){
@@ -42,6 +44,16 @@ public class GameHandler {
         towerColors.add(TowerColor.BLACK);
         towerColors.add(TowerColor.GRAY);
         towerColors.add(TowerColor.WHITE);
+
+        availableWizards = new ArrayList<>();
+
+        for(int i = 1; i <= 4; i++){
+            availableWizards.add(i);
+        }
+    }
+
+    public boolean isActive() {
+        return isActive;
     }
 
     public void startGame(){

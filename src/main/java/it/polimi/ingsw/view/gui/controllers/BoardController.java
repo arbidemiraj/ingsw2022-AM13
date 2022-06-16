@@ -89,7 +89,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     private List<TilePane> dinnerRoom;
 
-    private List<ImageView> cards;
+    private List<ImageView> cardsPlayed;
 
     private List<Node> assistantCards;
 
@@ -99,6 +99,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     private List<ImageView> cloudsImage;
 
+    private List<ImageView> charactersImages;
+
     private int studentsCount = 0;
 
     private IntColorMap intColorMap = new IntColorMap();
@@ -106,6 +108,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     private ColorIntMap colorIntMap = new ColorIntMap();
     private Map<Student, Integer> getIntFromStudent = colorIntMap.getMap();
     private Map<Student, Integer> positionMap = new HashMap<>();
+    private Map<String, ImageView> lastCardMap = new HashMap<>();
 
     private Map<Student, String> studentsImages = new HashMap<>();
     private Map<TowerColor, String> towerImages = new HashMap<>();
@@ -143,11 +146,23 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         dinnerRoom = new ArrayList<>();
         professors = new ArrayList<>();
         cloudsImage = new ArrayList<>();
-
-
+        charactersImages = new ArrayList<>();
         moveStudentParameters = new ArrayList<>();
+        cardsPlayed = new ArrayList<>();
 
 
+        for(int i = 1; i <= 3; i++) {
+            try {
+                try {
+                    charactersImages.add((ImageView) getClass().getDeclaredField("character" + i).get(this));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+        }
+        
         for(int i = 1; i < 10; i++) {
             try {
                 try {
@@ -201,10 +216,14 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         player1.setText(reducedModel.getUsername().get(0));
         player2.setText(reducedModel.getUsername().get(1));
 
-        if(reducedModel.getUsername().size() == 3) player3.setText(reducedModel.getUsername().get(2));
-        else player3.setText("");
+        if(reducedModel.getUsername().get(0).equals(reducedModel.getPlayerUsername())) player1.setText("You");
+        if(reducedModel.getUsername().get(1).equals(reducedModel.getPlayerUsername())) player2.setText("You");
 
-        cards = new ArrayList<>();
+        if(reducedModel.getUsername().size() == 3){
+            player3.setText(reducedModel.getUsername().get(2));
+            if(reducedModel.getUsername().get(2).equals(reducedModel.getPlayerUsername())) player2.setText("You");
+        }
+        else player3.setText("");
     }
 
     private void playCard(int id) {
@@ -266,6 +285,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
         if(reducedModel.getReducedBoard().getClouds().length == 3) cloud3.setImage(new Image(String.valueOf(getClass().getResource("/assets/custom/cloud.png"))));
 
+        fillClouds();
+    }
+
+    public void fillClouds() {
         int k = 0;
 
         for(Cloud cloud : reducedModel.getReducedBoard().getClouds()){
@@ -319,6 +342,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         positionMap.put(Student.YELLOW, 2);
         positionMap.put(Student.PINK, 3);
         positionMap.put(Student.BLUE, 4);
+
+        lastCardMap.put(reducedModel.getUsername().get(0), lastCard1);
+        lastCardMap.put(reducedModel.getUsername().get(1), lastCard2);
+        if(reducedModel.getUsername().size() > 2) lastCardMap.put(reducedModel.getUsername().get(2), lastCard3);
     }
 
     public void setReducedModel(ReducedModel reducedModel){
@@ -354,6 +381,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     }
 
     public void askStudent() {
+        setCharacterClickable();
+
         turnInfo.setText("Select a student from entrance");
 
         for (ImageView singleStud : entrance) {
@@ -400,6 +429,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
 
         for(TilePane dinner : dinnerRoom){
+            dinner.setDisable(false);
+
             dinner.setOnMouseClicked(e -> {
                 addStudentToDinner(dinnerRoom.get(positionMap.get(imagesStudent.get(url))), url);
 
@@ -408,6 +439,15 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 if(studentsCount == 3){
                     disableStudents();
                     studentsCount = 0;
+                }
+
+                for(TilePane din : dinnerRoom){
+                    din.setDisable(true);
+                }
+
+                if((dinner.getChildren().size() == 3 || dinner.getChildren().size() == 6 || dinner.getChildren().size() == 9) && reducedModel.isExpertMode()){
+                    reducedModel.addCoin();
+                    coins.setText(String.valueOf(reducedModel.getNumCoins()));
                 }
 
                 new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudent("ENTRANCE", String.valueOf(imagesStudent.get(url)), "DINNER", 0))).start();
@@ -450,6 +490,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     }
 
     public void askCard(){
+        setCharacterClickable();
 
         turnInfo.setText("It's your turn! Select an assistant card to play");
 
@@ -460,54 +501,52 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
         turnPlayer.setText("Current Player: " + reducedModel.getCurrentPlayer());
 
-        if(!reducedModel.getTurnCards().isEmpty()){
-            int id = reducedModel.getTurnCards().get(0).getValue();
-
-            lastCard2.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id) +".png"))));
-
-            if(reducedModel.getTurnCards().size() == 2){
-                lastCard3.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id) +".png"))));
-            }
-        }
 
         deck.setOnMouseClicked(e -> {
             Node node = (Node) e.getTarget();
-            int id = GridPane.getColumnIndex(node);
 
-            boolean isValid = true;
+            if(!cardsPlayed.contains(node)) {
+                int id = GridPane.getColumnIndex(node);
 
-            for(AssistantCard assistantCard : reducedModel.getTurnCards()){
-                if(assistantCard.getValue() == id + 1){
-                    isValid = false;
+                boolean isValid = true;
+
+                for (AssistantCard assistantCard : reducedModel.getTurnCards()) {
+                    if (assistantCard.getValue() == id + 1) {
+                        isValid = false;
+                    }
+
+
+                }
+
+                if (isValid = true) {
+                    ImageView imageView = (ImageView) node;
+
+                    int wizardId = reducedModel.getWizardId();
+
+                    imageView.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/wizard" + wizardId +".png"))));
+
+                    playCard(id);
+
+                    cardsPlayed.add(imageView);
+
+                    disableCharacterClickable();
+
+                    lastCardMap.get(reducedModel.getPlayerUsername()).setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente" + (id + 1) + ".png"))));
                 }
             }
 
-            if(isValid = true){
-                ImageView imageView = (ImageView) node;
 
-                imageView.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/retro1.png"))));
-
-                playCard(id);
-
-                lastCard1.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id + 1) +".png"))));
-            }
         });
     }
 
-    public void setTurnCards(List<AssistantCard> turnCardsPlayed) {
-
-        if(turnCardsPlayed.size() == 3){
-            int id = turnCardsPlayed.get(2).getValue();
-            lastCard3.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id) +".png"))));
-        }else if(turnCardsPlayed.size() == 2){
-            int id = turnCardsPlayed.get(0).getValue();
-            lastCard2.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id) +".png"))));
-
-            if(lastCard1.getImage().equals(lastCard2.getImage())){
-                id = turnCardsPlayed.get(1).getValue();
-                lastCard2.setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente"+ (id) +".png"))));
+    public void setTurnCards(HashMap<String, Integer> turnCardsPlayed) {
+        for(String username : reducedModel.getUsername()){
+            if(turnCardsPlayed.containsKey(username)) {
+                int id = turnCardsPlayed.get(username);
+                lastCardMap.get(username).setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente" + (id) + ".png"))));
             }
         }
+
     }
 
     public void askMotherNature() {
@@ -568,11 +607,16 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 ObservableList<Node> childrens = cloudsPane.get(index).getChildren();
 
                 for(Node student : childrens){
-                    String url = ((ImageView)student).getImage().getUrl();
+                    if( ((ImageView)student).getImage() != null) {
+                        String url = ((ImageView) student).getImage().getUrl();
 
-                    refillEntrance(url);
-                    ((ImageView)student).setImage(null);
+                        refillEntrance(url);
+                        ((ImageView) student).setImage(null);
+                        cloudsPane.remove(node);
+                    }
                 }
+
+                disableCharacterClickable();
 
                 turnInfo.setText("Wait... other players are playing their turn");
             });
@@ -648,10 +692,26 @@ public class BoardController extends ViewObservable implements GenericSceneContr
             if(islandOwned.getRowIndex(node) != null && islandOwned.getColumnIndex(node) != null) {
                 if(islandOwned.getRowIndex(node) == 0 && islandOwned.getColumnIndex(node) == 4) {
                     ImageView image = (ImageView) node;
-                    image.setImage(new Image(String.valueOf(getClass().getResource("/assets/custom/" + color + "Tower.png"))));
+
+                    islandOwned.getChildren().remove(node);
                 }
             }
         }
+
+        if(color.equals(String.valueOf(reducedModel.getColor()))) {
+            childrens = playerBoardTowers.getChildren();
+
+            for (int i = 0; i < childrens.size(); i++) {
+                Node node = childrens.get(i);
+                ImageView imageView = (ImageView) node;
+
+                if (imageView.getImage() != null) {
+                    imageView.setImage(null);
+                    i = childrens.size();
+                }
+            }
+        }
+        islandOwned.add(new ImageView((new Image(String.valueOf(getClass().getResource("/assets/custom/" + color + "Tower.png"))))), 0, 4);
     }
 
     @FXML
@@ -668,35 +728,6 @@ public class BoardController extends ViewObservable implements GenericSceneContr
             new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateDisconnect())).start();
         }
 
-    }
-
-    public void updateMotherNature(int steps) {
-        GridPane island = islands.get(reducedModel.getReducedBoard().getMotherNature() - steps);
-
-        ObservableList<Node> childrens = island.getChildren();
-
-        for (Node node : childrens) {
-            if(island.getRowIndex(node) != null && island.getColumnIndex(node) != null) {
-                if(island.getRowIndex(node) == 1 && island.getColumnIndex(node) == 1) {
-                    ImageView image = (ImageView) node;
-                    image.setImage(null);
-                }
-            }
-        }
-
-        island = islands.get(reducedModel.getReducedBoard().getMotherNature());
-
-        childrens = island.getChildren();
-
-
-        for (Node node : childrens) {
-            if(island.getRowIndex(node) != null && island.getColumnIndex(node) != null) {
-                if(island.getRowIndex(node) == 1 && island.getColumnIndex(node) == 1) {
-                    ImageView image = (ImageView) node;
-                    image.setImage(new Image(String.valueOf(getClass().getResource("/assets/custom/motherNature.png"))));
-                }
-            }
-        }
     }
 
     public void updateIslands(){
@@ -722,19 +753,15 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 j++;
             }
 
+            childrens = island.getChildren();
+
             for (Node node : childrens) {
                 if(island.getRowIndex(node) != null && island.getColumnIndex(node) != null) {
                     if(island.getRowIndex(node) == 1 && island.getColumnIndex(node) == 1) {
                         ImageView image = (ImageView) node;
-                        if(image.getImage() != null){
-                            if(i == reducedModel.getReducedBoard().getMotherNature()){
-                                image.setImage(new Image(String.valueOf(getClass().getResource("/assets/custom/motherNature.png"))));
-                            }
-                            else {
-                                image.setImage(null);
-                            }
+                        if(image.getImage() != null) {
+                            island.getChildren().remove(node);
                         }
-
                     }
                 }
             }
@@ -742,5 +769,40 @@ public class BoardController extends ViewObservable implements GenericSceneContr
             i++;
         }
 
+        islands.get(reducedModel.getReducedBoard().getMotherNature()).add(new ImageView(new Image(String.valueOf(getClass().getResource("/assets/custom/motherNature.png")))), 1, 1);
+    }
+
+    public void updateCloud(int cloudId) {
+
+        ObservableList<Node> childrens =  cloudsPane.get(cloudId).getChildren();
+
+        for(Node student : childrens){
+            ((ImageView)student).setImage(null);
+        }
+    }
+
+    public void setCharacterClickable(){
+        if(reducedModel.isExpertMode()) {
+            for (ImageView character : charactersImages) {
+                character.setDisable(false);
+                character.getStyleClass().set(0, "clickable");
+                character.setOnMouseClicked(e -> {
+                    ImageView node = (ImageView) e.getTarget();
+
+                    int effectId = reducedModel.getReducedCharacters()[charactersImages.indexOf(node)].getEffectId();
+
+                    new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateCharacter(effectId))).start();
+                });
+            }
+        }
+    }
+
+    public void disableCharacterClickable() {
+        if (reducedModel.isExpertMode()) {
+            for (ImageView character : charactersImages) {
+                character.setDisable(true);
+                character.getStyleClass().set(0, "");
+            }
+        }
     }
 }

@@ -32,6 +32,7 @@ public class GameController implements Observer {
     private GameHandler gameHandler;
     private int phase;
     private int playerTurn;
+    private HashMap<String, Integer> playerTurnCards;
 
 
     /**
@@ -45,6 +46,7 @@ public class GameController implements Observer {
         turnController = new TurnController(this, gameHandler);
         this.activePlayers = new ArrayList<>(model.getUsernames());
         phase = 0;
+        playerTurnCards = new HashMap<>();
         playerTurn = 0;
     }
 
@@ -256,6 +258,8 @@ public class GameController implements Observer {
 
                 moveStudentsFromCloud (chooseCloudMessage.getCloudId());
 
+                gameHandler.sendMessageToAllExcept(new UpdateClouds(chooseCloudMessage.getCloudId()), message.getUsername());
+
                 playerTurn++;
 
                 if(turnController.nextPlayer()){
@@ -279,7 +283,7 @@ public class GameController implements Observer {
                     gameHandler.sendMessage(new AskMotherNature(), turnController.getCurrentPlayerUsername());
                 }
 
-                updateIslands();
+                updateIslands(message.getUsername());
 
                 gameHandler.sendMessage(new AskCloud(model.getBoard().getClouds()), turnController.getCurrentPlayerUsername());
             }
@@ -295,12 +299,13 @@ public class GameController implements Observer {
 
                 try {
                     playCard(assistantCard);
+                    playerTurnCards.put(msg.getUsername(), assistantCard.getValue());
                 }catch (CardAlreadyPlayedException e){
                     gameHandler.sendMessage(new ErrorMessage(e.getMessage(), ErrorType.DUPLICATE_CARD), message.getUsername());
                     gameHandler.sendMessage(new AskCard(turnController.getCurrentPlayer().getDeck(), turnController.getTurnCardsPlayed()), turnController.getCurrentPlayerUsername());
                 }
 
-                gameHandler.sendMessageToAllExcept(new UpdateModelMessage(turnController.getTurnCardsPlayed()), msg.getUsername());
+                gameHandler.sendMessageToAllExcept(new UpdateModelMessage(playerTurnCards), msg.getUsername());
 
                 if(turnController.nextPlayer()){
                     gameHandler.sendMessage(new AskCard(turnController.getCurrentPlayer().getDeck(), turnController.getTurnCardsPlayed()), turnController.getCurrentPlayerUsername());
@@ -446,12 +451,11 @@ public class GameController implements Observer {
                 }
                 else {
                     updateReducedBoard();
-                    updateIslands();
+                    updateIslands(studentMessage.getUsername());
 
                     gameHandler.sendMessage(new AskMotherNature(), turnController.getCurrentPlayerUsername());
                 }
 
-                gameHandler.sendMessage(new SuccessMessage(SuccessType.MOVE), turnController.getCurrentPlayerUsername());
             } catch (InvalidMoveException e) {
                 String fromString = studentMessage.getFrom();
                 String toString = studentMessage.getTo();
@@ -561,7 +565,7 @@ public class GameController implements Observer {
         if(model.getBoard().getBag().isEmpty()) endGame();
     }
 
-    public void updateIslands(){
+    public void updateIslands(String username){
         String[] owner = new String[12];
 
         ArrayList<Student> students;
@@ -575,7 +579,7 @@ public class GameController implements Observer {
             islands.add(new ReducedIsland(students, owner[i], i, false));
         }
 
-        gameHandler.sendMessageToAll(new UpdateModelMessage(islands));
+        gameHandler.sendMessageToAllExcept(new UpdateModelMessage(islands), username);
     }
 
 }

@@ -300,7 +300,10 @@ public class Game extends Observable {
 
 		String newOwner = board.getProfessors()[colorPos].getOwner().getUsername();
 
-		if(actualOwner != null && actualOwner.equals(newOwner)){
+		if(actualOwner != null && !actualOwner.equals(newOwner)){
+			return true;
+		}
+		else if(actualOwner == null && newOwner != null){
 			return true;
 		}
 		else return false;

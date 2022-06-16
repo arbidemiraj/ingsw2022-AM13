@@ -31,17 +31,19 @@ public class LobbyHandler {
         lobby = "\n [LOBBY] \n";
 
         for (GameHandler game : games) {
-            lobby += "\nGame Id : " +
-                    game.getGameId() + "    " +
-                    "Number of players:  " +
-                    game.getNumPlayers() + " / " +
-                    game.getMaxPlayers() + "    ";
+            if(game.isActive() && !game.isStarted()) {
+                lobby += "\nGame Id : " +
+                        game.getGameId() + "    " +
+                        "Number of players:  " +
+                        game.getNumPlayers() + " / " +
+                        game.getMaxPlayers() + "    ";
 
-            if(game.getGame().isExpertMode()) lobby += "ExpertMode : ON";
-            else lobby += "ExpertMode : OFF";
+                if (game.getGame().isExpertMode()) lobby += "ExpertMode : ON";
+                else lobby += "ExpertMode : OFF";
 
-            if(game.isStarted()) lobby += " already Started \n";
-            else lobby += "\n";
+                if (game.isStarted()) lobby += " already Started \n";
+                else lobby += "\n";
+            }
         }
 
         return lobby;
@@ -81,8 +83,6 @@ public class LobbyHandler {
         games.get(getGameIdFromUsername(username)).sendMessageToAllExcept(new GenericMessage("Game has ended because user '" + username + "' disconnected", GenericType.END), username);
 
         games.get(getGameIdFromUsername(username)).endGame(username);
-
-        games.remove(getGameIdFromUsername(username));
 
         gameIdUsernameMap.remove(username);
     }

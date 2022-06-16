@@ -8,6 +8,7 @@ import it.polimi.ingsw.network.message.MessageType;
 import it.polimi.ingsw.network.message.UpdateType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class UpdateModelMessage extends Message {
@@ -18,11 +19,11 @@ public class UpdateModelMessage extends Message {
     private int island2;
     private String professorOwner;
     private Student color;
-    private List<AssistantCard> turnCardsPlayed;
+    private HashMap<String, Integer> turnCardsPlayed;
     private int maxSteps;
     private UpdateType updateType;
 
-    public UpdateModelMessage(List<AssistantCard> turnCardsPlayed) {
+    public UpdateModelMessage(HashMap<String, Integer> turnCardsPlayed) {
         super("Server", MessageType.UPDATE_MODEL);
 
         updateType = UpdateType.TURN_CARDS;
@@ -107,7 +108,7 @@ public class UpdateModelMessage extends Message {
         return maxSteps;
     }
 
-    public List<AssistantCard> getTurnCardsPlayed() {
+    public HashMap<String, Integer> getTurnCardsPlayed() {
         return turnCardsPlayed;
     }
 
