@@ -77,4 +77,16 @@ public interface View {
     void updateClouds(int cloudId);
 
     void fillClouds(Cloud[] clouds);
+
+    void askStudentEffect(int effectId);
+
+    void askIslandEffect(int effectId);
+
+    void askSwitch();
+
+    void updateCharacterStudents(ArrayList<Student> students, int id);
+
+    void notifyCharacterActivation(int effectId, boolean activated);
+
+    void askEffect12Students(Student color);
 }

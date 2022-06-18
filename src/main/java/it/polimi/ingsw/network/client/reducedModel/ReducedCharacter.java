@@ -1,7 +1,10 @@
 package it.polimi.ingsw.network.client.reducedModel;
 
+import it.polimi.ingsw.model.enumerations.Student;
+
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class ReducedCharacter implements Serializable {
     @Serial
@@ -10,11 +13,13 @@ public class ReducedCharacter implements Serializable {
     private int effectId;
     private String characterDesc;
     private boolean isActive;
+    private ArrayList<Student> students;
 
     public ReducedCharacter(int cost, int effectId, String characterDesc) {
         this.cost = cost;
         this.effectId = effectId;
         this.characterDesc = characterDesc;
+
     }
 
     public int getCost() {
@@ -31,5 +36,13 @@ public class ReducedCharacter implements Serializable {
 
     public void activate() {
         isActive = true;
+    }
+
+    public void setStudents(ArrayList<Student> students){
+        this.students = students;
+    }
+
+    public ArrayList<Student> getStudents() {
+        return students;
     }
 }

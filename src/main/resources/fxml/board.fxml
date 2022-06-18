@@ -356,27 +356,27 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <ImageView fitHeight="72.0" fitWidth="72.0" layoutX="1313.0" layoutY="533.0">
+      <ImageView fx:id="yellow" fitHeight="72.0" fitWidth="72.0" layoutX="1313.0" layoutY="533.0">
          <image>
             <Image url="@../assets/custom/yellowProf.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="72.0" fitWidth="72.0" layoutX="1313.0" layoutY="643.0">
+      <ImageView fx:id="blue" fitHeight="72.0" fitWidth="72.0" layoutX="1313.0" layoutY="643.0">
          <image>
             <Image url="@../assets/custom/blueProf.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="72.0" fitWidth="72.0" layoutX="1313.0" layoutY="423.0">
+      <ImageView fx:id="green" fitHeight="72.0" fitWidth="72.0" layoutX="1313.0" layoutY="423.0">
          <image>
             <Image url="@../assets/custom/greenProf.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="72.0" fitWidth="72.0" layoutX="1313.0" layoutY="593.0">
+      <ImageView fx:id="pink" fitHeight="72.0" fitWidth="72.0" layoutX="1313.0" layoutY="593.0">
          <image>
             <Image url="@../assets/custom/pinkProf.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="72.0" fitWidth="72.0" layoutX="1313.0" layoutY="476.0">
+      <ImageView fx:id="red" fitHeight="72.0" fitWidth="72.0" layoutX="1313.0" layoutY="476.0">
          <image>
             <Image url="@../assets/custom/redProf.png" />
          </image>
@@ -397,6 +397,9 @@
       <ImageView fx:id="estud2" fitHeight="45.0" fitWidth="45.0" layoutX="67.0" layoutY="819.0" />
       <ImageView fx:id="cloud3" fitHeight="147.0" fitWidth="150.0" layoutX="623.0" layoutY="178.0" pickOnBounds="true" preserveRatio="true" />
       <TilePane fx:id="cloud3pane" layoutX="651.0" layoutY="205.0" prefHeight="96.0" prefWidth="87.0" />
+      <TilePane fx:id="characterPane1" layoutX="1358.0" layoutY="238.0" prefHeight="88.0" prefWidth="96.0" />
+      <TilePane fx:id="characterPane3" layoutX="1644.0" layoutY="228.0" prefHeight="88.0" prefWidth="96.0" />
+      <TilePane fx:id="characterPane2" layoutX="1500.0" layoutY="228.0" prefHeight="88.0" prefWidth="96.0" />
    </children>
    <stylesheets>
       <URL value="@../css/board.css" />

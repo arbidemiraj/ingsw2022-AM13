@@ -79,9 +79,11 @@ public class GameController implements Observer {
             }
 
             player.setNumCoins(player.getNumCoins() - character.getCost());
-            model.removeCoins(character.getCost()-1);
-            character.setCost(character.getCost()+1);
+            model.removeCoins(character.getCost() - 1);
+            character.setCost(character.getCost() + 1);
             model.getActivatedCharacters().add(character.getEffectId());
+
+            gameHandler.sendMessageToAll(new CharacterActivated(id, true));
     }
 
     /**
@@ -105,6 +107,14 @@ public class GameController implements Observer {
         model.removeCoins(character.getCost()-1);
         character.setCost(character.getCost()+1);
         model.getActivatedCharacters().add(character.getEffectId());
+
+        ArrayList<Student> students = ((Effect1)character.getEffect()).getStudents();
+
+        updateIslands(character.getOwner().getUsername());
+
+        gameHandler.sendMessageToAll(new UpdateCharacterStudents(students, id));
+
+        gameHandler.sendMessageToAll(new CharacterActivated(id, true));
     }
 
     /**
@@ -125,6 +135,7 @@ public class GameController implements Observer {
         character.setCost(character.getCost()+1);
         model.getActivatedCharacters().add(character.getEffectId());
 
+        gameHandler.sendMessageToAll(new CharacterActivated(id, true));
     }
 
     /**
@@ -333,7 +344,10 @@ public class GameController implements Observer {
             case STUDENT_EFFECT -> {
                 StudentEffectMessage msg = (StudentEffectMessage) message;
 
-                if(msg.getEffectId() == 1) gameHandler.sendMessage(new AskIsland(), msg.getUsername());
+                if(msg.getEffectId() == 1) gameHandler.sendMessage(new AskIsland(msg.getEffectId()), msg.getUsername());
+                else if(msg.getEffectId() == 12) {
+                    gameHandler.sendMessageToAll(new Effect12Message(msg.getChosenStudent()));
+                }
                 else {
                     activateStudentCharacter(msg.getEffectId(), msg.getChosenStudent());
                 }
@@ -366,11 +380,11 @@ public class GameController implements Observer {
 
         character.setOwner(player);
 
-        player.getPlayerBoard().getDinnerRoom()[model.createColorIntMap(students.get(0))].removeStudent(students.get(2));
-        player.getPlayerBoard().getDinnerRoom()[model.createColorIntMap(students.get(0))].removeStudent(students.get(3));
+        player.getPlayerBoard().getDinnerRoom()[model.createColorIntMap(students.get(1))].removeStudent(students.get(1));
+        player.getPlayerBoard().getDinnerRoom()[model.createColorIntMap(students.get(3))].removeStudent(students.get(3));
 
         player.getPlayerBoard().addStudent(students.get(0));
-        player.getPlayerBoard().addStudent(students.get(1));
+        player.getPlayerBoard().addStudent(students.get(2));
 
         player.setNumCoins(player.getNumCoins() - character.getCost());
         model.removeCoins(character.getCost() - 1);
@@ -389,7 +403,7 @@ public class GameController implements Observer {
             }
 
             case 3,5 -> {
-                gameHandler.sendMessage(new AskIsland(), username);
+                gameHandler.sendMessage(new AskIsland(id), username);
             }
 
 
@@ -472,6 +486,8 @@ public class GameController implements Observer {
     public void addPlayer(String username){
         model.addPlayer(username);
         activePlayers.add(username);
+
+
     }
 
     @Override
@@ -500,8 +516,12 @@ public class GameController implements Observer {
 
             for(Character character : model.getCharacters()){
                 reducedCharacters[i] = new ReducedCharacter(character.getCost(), character.getEffectId(), character.getDesc());
+                if(character.getEffectId() == 1){
+                    reducedCharacters[i].setStudents(((Effect1)character.getEffect()).getStudents());
+                }
                 i++;
             }
+
 
             for(Player player : model.getPlayers()){
                 ReducedBoard reducedBoard = createBoard(player);

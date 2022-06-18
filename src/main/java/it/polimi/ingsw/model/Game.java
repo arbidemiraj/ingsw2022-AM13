@@ -434,6 +434,10 @@ public class Game extends Observable {
 	public void addPlayer(String username) {
 		Player player = new Player(numTowers, username);
 		players.add(player);
+
+		if(expertMode){
+			player.setNumCoins(3);
+		}
 	}
 
 	public void setupPhase(){

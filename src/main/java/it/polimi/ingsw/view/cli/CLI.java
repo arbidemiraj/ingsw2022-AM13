@@ -569,4 +569,34 @@ public class CLI extends ViewObservable implements View {
     public void fillClouds(Cloud[] clouds) {
 
     }
+
+    @Override
+    public void askStudentEffect(int effectId) {
+
+    }
+
+    @Override
+    public void askIslandEffect(int effectId) {
+
+    }
+
+    @Override
+    public void askSwitch() {
+
+    }
+
+    @Override
+    public void updateCharacterStudents(ArrayList<Student> students, int id) {
+
+    }
+
+    @Override
+    public void notifyCharacterActivation(int effectId, boolean activated) {
+
+    }
+
+    @Override
+    public void askEffect12Students(Student color) {
+
+    }
 }

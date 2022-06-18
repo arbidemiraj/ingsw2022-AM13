@@ -158,4 +158,14 @@ public class ReducedModel implements Serializable {
     public void setWizardId(int wizardId) {
         this.wizardId = wizardId;
     }
+
+    public ReducedCharacter getCharacterById(int id){
+
+        ReducedCharacter character = Arrays.stream(reducedCharacters)
+                .filter(c -> c.getEffectId() == id)
+                .collect(Collectors.toList())
+                .get(0);
+
+        return character;
+    }
 }

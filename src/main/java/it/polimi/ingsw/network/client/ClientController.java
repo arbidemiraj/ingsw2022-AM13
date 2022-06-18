@@ -11,6 +11,7 @@ import it.polimi.ingsw.observer.Observer;
 import it.polimi.ingsw.observer.ViewObserver;
 import it.polimi.ingsw.view.View;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -138,6 +139,42 @@ public class ClientController implements ViewObserver, Observer {
                 FillCloudsMessage msg = (FillCloudsMessage) message;
 
                 taskQueue.execute(() -> view.fillClouds(msg.getClouds()));
+            }
+
+            case STUDENTS -> {
+                StudentsMessage msg = (StudentsMessage) message;
+
+
+                taskQueue.execute(() -> view.askStudentEffect(msg.getEffectId()));
+            }
+
+            case ASK_SWITCH_STUDENT -> {
+                taskQueue.execute(view::askSwitch);
+            }
+
+            case SELECT_ISLAND -> {
+                AskIsland msg = (AskIsland) message;
+
+                taskQueue.execute(() -> view.askIslandEffect(msg.getEffectId()));
+            }
+
+            case EFFECT12 -> {
+                Effect12Message msg = (Effect12Message) message;
+
+
+                taskQueue.execute(() -> view.askEffect12Students(msg.getColor()));
+            }
+
+            case UPDATE_CHARACTER_STUDENTS -> {
+                UpdateCharacterStudents msg = (UpdateCharacterStudents) message;
+
+                taskQueue.execute(() -> view.updateCharacterStudents(msg.getStudents(), msg.getEffectId()));
+            }
+
+            case CHARACTER_ACTIVATED -> {
+                CharacterActivated msg = (CharacterActivated) message;
+
+                taskQueue.execute(() -> view.notifyCharacterActivation(msg.getEffectId(), msg.isActivated()));
             }
             case UPDATE_MODEL -> {
                 UpdateModelMessage msg = (UpdateModelMessage) message;
@@ -268,5 +305,10 @@ public class ClientController implements ViewObserver, Observer {
     @Override
     public void onUpdateStudentEffect(String chosenStudent, int effectId) {
         client.sendMessage(new StudentEffectMessage(username, Student.valueOf(chosenStudent), effectId));
+    }
+
+    @Override
+    public void onUpdateSwitchStudents(ArrayList<Student> students){
+        client.sendMessage(new SwitchStudents(username, students));
     }
 }

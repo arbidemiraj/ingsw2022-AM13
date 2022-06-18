@@ -5,10 +5,7 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.GenericType;
-import it.polimi.ingsw.network.message.servermsg.AskCard;
-import it.polimi.ingsw.network.message.servermsg.AskStudent;
-import it.polimi.ingsw.network.message.servermsg.FillCloudsMessage;
-import it.polimi.ingsw.network.message.servermsg.UpdateModelMessage;
+import it.polimi.ingsw.network.message.servermsg.*;
 import it.polimi.ingsw.network.server.GameHandler;
 
 import java.util.ArrayList;
@@ -51,7 +48,12 @@ public class TurnController {
 
         numTurn++;
 
-        if(game.isExpertMode()) game.getActivatedCharacters().clear();
+        if(game.isExpertMode()){
+            for(int id : game.getActivatedCharacters()){
+                gameHandler.sendMessageToAll(new CharacterActivated(id, false));
+            }
+            game.getActivatedCharacters().clear();
+        }
 
         turnCardsPlayed.clear();
 

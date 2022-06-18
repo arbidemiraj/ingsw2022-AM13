@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.Movable;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -47,4 +48,5 @@ public interface ViewObserver {
     void onUpdateStudentEffect(String chosenStudent, int effectId);
 
 
+    void onUpdateSwitchStudents(ArrayList<Student> students);
 }

@@ -233,5 +233,36 @@ public class GUI extends ViewObservable implements View {
         Platform.runLater(() -> controller.fillClouds());
     }
 
+    @Override
+    public void askStudentEffect(int effectId) {
 
+        Platform.runLater(() -> controller.askStudentEffect(effectId));
+    }
+
+    @Override
+    public void askIslandEffect(int effectId) {
+        Platform.runLater(() -> controller.askIslandEffect(effectId));
+    }
+
+    @Override
+    public void askSwitch() {
+        Platform.runLater(() -> controller.askSwitch());
+    }
+
+    @Override
+    public void updateCharacterStudents(ArrayList<Student> students, int id) {
+        reducedModel.getCharacterById(id).setStudents(students);
+
+        Platform.runLater(() -> controller.updateCharacterStudents());
+    }
+
+    @Override
+    public void notifyCharacterActivation(int effectId, boolean activated) {
+        Platform.runLater(() -> controller.characterIsActivated(effectId, activated));
+    }
+
+    @Override
+    public void askEffect12Students(Student color) {
+        Platform.runLater(() -> controller.askEffect12Students(color));
+    }
 }

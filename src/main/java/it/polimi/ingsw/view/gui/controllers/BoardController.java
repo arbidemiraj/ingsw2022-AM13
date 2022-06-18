@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BoardController extends ViewObservable implements GenericSceneController {
 
@@ -35,9 +36,11 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     @FXML
     private TilePane greenStudents, redStudents, yellowStudents, blueStudents, pinkStudents;
     @FXML
+    private TilePane characterPane1, characterPane2, characterPane3;
+    @FXML
     private ImageView character1, character2, character3, cloudImage1, cloudImage2;
     @FXML
-    private ImageView estud1, estud2, estud3, estud4, estud5, estud6, estud7, estud8, estud9;
+    private ImageView estud1, estud2, estud3, estud4, estud5, estud6, estud7, estud8, estud9, green, yellow, blue, pink, red;
     @FXML
     private Label greenProfOwner, redProfOwner, yellowProfOwner, pinkProfOwner, blueProfOwner;
     @FXML
@@ -97,9 +100,13 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     private List<ImageView> entrance;
 
+    private List<ImageView> colors;
+
     private List<ImageView> cloudsImage;
 
     private List<ImageView> charactersImages;
+
+    private List<TilePane> charactersPanes;
 
     private int studentsCount = 0;
 
@@ -137,6 +144,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
             characters.setText("");
             coins.setText(String.valueOf(reducedModel.getNumCoins()));
             coinImage.setImage(new Image(String.valueOf(getClass().getResource("/assets/custom/coin.png"))));
+
             showCharacters();
         }
 
@@ -149,12 +157,21 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         charactersImages = new ArrayList<>();
         moveStudentParameters = new ArrayList<>();
         cardsPlayed = new ArrayList<>();
+        charactersPanes = new ArrayList<>();
+        colors = new ArrayList<>();
+
+        colors.add(red);
+        colors.add(green);
+        colors.add(yellow);
+        colors.add(pink);
+        colors.add(blue);
 
 
         for(int i = 1; i <= 3; i++) {
             try {
                 try {
                     charactersImages.add((ImageView) getClass().getDeclaredField("character" + i).get(this));
+                    charactersPanes.add((TilePane) getClass().getDeclaredField("characterPane" + i).get(this));
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
@@ -361,6 +378,14 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
         id = reducedModel.getReducedCharacters()[2].getEffectId();
         character3.setImage(new Image(String.valueOf(getClass().getResource("/assets/personaggi/character" + id +".jpg"))));
+
+        for(int i = 0; i < 3; i++){
+            if(reducedModel.getReducedCharacters()[i].getStudents() != null){
+                for(Student student : reducedModel.getReducedCharacters()[i].getStudents()){
+                    charactersPanes.get(i).getChildren().add(new ImageView(new Image(studentsImages.get(student))));
+                }
+            }
+        }
     }
 
     public void showDeck() {
@@ -738,6 +763,13 @@ public class BoardController extends ViewObservable implements GenericSceneContr
             int j = 0;
             ObservableList<Node> childrens = island.getChildren();
 
+            int index = islands.indexOf(island);
+
+            if(reducedModel.getReducedBoard().getIslands().get(index).isNoEntryTile()){
+           //     island.add(new ImageView(new Image(String.valueOf(getClass().getResource("/assets/")))))
+            }else{
+
+            }
 
             for (Student student : Student.values()) {
                 for (Node node : childrens) {
@@ -790,6 +822,11 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                     ImageView node = (ImageView) e.getTarget();
 
                     int effectId = reducedModel.getReducedCharacters()[charactersImages.indexOf(node)].getEffectId();
+                    int index = charactersImages.indexOf(character);
+
+                    if(effectId == 4 && reducedModel.getNumCoins() >= reducedModel.getCharacterById(effectId).getCost()){
+                        reducedModel.setMaxSteps(reducedModel.getMaxSteps() + 2);
+                    }
 
                     new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateCharacter(effectId))).start();
                 });
@@ -804,5 +841,230 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 character.getStyleClass().set(0, "");
             }
         }
+    }
+
+    public void askStudentEffect(int effectId) {
+        int index = Arrays.asList(reducedModel.getReducedCharacters()).indexOf(reducedModel.getCharacterById(effectId));
+
+        switch (effectId){
+            case 1 -> {
+                turnInfo.setText("Select a student you want to move to an Island");
+
+                for(Node node : charactersPanes.get(index).getChildren()){
+                    node.getStyleClass().set(0, "clickable");
+
+                    node.setOnMouseClicked(e -> {
+                        ImageView student = (ImageView) e.getTarget();
+
+                        Student selectedStudent = imagesStudent.get(student.getImage().getUrl());
+
+                        new Thread (() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudentEffect(String.valueOf(selectedStudent), effectId)));
+                    });
+                }
+            }
+
+            case 7 -> {
+                turnInfo.setText("Select a student from the card");
+
+                for(Node node : charactersPanes.get(index).getChildren()){
+                    node.getStyleClass().set(0, "clickable");
+
+                    node.setOnMouseClicked(e -> {
+                        ImageView student = (ImageView) e.getTarget();
+
+                        for (ImageView singleStud : entrance) {
+                            singleStud.getStyleClass().set(0, "clickable");
+
+                            singleStud.setOnMouseClicked(e1 -> {
+                                Node entranceNode = (Node) e1.getTarget();
+
+                                ImageView entranceStud = (ImageView) entranceNode;
+
+                                String studentString = String.valueOf(imagesStudent.get(entranceStud.getImage().getUrl()));
+
+                                moveStudentParameters.add(studentString);
+
+
+                                entranceStud.setImage(student.getImage());
+
+                                student.setImage(entranceStud.getImage());
+
+                                disableStudents();
+                                //TODO disable students from card
+                            });
+                        }
+
+
+                    });
+                }
+
+            }
+
+            case 9,12 -> {
+                turnInfo.setText("Click on a professor, his color will be the selected color");
+
+                for(ImageView color : colors){
+                    color.setOnMouseClicked(e -> {
+
+                        Student selectedColor = imagesProfessor.get(color.getImage().getUrl());
+
+                        new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudentEffect(String.valueOf(selectedColor), effectId)));
+                    });
+                }
+            }
+
+            case 11 -> {
+                turnInfo.setText("Select a student you want to move to the dinner room");
+
+                for(Node node : charactersPanes.get(index).getChildren()){
+                    node.getStyleClass().set(0, "clickable");
+
+                    node.setOnMouseClicked(e -> {
+                        ImageView student = (ImageView) e.getTarget();
+
+                        Student selectedStudent = imagesStudent.get(student.getImage().getUrl());
+
+                        dinnerRoom.get(positionMap.get(selectedStudent)).getChildren().add(student);
+
+                        new Thread (() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudentEffect(String.valueOf(selectedStudent), effectId)));
+                    });
+                }
+            }
+
+        }
+    }
+
+    public void askIslandEffect(int effectId) {
+        turnInfo.setText("Select the island you want");
+
+        switch(effectId){
+            case 5 -> {
+                for(GridPane island : islands){
+                    island.setOnMouseClicked(e -> {
+
+                        new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateIslandEffect(islands.indexOf(island))));
+                    });
+                }
+            }
+        }
+        for(GridPane island : islands){
+            island.setOnMouseClicked(e -> {
+                new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateIslandEffect(islands.indexOf(island))));
+            });
+        }
+    }
+
+    public void askSwitch() {
+        turnInfo.setText("Select a student from entrance");
+        ArrayList<Student> students = new ArrayList<>();
+
+        AtomicInteger numStudents = new AtomicInteger();
+
+        for (ImageView singleStud : entrance) {
+            singleStud.getStyleClass().set(0, "clickable");
+
+            singleStud.setOnMouseClicked(e -> {
+                Node node = (Node) e.getTarget();
+
+                ImageView student = (ImageView) node;
+
+                Student selectedStud = imagesStudent.get(student.getImage().getUrl());
+
+                students.add(selectedStud);
+
+                String url = student.getImage().getUrl();
+
+                addStudentToDinner(dinnerRoom.get(positionMap.get(imagesStudent.get(url))), url);
+
+                if((dinnerRoom.get(positionMap.get(imagesStudent.get(url))).getChildren().size() == 3 || 
+                        dinnerRoom.get(positionMap.get(imagesStudent.get(url))).getChildren().size() == 6 || 
+                        dinnerRoom.get(positionMap.get(imagesStudent.get(url))).getChildren().size() == 9) && reducedModel.isExpertMode()){
+                    reducedModel.addCoin();
+                    coins.setText(String.valueOf(reducedModel.getNumCoins()));
+                }
+                
+                turnInfo.setText("Select a dinner");
+
+                student.setImage(null);
+                
+                for(TilePane dinner : dinnerRoom){
+                    dinner.setDisable(false);
+
+                    dinner.setOnMouseClicked(e1 -> {
+
+                        dinner.getChildren().remove(dinner.getChildren().size() - 1);
+
+                        numStudents.getAndIncrement();
+                        
+                        for(TilePane din : dinnerRoom){
+                            din.setDisable(true);
+                        }
+
+                        
+                        if(numStudents.get() == 2){
+                            disableStudents();
+                            numStudents.set(0);
+                            new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students))).start();
+                        }
+                    });
+                }
+
+                
+            });
+        }
+
+
+
+    }
+
+    public void updateCharacterStudents() {
+        for(int i = 0; i < 3; i++){
+            if(reducedModel.getReducedCharacters()[i].getStudents() != null){
+                for(Student student : reducedModel.getReducedCharacters()[i].getStudents()){
+                    charactersPanes.get(i).getChildren().add(new ImageView(new Image(studentsImages.get(student))));
+                }
+            }
+        }
+    }
+
+    public void characterIsActivated(int effectId, boolean activated) {
+        if(activated){
+            int index = Arrays.asList(reducedModel.getReducedCharacters()).indexOf(reducedModel.getCharacterById(effectId));
+
+            charactersImages.get(index).setX(1.2);
+            charactersImages.get(index).setY(1.2);
+
+            charactersImages.get(index).setStyle("-fx-effect: dropshadow(gaussian, #f2e0d6, 20, 0.3, 0, 0);");
+
+            charactersPanes.get(index).getChildren().add(new Label("ACTIVATED"));
+
+            coins.setText(String.valueOf(reducedModel.getNumCoins()));
+        }
+        else {
+            int index = Arrays.asList(reducedModel.getReducedCharacters()).indexOf(reducedModel.getCharacterById(effectId));
+
+            charactersImages.get(index).setX(1);
+            charactersImages.get(index).setY(1);
+
+            charactersImages.get(index).setStyle("");
+
+            charactersPanes.get(index).getChildren().add(new Label(""));
+        }
+    }
+
+    public void askEffect12Students(Student color) {
+        TilePane dinner = dinnerRoom.get(positionMap.get(color));
+
+        int numStudents = dinner.getChildren().size();
+
+        ObservableList<Node> childrens = dinner.getChildren();
+
+        for(int i = 0; i < numStudents; i++){
+            Node node = childrens.get(i);
+
+            dinner.getChildren().remove(node);
+        }
+
+        turnInfo.setText(numStudents + " students have been taken from the dinner! ");
     }
 }
