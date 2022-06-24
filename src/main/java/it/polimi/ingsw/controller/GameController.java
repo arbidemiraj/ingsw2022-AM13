@@ -83,6 +83,8 @@ public class GameController implements Observer {
             character.setCost(character.getCost() + 1);
             model.getActivatedCharacters().add(character.getEffectId());
 
+            updateIslands(character.getOwner().getUsername());
+
             if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true));
     }
 
@@ -197,9 +199,17 @@ public class GameController implements Observer {
     public void moveMotherNature(int steps) throws InvalidMotherNatureMovesException {
         Player player = turnController.getCurrentPlayer();
 
-        if(steps > player.getMotherNatureMoves()) throw new InvalidMotherNatureMovesException();
+        if(model.getActivatedCharacters().contains(4)){
+            if(steps - 2 > player.getMotherNatureMoves() ) throw new InvalidMotherNatureMovesException();
+            else{
+                model.getBoard().moveMotherNature(steps);
+            }
+        }
         else{
-            model.getBoard().moveMotherNature(steps);
+            if(steps > player.getMotherNatureMoves()) throw new InvalidMotherNatureMovesException();
+            else{
+                model.getBoard().moveMotherNature(steps);
+            }
         }
 
         if(model.checkAfterMotherNature()){
@@ -223,8 +233,6 @@ public class GameController implements Observer {
             }
 
             model.mergeCheck();
-
-
         }
     }
 

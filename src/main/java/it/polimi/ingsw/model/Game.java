@@ -240,15 +240,15 @@ public class Game extends Observable {
 		if(island2.getOwner().equals(island1.getOwner())) {
 			mergeIslands(island2, island1);
 			board.getIslands().remove(previous);
-			new Thread(() -> notifyObserver(new UpdateModelMessage(previous, motherNature))).start();
-			new Thread(() -> notifyObserver(new GenericMessage("Island [" + previous + "] and [" + motherNature + "] have been merged", GenericType.MERGE))).start();
+			notifyObserver(new UpdateModelMessage(previous, motherNature));
+			notifyObserver(new GenericMessage("Island [" + previous + "] and [" + motherNature + "] have been merged", GenericType.MERGE));
 		}
 		if(island2.getOwner().equals(island3.getOwner())) {
 			mergeIslands(island2, island3);
 			board.getIslands().remove(next);
 
-			new Thread(() -> notifyObserver(new UpdateModelMessage(next, motherNature))).start();
-			new Thread(() -> notifyObserver(new GenericMessage("Island [" + next + "] and [" + motherNature + "] have been merged", GenericType.MERGE))).start();
+			notifyObserver(new UpdateModelMessage(next, motherNature));
+			notifyObserver(new GenericMessage("Island [" + next + "] and [" + motherNature + "] have been merged", GenericType.MERGE));
 		}
 	}
 

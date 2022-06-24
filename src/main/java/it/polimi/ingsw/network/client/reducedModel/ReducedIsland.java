@@ -118,4 +118,8 @@ public class ReducedIsland implements Serializable {
     public boolean isNoEntryTile() {
         return isNoEntryTile;
     }
+
+    public void setOwner(String islandOwner) {
+        this.owner = islandOwner;
+    }
 }

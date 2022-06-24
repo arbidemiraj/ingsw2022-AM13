@@ -60,7 +60,12 @@ public class LobbyHandler {
     }
 
     public int getGameIdFromUsername(String username){
-        return gameIdUsernameMap.get(username);
+        if(gameIdUsernameMap.get(username) != null){
+            return gameIdUsernameMap.get(username);
+        }else{
+            return -1;
+        }
+
     }
 
     public List<GameHandler> getGames() {
@@ -80,10 +85,12 @@ public class LobbyHandler {
     }
 
     public void disconnect(String username) {
-        games.get(getGameIdFromUsername(username)).sendMessageToAllExcept(new GenericMessage("Game has ended because user '" + username + "' disconnected", GenericType.END), username);
+        if(getGameIdFromUsername(username) != -1){
+            games.get(getGameIdFromUsername(username)).sendMessageToAllExcept(new GenericMessage("Game has ended because user '" + username + "' disconnected", GenericType.END), username);
 
-        games.get(getGameIdFromUsername(username)).endGame(username);
+            games.get(getGameIdFromUsername(username)).endGame(username);
 
-        gameIdUsernameMap.remove(username);
+            gameIdUsernameMap.remove(username);
+        }
     }
 }

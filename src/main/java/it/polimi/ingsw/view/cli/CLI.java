@@ -2,17 +2,25 @@ package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.Cloud;
+import it.polimi.ingsw.model.enumerations.PhaseType;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
+import it.polimi.ingsw.model.exceptions.EmptyCloudException;
+import it.polimi.ingsw.model.maps.ColorIntMap;
 import it.polimi.ingsw.network.client.reducedModel.ReducedBoard;
 import it.polimi.ingsw.network.client.reducedModel.ReducedCharacter;
 import it.polimi.ingsw.network.client.reducedModel.ReducedIsland;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.view.View;
+import javafx.scene.Node;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.TilePane;
 
 import java.io.PrintStream;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 public class CLI extends ViewObservable implements View {
@@ -24,6 +32,7 @@ public class CLI extends ViewObservable implements View {
     public static final Logger LOGGER = Logger.getLogger(CLI.class.getName());
     private boolean activatingCharacter;
     private ReducedModel reducedModel;
+    private PhaseType currentPhase;
 
     private final String INV_INP = "Invalid input! ";
     private String playerUsername;
@@ -273,7 +282,11 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void askCardToPlay(List<AssistantCard> assistantCards, List<AssistantCard> cardsPlayed) {
-        int cardId;
+        String id;
+        int cardId = 0;
+        
+
+        currentPhase = PhaseType.CARD;
 
         do {
             output.println("\n\nThis is your deck -> " + printDeck(assistantCards));
@@ -286,19 +299,27 @@ public class CLI extends ViewObservable implements View {
             output.println("Choose the card you want to play this turn! ");
             output.println("[ insert the number of the card ]");
             output.print("> ");
-
-
-            cardId = Integer.parseInt(readLine());
+            
+            id = readLine();
+            
+            if(id != null) cardId = Integer.parseInt(id);
 
         }while(cardId < 0 || cardId > 10);
 
 
         int finalCardId = cardId;
 
-        notifyObserver(viewObserver -> viewObserver.onUpdateCard(finalCardId));
+        if(finalCardId != 0){
+            notifyObserver(viewObserver -> viewObserver.onUpdateCard(finalCardId));
+            output.println("Wait... other player is playing his turn");
+        }else{
+            reducedModel.setTurnCards(cardsPlayed);
+            reducedModel.setDeck(assistantCards);
+        }
+
         input.reset();
 
-        output.println("Wait... other player is playing his turn");
+
     }
 
     private String printDeck(List<AssistantCard> assistantCards) {
@@ -319,6 +340,8 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void askCloud() {
+        currentPhase = PhaseType.CLOUD;
+
         output.println(reducedModel.getReducedBoard().printClouds());
         boolean isValid = false;
         int cloud = 0;
@@ -351,6 +374,9 @@ public class CLI extends ViewObservable implements View {
     @Override
     public void askStudentToMove() {
         output.flush();
+        input.reset();
+
+        currentPhase = PhaseType.MOVE_STUDENT;
 
         showBoard();
 
@@ -371,34 +397,34 @@ public class CLI extends ViewObservable implements View {
 
         String inputString;
 
-        do{
-            inputString = readLine();
-        }while(inputString.isEmpty());
-
+        inputString = readLine();
 
         if(inputString.equals("")) inputString=input.nextLine();
 
-        String[] temp = inputString.split("\\s+");
+        if(inputString != null){
+            String[] temp = inputString.split("\\s+");
 
-        student = temp[0].toUpperCase();
-        to = temp[1].toUpperCase();
+            student = temp[0].toUpperCase();
+            to = temp[1].toUpperCase();
 
-        int islandId = 0;
+            int islandId = 0;
 
-        if(to.equals("ISLAND")){
-            output.println("Select the island where you want to move the student \n[Insert the ID]");
-            output.print("> ");
+            if(to.equals("ISLAND")){
+                output.println("Select the island where you want to move the student \n[Insert the ID]");
+                output.print("> ");
 
-            id = input.nextInt();
+                id = input.nextInt();
+            }
+
+            int finalId = id;
+
+            reducedModel.moveStudent(from, student, to, id);
+
+            notifyObserver(viewObserver -> viewObserver.onUpdateStudent(from, student, to, finalId));
+
+            input.reset();
         }
 
-        int finalId = id;
-
-        reducedModel.moveStudent(from, student, to, id);
-
-        notifyObserver(viewObserver -> viewObserver.onUpdateStudent(from, student, to, finalId));
-
-        input.reset();
     }
 
 
@@ -468,31 +494,11 @@ public class CLI extends ViewObservable implements View {
         this.reducedModel = reducedModel;
     }
 
-    public String[] sideMenu(){
-        String sideMenu = "";
-
-        sideMenu += "\n\n-----------------------------------" +
-                "\n USERNAME " +
-                "\n-----------------------------------\n" +
-                reducedModel.getPlayerUsername() +
-                "\n-----------------------------------\n" +
-                "\n COLOR " +
-                "\n-----------------------------------\n" +
-                reducedModel.getColor() +
-                "\n-----------------------------------\n" +
-                "\n STATUS" +
-                "\n-----------------------------------\n" +
-                status;
-
-
-        String[] sideMenuRows = sideMenu.split("\n");
-
-
-        return sideMenuRows;
-    }
 
     @Override
     public void askMotherNatureMove() {
+        currentPhase = PhaseType.MOTHER_NATURE;
+
         output.println("\nEnter the number of steps you want to move motherNature");
         output.print("> ");
 
@@ -521,27 +527,29 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void mergeIsland(int island1, int island2) {
+        reducedModel.getReducedBoard().mergeIslands(island1, island2);
 
+        output.println("Island " + island1 + " and Island " + island2 + " have been merged");
     }
 
     @Override
     public void updateModel(HashMap<String, Integer> turnCardsPlayed) {
-
     }
 
     @Override
     public void changeProfOwner(String professorOwner, Student color) {
-
+        reducedModel.setProfOwner(professorOwner, color);
     }
 
     @Override
     public void conquerIsland(int island, String islandOwner) {
-
+        reducedModel.getReducedBoard().getIslands().get(island).setOwner(islandOwner);
+        output.println(islandOwner + "is now the owner of Island" + island);
     }
 
     @Override
     public void updateMotherNature(int steps) {
-
+        reducedModel.getReducedBoard().moveMotherNature(steps);
     }
 
     @Override
@@ -551,7 +559,7 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void updateIslands(ArrayList<ReducedIsland> islands) {
-
+        reducedModel.getReducedBoard().setIslands(islands);
     }
 
     private void moveMotherNature(int steps) {
@@ -562,41 +570,134 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void updateClouds(int cloudId) {
-
+        try {
+            reducedModel.getReducedBoard().getClouds()[cloudId].getStudentsFromCloud();
+        } catch (EmptyCloudException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void fillClouds(Cloud[] clouds) {
-
+        reducedModel.getReducedBoard().setClouds(clouds);
     }
 
     @Override
     public void askStudentEffect(int effectId) {
+        switch (effectId){
+            case 1 -> {
+                output.println("Select a student you want to move to an Island");
 
+                output.println(reducedModel.getCharacterById(effectId).getStudents());
+
+                output.print("> ");
+                String selectedStudent = input.nextLine();
+
+                notifyObserver(viewObserver -> viewObserver.onUpdateStudentEffect(selectedStudent, effectId));
+            }
+
+            case 7,11 -> {
+                output.println("Select a student from the card");
+
+                output.println(reducedModel.getCharacterById(effectId).getStudents());
+
+                output.print("> ");
+                String selectedStudent = input.nextLine();
+            }
+
+            case 9,12 -> {
+                output.println("Insert a color");
+                output.print("> ");
+
+                String selectedColor = input.nextLine();
+
+                notifyObserver(viewObserver -> viewObserver.onUpdateStudentEffect(selectedColor, effectId));
+            }
+        }
     }
 
     @Override
     public void askIslandEffect(int effectId) {
+        output.println("Insert the id of the island you want");
+
+        output.print("> ");
+
+        int id = input.nextInt();
+
+        notifyObserver(viewObserver -> viewObserver.onUpdateIslandEffect(id , effectId));
 
     }
 
     @Override
     public void askSwitch() {
+        ArrayList<Student> students = new ArrayList<>();
 
+        for(int i = 0; i < 2; i++){
+            output.println("Insert the student from entrance");
+            output.print("> ");
+            String selectedStud = input.nextLine();
+
+            students.add(Student.valueOf(selectedStud));
+
+            output.println("Insert the color of the student you want to get from the dinner");
+            output.print("> ");
+            selectedStud = input.nextLine();
+
+            students.add(Student.valueOf(selectedStud));
+        }
+
+
+        notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students));
     }
 
     @Override
     public void updateCharacterStudents(ArrayList<Student> students, int id) {
-
+        reducedModel.getCharacterById(id).setStudents(students);
     }
 
     @Override
     public void notifyCharacterActivation(int effectId, boolean activated) {
+        if(activated){
+            output.println("Character " + effectId + " is now active");
+            resumePhase();
+        }else {
+            output.println("Character " + effectId + " is not active anymore");
+        }
+    }
 
+    private void resumePhase() {
+        if(currentPhase != null) {
+            switch (currentPhase) {
+
+                case CARD -> askCardToPlay(reducedModel.getDeck(), reducedModel.getTurnCards());
+
+                case MOTHER_NATURE -> askMotherNatureMove();
+
+                case CLOUD -> askCloud();
+
+                case MOVE_STUDENT -> askStudentToMove();
+            }
+        }
     }
 
     @Override
     public void askEffect12Students(Student color) {
+        ColorIntMap map = new ColorIntMap();
+        HashMap<Student, Integer> posMap = posMap = map.getMap();
 
+        int numStudents = reducedModel.getReducedBoard().getPlayerBoard().getHallStudents()[posMap.get(color)];
+
+        if(numStudents >= 3){
+            for(int i = 0; i < 3; i++){
+                reducedModel.getReducedBoard().getPlayerBoard().removeHallStudent(String.valueOf(color));
+            }
+        }
+        else{
+            for(int i = 0; i < numStudents; i++){
+                reducedModel.getReducedBoard().getPlayerBoard().removeHallStudent(String.valueOf(color));
+            }
+        }
+
+        output.println(numStudents + " students have been taken from the dinner! ");
     }
 }

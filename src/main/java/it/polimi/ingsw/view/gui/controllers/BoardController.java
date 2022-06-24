@@ -387,8 +387,6 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         character3.setImage(new Image(String.valueOf(getClass().getResource("/assets/personaggi/character" + id +".jpg"))));
 
         for(int i = 0; i < 3; i++){
-            charactersPanes.get(i).getChildren().add(new ImageView(new Image(studentsImages.get(Student.GREEN))));
-
             if(reducedModel.getReducedCharacters()[i].getStudents() != null){
                 for(Student student : reducedModel.getReducedCharacters()[i].getStudents()){
                     charactersPanes.get(i).getChildren().add(new ImageView(new Image(studentsImages.get(student))));
@@ -444,8 +442,11 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     }
 
     private void askWhere(String url) {
+        disableCharacterClickable();
 
         for(GridPane island : islands){
+            island.setDisable(false);
+
             island.setOnMouseClicked(e -> {
                 Node source = (Node)e.getSource() ;
 
@@ -459,6 +460,11 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                     disableStudents();
                     studentsCount = 0;
                 }
+
+                for(GridPane is : islands){
+                    is.setDisable(true);
+                }
+
 
                 new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudent("ENTRANCE", String.valueOf(imagesStudent.get(url)), "ISLAND", islands.indexOf(island)))).start();
             });
@@ -719,12 +725,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         numIslandsLabel.setMinWidth(150);
         numIslandsLabel.setMinHeight(35);
 
+        //TODO fix
         islands.get(island2).add(numIslandsLabel, 2, 6);
 
-        GridPane islandPane = islands.get(island2);
-
-        ObservableList<Node> childrens = islands.get(island2).getChildren();
-        ImageView image = null;
+        updateIslands();
     }
 
     public void conquerIsland(int island, String color) {

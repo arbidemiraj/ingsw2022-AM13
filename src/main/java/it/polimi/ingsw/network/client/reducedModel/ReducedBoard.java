@@ -97,9 +97,11 @@ public class ReducedBoard implements Serializable {
     }
 
     public void mergeIslands(int island1, int island2) {
-        islands.get(island1).mergeStudents(islands.get(island2).getNumStudents());
+        islands.get(island2).mergeStudents(islands.get(island1).getNumStudents());
 
-        islands.get(island1).addIsland();
+        islands.get(island2).addIsland();
+
+        islands.remove(island1);
     }
 
     public void setClouds(Cloud[] clouds) {
