@@ -17,6 +17,7 @@ public class IslandEffectMessage extends Message {
     public IslandEffectMessage(String username,int chosenIsland, int effectId) {
         super(username, MessageType.ISLAND_EFFECT);
         this.chosenIslandId = chosenIsland;
+        this.effectId = effectId;
     }
 
     public int getEffectId() {

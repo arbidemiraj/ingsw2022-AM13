@@ -111,6 +111,7 @@ class GameTest {
         game.mergeCheck();
 
         assertEquals(game.getBoard().getIslands().get(motherNature-1).getIslandState().getNumIslands(), 3);
+        assertEquals(game.getBoard().getMotherNatureIsland().getOwner(), player1);
     }
 
     @Test

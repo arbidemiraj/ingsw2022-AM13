@@ -37,6 +37,9 @@ public class GameHandler {
         maxPlayers = newGameMessage.getMaxPlayers();
         game = new Game(maxPlayers, newGameMessage.isExpertMode());
         gameController = new GameController(game, this);
+
+        game.addObserver(gameController);
+
         numPlayers = 0;
         this.gameId = gameId;
 

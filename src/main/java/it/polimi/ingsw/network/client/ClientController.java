@@ -148,6 +148,12 @@ public class ClientController implements ViewObserver, Observer {
                 taskQueue.execute(() -> view.askStudentEffect(msg.getEffectId()));
             }
 
+            case UPDATE_MOTHERNATURE -> {
+                UpdateMotherNature msg = (UpdateMotherNature) message;
+
+                reducedModel.getReducedBoard().setMotherNature(msg.getMotherNature());
+            }
+
             case ASK_SWITCH_STUDENT -> {
                 taskQueue.execute(view::askSwitch);
             }

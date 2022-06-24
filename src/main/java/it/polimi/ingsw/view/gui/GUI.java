@@ -174,9 +174,13 @@ public class GUI extends ViewObservable implements View {
 
     @Override
     public void mergeIsland(int island1, int island2) {
+        reducedModel.getReducedBoard().setMotherNature(island2);
+
         reducedModel.getReducedBoard().mergeIslands(island1, island2);
 
-        Platform.runLater(() -> controller.mergeIslands(island1, island2));
+        Platform.runLater(() -> {
+            controller.mergeIslands(island1, island2);
+        });
     }
 
     @Override
@@ -209,8 +213,9 @@ public class GUI extends ViewObservable implements View {
 
     @Override
     public void updateIslands(ArrayList<ReducedIsland> islands) {
+        reducedModel.getReducedBoard().setIslands(islands);
+        
         Platform.runLater(() -> {
-            reducedModel.getReducedBoard().setIslands(islands);
             controller.updateIslands();
         });
     }

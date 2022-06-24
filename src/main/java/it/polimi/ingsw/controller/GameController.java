@@ -83,7 +83,7 @@ public class GameController implements Observer {
             character.setCost(character.getCost() + 1);
             model.getActivatedCharacters().add(character.getEffectId());
 
-            gameHandler.sendMessageToAll(new CharacterActivated(id, true));
+            if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true));
     }
 
     /**
@@ -112,9 +112,9 @@ public class GameController implements Observer {
 
         updateIslands(character.getOwner().getUsername());
 
-        gameHandler.sendMessageToAll(new UpdateCharacterStudents(students, id));
+        if(gameHandler != null) gameHandler.sendMessageToAll(new UpdateCharacterStudents(students, id));
 
-        gameHandler.sendMessageToAll(new CharacterActivated(id, true));
+        if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true));
     }
 
     /**
@@ -135,7 +135,7 @@ public class GameController implements Observer {
         character.setCost(character.getCost()+1);
         model.getActivatedCharacters().add(character.getEffectId());
 
-        gameHandler.sendMessageToAll(new CharacterActivated(id, true));
+        if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true));
     }
 
     /**
@@ -152,11 +152,11 @@ public class GameController implements Observer {
                 int colorPos = model.createColorIntMap(color);
                 String professorOwner = model.getBoard().getProfessors()[colorPos].getOwner().getUsername();
 
-                gameHandler.sendMessageToAll(new UpdateModelMessage(professorOwner, color));
+                if(gameHandler != null) gameHandler.sendMessageToAll(new UpdateModelMessage(professorOwner, color));
 
                 //TODO fix
-                gameHandler.sendMessage(new GenericMessage("You are now the owner of the " + color + " professor", GenericType.PROFESSOR), professorOwner);
-                gameHandler.sendMessageToAllExcept(new GenericMessage(professorOwner + " is now the owner of the " + color + " professor", GenericType.PROFESSOR), professorOwner);
+                if(gameHandler != null) gameHandler.sendMessage(new GenericMessage("You are now the owner of the " + color + " professor", GenericType.PROFESSOR), professorOwner);
+                if(gameHandler != null) gameHandler.sendMessageToAllExcept(new GenericMessage(professorOwner + " is now the owner of the " + color + " professor", GenericType.PROFESSOR), professorOwner);
             }
 
         }
@@ -203,9 +203,16 @@ public class GameController implements Observer {
         }
 
         if(model.checkAfterMotherNature()){
-            String islandOwner = model.getBoard().getMotherNatureIsland().getOwner().getUsername();
+            String islandOwner = null;
 
-            if(model.getPlayerByUsername(islandOwner).getNumTowers() == 0){
+            Island test = model.getBoard().getMotherNatureIsland();
+
+            if(model.getBoard().getMotherNatureIsland().getOwner() != null){
+                islandOwner = model.getBoard().getMotherNatureIsland().getOwner().getUsername();
+
+            }
+
+            if(islandOwner!=null && model.getPlayerByUsername(islandOwner).getNumTowers() == 0){
                 endGame();
             }
 
@@ -213,9 +220,10 @@ public class GameController implements Observer {
                 gameHandler.sendMessageToAll(new UpdateModelMessage(model.getBoard().getMotherNature(), String.valueOf(model.getPlayerByUsername(islandOwner).getTowerColor())));
                 gameHandler.sendMessage(new GenericMessage("You are now the owner of the " + model.getBoard().getMotherNature() + " island", GenericType.ISLAND_OWNER), islandOwner);
                 gameHandler.sendMessageToAllExcept(new GenericMessage(islandOwner + " is now the owner of the " + model.getBoard().getMotherNature() + " island", GenericType.ISLAND_OWNER), islandOwner);
-
-                updateReducedBoard();
             }
+
+            model.mergeCheck();
+
 
         }
     }
@@ -288,13 +296,13 @@ public class GameController implements Observer {
 
                 try {
                     moveMotherNature(moveMotherNatureMessage.getSteps());
-
+                    updateMotherNature(message.getUsername());
                 } catch (InvalidMotherNatureMovesException e) {
                     gameHandler.sendMessage(new ErrorMessage("Invalid mother nature move", ErrorType.INVALID_MOVE), turnController.getCurrentPlayerUsername());
                     gameHandler.sendMessage(new AskMotherNature(), turnController.getCurrentPlayerUsername());
                 }
 
-                updateIslands(message.getUsername());
+
 
                 gameHandler.sendMessage(new AskCloud(model.getBoard().getClouds()), turnController.getCurrentPlayerUsername());
             }
@@ -371,6 +379,10 @@ public class GameController implements Observer {
                 }
             }
         }
+    }
+
+    private void updateMotherNature(String username) {
+        if(gameHandler != null) gameHandler.sendMessageToAllExcept(new UpdateMotherNature(model.getBoard().getMotherNature()), username);
     }
 
     private void activateEffect10(ArrayList<Student> students, String username) throws InvalidMoveException {
@@ -464,7 +476,6 @@ public class GameController implements Observer {
                     gameHandler.sendMessage(new AskStudent(), turnController.getCurrentPlayerUsername());
                 }
                 else {
-                    updateReducedBoard();
                     updateIslands(studentMessage.getUsername());
 
                     gameHandler.sendMessage(new AskMotherNature(), turnController.getCurrentPlayerUsername());
@@ -493,11 +504,11 @@ public class GameController implements Observer {
     @Override
     public void update(Message message) {
         switch (message.getMessageType()){
-            case GENERIC -> {
-                GenericMessage genericMessage = (GenericMessage) message;
-                switch (genericMessage.getGenericType()){
+            case UPDATE_MODEL -> {
+                UpdateModelMessage modelMessage = (UpdateModelMessage) message;
+                switch (modelMessage.getUpdateType()){
                     case MERGE -> {
-                        updateReducedBoard();
+                        gameHandler.sendMessageToAll(message);
                     }
                 }
             }
@@ -572,15 +583,6 @@ public class GameController implements Observer {
         return new ReducedBoard(model.getBoard().getClouds(), owner, reducedPlayerBoard, model.getBoard().getMotherNature(), islands);
     }
 
-    public void updateReducedBoard() {
-        for(Player player : model.getPlayers()){
-            ReducedBoard reducedBoard = createBoard(player);
-
-            gameHandler.sendMessage(new BoardMessage(reducedBoard), player.getUsername());
-        }
-    }
-
-
     public void checkBag() {
         if(model.getBoard().getBag().isEmpty()) endGame();
     }
@@ -591,7 +593,7 @@ public class GameController implements Observer {
         ArrayList<Student> students;
         ArrayList<ReducedIsland> islands = new ArrayList<>();
 
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < model.getBoard().getIslands().size(); i++) {
             students = model.getBoard().getIslands().get(i).getStudents();
             if (model.getBoard().getIslands().get(i).getOwner() != null) {
                 owner[i] = model.getBoard().getIslands().get(i).getOwner().getUsername();
@@ -599,7 +601,7 @@ public class GameController implements Observer {
             islands.add(new ReducedIsland(students, owner[i], i, false));
         }
 
-        gameHandler.sendMessageToAllExcept(new UpdateModelMessage(islands), username);
+        if(gameHandler != null) gameHandler.sendMessageToAllExcept(new UpdateModelMessage(islands), username);
     }
 
 }

@@ -199,6 +199,7 @@ public class Game extends Observable {
 	 * @param island2		second island to unify
 	 */
 	public void mergeIslands(Island island1, Island island2) {
+		Player owner = island1.getOwner();
 		ArrayList<Student> students1;
 		ArrayList<Student> students2;
 		int numIslands = island1.getIslandState().getNumIslands();
@@ -214,6 +215,7 @@ public class Game extends Observable {
 		unify.addIsland();
 		island1.changeState(unify);
 
+		island1.setOwner(owner);
 	}
 
 
@@ -237,17 +239,16 @@ public class Game extends Observable {
 
 		if(island2.getOwner().equals(island1.getOwner())) {
 			mergeIslands(island2, island1);
-			board.setMotherNature(motherNature - 1);
 			board.getIslands().remove(previous);
-			notifyObserver(new UpdateModelMessage(previous, motherNature));
-			notifyObserver(new GenericMessage("Island [" + previous + "] and [" + motherNature + "] have been merged", GenericType.MERGE));
+			new Thread(() -> notifyObserver(new UpdateModelMessage(previous, motherNature))).start();
+			new Thread(() -> notifyObserver(new GenericMessage("Island [" + previous + "] and [" + motherNature + "] have been merged", GenericType.MERGE))).start();
 		}
 		if(island2.getOwner().equals(island3.getOwner())) {
 			mergeIslands(island2, island3);
 			board.getIslands().remove(next);
 
-			notifyObserver(new UpdateModelMessage(next, motherNature));
-			notifyObserver(new GenericMessage("Island [" + next + "] and [" + motherNature + "] have been merged", GenericType.MERGE));
+			new Thread(() -> notifyObserver(new UpdateModelMessage(next, motherNature))).start();
+			new Thread(() -> notifyObserver(new GenericMessage("Island [" + next + "] and [" + motherNature + "] have been merged", GenericType.MERGE))).start();
 		}
 	}
 
@@ -298,7 +299,11 @@ public class Game extends Observable {
 		}
 		else if(playersCheck.size() == 1) board.getProfessors()[colorPos].setOwner(playersCheck.get(0));
 
-		String newOwner = board.getProfessors()[colorPos].getOwner().getUsername();
+		String newOwner = null;
+
+		if(board.getProfessors()[colorPos].getOwner() != null){
+			newOwner = board.getProfessors()[colorPos].getOwner().getUsername();
+		}
 
 		if(actualOwner != null && !actualOwner.equals(newOwner)){
 			return true;
@@ -337,6 +342,7 @@ public class Game extends Observable {
 
 		return false;
 	}
+
 	/**
 	 * After setting the influence player if it is not the actual island owner he conquers it
 	 */
@@ -346,9 +352,9 @@ public class Game extends Observable {
 		if(influencePlayer != board.getMotherNatureIsland().getOwner()){
 			board.getMotherNatureIsland().setOwner(influencePlayer);
 			influencePlayer.removeTower();
-
 			return true;
 		}
+
 		return false;
 	}
 

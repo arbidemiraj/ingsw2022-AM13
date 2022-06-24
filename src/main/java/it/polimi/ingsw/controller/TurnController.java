@@ -44,7 +44,6 @@ public class TurnController {
 
         gameController.checkBag();
         game.getBoard().fillClouds();
-        gameController.updateReducedBoard();
 
         numTurn++;
 
@@ -88,7 +87,6 @@ public class TurnController {
      * Used on each phase to advance to another player turn
      */
     public boolean nextPlayer() {
-        gameController.updateReducedBoard();
         int currentPlayerIndex = usernameQueue.indexOf(currentPlayer);
 
         if((currentPlayerIndex + 1) < usernameQueue.size()) currentPlayerIndex++;
