@@ -314,7 +314,12 @@ public class ClientController implements ViewObserver, Observer {
     }
 
     @Override
-    public void onUpdateSwitchStudents(ArrayList<Student> students){
-        client.sendMessage(new SwitchStudents(username, students));
+    public void onUpdateSwitchStudents(ArrayList<Student> students) {
+        client.sendMessage(new SwitchStudents(username, students, 10));
+    }
+
+    @Override
+    public void onUpdateSwitchStudents(ArrayList<Student> students, int effectId){
+        client.sendMessage(new SwitchStudents(username, students, effectId));
     }
 }

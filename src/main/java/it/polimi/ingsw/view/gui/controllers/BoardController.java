@@ -81,6 +81,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     @FXML
     private ImageView cloud3;
     @FXML
+    private Button confirmBtn;
+    @FXML
     private TilePane cloud3pane;
     @FXML
     private Label turnPlayer;
@@ -146,6 +148,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     @FXML
     public void initialize() {
+        confirmBtn.setOpacity(0);
+        confirmBtn.setDisable(true);
 
         quitButton.setOnMouseClicked(this::quit);
 
@@ -621,6 +625,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                     cardsPlayed.add(imageView);
 
                     disableCharacterClickable();
+                    currentPhase = PhaseType.NOT_MYTURN;
 
                     lastCardMap.get(reducedModel.getPlayerUsername()).setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente" + (id + 1) + ".png"))));
                 }
@@ -654,7 +659,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
                 int steps = getSteps(island);
 
-                if(steps <= (reducedModel).getMaxSteps() && steps > 0) {
+                if(steps <= (reducedModel).getMaxSteps() && steps >= 0) {
                     ObservableList<Node> childrens = islands.get(reducedModel.getReducedBoard().getMotherNature()).getChildren();
 
                     for (Node node : childrens) {
@@ -907,19 +912,23 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     public void setCharacterClickable(){
         if(reducedModel.isExpertMode()) {
             for (ImageView character : charactersImages) {
-                character.setDisable(false);
-                character.getStyleClass().set(0, "clickable");
-                character.setOnMouseClicked(e -> {
-                    ImageView node = (ImageView) e.getTarget();
+                int index = charactersImages.indexOf(character);
 
-                    int effectId = reducedModel.getReducedCharacters()[charactersImages.indexOf(node)].getEffectId();
-                    int index = charactersImages.indexOf(character);
+                if (!reducedModel.getReducedCharacters()[index].isActive()) {
+                    character.setDisable(false);
+                    character.getStyleClass().set(0, "clickable");
+                    character.setOnMouseClicked(e -> {
+                        ImageView node = (ImageView) e.getTarget();
 
-                    if(effectId == 4 && reducedModel.getNumCoins() >= reducedModel.getCharacterById(effectId).getCost()){
-                        reducedModel.setMaxSteps(reducedModel.getMaxSteps() + 2);
-                    }
-                    new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateCharacter(effectId))).start();
-                });
+                        int effectId = reducedModel.getReducedCharacters()[charactersImages.indexOf(node)].getEffectId();
+
+
+                        if (effectId == 4 && reducedModel.getNumCoins() >= reducedModel.getCharacterById(effectId).getCost()) {
+                            reducedModel.setMaxSteps(reducedModel.getMaxSteps() + 2);
+                        }
+                        new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateCharacter(effectId))).start();
+                    });
+                }
             }
         }
     }
@@ -957,13 +966,19 @@ public class BoardController extends ViewObservable implements GenericSceneContr
             }
 
             case 7 -> {
-                turnInfo.setText("Select a student from the card");
+                int count = 0;
+                ArrayList<Student> students = new ArrayList<>();
+
+                turnInfo.setText("Select a student from the card...Click confirm when you switched all students (max 3) ");
 
                 for(Node node : charactersPanes.get(index).getChildren()){
                     node.getStyleClass().set(0, "clickable");
+                    node.setDisable(false);
 
                     node.setOnMouseClicked(e -> {
                         ImageView student = (ImageView) e.getTarget();
+
+                        students.add(imagesStudent.get(student.getImage().getUrl()));
 
                         for (ImageView singleStud : entrance) {
                             singleStud.getStyleClass().set(0, "clickable");
@@ -980,14 +995,38 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
                                 entranceStud.setImage(student.getImage());
 
-                                student.setImage(entranceStud.getImage());
+                                students.add(imagesStudent.get(entranceStud.getImage().getUrl()));
+
+                                student.setImage(new Image(entranceStud.getImage().getUrl()));
 
                                 disableStudents();
-                                //TODO disable students from card
+
+                                if(count == 3){
+                                    new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students, 7))).start();
+
+                                    for(Node n : charactersPanes.get(index).getChildren()){
+                                        n.setDisable(true);
+                                    }
+                                }
+
                             });
                         }
 
 
+                    });
+
+                    confirmBtn.setDisable(false);
+                    confirmBtn.setOpacity(1);
+
+                    confirmBtn.setOnMouseClicked(e -> {
+                        new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students, 7))).start();
+
+                        confirmBtn.setDisable(false);
+                        confirmBtn.setOpacity(0);
+
+                        for(Node n : charactersPanes.get(index).getChildren()){
+                            n.setDisable(true);
+                        }
                     });
                 }
 
@@ -1053,8 +1092,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
             case 5 -> {
                 for(GridPane island : islands){
                     island.setOnMouseClicked(e -> {
-
-                        island.add(new ImageView(new Image(String.valueOf(getClass().getResource("/assets/deny.png")))), 1, 1);
+                        island.add(new ImageView(new Image(String.valueOf(getClass().getResource("/assets/deny.png")))), 0, 0);
                         disabledIsland = islands.indexOf(island);
 
                         island.setDisable(true);
@@ -1065,6 +1103,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
             }
             default -> {
                 for(GridPane island : islands){
+                    if(islands.indexOf(island) != disabledIsland) island.setDisable(false);
+
                     island.setOnMouseClicked(e -> {
                         new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateIslandEffect(islands.indexOf(island), effectId))).start();
                     });
@@ -1149,6 +1189,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     public void characterIsActivated(int effectId, boolean activated, String owner) {
         if(activated){
+            reducedModel.activateCharacter(effectId);
+
             int index = Arrays.asList(reducedModel.getReducedCharacters()).indexOf(reducedModel.getCharacterById(effectId));
 
             charactersImages.get(index).setX(1.2);
@@ -1162,11 +1204,31 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
             coins.setText(String.valueOf(reducedModel.getNumCoins()));
 
+            if(currentPhase != null && !currentPhase.equals(PhaseType.NOT_MYTURN)) setCharacterClickable();
+
             resumePhase();
         }
         else {
             if(effectId == 5){
-                islands.get(disabledIsland).getChildren().remove(1, 1);
+
+                GridPane island = islands.get(disabledIsland);
+                ObservableList<Node> childrens = island.getChildren();
+
+                final List<Node> removalCandidates = new ArrayList<>();
+
+                for(Node node : childrens){
+                    if(island.getRowIndex(node) != null && island.getColumnIndex(node) != null) {
+                        if(island.getRowIndex(node) == 0 && island.getColumnIndex(node) == 0) {
+                            ImageView image = (ImageView) node;
+                            if(image.getImage() != null) {
+                                removalCandidates.add(node);
+                            }
+                        }
+                    }
+                }
+
+                island.getChildren().removeAll(removalCandidates);
+
                 disabledIsland = -1;
             }
 

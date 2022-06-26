@@ -11,14 +11,20 @@ public class SwitchStudents extends Message {
     @Serial
     private static final long serialVersionUID = -4865678587900765629L;
     private final ArrayList<Student> students;
+    private final int effectId;
 
-    public SwitchStudents(String username, ArrayList<Student> students) {
+    public SwitchStudents(String username, ArrayList<Student> students, int effectId) {
         super(username, MessageType.SWITCH_STUDENTS);
         this.students = students;
+        this.effectId = effectId;
     }
 
     public ArrayList<Student> getStudents() {
         return students;
+    }
+
+    public int getEffectId() {
+        return effectId;
     }
 
     @Override

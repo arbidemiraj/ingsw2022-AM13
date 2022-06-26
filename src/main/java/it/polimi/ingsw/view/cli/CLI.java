@@ -659,6 +659,7 @@ public class CLI extends ViewObservable implements View {
     public void notifyCharacterActivation(int effectId, boolean activated, String owner) {
         if(activated){
             output.println("Character " + effectId + " is now active");
+            reducedModel.activateCharacter(effectId);
             resumePhase();
         }else {
             output.println("Character " + effectId + " is not active anymore");

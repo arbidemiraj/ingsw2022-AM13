@@ -95,9 +95,9 @@ public class Game extends Observable {
 		}
 		 */
 
-		characters[0] = new Character(this, 1, cost[1]);
-		characters[1] = new Character(this, 2, cost[2]);
-		characters[2] = new Character(this, 3, cost[3]);
+		characters[0] = new Character(this, 7, cost[4]);
+		characters[1] = new Character(this, 8, cost[5]);
+		characters[2] = new Character(this, 9, cost[6]);
 	}
 
 
@@ -303,6 +303,7 @@ public class Game extends Observable {
 				Player owner = character.getOwner();
 
 				if(playersCheck.contains(owner)) board.getProfessors()[colorPos].setOwner(owner);
+				else if(playersCheck.size() == 1) board.getProfessors()[colorPos].setOwner(playersCheck.get(0));
 			}
 			else if(playersCheck.size() == 1) board.getProfessors()[colorPos].setOwner(playersCheck.get(0));
 		}
@@ -358,9 +359,10 @@ public class Game extends Observable {
 	public boolean setIslandOwner(Island island) {
 		setInfluencePlayer(island);
 
-		if(influencePlayer != board.getMotherNatureIsland().getOwner()){
-			board.getMotherNatureIsland().setOwner(influencePlayer);
+		if(influencePlayer != island.getOwner()){
+			island.setOwner(influencePlayer);
 			influencePlayer.removeTower();
+
 			return true;
 		}
 
@@ -530,5 +532,11 @@ public class Game extends Observable {
 
 	public void removePlayer(String user) {
 		players.remove(getPlayerByUsername(user));
+	}
+
+	public void updateConquer(int chosenIsland) {
+		String islandOwner = board.getIslands().get(chosenIsland).getOwner().getUsername();
+
+		notifyObserver(new UpdateModelMessage(chosenIsland, String.valueOf(getPlayerByUsername(islandOwner).getTowerColor())));
 	}
 }

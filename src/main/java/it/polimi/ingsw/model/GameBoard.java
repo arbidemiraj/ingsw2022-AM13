@@ -186,10 +186,8 @@ public class GameBoard implements Serializable {
 	}
 
 	public void moveMotherNature(int steps) {
-		motherNature += steps;
-
-		if(motherNature >= 12){
-			motherNature = motherNature - 12;
+		for(int i = 0; i < steps; i++){
+			motherNature = islands.getPosition(islands.getNext(getMotherNatureIsland()));
 		}
 	}
 

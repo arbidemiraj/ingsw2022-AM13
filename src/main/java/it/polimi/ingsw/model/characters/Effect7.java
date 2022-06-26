@@ -13,6 +13,7 @@ public class Effect7 implements Movable, Actionable {
     public Effect7(ArrayList<Student> students){
         this.students = students;
     }
+
     @Override
     public Student removeStudent(Student color) {
         students.remove(color);
@@ -23,7 +24,7 @@ public class Effect7 implements Movable, Actionable {
     @Override
     public void apply(Game game, Student chosenStudent) {
         removeStudent(chosenStudent);
-        game.getPlayers().get(game.getCurrentPlayer()).getPlayerBoard().addStudent(chosenStudent);
+
     }
 
     @Override

@@ -406,6 +406,7 @@
       <ImageView fx:id="desc1" fitHeight="100.0" fitWidth="380.0" layoutX="1223.0" layoutY="358.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="desc2" fitHeight="100.0" fitWidth="380.0" layoutX="1385.0" layoutY="376.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="desc3" fitHeight="100.0" fitWidth="380.0" layoutX="1522.0" layoutY="376.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="confirmBtn" layoutX="1620.0" layoutY="-5.0" mnemonicParsing="false" text="Confirm" underline="true" />
    </children>
    <stylesheets>
       <URL value="@../css/board.css" />

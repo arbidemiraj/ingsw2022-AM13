@@ -386,18 +386,32 @@ public class GameController implements Observer {
                 String username = message.getUsername();
 
                 SwitchStudents msg = (SwitchStudents) message;
+                switch (msg.getEffectId()){
+                    case 10 -> {
+                        try {
+                            activateEffect10(msg.getStudents(), username);
+                        } catch (InvalidMoveException e) {
+                            gameHandler.sendMessage(new ErrorMessage("Invalid move", ErrorType.INVALID_SWITCH), username);
+                        }
+                    }
 
-                try {
-                    activateEffect10(msg.getStudents(), username);
-                } catch (InvalidMoveException e) {
-                    gameHandler.sendMessage(new ErrorMessage("Invalid move", ErrorType.INVALID_SWITCH), username);
+                    case 7 -> {
+                        activateEffect7(msg.getStudents(), msg.getUsername());
+                    }
                 }
+
             }
         }
     }
 
     private void updateMotherNature(String username) {
         if(gameHandler != null) gameHandler.sendMessageToAllExcept(new UpdateMotherNature(model.getBoard().getMotherNature()), username);
+    }
+
+    private void activateEffect7(ArrayList<Student> students, String username){
+        Player player = model.getPlayerByUsername(username);
+        Character character = model.getCharacter(7);
+
     }
 
     private void activateEffect10(ArrayList<Student> students, String username) throws InvalidMoveException {
@@ -432,8 +446,6 @@ public class GameController implements Observer {
             case 3,5 -> {
                 gameHandler.sendMessage(new AskIsland(id), username);
             }
-
-
             case 7 -> {
                 gameHandler.sendMessage(new StudentsMessage(((Effect7) model.getCharacter(id).getEffect()).getStudents(), id), username);
             }
@@ -524,6 +536,9 @@ public class GameController implements Observer {
                 switch (modelMessage.getUpdateType()){
                     case MERGE -> {
                         updateMotherNature(message.getUsername());
+                        gameHandler.sendMessageToAll(message);
+                    }
+                    case CONQUER -> {
                         gameHandler.sendMessageToAll(message);
                     }
                 }

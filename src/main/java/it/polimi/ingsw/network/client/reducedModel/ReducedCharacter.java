@@ -45,4 +45,8 @@ public class ReducedCharacter implements Serializable {
     public ArrayList<Student> getStudents() {
         return students;
     }
+
+    public boolean isActive() {
+        return isActive;
+    }
 }
