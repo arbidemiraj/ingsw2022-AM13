@@ -656,7 +656,7 @@ public class CLI extends ViewObservable implements View {
     }
 
     @Override
-    public void notifyCharacterActivation(int effectId, boolean activated) {
+    public void notifyCharacterActivation(int effectId, boolean activated, String owner) {
         if(activated){
             output.println("Character " + effectId + " is now active");
             resumePhase();
@@ -699,5 +699,10 @@ public class CLI extends ViewObservable implements View {
         }
 
         output.println(numStudents + " students have been taken from the dinner! ");
+    }
+
+    @Override
+    public void setMotherNature(int motherNature) {
+        reducedModel.getReducedBoard().setMotherNature(motherNature);
     }
 }

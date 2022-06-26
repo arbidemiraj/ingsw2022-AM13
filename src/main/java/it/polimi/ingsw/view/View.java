@@ -86,7 +86,9 @@ public interface View {
 
     void updateCharacterStudents(ArrayList<Student> students, int id);
 
-    void notifyCharacterActivation(int effectId, boolean activated);
+    void notifyCharacterActivation(int effectId, boolean activated, String owner);
 
     void askEffect12Students(Student color);
+
+    void setMotherNature(int motherNature);
 }

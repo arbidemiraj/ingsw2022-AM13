@@ -168,4 +168,8 @@ public class ReducedModel implements Serializable {
 
         return character;
     }
+
+    public void setNumCoins(int numCoins) {
+        this.numCoins = numCoins;
+    }
 }

@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.MessageType;
 
+import java.io.Serial;
+
 /**
  * This message is sent from the client to the server when the user wants to play an assistant card
  */
@@ -12,7 +14,9 @@ import it.polimi.ingsw.network.message.MessageType;
 
 public class PlayCardMessage extends Message{
 
-    private int assistantCard;
+    @Serial
+    private static final long serialVersionUID = 1217519339922244295L;
+    private final int assistantCard;
 
     public PlayCardMessage(String username, int assistantCardId ) {
         super(username, MessageType.PLAY_CARD);
@@ -26,8 +30,7 @@ public class PlayCardMessage extends Message{
     @Override
     public String toString() {
         return "PlayCardMessage{" +
-                "username=" + getUsername() +
-                ", assistantcardId=" + assistantCard +
+                "assistantCard=" + assistantCard +
                 '}';
     }
 }

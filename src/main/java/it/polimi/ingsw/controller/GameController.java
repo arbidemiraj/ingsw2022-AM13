@@ -85,7 +85,7 @@ public class GameController implements Observer {
 
             updateIslands(character.getOwner().getUsername());
 
-            if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true));
+            if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true, character.getOwner().getUsername()));
     }
 
     /**
@@ -116,7 +116,7 @@ public class GameController implements Observer {
 
         if(gameHandler != null) gameHandler.sendMessageToAll(new UpdateCharacterStudents(students, id));
 
-        if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true));
+        if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true, character.getOwner().getUsername()));
     }
 
     /**
@@ -137,7 +137,7 @@ public class GameController implements Observer {
         character.setCost(character.getCost()+1);
         model.getActivatedCharacters().add(character.getEffectId());
 
-        if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true));
+        if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true, character.getOwner().getUsername()));
     }
 
     /**
@@ -309,8 +309,6 @@ public class GameController implements Observer {
                     gameHandler.sendMessage(new ErrorMessage("Invalid mother nature move", ErrorType.INVALID_MOVE), turnController.getCurrentPlayerUsername());
                     gameHandler.sendMessage(new AskMotherNature(), turnController.getCurrentPlayerUsername());
                 }
-
-
 
                 gameHandler.sendMessage(new AskCloud(model.getBoard().getClouds()), turnController.getCurrentPlayerUsername());
             }
@@ -516,6 +514,7 @@ public class GameController implements Observer {
                 UpdateModelMessage modelMessage = (UpdateModelMessage) message;
                 switch (modelMessage.getUpdateType()){
                     case MERGE -> {
+                        updateMotherNature(message.getUsername());
                         gameHandler.sendMessageToAll(message);
                     }
                 }
@@ -538,6 +537,13 @@ public class GameController implements Observer {
                 if(character.getEffectId() == 1){
                     reducedCharacters[i].setStudents(((Effect1)character.getEffect()).getStudents());
                 }
+                if(character.getEffectId() == 7){
+                    reducedCharacters[i].setStudents(((Effect7)character.getEffect()).getStudents());
+                }
+                if(character.getEffectId() == 11){
+                    reducedCharacters[i].setStudents(((Effect11)character.getEffect()).getStudents());
+                }
+
                 i++;
             }
 

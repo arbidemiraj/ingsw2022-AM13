@@ -4,5 +4,5 @@ public enum PhaseType {
     CARD,
     MOVE_STUDENT,
     MOTHER_NATURE,
-    CLOUD
+    NOT_MYTURN, CLOUD
 }

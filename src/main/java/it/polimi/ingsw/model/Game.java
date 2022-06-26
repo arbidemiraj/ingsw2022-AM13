@@ -170,6 +170,7 @@ public class Game extends Observable {
 				owner.addInfluence();
 				owner.addInfluence();
 		}
+
 		if (!island.isNoEntryTile()) {
 
 			//number of students for each color in island, es. numStudent[0] = num of yellow students
@@ -240,6 +241,8 @@ public class Game extends Observable {
 		if(island2.getOwner().equals(island1.getOwner())) {
 			mergeIslands(island2, island1);
 			board.getIslands().remove(previous);
+
+			board.setMotherNature(board.getIslands().getPosition(island2));
 			notifyObserver(new UpdateModelMessage(previous, motherNature));
 			notifyObserver(new GenericMessage("Island [" + previous + "] and [" + motherNature + "] have been merged", GenericType.MERGE));
 		}

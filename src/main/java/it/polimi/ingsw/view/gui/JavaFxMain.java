@@ -20,6 +20,10 @@ public class JavaFxMain extends Application {
     private Stage stage;
     private SceneController sceneController;
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
        /* Media media = new Media(String.valueOf(getClass().getResource("/Spitfires.mp3")));

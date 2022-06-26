@@ -49,7 +49,7 @@ public class TurnController {
 
         if(game.isExpertMode()){
             for(int id : game.getActivatedCharacters()){
-                gameHandler.sendMessageToAll(new CharacterActivated(id, false));
+                gameHandler.sendMessageToAll(new CharacterActivated(id, false, null));
             }
             game.getActivatedCharacters().clear();
         }

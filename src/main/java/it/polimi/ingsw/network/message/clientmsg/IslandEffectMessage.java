@@ -4,6 +4,8 @@ import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.MessageType;
 
+import java.io.Serial;
+
 /**
  * This message is sent from the client to the server as a response of the AskIslandMessage
  */
@@ -11,8 +13,10 @@ import it.polimi.ingsw.network.message.MessageType;
 
 public class IslandEffectMessage extends Message {
 
-    private int chosenIslandId;
-    private int effectId;
+    @Serial
+    private static final long serialVersionUID = -549964995352110878L;
+    private final int chosenIslandId;
+    private final int effectId;
 
     public IslandEffectMessage(String username,int chosenIsland, int effectId) {
         super(username, MessageType.ISLAND_EFFECT);
@@ -31,10 +35,8 @@ public class IslandEffectMessage extends Message {
     @Override
     public String toString() {
         return "IslandEffectMessage{" +
-                "username=" + getUsername() +
-                ", chosenIsland=" + chosenIslandId +
+                "chosenIslandId=" + chosenIslandId +
+                ", effectId=" + effectId +
                 '}';
-
-
     }
 }

@@ -9,11 +9,13 @@ public class CharacterActivated extends Message {
     @Serial
     private static final long serialVersionUID = -3351832612563423675L;
 
-    private int effectId;
-    private boolean activated;
+    private final int effectId;
+    private final boolean activated;
+    private final String owner;
 
-    public CharacterActivated(int effectId, boolean activated) {
+    public CharacterActivated(int effectId, boolean activated, String owner) {
         super("Server", MessageType.CHARACTER_ACTIVATED);
+        this.owner = owner;
         this.effectId = effectId;
         this.activated = activated;
     }
@@ -24,5 +26,18 @@ public class CharacterActivated extends Message {
 
     public boolean isActivated() {
         return activated;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    @Override
+    public String toString() {
+        return "CharacterActivated{" +
+                "effectId=" + effectId +
+                ", activated=" + activated +
+                ", owner='" + owner + '\'' +
+                '}';
     }
 }

@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.MessageType;
 
+import java.io.Serial;
+
 /**
  * This message is sent from the client to the server when the user wants to move a student
  */
@@ -12,10 +14,12 @@ import it.polimi.ingsw.network.message.MessageType;
 
 public class MoveStudentMessage extends Message {
 
-    private String from;
-    private String color;
-    private String to;
-    private int id;
+    @Serial
+    private static final long serialVersionUID = -3060931431714572679L;
+    private final String from;
+    private final String color;
+    private final String to;
+    private final int id;
 
 
     public MoveStudentMessage(String username, String from, String color, String to, int id) {

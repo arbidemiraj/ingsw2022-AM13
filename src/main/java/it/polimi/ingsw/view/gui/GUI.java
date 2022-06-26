@@ -174,10 +174,6 @@ public class GUI extends ViewObservable implements View {
 
     @Override
     public void mergeIsland(int island1, int island2) {
-        reducedModel.getReducedBoard().setMotherNature(island2);
-
-        reducedModel.getReducedBoard().mergeIslands(island1, island2);
-
         Platform.runLater(() -> {
             controller.mergeIslands(island1, island2);
         });
@@ -262,12 +258,19 @@ public class GUI extends ViewObservable implements View {
     }
 
     @Override
-    public void notifyCharacterActivation(int effectId, boolean activated) {
-        Platform.runLater(() -> controller.characterIsActivated(effectId, activated));
+    public void notifyCharacterActivation(int effectId, boolean activated, String owner) {
+        Platform.runLater(() -> controller.characterIsActivated(effectId, activated, owner));
     }
 
     @Override
     public void askEffect12Students(Student color) {
         Platform.runLater(() -> controller.askEffect12Students(color));
+    }
+
+    @Override
+    public void setMotherNature(int motherNature) {
+        reducedModel.getReducedBoard().setMotherNature(motherNature);
+
+        Platform.runLater(() -> controller.updateMotherNature());
     }
 }

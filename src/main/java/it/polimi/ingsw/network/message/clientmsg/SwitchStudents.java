@@ -4,10 +4,13 @@ import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.MessageType;
 
+import java.io.Serial;
 import java.util.ArrayList;
 
 public class SwitchStudents extends Message {
-    private ArrayList<Student> students;
+    @Serial
+    private static final long serialVersionUID = -4865678587900765629L;
+    private final ArrayList<Student> students;
 
     public SwitchStudents(String username, ArrayList<Student> students) {
         super(username, MessageType.SWITCH_STUDENTS);
@@ -16,5 +19,12 @@ public class SwitchStudents extends Message {
 
     public ArrayList<Student> getStudents() {
         return students;
+    }
+
+    @Override
+    public String toString() {
+        return "SwitchStudents{" +
+                "students=" + students +
+                '}';
     }
 }

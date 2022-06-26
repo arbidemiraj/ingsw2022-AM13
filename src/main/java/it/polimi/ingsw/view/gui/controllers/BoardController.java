@@ -113,6 +113,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     private int studentsCount = 0;
 
+    private int disabledIsland = -1;
+
+    private String effectStudentUrl;
+
     private IntColorMap intColorMap = new IntColorMap();
     private Map<Integer, Student> getStudentFromInt = intColorMap.getMap();
     private ColorIntMap colorIntMap = new ColorIntMap();
@@ -367,6 +371,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         positionMap.put(Student.PINK, 3);
         positionMap.put(Student.BLUE, 4);
 
+        towerImages.put(TowerColor.BLACK, String.valueOf(getClass().getResource("/assets/custom/blackTower.png")));
+        towerImages.put(TowerColor.GRAY, String.valueOf(getClass().getResource("/assets/custom/grayTower.png")));
+        towerImages.put(TowerColor.WHITE, String.valueOf(getClass().getResource("/assets/custom/whiteTower.png")));
+
         lastCardMap.put(reducedModel.getUsername().get(0), lastCard1);
         lastCardMap.put(reducedModel.getUsername().get(1), lastCard2);
         if(reducedModel.getUsername().size() > 2) lastCardMap.put(reducedModel.getUsername().get(2), lastCard3);
@@ -389,7 +397,13 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         for(int i = 0; i < 3; i++){
             if(reducedModel.getReducedCharacters()[i].getStudents() != null){
                 for(Student student : reducedModel.getReducedCharacters()[i].getStudents()){
-                    charactersPanes.get(i).getChildren().add(new ImageView(new Image(studentsImages.get(student))));
+                    ImageView studentImage = new ImageView(new Image(studentsImages.get(student)));
+
+                    studentImage.getStyleClass().set(0, "clickable");
+                    studentImage.setX(1.2);
+                    studentImage.setY(1.2);
+
+                    charactersPanes.get(i).getChildren().add(studentImage);
                 }
             }
         }
@@ -445,7 +459,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         disableCharacterClickable();
 
         for(GridPane island : islands){
-            island.setDisable(false);
+            if(islands.indexOf(island) != disabledIsland) island.setDisable(false);
 
             island.setOnMouseClicked(e -> {
                 Node source = (Node)e.getSource() ;
@@ -599,6 +613,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         turnInfo.setText("Select the island where you want to move mother nature");
 
         for(GridPane island : islands){
+            island.setDisable(false);
+
             island.setOnMouseClicked(e -> {
 
                 int steps = getSteps(island);
@@ -650,6 +666,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
         turnInfo.setText("Choose the cloud you want to get the students from");
 
+        setCharacterClickable();
         setCloudClickable(true);
 
         for(ImageView cloud : cloudsImage){
@@ -674,6 +691,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 cloudsPane.get(index).getChildren().clear();
 
                 disableCharacterClickable();
+
+                currentPhase = PhaseType.NOT_MYTURN;
 
                 turnInfo.setText("Wait... other players are playing their turn");
             });
@@ -713,6 +732,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     }
 
     public void mergeIslands(int island1, int island2) {
+        reducedModel.getReducedBoard().mergeIslands(island1, island2);
+
         int numIslands = reducedModel.getReducedBoard().getIslands().get(island1).getNumIslands();
 
         GridPane island = islands.get(island1);
@@ -725,8 +746,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         numIslandsLabel.setMinWidth(150);
         numIslandsLabel.setMinHeight(35);
 
-        //TODO fix
-        islands.get(island2).add(numIslandsLabel, 2, 6);
+        int motherNature = reducedModel.getReducedBoard().getMotherNature();
+        islands.get(motherNature).add(numIslandsLabel, 2, 6);
 
         updateIslands();
     }
@@ -758,7 +779,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 }
             }
         }
-        islandOwned.add(new ImageView((new Image(String.valueOf(getClass().getResource("/assets/custom/" + color + "Tower.png"))))), 0, 4);
+
+        islandOwned.add(new ImageView((new Image(towerImages.get(TowerColor.valueOf(color))))), 0, 4);
     }
 
     @FXML
@@ -892,6 +914,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                         ImageView student = (ImageView) e.getTarget();
 
                         Student selectedStudent = imagesStudent.get(student.getImage().getUrl());
+                        effectStudentUrl = student.getImage().getUrl();
 
                         new Thread (() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudentEffect(String.valueOf(selectedStudent), effectId))).start();
                     });
@@ -973,9 +996,33 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         turnInfo.setText("Select the island you want");
 
         switch(effectId){
+            case 1 -> {
+                for(GridPane island : islands){
+                    if(islands.indexOf(island) != disabledIsland) island.setDisable(false);
+
+                    island.setOnMouseClicked(e -> {
+                        Node source = (Node)e.getSource() ;
+
+                        reducedModel.getReducedBoard().getIslands().get(islands.indexOf(island)).addStudent(imagesStudent.get(effectStudentUrl));
+
+                        updateIsland(island, imagesStudent.get(effectStudentUrl));
+
+                        for(GridPane is : islands){
+                            is.setDisable(true);
+                        }
+
+                        new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateIslandEffect(islands.indexOf(island), effectId))).start();
+                    });
+                }
+            }
             case 5 -> {
                 for(GridPane island : islands){
                     island.setOnMouseClicked(e -> {
+
+                        island.add(new ImageView(new Image(String.valueOf(getClass().getResource("/assets/deny.png")))), 1, 1);
+                        disabledIsland = islands.indexOf(island);
+
+                        island.setDisable(true);
 
                         new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateIslandEffect(islands.indexOf(island), effectId))).start();
                     });
@@ -1062,7 +1109,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
-    public void characterIsActivated(int effectId, boolean activated) {
+    public void characterIsActivated(int effectId, boolean activated, String owner) {
         if(activated){
             int index = Arrays.asList(reducedModel.getReducedCharacters()).indexOf(reducedModel.getCharacterById(effectId));
 
@@ -1071,13 +1118,20 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
             charactersImages.get(index).setStyle("-fx-effect: dropshadow(gaussian, #f2e0d6, 20, 0.3, 0, 0);");
 
-            charactersPanes.get(index).getChildren().add(new Label("ACTIVATED"));
+            reducedModel.setNumCoins(reducedModel.getNumCoins() - reducedModel.getCharacterById(effectId).getCost());
+
+            charactersPanes.get(index).getChildren().add(new Label(owner));
 
             coins.setText(String.valueOf(reducedModel.getNumCoins()));
 
             resumePhase();
         }
         else {
+            if(effectId == 5){
+                islands.get(disabledIsland).getChildren().remove(1, 1);
+                disabledIsland = -1;
+            }
+
             int index = Arrays.asList(reducedModel.getReducedCharacters()).indexOf(reducedModel.getCharacterById(effectId));
 
             charactersImages.get(index).setX(1);
@@ -1090,12 +1144,16 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     }
 
     private void resumePhase() {
-        switch (currentPhase){
-            case CARD -> turnInfo.setText("It's your turn! Select an assistant card to play");
-            case MOVE_STUDENT -> turnInfo.setText("Select a student from entrance");
-            case CLOUD -> turnInfo.setText("Choose the cloud you want to get the students from");
-            case MOTHER_NATURE -> turnInfo.setText("Select the island where you want to move mother nature");
+        if(currentPhase != null){
+            switch (currentPhase){
+                case CARD -> turnInfo.setText("It's your turn! Select an assistant card to play");
+                case MOVE_STUDENT -> turnInfo.setText("Select a student from entrance");
+                case CLOUD -> turnInfo.setText("Choose the cloud you want to get the students from");
+                case MOTHER_NATURE -> turnInfo.setText("Select the island where you want to move mother nature");
+                case NOT_MYTURN -> turnInfo.setText("Wait...other players are playing their turn");
+            }
         }
+
     }
 
     public void askEffect12Students(Student color) {
@@ -1112,5 +1170,35 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
 
         turnInfo.setText(numStudents + " students have been taken from the dinner! ");
+    }
+
+    public void updateMotherNature() {
+        int i = 0;
+
+        for(GridPane island : islands ) {
+            ObservableList<Node> childrens = island.getChildren();
+
+            Iterator<Node> iterator = childrens.iterator();
+            final List<Node> removalCandidates = new ArrayList<>();
+
+            while(iterator.hasNext()){
+                Node node = iterator.next();
+
+                if(island.getRowIndex(node) != null && island.getColumnIndex(node) != null) {
+                    if(island.getRowIndex(node) == 1 && island.getColumnIndex(node) == 1) {
+                        ImageView image = (ImageView) node;
+                        if(image.getImage() != null) {
+                            removalCandidates.add(node);
+                        }
+                    }
+                }
+            }
+
+            island.getChildren().removeAll(removalCandidates);
+
+            i++;
+        }
+
+        islands.get(reducedModel.getReducedBoard().getMotherNature()).add(new ImageView(new Image(String.valueOf(getClass().getResource("/assets/custom/motherNature.png")))), 1, 1);
     }
 }

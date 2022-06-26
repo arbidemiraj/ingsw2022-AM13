@@ -151,7 +151,7 @@ public class ClientController implements ViewObserver, Observer {
             case UPDATE_MOTHERNATURE -> {
                 UpdateMotherNature msg = (UpdateMotherNature) message;
 
-                reducedModel.getReducedBoard().setMotherNature(msg.getMotherNature());
+                taskQueue.execute(() -> view.setMotherNature(msg.getMotherNature()));
             }
 
             case ASK_SWITCH_STUDENT -> {
@@ -180,7 +180,7 @@ public class ClientController implements ViewObserver, Observer {
             case CHARACTER_ACTIVATED -> {
                 CharacterActivated msg = (CharacterActivated) message;
 
-                taskQueue.execute(() -> view.notifyCharacterActivation(msg.getEffectId(), msg.isActivated()));
+                taskQueue.execute(() -> view.notifyCharacterActivation(msg.getEffectId(), msg.isActivated(), msg.getOwner()));
             }
             case UPDATE_MODEL -> {
                 UpdateModelMessage msg = (UpdateModelMessage) message;

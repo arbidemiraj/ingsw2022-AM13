@@ -3,6 +3,7 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.network.client.ClientController;
 import it.polimi.ingsw.view.cli.CLI;
+import it.polimi.ingsw.view.gui.JavaFxMain;
 
 import java.io.IOException;
 
@@ -12,9 +13,10 @@ import java.io.IOException;
 public class ClientApp {
 
     public static void main(String[] args) throws IOException {
-            CLI view = new CLI();
-            ClientController clientController = new ClientController(view);
-            view.addObserver(clientController);
-            view.init();
+        CLI view = new CLI();
+        ClientController clientController = new ClientController(view);
+        view.addObserver(clientController);
+        view.init();
+
     }
 }
