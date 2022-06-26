@@ -126,7 +126,7 @@ public class GameController implements Observer {
     }
 
     /**
-     * method used to activate the character that don't need parameters
+     * method used to activate the character that doesn't need parameters
      *
      * @param id        the id of the character
      */
@@ -134,7 +134,6 @@ public class GameController implements Observer {
         Player player = turnController.getCurrentPlayer();
 
         Character character = model.getCharacter(id);
-
 
         character.setOwner(player);
         character.applyEffect();
@@ -644,5 +643,4 @@ public class GameController implements Observer {
 
 
     }
-
 }
