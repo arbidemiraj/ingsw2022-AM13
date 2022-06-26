@@ -83,6 +83,11 @@ public class GameController implements Observer {
             character.setCost(character.getCost() + 1);
             model.getActivatedCharacters().add(character.getEffectId());
 
+            if(id == 1){
+                ArrayList<Student> students = ((Effect1)character.getEffect()).getStudents();
+                if(gameHandler != null) gameHandler.sendMessageToAll(new UpdateCharacterStudents(students, id));
+            }
+
             updateIslands(character.getOwner().getUsername());
 
             if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true, character.getOwner().getUsername()));
@@ -110,11 +115,12 @@ public class GameController implements Observer {
         character.setCost(character.getCost()+1);
         model.getActivatedCharacters().add(character.getEffectId());
 
-        ArrayList<Student> students = ((Effect1)character.getEffect()).getStudents();
+        if(id == 1){
+            ArrayList<Student> students = ((Effect1)character.getEffect()).getStudents();
+            if(gameHandler != null) gameHandler.sendMessageToAll(new UpdateCharacterStudents(students, id));
+        }
 
         updateIslands(character.getOwner().getUsername());
-
-        if(gameHandler != null) gameHandler.sendMessageToAll(new UpdateCharacterStudents(students, id));
 
         if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true, character.getOwner().getUsername()));
     }
@@ -358,7 +364,10 @@ public class GameController implements Observer {
             case STUDENT_EFFECT -> {
                 StudentEffectMessage msg = (StudentEffectMessage) message;
 
-                if(msg.getEffectId() == 1) gameHandler.sendMessage(new AskIsland(msg.getEffectId()), msg.getUsername());
+                if(msg.getEffectId() == 1){
+                    ((Effect1)model.getCharacter(msg.getEffectId()).getEffect()).apply(model, msg.getChosenStudent());
+                    gameHandler.sendMessage(new AskIsland(msg.getEffectId()), msg.getUsername());
+                }
                 else if(msg.getEffectId() == 12) {
                     gameHandler.sendMessageToAll(new Effect12Message(msg.getChosenStudent()));
                 }
@@ -615,7 +624,10 @@ public class GameController implements Observer {
             islands.add(new ReducedIsland(students, owner[i], i, false));
         }
 
-        if(gameHandler != null) gameHandler.sendMessageToAllExcept(new UpdateModelMessage(islands), username);
+        if(gameHandler != null && username == null) gameHandler.sendMessageToAll(new UpdateModelMessage(islands));
+        else if(gameHandler != null) gameHandler.sendMessageToAllExcept(new UpdateModelMessage(islands), username);
+
+
     }
 
 }

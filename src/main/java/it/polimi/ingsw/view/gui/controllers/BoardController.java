@@ -45,6 +45,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     @FXML
     private Label greenProfOwner, redProfOwner, yellowProfOwner, pinkProfOwner, blueProfOwner;
     @FXML
+    private Label characterOwner1, characterOwner2, characterOwner3;
+    @FXML
+    private ImageView desc1, desc2, desc3;
+    @FXML
     private GridPane deck;
     @FXML
     private Button quitButton;
@@ -95,6 +99,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     private List<ImageView> cardsPlayed;
 
+    private List<ImageView> descriptions;
+
     private List<Node> assistantCards;
 
     private List<Node> islandComponents;
@@ -111,11 +117,13 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     private List<TilePane> charactersPanes;
 
+    private List<Label> owners;
+
     private int studentsCount = 0;
 
     private int disabledIsland = -1;
 
-    private String effectStudentUrl;
+    private String effectStudentUrl = "";
 
     private IntColorMap intColorMap = new IntColorMap();
     private Map<Integer, Student> getStudentFromInt = intColorMap.getMap();
@@ -232,6 +240,16 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }else{
             charactersImages = new ArrayList<>();
             charactersPanes = new ArrayList<>();
+            owners = new ArrayList<>();
+            descriptions = new ArrayList<>();
+
+            descriptions.add(desc1);
+            descriptions.add(desc2);
+            descriptions.add(desc3);
+
+            owners.add(characterOwner1);
+            owners.add(characterOwner2);
+            owners.add(characterOwner3);
 
             characters.setText("Characters");
             coins.setText(String.valueOf(reducedModel.getNumCoins()));
@@ -407,6 +425,24 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 }
             }
         }
+
+        for(ImageView character : charactersImages){
+            character.setOnMouseEntered(e -> {
+                int index = charactersImages.indexOf(character);
+                descriptions.get(index).setOpacity(1);
+                descriptions.get(index).setDisable(false);
+
+                String url = "/assets/personaggi/descrizioni/desc" + reducedModel.getReducedCharacters()[index].getEffectId() + ".png";
+                descriptions.get(index).setImage(new Image(String.valueOf(getClass().getResource(url))));
+            });
+
+            character.setOnMouseExited(e -> {
+                int index = charactersImages.indexOf(character);
+
+                descriptions.get(index).setOpacity(0);
+                descriptions.get(index).setDisable(true);
+            });
+        }
     }
 
     public void showDeck() {
@@ -478,7 +514,6 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 for(GridPane is : islands){
                     is.setDisable(true);
                 }
-
 
                 new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudent("ENTRANCE", String.valueOf(imagesStudent.get(url)), "ISLAND", islands.indexOf(island)))).start();
             });
@@ -911,6 +946,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                     node.setOnMouseClicked(e -> {
                         ImageView student = (ImageView) e.getTarget();
 
+                        charactersPanes.get(index).getChildren().remove(node);
+
                         Student selectedStudent = imagesStudent.get(student.getImage().getUrl());
                         effectStudentUrl = student.getImage().getUrl();
 
@@ -1026,11 +1063,13 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                     });
                 }
             }
-        }
-        for(GridPane island : islands){
-            island.setOnMouseClicked(e -> {
-                new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateIslandEffect(islands.indexOf(island), effectId))).start();
-            });
+            default -> {
+                for(GridPane island : islands){
+                    island.setOnMouseClicked(e -> {
+                        new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateIslandEffect(islands.indexOf(island), effectId))).start();
+                    });
+                }
+            }
         }
     }
 
@@ -1099,6 +1138,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     public void updateCharacterStudents() {
         for(int i = 0; i < 3; i++){
+            charactersPanes.get(i).getChildren().clear();
             if(reducedModel.getReducedCharacters()[i].getStudents() != null){
                 for(Student student : reducedModel.getReducedCharacters()[i].getStudents()){
                     charactersPanes.get(i).getChildren().add(new ImageView(new Image(studentsImages.get(student))));
@@ -1118,7 +1158,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
             reducedModel.setNumCoins(reducedModel.getNumCoins() - reducedModel.getCharacterById(effectId).getCost());
 
-            charactersPanes.get(index).getChildren().add(new Label(owner));
+            owners.get(index).setText(owner);
 
             coins.setText(String.valueOf(reducedModel.getNumCoins()));
 
@@ -1137,7 +1177,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
             charactersImages.get(index).setStyle("");
 
-            charactersPanes.get(index).getChildren().add(new Label(""));
+            owners.get(index).setText("");
         }
     }
 
