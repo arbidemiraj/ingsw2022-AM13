@@ -299,6 +299,7 @@ public class Game extends Observable {
 
 				if(playersCheck.contains(owner)) board.getProfessors()[colorPos].setOwner(owner);
 			}
+			else if(playersCheck.size() == 1) board.getProfessors()[colorPos].setOwner(playersCheck.get(0));
 		}
 		else if(playersCheck.size() == 1) board.getProfessors()[colorPos].setOwner(playersCheck.get(0));
 

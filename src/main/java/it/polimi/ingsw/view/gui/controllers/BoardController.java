@@ -883,8 +883,6 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                     if(effectId == 4 && reducedModel.getNumCoins() >= reducedModel.getCharacterById(effectId).getCost()){
                         reducedModel.setMaxSteps(reducedModel.getMaxSteps() + 2);
                     }
-
-                    coins.setText(String.valueOf(reducedModel.getNumCoins()));
                     new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateCharacter(effectId))).start();
                 });
             }
