@@ -12,11 +12,13 @@ public class Effect3 implements Actionable {
 	public void apply(Game game , Island chosenIsland) {
 		boolean isValid = false;
 
+		boolean owned = game.setIslandOwner(chosenIsland);
+
 		for(Player player : game.getPlayers()){
 			if(player.getInfluenceValue() != 0) isValid = true;
 		}
 
-		if(game.setIslandOwner(chosenIsland) && isValid == true) game.updateConquer(game.getBoard().getIslands().getPosition(chosenIsland));
+		if(owned && isValid == true) game.updateConquer(game.getBoard().getIslands().getPosition(chosenIsland));
 	}
 
 	@Override

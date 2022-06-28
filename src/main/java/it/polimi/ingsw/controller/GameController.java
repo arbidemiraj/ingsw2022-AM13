@@ -555,6 +555,7 @@ public class GameController implements Observer {
         switch (message.getMessageType()){
             case UPDATE_MODEL -> {
                 UpdateModelMessage modelMessage = (UpdateModelMessage) message;
+
                 switch (modelMessage.getUpdateType()){
                     case MERGE -> {
                         updateMotherNature(message.getUsername());

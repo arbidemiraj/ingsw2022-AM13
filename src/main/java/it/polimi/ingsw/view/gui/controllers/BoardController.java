@@ -281,7 +281,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     }
 
     private void playCard(int id) {
-        deck.setOnMouseClicked(e -> {showGenericText("You can't play a card now!");});
+        deck.setOnMouseClicked(e -> {showAlert("You can't play a card now!");});
         turnInfo.setText("Wait... other players are playing their turn");
 
         new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateCard((id + 1)))).start();
@@ -508,7 +508,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         disableCharacterClickable();
 
         for(GridPane island : islands){
-            if(islands.indexOf(island) != disabledIsland) island.setDisable(false);
+            island.setDisable(false);
 
             island.setOnMouseClicked(e -> {
                 Node source = (Node)e.getSource() ;
@@ -585,7 +585,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         for(ImageView singleStud : entrance) {
             singleStud.setOnMouseClicked(e -> {
                 singleStud.getStyleClass().set(0, "");
-                turnInfo.setText("You can't move a student!");
+                showAlert("You can't move a student!");
             });
         }
 
@@ -679,13 +679,27 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                     for (Node node : childrens) {
                         if(island.getRowIndex(node) != null && island.getColumnIndex(node) != null) {
                             if(island.getRowIndex(node) == 1 && island.getColumnIndex(node) == 1) {
-                            ImageView image = (ImageView) node;
-                            image.setImage(null);
+                                ImageView image = (ImageView) node;
+                                image.setImage(null);
                         }
                         }
                     }
 
+
+
                     island.add(new ImageView(new Image(String.valueOf(getClass().getResource("/assets/custom/motherNature.png")))), 1, 1);
+
+                    int index = islands.indexOf(island);
+
+                    if(reducedModel.getReducedBoard().getIslands().get(index).isNoEntryTile()){
+                        for (Node node : childrens) {
+                            if(island.getRowIndex(node) != null && island.getColumnIndex(node) != null) {
+                                if(island.getRowIndex(node) == 0 && island.getColumnIndex(node) == 0) {
+                                    island.getChildren().remove(node);
+                                }
+                            }
+                        }
+                    }
 
                     new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateMotherNature(steps))).start();
 
@@ -711,7 +725,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     private void disableMotherNatureClickable() {
         for(GridPane island : islands){
-            island.setOnMouseClicked(e -> {});
+            island.setDisable(true);
         }
     }
 
@@ -1111,7 +1125,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         switch(effectId){
             case 1 -> {
                 for(GridPane island : islands){
-                    if(islands.indexOf(island) != disabledIsland) island.setDisable(false);
+                    island.setDisable(false);
 
                     island.setOnMouseClicked(e -> {
                         Node source = (Node)e.getSource() ;
@@ -1134,15 +1148,13 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                         island.add(new ImageView(new Image(String.valueOf(getClass().getResource("/assets/deny.png")))), 0, 0);
                         disabledIsland = islands.indexOf(island);
 
-                        island.setDisable(true);
-
                         new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateIslandEffect(islands.indexOf(island), effectId))).start();
                     });
                 }
             }
             default -> {
                 for(GridPane island : islands){
-                    if(islands.indexOf(island) != disabledIsland) island.setDisable(false);
+                    island.setDisable(false);
 
                     island.setOnMouseClicked(e -> {
                         new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateIslandEffect(islands.indexOf(island), effectId))).start();
@@ -1153,65 +1165,82 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     }
 
     public void askSwitch() {
-        turnInfo.setText("Select a student from entrance");
+        boolean test = true;
 
-        ArrayList<Student> students = new ArrayList<>();
-
-        AtomicInteger numStudents = new AtomicInteger();
-
-        for (ImageView singleStud : entrance) {
-            singleStud.getStyleClass().set(0, "clickable");
-
-            singleStud.setOnMouseClicked(e -> {
-                Node node = (Node) e.getTarget();
-
-                ImageView student = (ImageView) node;
-
-                Student selectedStud = imagesStudent.get(student.getImage().getUrl());
-
-                students.add(selectedStud);
-
-                String url = student.getImage().getUrl();
-
-                addStudentToDinner(dinnerRoom.get(positionMap.get(imagesStudent.get(url))), url);
-
-                if((dinnerRoom.get(positionMap.get(imagesStudent.get(url))).getChildren().size() == 3 || 
-                        dinnerRoom.get(positionMap.get(imagesStudent.get(url))).getChildren().size() == 6 || 
-                        dinnerRoom.get(positionMap.get(imagesStudent.get(url))).getChildren().size() == 9) && reducedModel.isExpertMode()){
-                    reducedModel.addCoin();
-                    coins.setText(String.valueOf(reducedModel.getNumCoins()));
-                }
-                
-                turnInfo.setText("Select a dinner");
-
-                student.setImage(null);
-                
-                for(TilePane dinner : dinnerRoom){
-                    dinner.setDisable(false);
-
-                    dinner.setOnMouseClicked(e1 -> {
-
-                        dinner.getChildren().remove(dinner.getChildren().size() - 1);
-
-                        numStudents.getAndIncrement();
-                        
-                        for(TilePane din : dinnerRoom){
-                            din.setDisable(true);
-                        }
-
-                        
-                        if(numStudents.get() == 2){
-                            disableStudents();
-                            numStudents.set(0);
-                            new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students))).start();
-                        }
-                    });
-                }
-
-                
-            });
+        for(TilePane dinner : dinnerRoom){
+            if(dinner.getChildren().isEmpty()) test = false;
         }
+        if(!test){
+            turnInfo.setText("Select a student from entrance");
 
+            ArrayList<Student> students = new ArrayList<>();
+
+            AtomicInteger numStudents = new AtomicInteger();
+
+            for (ImageView singleStud : entrance) {
+                singleStud.getStyleClass().set(0, "clickable");
+
+                singleStud.setOnMouseClicked(e -> {
+                    Node node = (Node) e.getTarget();
+
+                    ImageView student = (ImageView) node;
+
+                    Student selectedStud = imagesStudent.get(student.getImage().getUrl());
+
+                    students.add(selectedStud);
+
+                    String url = student.getImage().getUrl();
+
+                    addStudentToDinner(dinnerRoom.get(positionMap.get(imagesStudent.get(url))), url);
+
+                    if((dinnerRoom.get(positionMap.get(imagesStudent.get(url))).getChildren().size() == 3 ||
+                            dinnerRoom.get(positionMap.get(imagesStudent.get(url))).getChildren().size() == 6 ||
+                            dinnerRoom.get(positionMap.get(imagesStudent.get(url))).getChildren().size() == 9) && reducedModel.isExpertMode()){
+                        reducedModel.addCoin();
+                        coins.setText(String.valueOf(reducedModel.getNumCoins()));
+                    }
+
+                    turnInfo.setText("Select a dinner");
+
+                    student.setImage(null);
+
+                    numStudents.getAndIncrement();
+
+                    if(numStudents.get() == 2) {
+                        disableStudents();
+                        numStudents.set(0);
+                    }
+                    for(TilePane dinner : dinnerRoom){
+                        dinner.setDisable(false);
+
+
+                        dinner.setOnMouseClicked(e1 -> {
+                            if(!dinner.getChildren().isEmpty()){
+                                dinner.getChildren().remove(dinner.getChildren().size() - 1);
+
+                                for(TilePane din : dinnerRoom){
+                                    din.setDisable(true);
+                                }
+
+
+
+                                new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students))).start();
+
+                            }
+                            else{
+                                showAlert("Select another dinner that is not empty!");
+                            }
+                        });
+                    }
+
+
+                });
+            }
+
+        }
+        else {
+            showAlert("Your dinner room is empty!");
+        }
 
 
     }
@@ -1233,8 +1262,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
             int index = Arrays.asList(reducedModel.getReducedCharacters()).indexOf(reducedModel.getCharacterById(effectId));
 
-            charactersImages.get(index).setX(1.2);
-            charactersImages.get(index).setY(1.2);
+            charactersImages.get(index).setX(1.5);
+            charactersImages.get(index).setY(1.5);
 
             charactersImages.get(index).setStyle("-fx-effect: dropshadow(gaussian, #f2e0d6, 20, 0.3, 0, 0);");
 
@@ -1289,7 +1318,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 case CARD -> turnInfo.setText("It's your turn! Select an assistant card to play");
                 case MOVE_STUDENT -> turnInfo.setText("Select a student from entrance");
                 case CLOUD -> turnInfo.setText("Choose the cloud you want to get the students from");
-                case MOTHER_NATURE -> turnInfo.setText("Select the island where you want to move mother nature");
+                case MOTHER_NATURE -> askMotherNature();
                 case NOT_MYTURN -> turnInfo.setText("Wait...other players are playing their turn");
             }
         }
@@ -1343,9 +1372,17 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     }
 
     public void showDisconnection(String username) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Disconnection");
         alert.setContentText("Game has ended because user " + username + " disconnected");
+
+        alert.showAndWait();
+    }
+
+    public void showAlert(String message){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setContentText(message);
 
         alert.showAndWait();
     }

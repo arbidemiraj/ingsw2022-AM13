@@ -95,9 +95,9 @@ public class Game extends Observable {
 		}
 		 */
 
-		characters[0] = new Character(this, 10, cost[4]);
-		characters[1] = new Character(this, 11, cost[5]);
-		characters[2] = new Character(this, 12, cost[6]);
+		characters[0] = new Character(this, 4, cost[4]);
+		characters[1] = new Character(this, 5, cost[5]);
+		characters[2] = new Character(this, 6, cost[6]);
 	}
 
 
