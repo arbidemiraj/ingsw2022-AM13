@@ -38,7 +38,10 @@ public class Server {
 
     /**
      * Adds a client to be managed by the server instance
-     *this creates a new player profile
+     * this creates a new player profile
+     * @param username to add
+     * @param clientHandler to handle the communication
+     * @throws DuplicateUsernameException if it already exists
      */
     public synchronized void addClient(String username, ClientHandler clientHandler) throws DuplicateUsernameException {
             if(!isUnique(username)) throw new DuplicateUsernameException();
@@ -52,7 +55,7 @@ public class Server {
     /**
      *verifies if the player username is unique
      * @param username
-     * @return boolean      true if it is unique, false if it isn't
+     * @return boolean true if it is unique, false if it isn't
      */
     private boolean isUnique (String username) {
         if(lobbyHandler.getUsernameQueue() != null && lobbyHandler.getUsernameQueue().contains(username)) return false;
@@ -61,6 +64,7 @@ public class Server {
 
     /**
      * Allows to delete a player given his username
+     * @param username
      */
     public synchronized void removeClient(String username) {
         clientHandlerMap.remove(username);
@@ -70,6 +74,7 @@ public class Server {
 
     /**
      * Forwards a received message from the client to the GameController.
+     * @param message that contains the different game options
      */
     public void messageReceived(Message message) {
         switch (message.getMessageType()){
@@ -96,6 +101,7 @@ public class Server {
 
     /**
      * Handles the disconnection of a client.
+     * @param clientHandler
      */
     public synchronized void disconnect(ClientHandler clientHandler) {
         if (lobbyHandler.getUsernameQueue().contains(getUsernameFromClientHandler(clientHandler))) lobbyHandler.disconnect(getUsernameFromClientHandler(clientHandler));
@@ -103,6 +109,7 @@ public class Server {
 
     /**
      * Returns the corresponding username of a ClientHandler
+     * @param clientHandler
      */
     private String getUsernameFromClientHandler(ClientHandler clientHandler) {
         return clientHandlerMap.entrySet()
@@ -117,6 +124,10 @@ public class Server {
         return clientHandlerMap;
     }
 
+    /**
+     *
+     * @param newGameMessage
+     */
     public void createNewGame(NewGameMessage newGameMessage){
         GameHandler gameHandler = new GameHandler(this, newGameMessage, nextGameId);
         lobbyHandler.newGame(gameHandler);

@@ -22,10 +22,18 @@ public class LobbyHandler {
         gameIdUsernameMap = new HashMap<>();
     }
 
+    /**
+     *
+     * @param newGame that the handler has to track
+     */
     public void newGame(GameHandler newGame){
         games.add(newGame);
     }
 
+    /**
+     *
+     * @return lobby information
+     */
     public String printLobby(){
         String lobby;
 
@@ -50,6 +58,11 @@ public class LobbyHandler {
         return lobby;
     }
 
+    /**
+     *
+     * @param receivedMessage
+     * @param gameId
+     */
     public void receivedMessage(Message receivedMessage, int gameId){
         GameHandler game = games
                 .stream()
@@ -60,6 +73,11 @@ public class LobbyHandler {
         game.receivedMessage(receivedMessage);
     }
 
+    /**
+     *
+     * @param username
+     * @return error if there is no username
+     */
     public int getGameIdFromUsername(String username){
         if(gameIdUsernameMap.get(username) != null){
             return gameIdUsernameMap.get(username);
@@ -73,10 +91,19 @@ public class LobbyHandler {
         return games;
     }
 
+    /**
+     *
+     * @param username to add to the list of players
+     */
     public void login(String username){
         usernameQueue.add(username);
     }
 
+    /**
+     *
+     * @param username that wants to join the game
+     * @param gameId to join
+     */
     public void joinGame(String username, int gameId){
         gameIdUsernameMap.put(username, gameId);
     }
@@ -85,6 +112,10 @@ public class LobbyHandler {
         return usernameQueue;
     }
 
+    /**
+     *
+     * @param username that drops the connection
+     */
     public void disconnect(String username) {
         if(getGameIdFromUsername(username) != -1){
             games.get(getGameIdFromUsername(username)).sendMessageToAllExcept(new NotifyDisconnectionMessage(username), username);
