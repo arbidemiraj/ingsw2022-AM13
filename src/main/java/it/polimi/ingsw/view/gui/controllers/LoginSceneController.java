@@ -23,6 +23,7 @@ public class LoginSceneController extends ViewObservable implements GenericScene
         private void onJoinBtnClick(Event event) {
             String nickname = nicknameField.getText();
 
-            new Thread(() ->notifyObserver(viewObserver -> viewObserver.onUpdateLoginMessage(nickname))).start();
+            if(!nickname.equals(""))
+                new Thread(() ->notifyObserver(viewObserver -> viewObserver.onUpdateLoginMessage(nickname))).start();
         }
 }
