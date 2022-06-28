@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.Cloud;
+import it.polimi.ingsw.model.Professor;
 import it.polimi.ingsw.model.enumerations.PhaseType;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
@@ -88,6 +89,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     private Label turnPlayer;
     @FXML
     private ImageView lastCard3;
+    @FXML
+    private ImageView greenProf,redProf,blueProf,yellowProf,pinkProf;
 
     private ReducedModel reducedModel;
 
@@ -122,6 +125,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     private List<TilePane> charactersPanes;
 
     private List<Label> owners;
+    private List<ImageView> boardProf;
 
     private int studentsCount = 0;
 
@@ -166,6 +170,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
         moveStudentParameters = new ArrayList<>();
         cardsPlayed = new ArrayList<>();
+        boardProf = new ArrayList<>();
 
         colors = new ArrayList<>();
 
@@ -175,6 +180,11 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         colors.add(pink);
         colors.add(blue);
 
+        boardProf.add(redProf);
+        boardProf.add(greenProf);
+        boardProf.add(yellowProf);
+        boardProf.add(pinkProf);
+        boardProf.add(blueProf);
 
 
         for(int i = 1; i < 10; i++) {
@@ -652,6 +662,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     public void askMotherNature() {
         currentPhase = PhaseType.MOTHER_NATURE;
 
+        setCharacterClickable();
         turnInfo.setText("Select the island where you want to move mother nature");
 
         for(GridPane island : islands){
@@ -771,6 +782,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     public void setProf(String professorOwner, Student color) {
         professors.get(getIntFromStudent.get(color)).setText(" : " + professorOwner);
+        if (professorOwner.equals(reducedModel.getPlayerUsername()))
+            boardProf.get(getIntFromStudent.get(color)).setImage(new Image(professorImages.get(color)));
     }
 
     public void mergeIslands(int island1, int island2) {

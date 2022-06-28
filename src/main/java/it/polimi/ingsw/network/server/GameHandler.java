@@ -31,6 +31,12 @@ public class GameHandler {
     private boolean isActive = true;
 
 
+    /**
+     *
+     * @param server class
+     * @param newGameMessage message that contains the game settings
+     * @param gameId number of the match
+     */
     public GameHandler(Server server, NewGameMessage newGameMessage, int gameId){
         this.server = server;
         started = false;
