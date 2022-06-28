@@ -33,7 +33,6 @@ public class SocketServer {
 
         /**
          * creates a server-client thread and controls the connection status
-         *
          */
         while (!Thread.currentThread().isInterrupted()) {
             try {
@@ -50,20 +49,38 @@ public class SocketServer {
         }
     }
 
+    /**
+     *
+     * @param username to add to the server
+     * @param clientHandler that has to handle it
+     * @throws DuplicateUsernameException
+     */
     public void addClient(String username, ClientHandler clientHandler) throws DuplicateUsernameException {
         server.addClient(username, clientHandler);
     }
 
 
+    /**
+     *
+     * @param message ack
+     */
     public void MessageReceived(Message message) {
         server.messageReceived(message);
     }
 
 
+    /**
+     *
+     * @param clientHandler disconnection
+     */
     public void disconnect(ClientHandler clientHandler) {
         server.disconnect(clientHandler);
     }
 
+    /**
+     *
+     * @param newGameMessage sent to the server
+     */
     public void createNewGame(NewGameMessage newGameMessage){
         server.createNewGame(newGameMessage);
     }

@@ -68,6 +68,9 @@ public class GameHandler {
     public void startGame(){
         boolean color = true;
 
+        /**
+         * @param color gets the tower color chosen by the player
+         */
         while(color){
             for(Player player : game.getPlayers()){
                 if(player.getTowerColor() != null) color = false;
@@ -84,6 +87,9 @@ public class GameHandler {
         return started;
     }
 
+    /**
+     * @param username adds the player to the game controller
+     */
     public void addPlayer(String username){
         gameController.addPlayer(username);
         askTowerColor(username);
@@ -103,6 +109,10 @@ public class GameHandler {
         started = false;
     }
 
+    /**
+     *
+     * @param username that has to be removed
+     */
     public void endGame(String username){
         for(String user : gameController.getGame().getUsernames()){
             server.removeClient(user);
@@ -113,6 +123,9 @@ public class GameHandler {
         started = false;
     }
 
+    /**
+     * @param username to who is asked the tower colour
+     */
     private void askTowerColor(String username) {
         sendMessage(new AskTowerColor(towerColors), username);
     }
@@ -133,6 +146,10 @@ public class GameHandler {
         return game;
     }
 
+    /**
+     *
+     * @param message sent from the client that chose the tower colour
+     */
     public void receivedMessage(Message message){
         switch (message.getMessageType()){
             case TOWER_COLOR_CHOOSE -> {
@@ -153,16 +170,29 @@ public class GameHandler {
         }
     }
 
+    /**
+     * @param message that contains the game data
+     * @param username of the player that receives the message
+     */
     public void sendMessage(Message message, String username){
         server.getClientHandlerMap().get(username).sendMessage(message);
     }
 
+    /**
+     *
+     * @param message asks the username to everyone
+     */
     public void sendMessageToAll(Message message){
         for(String username : gameController.getGame().getUsernames()){
             sendMessage(message, username);
         }
     }
 
+    /**
+     *
+     * @param message
+     * @param user
+     */
     public void sendMessageToAllExcept(Message message, String user){
         for(String username : gameController.getGame().getUsernames()){
             if(!username.equals(user)) sendMessage(message, username);

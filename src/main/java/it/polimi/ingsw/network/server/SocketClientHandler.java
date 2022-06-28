@@ -29,6 +29,11 @@ public class SocketClientHandler implements ClientHandler, Runnable {
 
     private final ScheduledExecutorService ping;
 
+    /**
+     *
+     * @param socketServer that recieves the messages
+     * @param client to listen to
+     */
     public SocketClientHandler(SocketServer socketServer, Socket client) {
         this.socketServer = socketServer;
         this.client = client;
@@ -128,6 +133,10 @@ public class SocketClientHandler implements ClientHandler, Runnable {
         }
     }
 
+    /**
+     *
+     * @param message to handle the game
+     */
     @Override
     public void sendMessage(Message message) {
         try {
@@ -144,6 +153,10 @@ public class SocketClientHandler implements ClientHandler, Runnable {
         }
     }
 
+    /**
+     *
+     * @param gameId to be returned
+     */
     public void setGameId(int gameId) {
         this.gameId = gameId;
     }
