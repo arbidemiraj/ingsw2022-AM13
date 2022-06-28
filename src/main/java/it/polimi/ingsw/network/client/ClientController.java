@@ -51,14 +51,12 @@ public class ClientController implements ViewObserver, Observer {
                     }
                 }
             }
+
             case GENERIC -> {
                 GenericMessage genericMessage = (GenericMessage) message;
                 taskQueue.execute(() -> view.showGenericMessage(genericMessage.toString()));
-
-                if(genericMessage.getGenericType() == GenericType.END){
-                    taskQueue.execute(() -> view.showDisconnection(genericMessage.getUsername()));
-                }
             }
+
             case CHOOSE_GAME_OPTIONS -> {
                 taskQueue.execute(view::askCreateOrJoin);
             }
@@ -79,6 +77,12 @@ public class ClientController implements ViewObserver, Observer {
                 this.reducedModel = msg.getReducedModel();
 
                 taskQueue.execute(() -> view.startGame(msg.getFirstPlayer(), msg.getReducedModel()));
+            }
+
+            case NOTIFY_DISCONNECTION -> {
+                NotifyDisconnectionMessage msg = (NotifyDisconnectionMessage) message;
+
+                taskQueue.execute(() -> view.showDisconnection(msg.getUsername()));
             }
 
             case TOWER_COLOR_ASK -> {
@@ -327,5 +331,10 @@ public class ClientController implements ViewObserver, Observer {
     @Override
     public void onUpdateSwitchStudents(ArrayList<Student> students, int effectId){
         client.sendMessage(new SwitchStudents(username, students, effectId));
+    }
+
+    @Override
+    public void backToChoice() {
+        taskQueue.execute(view::backToChoice);
     }
 }

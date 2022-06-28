@@ -51,11 +51,16 @@ public class GameBoard implements Serializable {
 		}
 
 
-		clouds = new Cloud[2];
+		if(numPlayers == 2) clouds = new Cloud[2];
+		else clouds = new Cloud[3];
 
 		//Create instances for clouds
 		clouds[0] = new Cloud(numPlayers);
 		clouds[1] = new Cloud(numPlayers);
+
+		if(numPlayers == 3){
+			clouds[2] = new Cloud(numPlayers);
+		}
 
 		//Creates 5 professors
 		IntColorMap studentColorMap = new IntColorMap();

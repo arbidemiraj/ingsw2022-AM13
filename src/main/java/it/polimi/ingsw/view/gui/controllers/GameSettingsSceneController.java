@@ -16,11 +16,15 @@ public class GameSettingsSceneController extends ViewObservable implements Gener
     private CheckBox expertMode;
 
     @FXML
+    private Button backBtn;
+
+    @FXML
     private Button joinGameBtn;
 
     @FXML
     public void initialize() {
         joinGameBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onJoinGame);
+        backBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onBackBtnClick);
     }
 
     @FXML
@@ -28,6 +32,11 @@ public class GameSettingsSceneController extends ViewObservable implements Gener
         int nPlayers = Integer.parseInt(numPlayers.getText());
         boolean expert = expertMode.isSelected();
 
-        notifyObserver(viewObserver -> viewObserver.onUpdateNewGame(nPlayers, expert));
+        new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateNewGame(nPlayers, expert))).start();
+    }
+
+    @FXML
+    private void onBackBtnClick(Event event) {
+        new Thread(() -> notifyObserver(viewObserver -> viewObserver.backToChoice())).start();
     }
 }

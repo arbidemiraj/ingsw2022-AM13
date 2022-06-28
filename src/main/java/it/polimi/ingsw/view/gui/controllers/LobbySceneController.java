@@ -12,6 +12,9 @@ public class LobbySceneController extends ViewObservable implements GenericScene
     @FXML
     private Button joinGameBtn;
 
+    @FXML
+    private Button backBtn;
+
     private String games;
 
     @FXML
@@ -23,7 +26,7 @@ public class LobbySceneController extends ViewObservable implements GenericScene
     @FXML
     public void initialize() {
         joinGameBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onJoinGame);
-
+        backBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onBackClick);
         gamesLobby.setText(games);
     }
 
@@ -31,6 +34,11 @@ public class LobbySceneController extends ViewObservable implements GenericScene
     private void onJoinGame(Event event) {
         int id = Integer.parseInt(gameId.getText());
         new Thread(()->notifyObserver(viewObserver -> viewObserver.onUpdateJoinGame(id))).start();
+    }
+
+    @FXML
+    private void onBackClick(Event event) {
+        new Thread(()->notifyObserver(viewObserver -> viewObserver.backToChoice())).start();
     }
 
     public void addGames(String games){

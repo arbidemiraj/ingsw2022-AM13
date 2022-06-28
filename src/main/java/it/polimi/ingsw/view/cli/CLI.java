@@ -67,20 +67,35 @@ public class CLI extends ViewObservable implements View {
             output.print("\n\nEnter the server address [ Default = " + defaultAddress + "] : ");
             String address = input.nextLine();
 
-            if(address.equals("")) serverInfo.add(defaultAddress);
-            else serverInfo.add(address);
-            isValid = true;
+            if(address.equals("")){
+                serverInfo.add(defaultAddress);
+                isValid = true;
+            }
+            else if(isValidIp(address)){
+                serverInfo.add(address);
+                isValid = true;
+            }
+            else{
+                serverInfo.add(address);
+                isValid = false;
+            }
+
 
         }while(!isValid);
 
         do{
             output.print("Enter the server port [ Default = " + defaultPort + "] : ");
-            String address = input.nextLine();
+            String port = input.nextLine();
 
-            if(address.equals("")){
+            if(port.equals("")){
                 serverInfo.add(defaultPort);
                 isValid = true;
-            } else{
+            }
+            else if(Integer.parseInt(port) >= 1 && Integer.parseInt(port) <= 65535){
+                serverInfo.add(port);
+                isValid = true;
+            }
+            else{
                 output.println("Invalid port");
                 isValid = false;
             }
@@ -711,4 +726,28 @@ public class CLI extends ViewObservable implements View {
     public void showDisconnection(String username) {
 
     }
+
+    @Override
+    public void backToChoice() {
+
+    }
+
+    private boolean isValidIp(String ip) {
+        String[] groups = ip.split("\\.");
+
+        if (groups.length != 4) {
+            return false;
+        }
+
+        try {
+            return Arrays.stream(groups)
+                    .filter(s -> s.length() > 1 && s.startsWith("0"))
+                    .map(Integer::parseInt)
+                    .filter(i -> (i >= 0 && i <= 255))
+                    .count() == 4;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
 }

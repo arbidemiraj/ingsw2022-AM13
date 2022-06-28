@@ -93,4 +93,6 @@ public interface View {
     void setMotherNature(int motherNature);
 
     void showDisconnection(String username);
+
+    void backToChoice();
 }

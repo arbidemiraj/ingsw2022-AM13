@@ -14,6 +14,7 @@
       <Label layoutX="541.0" layoutY="433.0" text="Expert Mode" />
       <Button fx:id="joinGameBtn" layoutX="535.0" layoutY="510.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="210.0" text="Create game" />
       <CheckBox fx:id="expertMode" layoutX="715.0" layoutY="442.0" mnemonicParsing="false" />
+      <Button fx:id="backBtn" layoutX="1138.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="142.0" text="Back" />
    </children>
    <stylesheets>
       <URL value="@../css/global.css" />

@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.model.AssistantCard;
 import it.polimi.ingsw.model.Cloud;
-import it.polimi.ingsw.model.Professor;
 import it.polimi.ingsw.model.enumerations.PhaseType;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
@@ -58,7 +57,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     @FXML
     private TilePane test;
     @FXML
-    private Label player1, player2;
+    private Label player1, player2, player3;
     @FXML
     private Label turnInfo;
     @FXML
@@ -71,8 +70,6 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     private Label coins;
     @FXML
     private ImageView coinImage;
-    @FXML
-    private Label player3;
     @FXML
     private ImageView playerBoard;
     @FXML
@@ -120,11 +117,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     private List<ImageView> charactersImages;
 
-
-
     private List<TilePane> charactersPanes;
 
     private List<Label> owners;
+
     private List<ImageView> boardProf;
 
     private int studentsCount = 0;
@@ -180,8 +176,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         colors.add(pink);
         colors.add(blue);
 
-        boardProf.add(redProf);
         boardProf.add(greenProf);
+        boardProf.add(redProf);
         boardProf.add(yellowProf);
         boardProf.add(pinkProf);
         boardProf.add(blueProf);
@@ -223,6 +219,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
         if(reducedModel.getUsername().size() == 3){
             cloudsPane.add(cloud3pane);
+            cloud3.setImage(new Image(String.valueOf(getClass().getResource("/assets/custom/cloud.png"))));
             cloudsImage.add(cloud3);
         }
 
@@ -245,7 +242,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
         if(reducedModel.getUsername().size() == 3){
             player3.setText(reducedModel.getUsername().get(2));
-            if(reducedModel.getUsername().get(2).equals(reducedModel.getPlayerUsername())) player2.setText("You");
+            if(reducedModel.getUsername().get(2).equals(reducedModel.getPlayerUsername())) player3.setText("You");
         }
         else player3.setText("");
 
@@ -552,6 +549,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                     din.setDisable(true);
                 }
 
+                for(GridPane is : islands){
+                    is.setDisable(true);
+                }
+
                 if((dinner.getChildren().size() == 3 || dinner.getChildren().size() == 6 || dinner.getChildren().size() == 9) && reducedModel.isExpertMode()){
                     reducedModel.addCoin();
                     coins.setText(String.valueOf(reducedModel.getNumCoins()));
@@ -782,8 +783,12 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     public void setProf(String professorOwner, Student color) {
         professors.get(getIntFromStudent.get(color)).setText(" : " + professorOwner);
-        if (professorOwner.equals(reducedModel.getPlayerUsername()))
-            boardProf.get(getIntFromStudent.get(color)).setImage(new Image(professorImages.get(color)));
+        if (professorOwner.equals(reducedModel.getPlayerUsername())){
+            boardProf.get(positionMap.get(color)).setImage(new Image(professorImages.get(color)));
+        }
+        else {
+            boardProf.get(positionMap.get(color)).setImage(null);
+        }
     }
 
     public void mergeIslands(int island1, int island2) {
@@ -981,7 +986,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
             }
 
             case 7 -> {
-                int count = 0;
+                AtomicInteger count = new AtomicInteger();
                 ArrayList<Student> students = new ArrayList<>();
 
                 turnInfo.setText("Select a student from the card...Switch max 3 students ");
@@ -993,6 +998,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                     node.setOnMouseClicked(e -> {
                         turnInfo.setText("Select the student from entrance you want to switch");
                         ImageView student = (ImageView) e.getTarget();
+
                         charactersPanes.get(index).getChildren().remove(node);
 
                         students.add(imagesStudent.get(student.getImage().getUrl()));
@@ -1017,7 +1023,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
                                 disableStudents();
 
-                                if(count == 2){
+                                count.getAndIncrement();
+
+                                if(count.get() == 2){
                                     new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students, 7))).start();
 
                                     for(Node n : charactersPanes.get(index).getChildren()){
@@ -1072,14 +1080,22 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 turnInfo.setText("Select a student you want to move to the dinner room");
 
                 for(Node node : charactersPanes.get(index).getChildren()){
+                    node.setDisable(false);
                     node.getStyleClass().set(0, "clickable");
 
                     node.setOnMouseClicked(e -> {
+
                         ImageView student = (ImageView) e.getTarget();
 
                         Student selectedStudent = imagesStudent.get(student.getImage().getUrl());
 
                         dinnerRoom.get(positionMap.get(selectedStudent)).getChildren().add(student);
+
+
+                        for(Node n : charactersPanes.get(index).getChildren()){
+                            n.setDisable(true);
+                        }
+
 
                         new Thread (() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudentEffect(String.valueOf(selectedStudent), effectId))).start();
                     });
@@ -1138,6 +1154,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     public void askSwitch() {
         turnInfo.setText("Select a student from entrance");
+
         ArrayList<Student> students = new ArrayList<>();
 
         AtomicInteger numStudents = new AtomicInteger();
@@ -1330,7 +1347,6 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         alert.setTitle("Disconnection");
         alert.setContentText("Game has ended because user " + username + " disconnected");
 
-        if (alert.showAndWait().get()== ButtonType.OK){
-        }
+        alert.showAndWait();
     }
 }

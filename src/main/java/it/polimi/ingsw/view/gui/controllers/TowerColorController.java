@@ -35,11 +35,13 @@ public class TowerColorController extends ViewObservable implements GenericScene
     private void onSelectBtnClick(Event event) {
         String color = towerColors.getValue();
 
-        info.setText("You chose " + color + " wait for other players to join...");
-        selectBtn.setDisable(true);
-        towerColors.hide();
+        if(color != null) {
+            info.setText("You chose " + color + " wait for other players to join...");
+            selectBtn.setDisable(true);
+            towerColors.hide();
 
         new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateTowerColor(color))).start();
+        }
     }
 
     public void addColorOptions(List<String> availableColors){

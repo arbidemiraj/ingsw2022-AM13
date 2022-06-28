@@ -278,4 +278,9 @@ public class GUI extends ViewObservable implements View {
     public void showDisconnection(String username) {
         Platform.runLater(() -> controller.showDisconnection(username));
     }
+
+    @Override
+    public void backToChoice() {
+        Platform.runLater(() -> sceneController.changeRoot(observers, "choice_scene.fxml"));
+    }
 }

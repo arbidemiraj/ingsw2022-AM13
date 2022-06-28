@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.server;
 import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.GenericType;
 import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.network.message.servermsg.NotifyDisconnectionMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,7 +87,7 @@ public class LobbyHandler {
 
     public void disconnect(String username) {
         if(getGameIdFromUsername(username) != -1){
-            games.get(getGameIdFromUsername(username)).sendMessageToAllExcept(new GenericMessage("Game has ended because user '" + username + "' disconnected", GenericType.END), username);
+            games.get(getGameIdFromUsername(username)).sendMessageToAllExcept(new NotifyDisconnectionMessage(username), username);
 
             games.get(getGameIdFromUsername(username)).endGame(username);
 

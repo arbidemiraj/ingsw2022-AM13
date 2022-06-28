@@ -51,4 +51,6 @@ public interface ViewObserver {
     void onUpdateSwitchStudents(ArrayList<Student> students);
 
     void onUpdateSwitchStudents(ArrayList<Student> students, int effectId);
+
+    void backToChoice();
 }

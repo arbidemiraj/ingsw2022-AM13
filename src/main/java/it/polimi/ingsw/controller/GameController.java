@@ -154,18 +154,19 @@ public class GameController implements Observer {
     public void moveStudent(Movable from, Student color, Movable to, boolean profCheck) throws InvalidMoveException {
         to.addStudent(from.removeStudent(color));
 
-        if(profCheck){
-            if(model.professorCheck(color)){
-                int colorPos = model.createColorIntMap(color);
-                String professorOwner = model.getBoard().getProfessors()[colorPos].getOwner().getUsername();
+        if(profCheck) professorCheckController(color);
+    }
 
-                if(gameHandler != null) gameHandler.sendMessageToAll(new UpdateModelMessage(professorOwner, color));
+    private void professorCheckController(Student color) {
+        if(model.professorCheck(color)){
+            int colorPos = model.createColorIntMap(color);
+            String professorOwner = model.getBoard().getProfessors()[colorPos].getOwner().getUsername();
 
-                //TODO fix
-                if(gameHandler != null) gameHandler.sendMessage(new GenericMessage("You are now the owner of the " + color + " professor", GenericType.PROFESSOR), professorOwner);
-                if(gameHandler != null) gameHandler.sendMessageToAllExcept(new GenericMessage(professorOwner + " is now the owner of the " + color + " professor", GenericType.PROFESSOR), professorOwner);
-            }
+            if(gameHandler != null) gameHandler.sendMessageToAll(new UpdateModelMessage(professorOwner, color));
 
+            //TODO fix
+            if(gameHandler != null) gameHandler.sendMessage(new GenericMessage("You are now the owner of the " + color + " professor", GenericType.PROFESSOR), professorOwner);
+            if(gameHandler != null) gameHandler.sendMessageToAllExcept(new GenericMessage(professorOwner + " is now the owner of the " + color + " professor", GenericType.PROFESSOR), professorOwner);
         }
     }
 
@@ -441,12 +442,15 @@ public class GameController implements Observer {
         player.getPlayerBoard().getDinnerRoom()[model.createColorIntMap(students.get(3))].removeStudent(students.get(3));
 
         player.getPlayerBoard().addStudent(students.get(0));
+        professorCheckController(students.get(0));
         player.getPlayerBoard().addStudent(students.get(2));
+        professorCheckController(students.get(2));
 
         player.setNumCoins(player.getNumCoins() - character.getCost());
         model.removeCoins(character.getCost() - 1);
         character.setCost(character.getCost()+1);
         model.getActivatedCharacters().add(character.getEffectId());
+
 
         if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(10, true, username));
     }

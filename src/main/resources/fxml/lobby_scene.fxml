@@ -13,6 +13,7 @@
       <TextArea fx:id="gamesLobby" layoutX="298.0" layoutY="241.0" prefHeight="373.0" prefWidth="761.0" />
       <TextField fx:id="gameId" layoutX="649.0" layoutY="650.0" prefHeight="26.0" prefWidth="27.0" />
       <Label layoutX="528.0" layoutY="645.0" text="Game Id :" />
+      <Button fx:id="backBtn" layoutX="1135.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="145.0" text="Back" />
    </children>
     <stylesheets>
         <URL value="@../css/global.css" />
