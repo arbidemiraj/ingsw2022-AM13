@@ -411,6 +411,23 @@ public class GameController implements Observer {
         Player player = model.getPlayerByUsername(username);
         Character character = model.getCharacter(7);
 
+        for(int i = 0; i < (students.size()); i = i + 2){
+            ((Effect7)character.getEffect()).removeStudent(students.get(i));
+            player.getPlayerBoard().addStudent(students.get(i));
+            try {
+                player.getPlayerBoard().removeStudent(students.get(i + 1));
+            } catch (InvalidMoveException e) {
+                gameHandler.sendMessage(new ErrorMessage("Invalid students selected", ErrorType.GENERIC), username);
+            }
+        }
+
+
+        player.setNumCoins(player.getNumCoins() - character.getCost());
+        model.removeCoins(character.getCost() - 1);
+        character.setCost(character.getCost()+1);
+        model.getActivatedCharacters().add(character.getEffectId());
+
+        if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(7, true, username));
     }
 
     private void activateEffect10(ArrayList<Student> students, String username) throws InvalidMoveException {
@@ -430,6 +447,8 @@ public class GameController implements Observer {
         model.removeCoins(character.getCost() - 1);
         character.setCost(character.getCost()+1);
         model.getActivatedCharacters().add(character.getEffectId());
+
+        if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(10, true, username));
     }
 
     private void activateGenericCharacter(int id, String username) throws NotEnoughCoinException {

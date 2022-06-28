@@ -117,6 +117,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     private List<ImageView> charactersImages;
 
+
+
     private List<TilePane> charactersPanes;
 
     private List<Label> owners;
@@ -969,14 +971,16 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 int count = 0;
                 ArrayList<Student> students = new ArrayList<>();
 
-                turnInfo.setText("Select a student from the card...Click confirm when you switched all students (max 3) ");
+                turnInfo.setText("Select a student from the card...Switch max 3 students ");
 
                 for(Node node : charactersPanes.get(index).getChildren()){
                     node.getStyleClass().set(0, "clickable");
                     node.setDisable(false);
 
                     node.setOnMouseClicked(e -> {
+                        turnInfo.setText("Select the student from entrance you want to switch");
                         ImageView student = (ImageView) e.getTarget();
+                        charactersPanes.get(index).getChildren().remove(node);
 
                         students.add(imagesStudent.get(student.getImage().getUrl()));
 
@@ -988,31 +992,31 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
                                 ImageView entranceStud = (ImageView) entranceNode;
 
+                                students.add(imagesStudent.get(entranceStud.getImage().getUrl()));
+
                                 String studentString = String.valueOf(imagesStudent.get(entranceStud.getImage().getUrl()));
 
                                 moveStudentParameters.add(studentString);
 
-
                                 entranceStud.setImage(student.getImage());
-
-                                students.add(imagesStudent.get(entranceStud.getImage().getUrl()));
 
                                 student.setImage(new Image(entranceStud.getImage().getUrl()));
 
                                 disableStudents();
 
-                                if(count == 3){
+                                if(count == 2){
                                     new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students, 7))).start();
 
                                     for(Node n : charactersPanes.get(index).getChildren()){
                                         n.setDisable(true);
                                     }
+
+                                    confirmBtn.setDisable(true);
+                                    confirmBtn.setOpacity(0);
                                 }
 
                             });
                         }
-
-
                     });
 
                     confirmBtn.setDisable(false);
@@ -1021,7 +1025,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                     confirmBtn.setOnMouseClicked(e -> {
                         new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students, 7))).start();
 
-                        confirmBtn.setDisable(false);
+                        confirmBtn.setDisable(true);
                         confirmBtn.setOpacity(0);
 
                         for(Node n : charactersPanes.get(index).getChildren()){
@@ -1036,9 +1040,15 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 turnInfo.setText("Click on a professor, his color will be the selected color");
 
                 for(ImageView color : colors){
+                    color.setDisable(false);
+                    color.getStyleClass().set(0, "clickable");
+
                     color.setOnMouseClicked(e -> {
 
                         Student selectedColor = imagesProfessor.get(color.getImage().getUrl());
+
+                        color.setDisable(true);
+                        color.getStyleClass().set(0, "");
 
                         new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateStudentEffect(String.valueOf(selectedColor), effectId))).start();
                     });
@@ -1300,5 +1310,14 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
 
         islands.get(reducedModel.getReducedBoard().getMotherNature()).add(new ImageView(new Image(String.valueOf(getClass().getResource("/assets/custom/motherNature.png")))), 1, 1);
+    }
+
+    public void showDisconnection(String username) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Disconnection");
+        alert.setContentText("Game has ended because user " + username + " disconnected");
+
+        if (alert.showAndWait().get()== ButtonType.OK){
+        }
     }
 }

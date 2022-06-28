@@ -91,4 +91,6 @@ public interface View {
     void askEffect12Students(Student color);
 
     void setMotherNature(int motherNature);
+
+    void showDisconnection(String username);
 }

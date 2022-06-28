@@ -14,7 +14,6 @@ ChoiceBox{
     -fx-background-color: rgba(256,256,256, 0.5);
 }
 
-
 .customText {
     -fx-font-family: 'Du Bellay Italic';
     -fx-text-fill: #fff;

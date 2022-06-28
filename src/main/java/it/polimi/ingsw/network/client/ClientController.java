@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.network.message.GenericMessage;
+import it.polimi.ingsw.network.message.GenericType;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.clientmsg.*;
 import it.polimi.ingsw.network.message.servermsg.*;
@@ -39,6 +40,7 @@ public class ClientController implements ViewObserver, Observer {
                 String error = errorMessage.getError();
 
                 taskQueue.execute(() -> view.error(error));
+
                 switch(errorMessage.getErrorType()){
                     case DUPLICATE_USERNAME -> {
                         taskQueue.execute(view::askUsername);
@@ -52,6 +54,10 @@ public class ClientController implements ViewObserver, Observer {
             case GENERIC -> {
                 GenericMessage genericMessage = (GenericMessage) message;
                 taskQueue.execute(() -> view.showGenericMessage(genericMessage.toString()));
+
+                if(genericMessage.getGenericType() == GenericType.END){
+                    taskQueue.execute(() -> view.showDisconnection(genericMessage.getUsername()));
+                }
             }
             case CHOOSE_GAME_OPTIONS -> {
                 taskQueue.execute(view::askCreateOrJoin);

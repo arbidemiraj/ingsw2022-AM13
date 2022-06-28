@@ -91,6 +91,8 @@ public class LobbyHandler {
             games.get(getGameIdFromUsername(username)).endGame(username);
 
             gameIdUsernameMap.remove(username);
+
+            usernameQueue.remove(username);
         }
     }
 }

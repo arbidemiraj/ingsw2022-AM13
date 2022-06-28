@@ -706,4 +706,9 @@ public class CLI extends ViewObservable implements View {
     public void setMotherNature(int motherNature) {
         reducedModel.getReducedBoard().setMotherNature(motherNature);
     }
+
+    @Override
+    public void showDisconnection(String username) {
+
+    }
 }

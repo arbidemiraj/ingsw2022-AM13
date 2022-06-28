@@ -273,4 +273,9 @@ public class GUI extends ViewObservable implements View {
 
         Platform.runLater(() -> controller.updateMotherNature());
     }
+
+    @Override
+    public void showDisconnection(String username) {
+        Platform.runLater(() -> controller.showDisconnection(username));
+    }
 }

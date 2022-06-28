@@ -18,6 +18,16 @@ Label{
     -fx-font-size: 20;
 }
 
+.turnInfo {
+    -fx-font-family: 'Du Bellay Italic';
+    -fx-font-size: 22;
+    -fx-text-fill: #fff;
+    -fx-alignment: center;
+    -fx-background-size: cover;
+    -fx-background-image: url("../images/button1.png");
+    -fx-background-radius: 5em;
+}
+
 .clickable:hover{
     -fx-effect: dropshadow(gaussian, #f2e0d6, 20, 0.3, 0, 0);
     -fx-cursor: hand;
