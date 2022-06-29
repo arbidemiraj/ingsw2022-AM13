@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+
 public class GameHandler {
     private final GameController gameController;
     private final Server server;
@@ -68,9 +69,6 @@ public class GameHandler {
     public void startGame(){
         boolean color = true;
 
-        /**
-         * @param color gets the tower color chosen by the player
-         */
         while(color){
             for(Player player : game.getPlayers()){
                 if(player.getTowerColor() != null) color = false;
