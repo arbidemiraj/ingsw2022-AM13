@@ -1,0 +1,62 @@
+[
+  {
+    "cost": "1",
+    "effectId": "1",
+    "desc": "Take 1 Student from this card and place it on an Island of your choice. Then, draw a new Student from the Bag and place it on this card"
+  },
+  {
+    "cost": "2",
+    "effectId": "2",
+    "desc": "During this turn, you take control of any number of Professors even if you have the same number of Students as the player who currently controls them"
+  },
+  {
+    "cost": "3",
+    "effectId": "3",
+    "desc": "Choose an Island and resolve the Isalnd as if Mother Nature has ended her movement there. Mother Nature will still move and the Island where she ends her movement will also be resolved"
+  },
+  {
+    "cost": "1",
+    "effectId": "4",
+    "desc": "You may move Mother Nature up to 2 additional Islands than is indicated by the Assistant card you've played"
+  },
+  {
+    "cost": "2",
+    "effectId": "5",
+    "desc": "Place a No Entry tile on an Island of your choice. The first time Mother Nature ends her movement there, put the No Entry tile back onto this card DO NOT calculate influence on that Island, or place any Towers"
+  },
+  {
+    "cost": "3",
+    "effectId": "6",
+    "desc": "When resolving a Conquering an Island, Towers do not count towards influence"
+  },
+  {
+    "cost": "1",
+    "effectId": "7",
+    "desc": "You may take up to 3 students from this card and replace them with the same number of Students from your entrance"
+  },
+  {
+    "cost": "2",
+    "effectId": "8",
+    "desc": "During the influence calculation this turn, you count as having 2 more influence"
+  },
+  {
+    "cost": "3",
+    "effectId": "9",
+    "desc": "Choose a color of Student: during the influence calculation this turn, that color adds no influence"
+  },
+  {
+    "cost": "1",
+    "effectId": "10",
+    "desc": "you may exchange up to 2 Students betweem your Entrance and your dining room"
+  },
+  {
+    "cost": "2",
+    "effectId": "11",
+    "desc": "Take 1 student from this card and place it in your dining room. Then, draw a new Student from the Bag and place it on the card"
+  },
+  {
+    "cost": "3",
+    "effectId": "12",
+    "desc": "Choose a type of Student: every player (including yourself) must return 3 Students of that type from their Dining Room. If any player has fewer than 3 students of that type return as many Students as they have"
+  }
+]

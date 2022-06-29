@@ -8,11 +8,14 @@ import it.polimi.ingsw.model.exceptions.EmptyBagException;
 
 import java.util.ArrayList;
 
+/**
+ * Characters class
+ */
 public class Character {
 
 	private int cost;
 
-	private Actionable effect;
+	private final Actionable effect;
 
 	private String desc;
 
@@ -22,8 +25,14 @@ public class Character {
 
 	private Player owner;
 
-	private Game game;
+	private final Game game;
 
+	/**
+	 * Default constructor
+	 * @param game	model
+	 * @param id	the id of the effect
+	 * @param cost	the cost of the character card
+	 */
 	public Character(Game game, int id, int cost) {
 		this.game = game;
 		isActivated = false;
@@ -104,18 +113,30 @@ public class Character {
 	public String getDesc(){
 		return desc;
 	}
-	//method for the cards that needs a chosenStudent to apply the effect
+
+	/**
+	 * method called when a card that needs a students as input is activated
+	 * @param chosenStudent		the student given in input
+	 * @throws EmptyBagException	if the bag is empty after moving throws the exception to end the game
+	 */
 	public void applyEffect(Student chosenStudent) throws EmptyBagException {
 		isActivated = true;
 		effect.apply(game, chosenStudent);
 	}
 
-	//method for the cards that needs a chosen Island to apply the effect
+	/**
+	 * method called when the card is activated on a chosenIsland
+	 * @param chosenIsland	the chosen Island
+	 * @throws EmptyBagException	if the bag is empty after activating throws the exception to end the game
+	 */
 	public void applyEffect(Island chosenIsland) throws EmptyBagException {
 		isActivated = true;
 		effect.apply(game, chosenIsland);
 	}
 
+	/**
+	 * Generic character card activation
+	 */
 	public void applyEffect(){
 		isActivated = true;
 		effect.apply(game);

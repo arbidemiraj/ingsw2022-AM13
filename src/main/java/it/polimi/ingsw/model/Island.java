@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+/**
+ * The class that represents the island
+ */
 public class Island implements Movable {
 
 	private ArrayList<Student> students;
@@ -18,6 +21,9 @@ public class Island implements Movable {
 
 	private boolean noEntryTile;
 
+	/**
+	 * Default constructor
+	 */
 	public Island() {
 		students = new ArrayList<>();
 		owner = null;
@@ -32,6 +38,10 @@ public class Island implements Movable {
 		this.owner = owner;
 	}
 
+	/**
+	 * changes the state if an island is unified
+	 * @param islandState the state you want to change the island in
+	 */
 	public void changeState(IslandState islandState) {
 		this.islandState = islandState;
 	}
@@ -40,6 +50,12 @@ public class Island implements Movable {
 		return islandState;
 	}
 
+	/**
+	 * removes the given student from the island
+	 * @param color the color of the student you want to remove
+	 * @return the student that has been removed
+	 * @throws InvalidMoveException if the given student isn't in the island
+	 */
 	@Override
 	public Student removeStudent(Student color) throws InvalidMoveException {
 		Student student;
@@ -53,11 +69,20 @@ public class Island implements Movable {
 
 		return null;
 	}
+
+	/**
+	 * adds a student to the island
+	 * @param student the student you want to add to the island
+	 */
 	@Override
 	public void addStudent(Student student) {
 		students.add(student);
 	}
 
+	/**
+	 * return an array containing the number of students of each color
+	 * @return an array containing the number of students of each color
+	 */
 	public int[] getNumStudents() {
 		int[] numStudents = new int[5];
 		ColorIntMap studentColorMap = new ColorIntMap();
@@ -82,6 +107,10 @@ public class Island implements Movable {
 		this.noEntryTile = true;
 	}
 
+	/**
+	 * returns true if the island has a no entry tile on it
+	 * @return
+	 */
 	public boolean isNoEntryTile() {
 		return noEntryTile;
 	}

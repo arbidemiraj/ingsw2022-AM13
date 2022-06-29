@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.exceptions.EmptyBagException;
 
 import java.util.ArrayList;
 
+/**
+ * The effect 11 class
+ */
 public class Effect11 implements Actionable {
 	private ArrayList<Student> students;
 
@@ -15,6 +18,12 @@ public class Effect11 implements Actionable {
 		this.students = students;
 	}
 
+	/**
+	 * Applies the effect
+	 * @param game	model
+	 * @param chosenStudent	the student chosen by the user
+	 * @throws EmptyBagException
+	 */
 	@Override
 	public void apply(Game game , Student chosenStudent) throws EmptyBagException {
 		Player player = game.getPlayers().get(game.getCurrentPlayer());

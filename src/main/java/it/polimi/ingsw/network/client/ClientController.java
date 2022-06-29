@@ -270,10 +270,6 @@ public class ClientController implements ViewObserver, Observer {
     }
 
     @Override
-    public void onUpdateIslandEffect(int chosenIsland) {
-    }
-
-    @Override
     public void onUpdateJoinGame(int gameId) {
         client.sendMessage(new JoinGameMessage(username, gameId));
     }
@@ -309,23 +305,8 @@ public class ClientController implements ViewObserver, Observer {
     }
 
     @Override
-    public void onUpdateReloadGame() {
-
-    }
-
-    @Override
-    public void onUpdateStudentEffect(String chosenStudent) {
-
-    }
-
-    @Override
     public void onUpdateStudentEffect(String chosenStudent, int effectId) {
         client.sendMessage(new StudentEffectMessage(username, Student.valueOf(chosenStudent), effectId));
-    }
-
-    @Override
-    public void onUpdateSwitchStudents(ArrayList<Student> students) {
-        client.sendMessage(new SwitchStudents(username, students, 10));
     }
 
     @Override

@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.enumerations.Student;
 
+/**
+ * The effect 9 class
+ */
 public class Effect9 implements Actionable{
 
     @Override

@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.enumerations.Student;
 
+/**
+ * Class for generic effects that only changes game rules
+ */
 public class Effect implements Actionable {
 	@Override
 	public void apply(Game game ) {

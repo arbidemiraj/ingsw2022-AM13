@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import com.google.gson.Gson;
+import it.polimi.ingsw.Eriantys;
 import it.polimi.ingsw.model.characters.Character;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.EmptyBagException;
@@ -10,6 +12,8 @@ import it.polimi.ingsw.network.message.GenericType;
 import it.polimi.ingsw.network.message.servermsg.UpdateModelMessage;
 import it.polimi.ingsw.observer.Observable;
 
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,6 +54,8 @@ public class Game extends Observable {
 
 	private final boolean expertMode;
 
+	private List<String> characterDesc;
+
 	/**
 	 * Default constructor
 	 * @param numPlayers        max number of players the user chose
@@ -85,7 +91,7 @@ public class Game extends Observable {
 		characters = new Character[3];
 		int[] cost = {0, 1, 2, 3, 1, 2, 3, 0, 2, 0, 0, 2};
 
-		/*int[] availableEffects = {1, 2, 3, 4, 5, 6, 8, 11};
+		int[] availableEffects = {1, 2, 3, 4, 5, 6, 8, 11};
 
 		generalSupply = 20 - numPlayers;
 
@@ -93,13 +99,7 @@ public class Game extends Observable {
 			id = chooseEffect(availableEffects);
 			characters[i] = new Character(this, id, cost[id]);
 		}
-		 */
-
-		characters[0] = new Character(this, 4, cost[4]);
-		characters[1] = new Character(this, 5, cost[5]);
-		characters[2] = new Character(this, 6, cost[6]);
 	}
-
 
 	/**
 	 * Returns an effect id, used to randomly generate 3 character that will be used in the game
@@ -193,6 +193,8 @@ public class Game extends Observable {
 			//add influence if the player has a tower
 			if(!activatedCharacters.isEmpty() && !activatedCharacters.contains(6) && board.getMotherNatureIsland().getOwner() != null){
 					board.getMotherNatureIsland().getOwner().addInfluence();
+			}else if(activatedCharacters.isEmpty() &&  board.getMotherNatureIsland().getOwner() != null){
+				board.getMotherNatureIsland().getOwner().addInfluence();
 			}
 		}
 	}
@@ -329,6 +331,7 @@ public class Game extends Observable {
 	 * @param color			the color associated to the position you want to know
 	 * @return				the integer associated to the color passed by using the maps
 	 */
+
 	public int createColorIntMap(Student color) {
 		ColorIntMap studentColorMap = new ColorIntMap();
 		HashMap<Student, Integer> studentColor = studentColorMap.getMap();
@@ -422,10 +425,18 @@ public class Game extends Observable {
 		return activatedCharacters;
 	}
 
+	/**
+	 * removes a coin from the general supply
+	 * @param numCoins
+	 */
 	public void removeCoins(int numCoins){
 		this.generalSupply -= numCoins;
 	}
 
+	/**
+	 * adds a coin to the general supply
+	 * @param numCoins
+	 */
 	public void addCoins(int numCoins){
 		this.generalSupply += numCoins;
 	}
@@ -434,6 +445,11 @@ public class Game extends Observable {
 		return generalSupply;
 	}
 
+	/**
+	 * return the player with the given username
+	 * @param username the username of the player you want
+	 * @return the player with the fiven username
+	 */
 	public Player getPlayerByUsername(String username) {
 		Player player = players
 				.stream()
@@ -448,6 +464,10 @@ public class Game extends Observable {
 		return players;
 	}
 
+	/**
+	 * adds a player to the game
+	 * @param username the username of the player to add
+	 */
 	public void addPlayer(String username) {
 		Player player = new Player(numTowers, username);
 		players.add(player);
@@ -457,6 +477,9 @@ public class Game extends Observable {
 		}
 	}
 
+	/**
+	 * manages the setup phase of the game
+	 */
 	public void setupPhase(){
 		for (Player player : players) {
 			if (numPlayers == 2) {
@@ -476,6 +499,10 @@ public class Game extends Observable {
 		}
 	}
 
+	/**
+	 * returns the list of the usernames of the players in the game
+	 * @return the list of the usernames of the players in the game
+	 */
 	public ArrayList<String> getUsernames() {
 		ArrayList<String> usernames = new ArrayList<>();
 
@@ -486,6 +513,10 @@ public class Game extends Observable {
 		return usernames;
 	}
 
+	/**
+	 * Sets the color currently disabled after activating the effect
+	 * @param color the color to disactivate
+	 */
 	public void setDisabledColor(Student color) {
 		disabledColor = createColorIntMap(color);
 	}
@@ -509,6 +540,10 @@ public class Game extends Observable {
 		}
 	}
 
+	/**
+	 * puts the given student in the bag
+	 * @param student the student to put in the bag
+	 */
 	public void putStudentInBag(Student student){
 		for(Player player : players){
 			int num = player.getPlayerBoard().getDinnerRoom()[4].getNumStudents();
@@ -530,10 +565,18 @@ public class Game extends Observable {
 
 	}
 
+	/**
+	 * removes a player from the game
+	 * @param user the username of the player to remove
+	 */
 	public void removePlayer(String user) {
 		players.remove(getPlayerByUsername(user));
 	}
 
+	/**
+	 * used to notify the controller that an island has been conquered
+	 * @param chosenIsland the island that has been conquered
+	 */
 	public void updateConquer(int chosenIsland) {
 		String islandOwner = board.getIslands().get(chosenIsland).getOwner().getUsername();
 

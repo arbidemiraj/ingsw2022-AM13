@@ -6,6 +6,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashMap;
 
+/**
+ * map used to get a student from an integer that represents the position in the array
+ */
 public class IntColorMap implements Serializable {
     @Serial
     private static final long serialVersionUID = -7465717978198819076L;

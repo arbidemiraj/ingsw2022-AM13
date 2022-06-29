@@ -7,12 +7,19 @@ import it.polimi.ingsw.model.exceptions.EmptyBagException;
 
 import java.util.ArrayList;
 
+/**
+ * Class for the first character effect
+ */
 public class Effect1 implements Actionable {
 
 	private ArrayList<Student> students;
 	private Student chosenStudent;
 	private String desc;
 
+	/**
+	 * Default constructor
+	 * @param students	students extracted in setup phase and placed on the card
+	 */
 	public Effect1(ArrayList<Student> students) {
 		this.students = students;
 		desc = "Take 1 student from this card and place it on an Island of your choice";

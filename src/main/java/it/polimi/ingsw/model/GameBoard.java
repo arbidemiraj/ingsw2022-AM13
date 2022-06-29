@@ -12,16 +12,9 @@ import java.util.HashMap;
 /**
  * This classes manages the game components
  */
-public class GameBoard implements Serializable {
-
-	@Serial
-	private static final long serialVersionUID = 2728402814716070089L;
-
-	private int currentNumPlayers;
+public class GameBoard {
 
 	private final int numPlayers;
-
-	private int numTowers;
 
 	private DoublyLinkedList islands;
 
@@ -73,6 +66,9 @@ public class GameBoard implements Serializable {
 		}
 	}
 
+	/**
+	 * prepares the game by filling the bag, the islands and the clouds
+	 */
 	public void prepareGame() {
 		//Initial 10 students in the bag
 		initBag();
@@ -88,6 +84,9 @@ public class GameBoard implements Serializable {
 		//fill entrance for each player
 	}
 
+	/**
+	 * fills the clouds
+	 */
 	public void fillClouds() {
 		int dim = numPlayers + 1;
 
@@ -99,11 +98,13 @@ public class GameBoard implements Serializable {
 		}
 	}
 
-
 	public Cloud[] getClouds() {
 		return clouds;
 	}
 
+	/**
+	 * initializes the bag with the first 10 students to put in the islands
+	 */
 	private void initBag() {
 		bag = new ArrayList<>();
 
@@ -120,6 +121,9 @@ public class GameBoard implements Serializable {
 		this.motherNature = motherNature;
 	}
 
+	/**
+	 * fills the bag for the start of the game
+	 */
 	public void fillBag() {
 		for (int i = 0; i < 120; i = i + 5) {
 			bag.add(i, Student.YELLOW);
@@ -130,6 +134,9 @@ public class GameBoard implements Serializable {
 		}
 	}
 
+	/**
+	 * fills the island with the students
+	 */
 	public void fillIslands() {
 		ArrayList<Student> students = new ArrayList<>();
 		int j = 0;
@@ -148,6 +155,10 @@ public class GameBoard implements Serializable {
 		}
 	}
 
+	/**
+	 * returns the opposite island of the one with mother nature
+	 * @return
+	 */
 	public int getOppositeMotherNature() {
 		Island island = islands.get(motherNature);
 
@@ -162,6 +173,12 @@ public class GameBoard implements Serializable {
 		return professors;
 	}
 
+	/**
+	 * extracts the given number of students
+	 * @param numStudents the number of students you want to extract
+	 * @return the students extracted
+	 * @throws EmptyBagException if the bag has been unfilled
+	 */
 	public ArrayList<Student> extractStudents(int numStudents) throws EmptyBagException {
 		ArrayList<Student> extractedStudents = new ArrayList<>();
 		
@@ -190,20 +207,21 @@ public class GameBoard implements Serializable {
 		return islands;
 	}
 
+	/**
+	 * moves mother nature
+	 * @param steps the number of steps you want to move mother nature
+	 */
 	public void moveMotherNature(int steps) {
 		for(int i = 0; i < steps; i++){
 			motherNature = islands.getPosition(islands.getNext(getMotherNatureIsland()));
 		}
 	}
 
+	/**
+	 * returns the island with mother nature on it
+	 * @return the island with mother nature on it
+	 */
 	public Island getMotherNatureIsland() {
 		return islands.get(motherNature);
-	}
-
-	public void setNumTowers(int numTowers) {
-		this.numTowers = numTowers;
-	}
-
-	public void fillCloud(int cloudId) {
 	}
 }

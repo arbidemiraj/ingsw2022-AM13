@@ -29,7 +29,7 @@ public class AssistantCard implements Serializable {
 
 	/**
 	 * Returns the value of this card
-	 * @return		the value of this card
+	 * @return	the value of this card
 	 */
 	public int getValue() {
 		return value;
@@ -38,7 +38,7 @@ public class AssistantCard implements Serializable {
 
 	/**
 	 * Returns the moves the player can make when playing this card
-	 * @return		the moves the player can make when playing this card
+	 * @return	the moves the player can make when playing this card
 	 */
 	public int getMaxMotherNatureMoves() {
 		return maxMotherNatureMoves;

@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.enumerations.Student;
 
+/**
+ * Class for the third character effect
+ */
 public class Effect3 implements Actionable {
 	private String desc;
 

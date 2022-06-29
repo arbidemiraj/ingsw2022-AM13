@@ -12,8 +12,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Interface that represents the view, implemented by the CLI and the GUI
+ */
 public interface View {
 
+    /**
+     * Asks the player if he wants to create a new game or join an existing one
+     */
     void askCreateOrJoin();
 
     void askUsername();

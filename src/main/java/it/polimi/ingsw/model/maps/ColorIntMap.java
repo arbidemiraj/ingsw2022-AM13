@@ -6,6 +6,9 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashMap;
 
+/**
+ * Map used to get an integer from a student to facilitate the array access
+ */
 public class ColorIntMap implements Serializable {
     @Serial
     private static final long serialVersionUID = -3587825076331083306L;

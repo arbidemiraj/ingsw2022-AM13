@@ -28,16 +28,17 @@ public class SocketClient extends Client {
     private final ExecutorService readExecutionQueue;
     private final ExecutorService pingExecutionQueue;
     private final ScheduledExecutorService ping;
-    private static final int SOCKET_TIMEOUT = 2000;
+    private static final int SOCKET_TIMEOUT = 3000;
 
     public SocketClient(String address, int port) throws IOException {
         this.socket = new Socket();
-        this.socket.connect(new InetSocketAddress(address, port), SOCKET_TIMEOUT);
+        this.socket.connect(new InetSocketAddress(address, port));
         this.output = new ObjectOutputStream(socket.getOutputStream());
         this.input = new ObjectInputStream(socket.getInputStream());
         this.readExecutionQueue = Executors.newSingleThreadExecutor();
         this.pingExecutionQueue = Executors.newSingleThreadExecutor();
         this.ping = Executors.newSingleThreadScheduledExecutor();
+        socket.setSoTimeout(1000);
     }
 
         @Override

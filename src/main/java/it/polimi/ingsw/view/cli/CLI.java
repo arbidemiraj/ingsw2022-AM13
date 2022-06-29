@@ -450,7 +450,7 @@ public class CLI extends ViewObservable implements View {
 
         int islandId = input.nextInt();
 
-        notifyObserver(viewObserver -> viewObserver.onUpdateIslandEffect(islandId));
+        notifyObserver(viewObserver -> viewObserver.onUpdateIslandEffect(islandId, 1));
         input.reset();
     }
 
@@ -662,7 +662,7 @@ public class CLI extends ViewObservable implements View {
         }
 
 
-        notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students));
+        notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students, 10));
     }
 
     @Override

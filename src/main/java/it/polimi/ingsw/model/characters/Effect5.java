@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.enumerations.Student;
 
+/**
+ * Class for the fifth character effect
+ */
 public class Effect5 implements Actionable {
 
 	private int numEntryTiles;
@@ -14,6 +17,7 @@ public class Effect5 implements Actionable {
 
 	public void apply(Game game , Island chosenIsland) {
 		chosenIsland.setNoEntryTile();
+
 		numEntryTiles--;
 	}
 

@@ -2,6 +2,9 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.enumerations.Student;
 
+/**
+ * The professor class
+ */
 public class Professor {
 
 	private Student color;

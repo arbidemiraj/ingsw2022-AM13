@@ -9,12 +9,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Class that represents the player board
+ */
 public class PlayerBoard implements Movable {
 
 	private ArrayList<Student> entrance = new ArrayList<>();
 
 	private DinnerRoomRow[] dinnerRoom = new DinnerRoomRow[5];
 
+	/**
+	 * Default constructor
+	 */
 	public PlayerBoard(){
 		IntColorMap studentColorMap = new IntColorMap();
 		HashMap<Integer, Student> studentColor = studentColorMap.getMap();
@@ -24,11 +30,20 @@ public class PlayerBoard implements Movable {
 		}
 	}
 
+	/**
+	 * Fills the entrance with the given students
+	 * @param students the students you want to put in the entrance
+	 */
 	public void fillEntrance(List<Student> students) {
 		for(Student student:students){
 			entrance.add(student);
 		}
 	}
+
+	/**
+	 * fills the dinner room with the given students
+	 * @param students the students you want to add to the dinner room
+	 */
 	public void fillDinnerRoom(List<Student> students) {
 		ColorIntMap studentColorMap = new ColorIntMap();
 		HashMap<Student, Integer> studentColor = studentColorMap.getMap();
@@ -47,6 +62,10 @@ public class PlayerBoard implements Movable {
 		return entrance;
 	}
 
+	/**
+	 * returns an array containing the number of each student in the entrance
+	 * @return an array containing the number of each student in the entrance
+	 */
 	public int[] getEntranceStudents(){
 		ColorIntMap studentColorMap = new ColorIntMap();
 		HashMap<Student, Integer> studentColor = studentColorMap.getMap();
@@ -58,6 +77,13 @@ public class PlayerBoard implements Movable {
 
 		return entranceStud;
 	}
+
+	/**
+	 * removes a student
+	 * @param color the color of the student you want to get
+	 * @return the student you want
+	 * @throws InvalidMoveException if the student asked doesn't exist
+	 */
 	@Override
 	public Student removeStudent(Student color) throws InvalidMoveException {
 		Student student = null;
@@ -76,6 +102,10 @@ public class PlayerBoard implements Movable {
 		return null;
 	}
 
+	/**
+	 * adds a student
+	 * @param student the student you want to add
+	 */
 	@Override
 	public void addStudent(Student student) {
 		entrance.add(student);

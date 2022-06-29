@@ -1,10 +1,10 @@
 package it.polimi.ingsw.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.characters.*;
 import it.polimi.ingsw.model.characters.Character;
-import it.polimi.ingsw.model.characters.Effect1;
-import it.polimi.ingsw.model.characters.Effect11;
-import it.polimi.ingsw.model.characters.Effect7;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.maps.ColorIntMap;
@@ -15,8 +15,8 @@ import it.polimi.ingsw.network.message.servermsg.*;
 import it.polimi.ingsw.network.server.GameHandler;
 import it.polimi.ingsw.observer.Observer;
 
-import java.io.Serial;
-import java.io.Serializable;
+import java.io.*;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -70,27 +70,34 @@ public class GameController implements Observer {
         Character character = model.getCharacter(id);
 
 
-            character.setOwner(player);
+        if(id == 5 && ((Effect5)character.getEffect()).getNumEntryTiles() == 0){
+                gameHandler.sendMessage(new ErrorMessage("No more entry tiles", ErrorType.GENERIC), player.getUsername());
+        }
+        else{
+                character.setOwner(player);
 
-            try {
-                character.applyEffect(chosenIsland);
-            } catch (EmptyBagException e) {
-                endGame();
+                try {
+                    character.applyEffect(chosenIsland);
+                } catch (EmptyBagException e) {
+                    endGame();
+                }
+
+                player.setNumCoins(player.getNumCoins() - character.getCost());
+
+                model.removeCoins(character.getCost() - 1);
+                character.setCost(character.getCost() + 1);
+                model.getActivatedCharacters().add(character.getEffectId());
+
+                if(id == 1){
+                    ArrayList<Student> students = ((Effect1)character.getEffect()).getStudents();
+                    if(gameHandler != null) gameHandler.sendMessageToAll(new UpdateCharacterStudents(students, id));
+                }
+
+                updateIslands(character.getOwner().getUsername());
+
+                if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true, character.getOwner().getUsername()));
             }
 
-            player.setNumCoins(player.getNumCoins() - character.getCost());
-            model.removeCoins(character.getCost() - 1);
-            character.setCost(character.getCost() + 1);
-            model.getActivatedCharacters().add(character.getEffectId());
-
-            if(id == 1){
-                ArrayList<Student> students = ((Effect1)character.getEffect()).getStudents();
-                if(gameHandler != null) gameHandler.sendMessageToAll(new UpdateCharacterStudents(students, id));
-            }
-
-            updateIslands(character.getOwner().getUsername());
-
-            if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true, character.getOwner().getUsername()));
     }
 
     /**
@@ -117,6 +124,11 @@ public class GameController implements Observer {
 
         if(id == 1){
             ArrayList<Student> students = ((Effect1)character.getEffect()).getStudents();
+            if(gameHandler != null) gameHandler.sendMessageToAll(new UpdateCharacterStudents(students, id));
+        }
+
+        if(id == 11){
+            ArrayList<Student> students = ((Effect11)character.getEffect()).getStudents();
             if(gameHandler != null) gameHandler.sendMessageToAll(new UpdateCharacterStudents(students, id));
         }
 
@@ -580,7 +592,9 @@ public class GameController implements Observer {
             int i = 0;
 
             for(Character character : model.getCharacters()){
-                reducedCharacters[i] = new ReducedCharacter(character.getCost(), character.getEffectId(), character.getDesc());
+                List<String> characterDesc = createCharacterDesc();
+
+                reducedCharacters[i] = new ReducedCharacter(character.getCost(), character.getEffectId(), characterDesc.get(character.getEffectId() - 1));
                 if(character.getEffectId() == 1){
                     reducedCharacters[i].setStudents(((Effect1)character.getEffect()).getStudents());
                 }
@@ -614,6 +628,21 @@ public class GameController implements Observer {
 
         gameHandler.sendMessage(new AskCard(turnController.getCurrentPlayer().getDeck(), turnController.getTurnCardsPlayed()), turnController.getCurrentPlayerUsername());
 
+    }
+
+    private List<String> createCharacterDesc() {
+        Gson gson = new Gson();
+        List<String> desc = new ArrayList<>();
+
+        Reader reader = new InputStreamReader(getClass().getResourceAsStream("/characters.json"));
+
+        ReducedCharacter[] reducedCharacters = gson.fromJson(reader, ReducedCharacter[].class);
+
+        for (ReducedCharacter reducedCharacter : reducedCharacters) {
+            desc.add(reducedCharacter.getCharacterDesc());
+        }
+
+        return desc;
     }
 
     private ReducedBoard createBoard(Player player) {
