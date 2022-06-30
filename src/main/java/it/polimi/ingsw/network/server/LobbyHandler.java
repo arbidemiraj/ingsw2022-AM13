@@ -126,7 +126,9 @@ public class LobbyHandler {
         if(getGameIdFromUsername(username) != -1){
             games.get(getGameIdFromUsername(username)).sendMessageToAllExcept(new NotifyDisconnectionMessage(username), username);
 
-            usernameQueue.remove(username);
+            for(String user : games.get(getGameIdFromUsername(username)).getGame().getUsernames()){
+                usernameQueue.remove(user);
+            }
 
             games.get(getGameIdFromUsername(username)).endGame(username);
 

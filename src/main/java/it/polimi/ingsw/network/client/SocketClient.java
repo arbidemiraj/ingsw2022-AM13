@@ -7,6 +7,7 @@ import it.polimi.ingsw.network.message.servermsg.ErrorMessage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
@@ -33,7 +34,13 @@ public class SocketClient extends Client {
 
     public SocketClient(String address, int port) throws IOException {
         this.socket = new Socket();
-        this.socket.connect(new InetSocketAddress(address, port));
+
+        try {
+            this.socket.connect(new InetSocketAddress(address, port));
+        }catch (ConnectException e){
+            LOGGER.info(() -> "Unable to connect to the given server");
+        }
+
         this.output = new ObjectOutputStream(socket.getOutputStream());
         this.input = new ObjectInputStream(socket.getInputStream());
         this.readExecutionQueue = Executors.newSingleThreadExecutor();

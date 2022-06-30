@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 /**
  * Handles the connection to the server scene
@@ -20,6 +21,9 @@ public class ConnectionSceneController extends ViewObservable implements Generic
     private TextField serverPort;
     @FXML
     private Button connectBtn;
+
+    private static final Pattern PATTERN = Pattern.compile(
+            "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
 
     /**
      * JavaFx initialize method
@@ -59,23 +63,10 @@ public class ConnectionSceneController extends ViewObservable implements Generic
      * @param ip the given ip
      * @return true if it is valid or else false
      */
-    private boolean isValidIp(String ip) {
-        String[] groups = ip.split("\\.");
-
-        if (groups.length != 4) {
-            return false;
-        }
-
-        try {
-            return Arrays.stream(groups)
-                    .filter(s -> s.length() > 1 && s.startsWith("0"))
-                    .map(Integer::parseInt)
-                    .filter(i -> (i >= 0 && i <= 255))
-                    .count() == 4;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+    public static boolean isValidIp(final String ip) {
+        return PATTERN.matcher(ip).matches();
     }
+
 
 
 }

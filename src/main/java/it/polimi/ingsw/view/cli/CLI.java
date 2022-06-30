@@ -22,6 +22,7 @@ import java.io.PrintStream;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 public class CLI extends ViewObservable implements View {
     private final Scanner input = new Scanner(System.in);
@@ -33,6 +34,9 @@ public class CLI extends ViewObservable implements View {
     private boolean activatingCharacter;
     private final String INV_INP = "Invalid input! ";
     private String playerUsername;
+    private static final Pattern PATTERN = Pattern.compile(
+            "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+
 
     public CLI(){
         output = System.out;
@@ -281,7 +285,13 @@ public class CLI extends ViewObservable implements View {
     public void askCardToPlay(List<AssistantCard> assistantCards, List<AssistantCard> cardsPlayed) {
         String id;
         int cardId = 0;
-        
+        List<Integer> idPlayed = new ArrayList<>();
+
+        if(assistantCards.size() > 1 && reducedModel.getUsername().size() == 2 || assistantCards.size() > 2 && reducedModel.getUsername().size() == 3){
+            for(AssistantCard card : cardsPlayed){
+                idPlayed.add(card.getValue());
+            }
+        }
 
         currentPhase = PhaseType.CARD;
 
@@ -308,12 +318,17 @@ public class CLI extends ViewObservable implements View {
 
             if(id != null) cardId = Integer.parseInt(id);
 
-        }while(cardId < 0 || cardId > 10);
+            if(idPlayed.contains(cardId)){
+                cardId = -1;
+                output.println("Card already played! ");
+            }
+
+        }while((cardId < 0 || cardId > 10) || id.equals("error"));
 
 
         int finalCardId = cardId;
 
-        if(finalCardId != 0){
+        if(finalCardId != 0 ){
             notifyObserver(viewObserver -> viewObserver.onUpdateCard(finalCardId));
             currentPhase = PhaseType.NOT_MYTURN;
             output.println("Wait... other player is playing his turn");
@@ -365,20 +380,20 @@ public class CLI extends ViewObservable implements View {
                 read = readLine();
             }
 
-
-
-            if (read.equals(null)) {
+            if (read == null) {
                 activatingCharacter = true;
+                cloud = -1;
             } else {
                 cloud = Integer.parseInt(read);
             }
 
-            if (cloud == 1 || cloud == 2 || cloud == 3) isValid = true;
+            if (cloud == 1 || cloud == 2 || cloud == 3 || cloud == -1) isValid = true;
 
         }while (!isValid) ;
 
             int finalCloud = cloud;
 
+        if(finalCloud != -1){
             for(Student student : reducedModel.getReducedBoard().getClouds()[cloud - 1].getStudents()){
                 reducedModel.getReducedBoard().getPlayerBoard().addEntranceStudent(String.valueOf(student));
             }
@@ -387,7 +402,7 @@ public class CLI extends ViewObservable implements View {
             input.reset();
 
             currentPhase = PhaseType.NOT_MYTURN;
-
+        }
     }
 
 
@@ -426,9 +441,7 @@ public class CLI extends ViewObservable implements View {
             inputString = readLine();
         }
 
-
-
-        if(inputString.equals("")) inputString=input.nextLine();
+        if(inputString.equals("")) inputString = input.nextLine();
 
 
         if(inputString != null){
@@ -502,12 +515,17 @@ public class CLI extends ViewObservable implements View {
         }
         else if(read.contains("DESC")){
             String[] temp = read.split("\\s+");
+            int effectId;
 
-            int effectId = Integer.parseInt(temp[1]);
-
-            output.println(reducedModel.getCharacterById(effectId).getCharacterDesc());
-
-            return "desc";
+            if(temp.length == 2){
+                effectId = Integer.parseInt(temp[1]);
+                output.println(reducedModel.getCharacterById(effectId).getCharacterDesc());
+                return "desc";
+            }
+            else{
+                output.println("Invalid input!");
+                return "error";
+            }
         }
         else return read;
     }
@@ -520,7 +538,7 @@ public class CLI extends ViewObservable implements View {
     @Override
     public void askMotherNatureMove() {
         currentPhase = PhaseType.MOTHER_NATURE;
-        int steps = 0;
+        int steps;
 
         output.println("\nEnter the number of steps you want to move motherNature");
         output.print("> ");
@@ -534,19 +552,24 @@ public class CLI extends ViewObservable implements View {
             read = readLine();
         }
 
-
-        if (read == null) {
+        if (read == null || read.equals("error")) {
             activatingCharacter = true;
+            steps = -1;
         } else {
             steps = Integer.parseInt(read);
         }
 
-        moveMotherNature(steps);
+        if(steps <= reducedModel.getMaxSteps() && steps != -1){
+            moveMotherNature(steps);
+            int finalSteps = steps;
 
-        int finalSteps = steps;
-
-        notifyObserver(viewObserver -> viewObserver.onUpdateMotherNature(finalSteps));
-        input.reset();
+            notifyObserver(viewObserver -> viewObserver.onUpdateMotherNature(finalSteps));
+            input.reset();
+        }
+        else{
+            output.println("Invalid move! ");
+            askMotherNatureMove();
+        }
     }
 
     @Override
@@ -724,7 +747,7 @@ public class CLI extends ViewObservable implements View {
     @Override
     public void askEffect12Students(Student color) {
         ColorIntMap map = new ColorIntMap();
-        HashMap<Student, Integer> posMap = posMap = map.getMap();
+        HashMap<Student, Integer> posMap = map.getMap();
 
         int numStudents = reducedModel.getReducedBoard().getPlayerBoard().getHallStudents()[posMap.get(color)];
 
@@ -756,23 +779,8 @@ public class CLI extends ViewObservable implements View {
     public void backToChoice() {
     }
 
-    private boolean isValidIp(String ip) {
-        String[] groups = ip.split("\\.");
-
-        if (groups.length != 3) {
-            return false;
-        }
-
-        try {
-            return Arrays.stream(groups)
-                    .filter(s -> s.length() > 1 && s.startsWith("0"))
-                    .map(Integer::parseInt)
-                    .filter(i -> (i >= 0 && i <= 255))
-                    .count() == 4;
-
-        } catch (NumberFormatException e) {
-            return false;
-        }
+    public static boolean isValidIp(final String ip) {
+        return PATTERN.matcher(ip).matches();
     }
 
 }

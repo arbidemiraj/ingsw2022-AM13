@@ -477,7 +477,7 @@ public class Game extends Observable {
 		players.add(player);
 
 		if(expertMode){
-			player.setNumCoins(15);
+			player.setNumCoins(3);
 		}
 	}
 

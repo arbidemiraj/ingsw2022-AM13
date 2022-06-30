@@ -400,9 +400,9 @@
       <TilePane fx:id="characterPane1" layoutX="1358.0" layoutY="238.0" prefHeight="88.0" prefWidth="96.0" />
       <TilePane fx:id="characterPane3" layoutX="1644.0" layoutY="228.0" prefHeight="88.0" prefWidth="96.0" />
       <TilePane fx:id="characterPane2" layoutX="1500.0" layoutY="228.0" prefHeight="88.0" prefWidth="96.0" />
-      <Label fx:id="characterOwner1" layoutX="1380.0" layoutY="343.0" text="prova" />
-      <Label fx:id="characterOwner3" layoutX="1525.0" layoutY="343.0" text="prova" />
-      <Label fx:id="characterOwner2" layoutX="1675.0" layoutY="343.0" text="prova" />
+      <Label fx:id="characterOwner1" layoutX="1380.0" layoutY="373.0" />
+      <Label fx:id="characterOwner3" layoutX="1525.0" layoutY="373.0" />
+      <Label fx:id="characterOwner2" layoutX="1675.0" layoutY="373.0" />
       <ImageView fx:id="desc1" fitHeight="100.0" fitWidth="380.0" layoutX="1223.0" layoutY="358.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="desc2" fitHeight="100.0" fitWidth="380.0" layoutX="1385.0" layoutY="376.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="desc3" fitHeight="100.0" fitWidth="380.0" layoutX="1522.0" layoutY="376.0" pickOnBounds="true" preserveRatio="true" />
