@@ -38,7 +38,7 @@ public class JavaFxMain extends Application {
         MediaPlayer player = new MediaPlayer(pick);
         player.setAutoPlay(true);
         player.setCycleCount(MediaPlayer.INDEFINITE);
-        player.setVolume(0.4);
+        player.setVolume(0.2);
 
         player.setOnEndOfMedia(() -> {
             player.seek(Duration.ZERO);
@@ -97,9 +97,6 @@ public class JavaFxMain extends Application {
         Media pick = new Media(Objects.requireNonNull(getClass().getClassLoader()
                 .getResource("Spitfires.mp3")).toExternalForm());
         MediaPlayer player = new MediaPlayer(pick);
-
-        music.stop();
-        player.stop();
 
         stage.setResizable(true);
         stage.setWidth(1920);
