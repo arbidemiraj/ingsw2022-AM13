@@ -49,6 +49,12 @@ public class ReducedModel implements Serializable {
         numCoins = 3;
     }
 
+    /**
+     * Default constructor
+     * @param username       username's list
+     * @param color          color of the tower
+     * @param reducedBoard       lighter version of the player board
+     */
     public ReducedModel(List<String> username, TowerColor color, ReducedBoard reducedBoard){
         this.username = username;
         this.color = color;
