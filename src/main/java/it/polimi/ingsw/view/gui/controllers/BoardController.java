@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.model.maps.ColorIntMap;
 import it.polimi.ingsw.model.maps.IntColorMap;
+import it.polimi.ingsw.network.client.reducedModel.ReducedCharacter;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.observer.ViewObservable;
 import javafx.application.Platform;
@@ -493,6 +494,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
         for (ImageView singleStud : entrance) {
             singleStud.getStyleClass().set(0, "clickable");
+            singleStud.setDisable(false);
 
             singleStud.setOnMouseClicked(e -> {
                 Node node = (Node) e.getTarget();
@@ -508,6 +510,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 askWhere(student.getImage().getUrl());
 
                 student.setImage(null);
+
+                disableStudents();
             });
 
         }
@@ -596,10 +600,6 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 singleStud.getStyleClass().set(0, "");
                 showAlert("You can't move a student!");
             });
-        }
-
-        for(TilePane dinner : dinnerRoom){
-            dinner.setOnMouseClicked(e -> {});
         }
     }
 
@@ -820,6 +820,14 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     public void mergeIslands(int island1, int island2) {
         reducedModel.getReducedBoard().mergeIslands(island1, island2);
+
+        for(GridPane island : islands){
+            island.setDisable(false);
+        }
+
+        if(island1 >= reducedModel.getReducedBoard().getIslands().size()){
+            island1 = island1 - reducedModel.getReducedBoard().getIslands().size();
+        }
 
         int numIslands = reducedModel.getReducedBoard().getIslands().get(island1).getNumIslands();
 
@@ -1176,6 +1184,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 charactersPanes.get(index).getChildren().remove(charactersPanes.get(index).getChildren().size() - 1);
 
                 for(GridPane island : islands){
+                    island.setDisable(false);
+
                     island.setOnMouseClicked(e -> {
                         island.add(new ImageView(new Image(String.valueOf(getClass().getResource("/assets/deny.png")))), 0, 0);
 
@@ -1337,6 +1347,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
             }
 
             int index = Arrays.asList(reducedModel.getReducedCharacters()).indexOf(reducedModel.getCharacterById(effectId));
+
+            reducedModel.getReducedCharacters()[index].disactivate();
 
             charactersImages.get(index).setX(1);
             charactersImages.get(index).setY(1);

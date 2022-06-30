@@ -99,6 +99,10 @@ public class Game extends Observable {
 			id = chooseEffect(availableEffects);
 			characters[i] = new Character(this, id, cost[id]);
 		}
+
+		characters[0] = new Character(this, 4, cost[0]);
+		characters[1] = new Character(this, 5, cost[0]);
+		characters[2] = new Character(this, 6, cost[0]);
 	}
 
 	/**

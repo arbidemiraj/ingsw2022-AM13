@@ -590,9 +590,9 @@ public class GameController implements Observer {
         if(model.isExpertMode()){
             ReducedCharacter[] reducedCharacters = new ReducedCharacter[3];
             int i = 0;
+            List<String> characterDesc = createCharacterDesc();
 
             for(Character character : model.getCharacters()){
-                List<String> characterDesc = createCharacterDesc();
 
                 reducedCharacters[i] = new ReducedCharacter(character.getCost(), character.getEffectId(), characterDesc.get(character.getEffectId() - 1));
                 if(character.getEffectId() == 1){

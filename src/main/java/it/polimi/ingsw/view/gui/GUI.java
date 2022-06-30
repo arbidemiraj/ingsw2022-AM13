@@ -61,21 +61,6 @@ public class GUI extends ViewObservable implements View {
     }
 
     @Override
-    public void startTurn() {
-
-    }
-
-    @Override
-    public void successMessage() {
-
-    }
-
-    @Override
-    public void disconnectionMessage() {
-
-    }
-
-    @Override
     public void error(String error) {
         Platform.runLater(() -> sceneController.showAlert(error));
     }
@@ -112,16 +97,6 @@ public class GUI extends ViewObservable implements View {
     @Override
     public void askStudentToMove() {
         Platform.runLater(() -> controller.askStudent());
-    }
-
-    @Override
-    public void askIslandToMove() {
-
-    }
-
-    @Override
-    public void connectionLost() {
-
     }
 
     @Override
@@ -200,11 +175,6 @@ public class GUI extends ViewObservable implements View {
     @Override
     public void updateMotherNature(int steps) {
         reducedModel.getReducedBoard().moveMotherNature(steps);
-    }
-
-    @Override
-    public void updateBoard() {
-        Platform.runLater(() -> controller.updateIslands());
     }
 
     @Override

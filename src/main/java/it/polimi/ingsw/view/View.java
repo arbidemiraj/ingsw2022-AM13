@@ -22,17 +22,14 @@ public interface View {
      */
     void askCreateOrJoin();
 
+    /**
+     *
+     */
     void askUsername();
 
     void askGameSettings();
 
     void askTowerColor(List<TowerColor> availableColors);
-
-    void startTurn();
-
-    void successMessage();
-
-    void disconnectionMessage();
 
     void error(String error);
 
@@ -45,10 +42,6 @@ public interface View {
     void askCloud();
 
     void askStudentToMove();
-
-    void askIslandToMove();
-
-    void connectionLost();
 
     void startGame(String firstPlayer, ReducedModel reducedModel);
 
@@ -75,8 +68,6 @@ public interface View {
     void conquerIsland(int island, String islandOwner);
 
     void updateMotherNature(int steps);
-
-    void updateBoard();
 
     void updateIslands(ArrayList<ReducedIsland> islands);
 

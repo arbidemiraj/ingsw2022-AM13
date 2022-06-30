@@ -49,4 +49,8 @@ public class ReducedCharacter implements Serializable {
     public boolean isActive() {
         return isActive;
     }
+
+    public void disactivate() {
+        isActive = false;
+    }
 }

@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -38,7 +39,7 @@ public class SocketClient extends Client {
         this.readExecutionQueue = Executors.newSingleThreadExecutor();
         this.pingExecutionQueue = Executors.newSingleThreadExecutor();
         this.ping = Executors.newSingleThreadScheduledExecutor();
-        socket.setSoTimeout(1000);
+        socket.setSoTimeout(5000);
     }
 
         @Override

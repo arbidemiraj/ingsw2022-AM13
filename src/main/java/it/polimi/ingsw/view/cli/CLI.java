@@ -24,16 +24,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 public class CLI extends ViewObservable implements View {
-    private Scanner input = new Scanner(System.in);
-    private Color color;
+    private final Scanner input = new Scanner(System.in);
     private final PrintStream output;
-    private String status;
     private String username;
     public static final Logger LOGGER = Logger.getLogger(CLI.class.getName());
-    private boolean activatingCharacter;
     private ReducedModel reducedModel;
     private PhaseType currentPhase;
-
+    private boolean activatingCharacter;
     private final String INV_INP = "Invalid input! ";
     private String playerUsername;
 
@@ -54,7 +51,6 @@ public class CLI extends ViewObservable implements View {
 
 
         askServerInfo();
-
     }
 
     public void askServerInfo(){
@@ -224,10 +220,6 @@ public class CLI extends ViewObservable implements View {
     }
 
     @Override
-    public void startTurn() {
-    }
-
-    @Override
     public void setBoard(ReducedBoard reducedBoard){
         this.reducedModel.setReducedBoard(reducedBoard);
     }
@@ -260,16 +252,6 @@ public class CLI extends ViewObservable implements View {
         }
 
         output.println(reducedModel.getReducedBoard().printIslands());
-    }
-
-    @Override
-    public void successMessage() {
-        output.println("Operation successfully completed! ");
-    }
-
-    @Override
-    public void disconnectionMessage() {
-
     }
 
     @Override
@@ -316,7 +298,14 @@ public class CLI extends ViewObservable implements View {
             output.print("> ");
             
             id = readLine();
-            
+
+            while (id != null && id.equals("desc")){
+                output.print("\n> ");
+                input.reset();
+
+                id = readLine();
+            }
+
             if(id != null) cardId = Integer.parseInt(id);
 
         }while(cardId < 0 || cardId > 10);
@@ -368,6 +357,15 @@ public class CLI extends ViewObservable implements View {
 
             String read = readLine();
 
+            while(read != null && read.equals("desc")){
+                output.print("\n> ");
+                input.reset();
+
+                read = readLine();
+            }
+
+
+
             if (read.equals(null)) {
                 activatingCharacter = true;
             } else {
@@ -379,6 +377,10 @@ public class CLI extends ViewObservable implements View {
         }while (!isValid) ;
 
             int finalCloud = cloud;
+
+            for(Student student : reducedModel.getReducedBoard().getClouds()[cloud - 1].getStudents()){
+                reducedModel.getReducedBoard().getPlayerBoard().addEntranceStudent(String.valueOf(student));
+            }
 
             notifyObserver(viewObserver -> viewObserver.onUpdateCloud(finalCloud - 1));
             input.reset();
@@ -414,7 +416,17 @@ public class CLI extends ViewObservable implements View {
 
         inputString = readLine();
 
+        while(inputString != null && inputString.equals("desc")){
+            output.print("\n> ");
+            input.reset();
+
+            inputString = readLine();
+        }
+
+
+
         if(inputString.equals("")) inputString=input.nextLine();
+
 
         if(inputString != null){
             String[] temp = inputString.split("\\s+");
@@ -439,23 +451,6 @@ public class CLI extends ViewObservable implements View {
 
             input.reset();
         }
-
-    }
-
-
-    @Override
-    public void askIslandToMove() {
-        output.println("Insert the id of the chosen Island: ");
-        output.print("> ");
-
-        int islandId = input.nextInt();
-
-        notifyObserver(viewObserver -> viewObserver.onUpdateIslandEffect(islandId, 1));
-        input.reset();
-    }
-
-    @Override
-    public void connectionLost() {
 
     }
 
@@ -502,6 +497,15 @@ public class CLI extends ViewObservable implements View {
 
             return null;
         }
+        else if(read.contains("DESC")){
+            String[] temp = read.split("\\s+");
+
+            int effectId = Integer.parseInt(temp[1]);
+
+            output.println(reducedModel.getCharacterById(effectId).getCharacterDesc());
+
+            return "desc";
+        }
         else return read;
     }
 
@@ -513,15 +517,32 @@ public class CLI extends ViewObservable implements View {
     @Override
     public void askMotherNatureMove() {
         currentPhase = PhaseType.MOTHER_NATURE;
+        int steps = 0;
 
         output.println("\nEnter the number of steps you want to move motherNature");
         output.print("> ");
 
-        int steps = Integer.parseInt(readLine());
+        String read = readLine();
+
+        while(read != null && read.equals("desc")){
+            output.print("\n> ");
+            input.reset();
+
+            read = readLine();
+        }
+
+
+        if (read == null) {
+            activatingCharacter = true;
+        } else {
+            steps = Integer.parseInt(read);
+        }
 
         moveMotherNature(steps);
 
-        notifyObserver(viewObserver -> viewObserver.onUpdateMotherNature(steps));
+        int finalSteps = steps;
+
+        notifyObserver(viewObserver -> viewObserver.onUpdateMotherNature(finalSteps));
         input.reset();
     }
 
@@ -567,10 +588,6 @@ public class CLI extends ViewObservable implements View {
         reducedModel.getReducedBoard().moveMotherNature(steps);
     }
 
-    @Override
-    public void updateBoard() {
-
-    }
 
     @Override
     public void updateIslands(ArrayList<ReducedIsland> islands) {
@@ -617,7 +634,10 @@ public class CLI extends ViewObservable implements View {
                 output.println(reducedModel.getCharacterById(effectId).getStudents());
 
                 output.print("> ");
+
                 String selectedStudent = input.nextLine();
+
+                notifyObserver(viewObserver -> viewObserver.onUpdateStudentEffect(selectedStudent, effectId));
             }
 
             case 9,12 -> {
@@ -673,7 +693,7 @@ public class CLI extends ViewObservable implements View {
     @Override
     public void notifyCharacterActivation(int effectId, boolean activated, String owner) {
         if(activated){
-            output.println("Character " + effectId + " is now active");
+            output.println(owner + " has activated character " + effectId);
             reducedModel.activateCharacter(effectId);
             resumePhase();
         }else {
@@ -724,18 +744,17 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void showDisconnection(String username) {
-
+        output.println("The game has ended because " + username + " disconnected");
     }
 
     @Override
     public void backToChoice() {
-
     }
 
     private boolean isValidIp(String ip) {
         String[] groups = ip.split("\\.");
 
-        if (groups.length != 4) {
+        if (groups.length != 3) {
             return false;
         }
 
@@ -745,6 +764,7 @@ public class CLI extends ViewObservable implements View {
                     .map(Integer::parseInt)
                     .filter(i -> (i >= 0 && i <= 255))
                     .count() == 4;
+
         } catch (NumberFormatException e) {
             return false;
         }
