@@ -89,9 +89,9 @@ public class Game extends Observable {
 	private void setupExpertMode() {
 		int id;
 		characters = new Character[3];
-		int[] cost = {0, 1, 2, 3, 1, 2, 3, 0, 2, 0, 0, 2};
+		int[] cost = {0, 1, 2, 3, 1, 2, 3, 0, 2, 0, 1, 2, 3};
 
-		int[] availableEffects = {1, 2, 3, 4, 5, 6, 8, 11, 12};
+		int[] availableEffects = {1, 2, 3, 4, 5, 6, 8, 9, 11, 12};
 
 		generalSupply = 20 - numPlayers;
 
@@ -99,10 +99,6 @@ public class Game extends Observable {
 			id = chooseEffect(availableEffects);
 			characters[i] = new Character(this, id, cost[id]);
 		}
-
-		characters[0] = new Character(this, 4, cost[0]);
-		characters[1] = new Character(this, 5, cost[0]);
-		characters[2] = new Character(this, 6, cost[0]);
 	}
 
 	/**
