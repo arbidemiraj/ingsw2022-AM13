@@ -11,6 +11,7 @@ import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,7 +31,6 @@ public class SocketClient extends Client {
     private final ExecutorService readExecutionQueue;
     private final ExecutorService pingExecutionQueue;
     private final ScheduledExecutorService ping;
-    private static final int SOCKET_TIMEOUT = 3000;
 
     public SocketClient(String address, int port) throws IOException {
         this.socket = new Socket();
@@ -71,7 +71,7 @@ public class SocketClient extends Client {
 
     /** This method sends message to the server **/
     @Override
-    public void sendMessage(Message message) {
+    public synchronized void sendMessage(Message message) {
         try {
             output.writeObject(message);
             output.reset();
@@ -108,8 +108,15 @@ public class SocketClient extends Client {
             }
     }
 
-    public void ping(){
-        sendMessage(new Ping());
+    private synchronized void ping() {
+        try {
+            output.writeObject(new Ping());
+            output.reset();
+        } catch (IOException e) {
+            disconnect();
+        }
     }
+
+
 }
 
