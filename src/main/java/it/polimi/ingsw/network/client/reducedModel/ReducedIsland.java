@@ -27,7 +27,7 @@ public class ReducedIsland implements Serializable {
     /**
      * Default constructor
      * @param students      list of the students
-     * @param id            player id
+     * @param id            character id
      * @param isNoEntryTile      true if that island cannot be used
      */
     public ReducedIsland(List<Student> students, String owner, int id, boolean isNoEntryTile) {

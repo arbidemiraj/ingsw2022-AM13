@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/** This class contains the reduced part of the game logic with the informations the client needs**/
+
 public class ReducedModel implements Serializable {
     private List<String> username;
     private ReducedBoard reducedBoard;
@@ -29,7 +31,14 @@ public class ReducedModel implements Serializable {
     private Map<Student, Integer> getIntFromStudent = colorIntMap.getMap();
     private int wizardId;
 
-
+    /**
+     * Default constructor
+     * @param username       username's list
+     * @param color          color of the tower
+     * @param reducedCharacters         lighter version of the character
+     * @param reducedBoard       lighter version of the player board
+     * @param isExpertMode        true if the expert mode is ON
+     */
     public ReducedModel(List<String> username, TowerColor color, ReducedCharacter[] reducedCharacters,ReducedBoard reducedBoard, boolean isExpertMode) {
         this.username = username;
         this.color = color;
@@ -88,6 +97,7 @@ public class ReducedModel implements Serializable {
         return reducedBoard;
     }
 
+    /** This method sets the reduced board **/
     public void setReducedBoard(ReducedBoard reducedBoard) {
         this.reducedBoard = reducedBoard;
 
@@ -103,6 +113,7 @@ public class ReducedModel implements Serializable {
         return turnMaxSteps;
     }
 
+    /** This method activates the character's effect **/
     public void activateCharacter(int id){
         Arrays.stream(reducedCharacters).filter(reducedCharacter -> reducedCharacter.getEffectId() == id).collect(Collectors.toList())
                 .get(0).activate();
@@ -110,6 +121,7 @@ public class ReducedModel implements Serializable {
 
     }
 
+    /** This method moves the student **/
     public void moveStudent(String from, String student, String to, int id) {
         if(from.equals("ENTRANCE")) reducedBoard.getPlayerBoard().removeEntranceStudent(student);
 
@@ -159,6 +171,7 @@ public class ReducedModel implements Serializable {
         this.wizardId = wizardId;
     }
 
+    /** This method is useful to get the character by id **/
     public ReducedCharacter getCharacterById(int id){
 
         ReducedCharacter character = Arrays.stream(reducedCharacters)
