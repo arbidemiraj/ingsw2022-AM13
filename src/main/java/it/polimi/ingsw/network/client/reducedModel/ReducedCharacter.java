@@ -6,6 +6,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/** This class is useful for showing client-side character updates **/
 public class ReducedCharacter implements Serializable {
     @Serial
     private static final long serialVersionUID = 4685160795889445445L;
@@ -15,6 +16,12 @@ public class ReducedCharacter implements Serializable {
     private boolean isActive;
     private ArrayList<Student> students;
 
+    /**
+     * Default constructor
+     * @param cost      cost of the character
+     * @param effectId      character's effect
+     * @param characterDesc       effect description
+     */
     public ReducedCharacter(int cost, int effectId, String characterDesc) {
         this.cost = cost;
         this.effectId = effectId;
