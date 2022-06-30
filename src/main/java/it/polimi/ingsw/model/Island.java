@@ -114,5 +114,12 @@ public class Island implements Movable {
 	public boolean isNoEntryTile() {
 		return noEntryTile;
 	}
+
+	/**
+	 * removes the no entry tile
+	 */
+    public void removeNoEntryTile() {
+		noEntryTile = false;
+    }
 }
 

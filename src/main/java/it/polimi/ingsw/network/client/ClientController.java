@@ -179,6 +179,12 @@ public class ClientController implements ViewObserver, Observer {
                 taskQueue.execute(view::askSwitch);
             }
 
+            case NO_ENTRY_TILE -> {
+                NoEntryTileMessage msg = (NoEntryTileMessage) message;
+
+                taskQueue.execute(() -> view.noEntryTile(msg.getIslandId()));
+            }
+
             case SELECT_ISLAND -> {
                 AskIsland msg = (AskIsland) message;
 

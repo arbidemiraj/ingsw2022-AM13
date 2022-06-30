@@ -261,6 +261,10 @@ public class CLI extends ViewObservable implements View {
     @Override
     public void error(String error) {
         output.println("\n" + error);
+
+        if(error.contains("coins")){
+            resumePhase();
+        }
     }
 
     @Override
@@ -323,7 +327,7 @@ public class CLI extends ViewObservable implements View {
                 output.println("Card already played! ");
             }
 
-        }while((cardId < 0 || cardId > 10) || id.equals("error"));
+        }while((cardId < 0 || cardId > 10) || (id != null && id.equals("error")));
 
 
         int finalCardId = cardId;
@@ -441,7 +445,7 @@ public class CLI extends ViewObservable implements View {
             inputString = readLine();
         }
 
-        if(inputString.equals("")) inputString = input.nextLine();
+        if(inputString != null && inputString.equals("")) inputString = input.nextLine();
 
 
         if(inputString != null){
@@ -606,7 +610,7 @@ public class CLI extends ViewObservable implements View {
     @Override
     public void conquerIsland(int island, String islandOwner) {
         reducedModel.getReducedBoard().getIslands().get(island).setOwner(islandOwner);
-        output.println(islandOwner + "is now the owner of Island" + island);
+        output.println(islandOwner + " is now the owner of Island " + island);
     }
 
     @Override
@@ -654,25 +658,112 @@ public class CLI extends ViewObservable implements View {
                 notifyObserver(viewObserver -> viewObserver.onUpdateStudentEffect(selectedStudent, effectId));
             }
 
-            case 7,11 -> {
-                output.println("Select a student from the card");
+            case 7 -> {
+                ColorIntMap map = new ColorIntMap();
+                HashMap<Student, Integer> m = map.getMap();
+                String answer = null;
+                int count = 0;
 
-                output.println(reducedModel.getCharacterById(effectId).getStudents());
+                do{
+                    input.reset();
 
-                output.print("> ");
+                    boolean isValid;
+                    ArrayList<Student> students = new ArrayList<>();
 
-                String selectedStudent = input.nextLine();
+                    do{
+                        output.println("Select a student from the card");
 
-                notifyObserver(viewObserver -> viewObserver.onUpdateStudentEffect(selectedStudent, effectId));
+                        output.println(reducedModel.getCharacterById(effectId).getStudents());
+
+                        output.print("> ");
+
+                        String selectedStudent = input.nextLine();
+
+                        if(!reducedModel.getCharacterById(effectId).getStudents().contains(Student.valueOf(selectedStudent))){
+                            output.println("The given student is not in the card, insert another student");
+                            isValid = false;
+                        }
+                        else{
+                            isValid = true;
+                            students.add(Student.valueOf(selectedStudent));
+                            reducedModel.getCharacterById(effectId).removeStudent(Student.valueOf(selectedStudent));
+                        }
+                    }while(!isValid);
+
+
+                    do{
+                        output.println("Select a student from the entrance");
+
+                        output.print("> ");
+
+                        String selectedStudent = input.nextLine();
+
+                        int pos = m.get(Student.valueOf(selectedStudent));
+
+                        if(reducedModel.getReducedBoard().getPlayerBoard().getEntranceStudents()[pos] > 0){
+                            output.println("The given student is not in the entrance, insert another student");
+                            isValid = false;
+                        }
+                        else{
+                            isValid = true;
+                            students.add(Student.valueOf(selectedStudent));
+                            reducedModel.getReducedBoard().getPlayerBoard().removeEntranceStudent(selectedStudent);
+                        }
+                    }while(!isValid);
+
+
+                    notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students, 7));
+
+                    count++;
+
+                    if(count < 3){
+                        do{
+                            output.println("Do you want to switch other students? [y/n]");
+                            output.print("> ");
+
+                            answer = input.nextLine();
+
+                        }while(!answer.equals("n") || !answer.equals("y"));
+                    }
+
+                }while(answer != null && answer.equals("y") && count < 3);
+            }
+            case 11 -> {
+                String selectedStudent;
+
+                do{
+                    output.println("Select a student from the card");
+
+                    output.println(reducedModel.getCharacterById(effectId).getStudents());
+
+                    output.print("> ");
+
+                    selectedStudent = input.nextLine();
+
+                }while(!reducedModel.getCharacterById(11).getStudents().contains(Student.valueOf(selectedStudent)));
+
+
+                String finalSelectedStudent = selectedStudent;
+                
+                notifyObserver(viewObserver -> viewObserver.onUpdateStudentEffect(finalSelectedStudent, effectId));
             }
 
             case 9,12 -> {
-                output.println("Insert a color");
-                output.print("> ");
+                String selectedColor;
+                
+                do{
+                    input.reset();
+                    
+                    output.println("Insert a color");
+                    output.print("> ");
 
-                String selectedColor = input.nextLine();
+                    selectedColor = input.nextLine();
+                }while(selectedColor.toUpperCase().equals("RED")||selectedColor.toUpperCase().equals("YELLOW")||selectedColor.toUpperCase().equals("GREEN")||selectedColor.toUpperCase().equals("BLUE")||selectedColor.toUpperCase().equals("PINK"));
 
-                notifyObserver(viewObserver -> viewObserver.onUpdateStudentEffect(selectedColor, effectId));
+
+                String finalSelectedColor = selectedColor;
+                
+                notifyObserver(viewObserver -> viewObserver.onUpdateStudentEffect(finalSelectedColor, effectId));
             }
         }
     }
@@ -692,20 +783,75 @@ public class CLI extends ViewObservable implements View {
     @Override
     public void askSwitch() {
         ArrayList<Student> students = new ArrayList<>();
+        String answer = null;
+        boolean isValid;
+        ColorIntMap map = new ColorIntMap();
+        HashMap<Student, Integer> m = map.getMap();
+        int effectId = 10;
+        String selectedStudent;
+        int count = 0;
 
-        for(int i = 0; i < 2; i++){
-            output.println("Insert the student from entrance");
-            output.print("> ");
-            String selectedStud = input.nextLine();
+        do{
+            do{
+                input.reset();
 
-            students.add(Student.valueOf(selectedStud));
+                output.println("Select a student from the entrance");
 
-            output.println("Insert the color of the student you want to get from the dinner");
-            output.print("> ");
-            selectedStud = input.nextLine();
+                output.print("> ");
 
-            students.add(Student.valueOf(selectedStud));
-        }
+                selectedStudent = input.nextLine();
+
+                int pos = m.get(Student.valueOf(selectedStudent));
+
+                if(reducedModel.getReducedBoard().getPlayerBoard().getEntranceStudents()[pos] > 0){
+                    output.println("The given student is not in the entrance, insert another student");
+                    isValid = false;
+                }
+                else{
+                    isValid = true;
+                    students.add(Student.valueOf(selectedStudent));
+                    reducedModel.getReducedBoard().getPlayerBoard().removeEntranceStudent(selectedStudent);
+                }
+            }while(!isValid);
+
+            do{
+                input.reset();
+
+                output.println("Insert the color of the student you want to get from the dinner");
+
+                output.print("> ");
+
+                selectedStudent = input.nextLine();
+
+                int pos = m.get(Student.valueOf(selectedStudent));
+
+                if(reducedModel.getReducedBoard().getPlayerBoard().getHallStudents()[pos] > 0){
+                    output.println("The given student is not in the dinner, insert another student");
+                    isValid = false;
+                }
+                else{
+                    isValid = true;
+                    students.add(Student.valueOf(selectedStudent));
+                    reducedModel.getReducedBoard().getPlayerBoard().removeEntranceStudent(selectedStudent);
+                }
+            }while(!isValid);
+
+
+            students.add(Student.valueOf(selectedStudent));
+
+            count ++;
+
+            if(count < 2){
+                do{
+                    output.println("Do you want to switch other students? [y/n]");
+                    output.print("> ");
+
+                    answer = input.nextLine();
+
+                }while(!answer.equals("n") || !answer.equals("y"));
+            }
+
+        }while(answer != null && answer.equals("y") && count < 2);
 
 
         notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students, 10));
@@ -721,9 +867,14 @@ public class CLI extends ViewObservable implements View {
         if(activated){
             output.println(owner + " has activated character " + effectId);
             reducedModel.activateCharacter(effectId);
+
+            if(effectId == 5){
+
+            }
+
             resumePhase();
         }else {
-            output.println("Character " + effectId + " is not active anymore");
+            if(effectId != 5) output.println("Character " + effectId + " is not active anymore");
         }
     }
 
@@ -773,6 +924,8 @@ public class CLI extends ViewObservable implements View {
     @Override
     public void showDisconnection(String username) {
         output.println("The game has ended because " + username + " disconnected");
+
+        System.exit(0);
     }
 
     @Override
@@ -783,4 +936,8 @@ public class CLI extends ViewObservable implements View {
         return PATTERN.matcher(ip).matches();
     }
 
+    @Override
+    public void noEntryTile(int islandId) {
+        reducedModel.getReducedBoard().getIslands().get(islandId).setNoEntryTile(false);
+    }
 }

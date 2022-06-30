@@ -10,13 +10,15 @@ class Effect5Test {
 
     @Test
     void apply() {
-        Game game = new Game(2, false);
+        Game game = new Game(2, true);
         game.getBoard().prepareGame();
         game.addPlayer("FirstPlayer");
         Player player = game.getPlayers().get(0);
 
         Effect5 effect5 = new Effect5();
         effect5.apply(game, game.getBoard().getMotherNatureIsland());
+
+        game.getCharacters()[0] = new Character(game, 5, 1);
 
         assertTrue(game.getBoard().getMotherNatureIsland().isNoEntryTile());
         assertEquals(3, effect5.getNumEntryTiles());

@@ -59,7 +59,7 @@
       <ImageView fx:id="greenProf" fitHeight="50.0" fitWidth="50.0" layoutX="558.0" layoutY="758.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="yellowProf" fitHeight="50.0" fitWidth="50.0" layoutX="559.0" layoutY="874.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="redProf" fitHeight="50.0" fitWidth="50.0" layoutX="558.0" layoutY="818.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="characters" alignment="CENTER" layoutX="1491.0" layoutY="136.0" prefHeight="34.0" prefWidth="114.0" text="Characters" textAlignment="CENTER" />
+      <Label fx:id="characters" alignment="CENTER" layoutX="1491.0" layoutY="109.0" prefHeight="34.0" prefWidth="114.0" text="Characters" textAlignment="CENTER" />
       <GridPane fx:id="island1" layoutX="61.0" layoutY="228.0" prefHeight="108.0" prefWidth="144.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -407,9 +407,12 @@
       <ImageView fx:id="desc2" fitHeight="100.0" fitWidth="380.0" layoutX="1385.0" layoutY="376.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="desc3" fitHeight="100.0" fitWidth="380.0" layoutX="1522.0" layoutY="376.0" pickOnBounds="true" preserveRatio="true" />
       <Button fx:id="confirmBtn" layoutX="1620.0" layoutY="-5.0" mnemonicParsing="false" text="Confirm" underline="true" />
-      <Label fx:id="coinText1" alignment="CENTER" layoutX="1111.0" layoutY="564.0" prefHeight="42.0" prefWidth="113.0" text="MONETE: " textAlignment="CENTER" />
+      <Label fx:id="coinText1" alignment="CENTER" layoutX="1111.0" layoutY="564.0" prefHeight="42.0" prefWidth="113.0" text="RISERVA:" textAlignment="CENTER" />
       <ImageView fx:id="coinImage1" fitHeight="81.0" fitWidth="87.0" layoutX="1126.0" layoutY="601.0" pickOnBounds="true" preserveRatio="true" />
       <Label fx:id="generalSupply" layoutX="1226.0" layoutY="571.0" prefHeight="30.0" prefWidth="30.0" text="X" />
+      <Label fx:id="cost1" layoutX="1391.0" layoutY="148.0" prefHeight="30.0" prefWidth="30.0" />
+      <Label fx:id="cost3" layoutX="1677.0" layoutY="144.0" prefHeight="30.0" prefWidth="30.0" />
+      <Label fx:id="cost2" layoutX="1536.0" layoutY="148.0" prefHeight="30.0" prefWidth="30.0" />
    </children>
    <stylesheets>
       <URL value="@../css/board.css" />

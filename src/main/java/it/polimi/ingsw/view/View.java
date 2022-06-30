@@ -225,4 +225,10 @@ public interface View {
      * Used to go back to the choice scene in the GUI
      */
     void backToChoice();
+
+    /**
+     * Notifies the end of the no entry tile effect on an island
+     * @param islandId the island with the no entry tile on it
+     */
+    void noEntryTile(int islandId);
 }

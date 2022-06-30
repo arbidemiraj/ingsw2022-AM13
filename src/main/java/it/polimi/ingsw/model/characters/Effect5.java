@@ -25,6 +25,9 @@ public class Effect5 implements Actionable {
 		return numEntryTiles;
 	}
 
+	public void addEntryTile(){
+		this.numEntryTiles++;
+	}
 	@Override
 	public void apply(Game game ) {
 	}

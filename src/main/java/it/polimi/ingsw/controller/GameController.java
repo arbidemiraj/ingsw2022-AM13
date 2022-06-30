@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class GameController implements Observer {
 
+    private int NUM_STUDENTS;
     private final Game model;
     private int movenStudents;
     private ArrayList<String> activePlayers;
@@ -41,6 +42,9 @@ public class GameController implements Observer {
      */
 
     public GameController(Game model, GameHandler gameHandler) {
+        if(model.getPlayers().size() == 2) NUM_STUDENTS = 3;
+        else NUM_STUDENTS = 4;
+
         this.model = model;
         this.gameHandler = gameHandler;
         turnController = new TurnController(this, gameHandler);
@@ -69,35 +73,32 @@ public class GameController implements Observer {
 
         Character character = model.getCharacter(id);
 
+        character.setOwner(player);
 
-        if(id == 5 && ((Effect5)character.getEffect()).getNumEntryTiles() == 0){
-                gameHandler.sendMessage(new ErrorMessage("No more entry tiles", ErrorType.GENERIC), player.getUsername());
-        }
-        else{
-                character.setOwner(player);
-
-                try {
-                    character.applyEffect(chosenIsland);
-                } catch (EmptyBagException e) {
-                    endGame();
-                }
-
-                player.setNumCoins(player.getNumCoins() - character.getCost());
-
-                model.removeCoins(character.getCost() - 1);
-                character.setCost(character.getCost() + 1);
-                model.getActivatedCharacters().add(character.getEffectId());
-
-                if(id == 1){
-                    ArrayList<Student> students = ((Effect1)character.getEffect()).getStudents();
-                    if(gameHandler != null) gameHandler.sendMessageToAll(new UpdateCharacterStudents(students, id));
-                }
-
-                updateIslands(character.getOwner().getUsername());
-
-                if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true, character.getOwner().getUsername()));
+        try {
+            if(id == 5 && ((Effect5)character.getEffect()).getNumEntryTiles() == 0){
+                gameHandler.sendMessage(new ErrorMessage("No more entry tiles! ", ErrorType.GENERIC), player.getUsername());
+            }else{
+                character.applyEffect(chosenIsland);
             }
 
+        } catch (EmptyBagException e) {
+            endGame();
+        }
+
+        buyCharacter(player, character);
+
+
+        if(id != 5) model.getActivatedCharacters().add(character.getEffectId());
+
+        if(id == 1){
+            ArrayList<Student> students = ((Effect1)character.getEffect()).getStudents();
+            if(gameHandler != null) gameHandler.sendMessageToAll(new UpdateCharacterStudents(students, id));
+        }
+
+        updateIslands(character.getOwner().getUsername());
+
+        if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true, character.getOwner().getUsername()));
     }
 
     /**
@@ -117,9 +118,9 @@ public class GameController implements Observer {
         } catch (EmptyBagException e) {
             e.printStackTrace();
         }
-        player.setNumCoins(player.getNumCoins() - character.getCost());
-        model.removeCoins(character.getCost()-1);
-        character.setCost(character.getCost()+1);
+
+        buyCharacter(player, character);
+
         model.getActivatedCharacters().add(character.getEffectId());
 
         if(id == 1){
@@ -138,6 +139,17 @@ public class GameController implements Observer {
     }
 
     /**
+     * Adds the coins to the general supply and increases the character cost
+     * @param player the player who activated the card
+     * @param character the activated character
+     */
+    private void buyCharacter(Player player, Character character) {
+        player.setNumCoins(player.getNumCoins() - character.getCost());
+        model.addCoins(character.getCost());
+        character.setCost(character.getCost()+1);
+    }
+
+    /**
      * method used to activate the character that doesn't need parameters
      *
      * @param id        the id of the character
@@ -149,9 +161,9 @@ public class GameController implements Observer {
 
         character.setOwner(player);
         character.applyEffect();
-        player.setNumCoins(player.getNumCoins() - character.getCost());
-        model.removeCoins(character.getCost()-1);
-        character.setCost(character.getCost()+1);
+
+        buyCharacter(player, character);
+
         model.getActivatedCharacters().add(character.getEffectId());
 
         if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(id, true, character.getOwner().getUsername()));
@@ -231,8 +243,6 @@ public class GameController implements Observer {
 
         if(model.checkAfterMotherNature()){
             String islandOwner = null;
-
-            Island test = model.getBoard().getMotherNatureIsland();
 
             if(model.getBoard().getMotherNatureIsland().getOwner() != null){
                 islandOwner = model.getBoard().getMotherNatureIsland().getOwner().getUsername();
@@ -453,9 +463,8 @@ public class GameController implements Observer {
         }
 
 
-        player.setNumCoins(player.getNumCoins() - character.getCost());
-        model.removeCoins(character.getCost() - 1);
-        character.setCost(character.getCost()+1);
+        buyCharacter(player, character);
+
         model.getActivatedCharacters().add(character.getEffectId());
 
         if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(7, true, username));
@@ -482,9 +491,8 @@ public class GameController implements Observer {
         player.getPlayerBoard().addStudent(students.get(2));
         professorCheckController(students.get(2));
 
-        player.setNumCoins(player.getNumCoins() - character.getCost());
-        model.removeCoins(character.getCost() - 1);
-        character.setCost(character.getCost()+1);
+        buyCharacter(player, character);
+
         model.getActivatedCharacters().add(character.getEffectId());
 
 
@@ -567,7 +575,7 @@ public class GameController implements Observer {
 
                 movenStudents++;
 
-                if(movenStudents < 3){
+                if(movenStudents < NUM_STUDENTS){
                     gameHandler.sendMessage(new AskStudent(), turnController.getCurrentPlayerUsername());
                 }
                 else {
@@ -600,6 +608,10 @@ public class GameController implements Observer {
 
     @Override
     public void update(Message message) {
+        if(message.getMessageType() == MessageType.NO_ENTRY_TILE){
+            gameHandler.sendMessageToAll(message);
+        }
+
         switch (message.getMessageType()){
             case UPDATE_MODEL -> {
                 UpdateModelMessage modelMessage = (UpdateModelMessage) message;
@@ -708,6 +720,7 @@ public class GameController implements Observer {
             if (model.getBoard().getIslands().get(i).getOwner() != null) {
                 owner[i] = model.getBoard().getIslands().get(i).getOwner().getUsername();
             } else owner[i] = "No owner";
+
             islands.add(new ReducedIsland(students, owner[i], i, false));
         }
 
@@ -740,10 +753,21 @@ public class GameController implements Observer {
 
         for (int i = 0; i < model.getBoard().getIslands().size(); i++) {
             students = model.getBoard().getIslands().get(i).getStudents();
+
+
             if (model.getBoard().getIslands().get(i).getOwner() != null) {
                 owner[i] = model.getBoard().getIslands().get(i).getOwner().getUsername();
             } else owner[i] = "No owner";
-            islands.add(new ReducedIsland(students, owner[i], i, false));
+
+            if(!model.getBoard().getIslands().get(i).isNoEntryTile()) islands.add(new ReducedIsland(students, owner[i], i, false));
+            else{
+                islands.add(new ReducedIsland(students, owner[i], i, true));
+            }
+
+            if(i == model.getBoard().getMotherNature()) islands.get(i).setMotherNature(true);
+            else {
+                islands.get(i).setMotherNature(false);
+            }
         }
 
         if(gameHandler != null && username == null) gameHandler.sendMessageToAll(new UpdateModelMessage(islands));

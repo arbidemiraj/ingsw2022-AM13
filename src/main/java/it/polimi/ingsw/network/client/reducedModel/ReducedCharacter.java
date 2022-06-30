@@ -66,4 +66,8 @@ public class ReducedCharacter implements Serializable {
 
 
     }
+
+    public void removeStudent(Student student) {
+        students.remove(student);
+    }
 }

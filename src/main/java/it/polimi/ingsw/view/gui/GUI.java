@@ -285,4 +285,9 @@ public class GUI extends ViewObservable implements View {
     public void backToChoice() {
         Platform.runLater(() -> sceneController.changeRoot(observers, "choice_scene.fxml"));
     }
+
+    @Override
+    public void noEntryTile(int islandId) {
+        Platform.runLater(() -> controller.noEntryTile(islandId));
+    }
 }

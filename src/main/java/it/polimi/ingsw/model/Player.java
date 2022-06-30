@@ -185,4 +185,8 @@ public class Player {
     public void removeTower() {
 		numTowers--;
     }
+
+    public void addTower() {
+		numTowers++;
+    }
 }

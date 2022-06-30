@@ -3,12 +3,14 @@ package it.polimi.ingsw.model;
 import com.google.gson.Gson;
 import it.polimi.ingsw.Eriantys;
 import it.polimi.ingsw.model.characters.Character;
+import it.polimi.ingsw.model.characters.Effect5;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.EmptyBagException;
 import it.polimi.ingsw.model.exceptions.InvalidMoveException;
 import it.polimi.ingsw.model.maps.ColorIntMap;
 import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.GenericType;
+import it.polimi.ingsw.network.message.servermsg.NoEntryTileMessage;
 import it.polimi.ingsw.network.message.servermsg.UpdateModelMessage;
 import it.polimi.ingsw.observer.Observable;
 
@@ -197,6 +199,12 @@ public class Game extends Observable {
 				board.getMotherNatureIsland().getOwner().addInfluence();
 			}
 		}
+		else if(island.equals(board.getMotherNatureIsland())){
+			island.removeNoEntryTile();
+			((Effect5)getCharacter(5).getEffect()).addEntryTile();
+
+			notifyObserver(new NoEntryTileMessage(board.getIslands().getPosition(island)));
+		}
 	}
 
 
@@ -363,6 +371,8 @@ public class Game extends Observable {
 		setInfluencePlayer(island);
 
 		if(influencePlayer != island.getOwner()){
+			if(island.getOwner() != null) island.getOwner().addTower();
+
 			island.setOwner(influencePlayer);
 			influencePlayer.removeTower();
 
@@ -426,7 +436,7 @@ public class Game extends Observable {
 	}
 
 	/**
-	 * removes a coin from the general supply
+	 * removes coins from the general supply
 	 * @param numCoins
 	 */
 	public void removeCoins(int numCoins){
@@ -434,7 +444,7 @@ public class Game extends Observable {
 	}
 
 	/**
-	 * adds a coin to the general supply
+	 * adds coins to the general supply
 	 * @param numCoins
 	 */
 	public void addCoins(int numCoins){
@@ -473,7 +483,7 @@ public class Game extends Observable {
 		players.add(player);
 
 		if(expertMode){
-			player.setNumCoins(3);
+			player.setNumCoins(1);
 		}
 	}
 

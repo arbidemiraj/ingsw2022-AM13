@@ -44,6 +44,10 @@ public class ReducedPlayerBoard implements Serializable {
 
     }
 
+    public int[] getEntranceStudents() {
+        return entranceStudents;
+    }
+
     public int getNumTowers() {
         return numTowers;
     }

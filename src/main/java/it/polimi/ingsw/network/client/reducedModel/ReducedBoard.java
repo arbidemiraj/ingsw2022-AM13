@@ -55,6 +55,15 @@ public class ReducedBoard implements Serializable {
 
     public void setMotherNature(int motherNature) {
         this.motherNature = motherNature;
+
+        for (int i = 0; i < islands.size(); i++){
+            if(i == motherNature){
+                islands.get(i).setMotherNature(true);
+            }
+            else {
+                islands.get(i).setMotherNature(false);
+            }
+        }
     }
 
     /** This method removes the student from the island **/

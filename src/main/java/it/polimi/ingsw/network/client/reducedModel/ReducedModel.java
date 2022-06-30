@@ -20,6 +20,7 @@ public class ReducedModel implements Serializable {
     private TowerColor color;
     private ReducedCharacter[] reducedCharacters;
     private String currentPlayer;
+    private int generalSupply;
     private boolean isExpertMode;
     private int turnMaxSteps;
     private boolean isActive;
@@ -46,7 +47,8 @@ public class ReducedModel implements Serializable {
         this.reducedBoard = reducedBoard;
         this.professorOwners = new String[5];
         this.isExpertMode = isExpertMode;
-        numCoins = 3;
+        generalSupply = 20 - username.size() * 3;
+        numCoins = 1;
     }
 
     /**
@@ -121,9 +123,16 @@ public class ReducedModel implements Serializable {
 
     /** This method activates the character's effect **/
     public void activateCharacter(int id){
-        Arrays.stream(reducedCharacters).filter(reducedCharacter -> reducedCharacter.getEffectId() == id).collect(Collectors.toList())
-                .get(0).activate();
+            ReducedCharacter character = Arrays.stream(reducedCharacters).filter(reducedCharacter -> reducedCharacter.getEffectId() == id).collect(Collectors.toList())
+                    .get(0);
 
+            character.activate();
+
+            numCoins -= character.getCost();
+            generalSupply += character.getCost();
+            character.setCost(character.getCost() + 1);
+
+            if(id == 5) character.disactivate();
 
     }
 
@@ -163,6 +172,10 @@ public class ReducedModel implements Serializable {
 
     public String getPlayerUsername() {
         return playerUsername;
+    }
+
+    public int getGeneralSupply() {
+        return generalSupply;
     }
 
     public void setProfOwner(String professorOwner, Student color) {

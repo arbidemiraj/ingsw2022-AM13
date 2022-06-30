@@ -93,6 +93,10 @@ public class ReducedIsland implements Serializable {
             print += "   [MN]    \n";
         }
 
+        if(isNoEntryTile){
+            print += " NO ENTRY TILE \n";
+        }
+
         if(owner != null){
             print += "  [ " + owner + " ]   \n";
         }
