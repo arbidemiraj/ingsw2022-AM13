@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.network.client.ClientController;
-import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.view.gui.controllers.ConnectionSceneController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +12,6 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.File;
 import java.util.Objects;
 
 /**
