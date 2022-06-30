@@ -17,6 +17,13 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * This class is part of the client side.
+ * It is an interpreter between the network and a generic view (which in this case can be CLI or GUI).
+ * It receives the messages, wraps/unwraps and pass them to the network/view.
+ */
+
+
 public class ClientController implements ViewObserver, Observer {
 
     private final View view;
@@ -31,7 +38,11 @@ public class ClientController implements ViewObserver, Observer {
         taskQueue = Executors.newSingleThreadExecutor();
     }
 
-
+    /**
+     * Takes action based on the message type received from the server.
+     *
+     * @param message the message received from the server.
+     */
     @Override
     public void update(Message message) {
         switch (message.getMessageType()){
@@ -221,7 +232,12 @@ public class ClientController implements ViewObserver, Observer {
             }
         }
     }
-
+    /**
+     * Create a new Socket Connection to the server with the updated info.
+     * An error view is shown if connection cannot be established.
+     *
+     * @param serverInfo a map of server address and server port.
+     */
     @Override
     public void onUpdateServerInfo(List<String> serverInfo) {
 
@@ -237,43 +253,80 @@ public class ClientController implements ViewObserver, Observer {
         }
 
     }
-
+    /**
+     * Sends a message to the server with the choice: create or join
+     *
+     * @param choice choice to make.
+     */
     @Override
     public void onUpdateCreateOrJoin(int choice) {
         client.sendMessage(new CreateOrJoinAnswer(username, choice));
     }
 
+    /**
+     * Sends a message to the server with the character chosen by the user.
+     *
+     * @param effectId character id.
+     */
     @Override
     public void onUpdateCharacter(int effectId) {
         client.sendMessage(new ActivateCharacterMessage(username, effectId));
     }
 
+    /**
+     * Sends a message to the server with the cloud chosen by the user.
+     *
+     * @param cloudId id of the cloud.
+     */
     @Override
     public void onUpdateCloud(int cloudId) {
         client.sendMessage(new ChooseCloudMessage(username, cloudId));
     }
 
+    /**
+     * Sends a message to the server with the tower color chosen by the user.
+     *
+     * @param chosenTowerColor the color of the tower.
+     */
     @Override
     public void onUpdateTowerColor(String chosenTowerColor) {
         TowerColor sendTowerColor = TowerColor.valueOf(chosenTowerColor);
         client.sendMessage(new ChooseTowerColorMessage(username, sendTowerColor));
     }
 
+    /**
+     * Sends a message to the server with the disconnect.
+     */
     @Override
     public void onUpdateDisconnect() {
         client.sendMessage(new DisconnectMessage(username));
     }
 
+    /**
+     * Sends a message to the server with the island chosen by the user.
+     *
+     * @param chosenIsland island chosen by the user.
+     * @param effectId character's effect
+     */
     @Override
     public void onUpdateIslandEffect(int chosenIsland, int effectId) {
         client.sendMessage(new IslandEffectMessage(username, chosenIsland, effectId));
     }
-
+    /**
+     * Sends a message to the server when a user joins a game.
+     *
+     * @param gameId Id of the game.
+     */
     @Override
     public void onUpdateJoinGame(int gameId) {
         client.sendMessage(new JoinGameMessage(username, gameId));
     }
 
+    /**
+     * Sends a message to the server with login message.
+     *
+     * @param username username of the player.
+     */
     @Override
     public void onUpdateLoginMessage(String username) {
         this.username = username;
@@ -282,6 +335,11 @@ public class ClientController implements ViewObserver, Observer {
         client.sendMessage(new LoginMessage(username));
     }
 
+    /**
+     * Sends a message to the server with the mother nature updates.
+     *
+     * @param steps number of mother nature' steps.
+     */
     @Override
     public void onUpdateMotherNature(int steps) {
         client.sendMessage(new MoveMotherNatureMessage(username, steps));
@@ -289,31 +347,64 @@ public class ClientController implements ViewObserver, Observer {
         taskQueue.execute(() -> view.updateMotherNature(steps));
     }
 
+    /**
+     * Sends a message to the server with the student's updates.
+     * @param color student's color.
+     * @param from  where the student was moved from
+     * @param to where the student was moved to
+     * @param id student id
+     */
     @Override
     public void onUpdateStudent(String from, String color, String to, int id) {
         client.sendMessage(new MoveStudentMessage(username, from, color, to, id));
     }
 
+    /**
+     * Sends a message to the server with the new game updates.
+     *
+     * @param maxPlayers max number of the players.
+     * @param expertMode true if expert mode is ON.
+     */
     @Override
     public void onUpdateNewGame(int maxPlayers, boolean expertMode) {
         client.sendMessage(new NewGameMessage(username, maxPlayers, expertMode));
     }
 
+    /**
+     * Sends a message to the server with the assistant card chosen by the player.
+     *
+     * @param assistantCardId assistant card.
+     */
     @Override
     public void onUpdateCard(int assistantCardId) {
         client.sendMessage(new PlayCardMessage(username, assistantCardId));
     }
 
+    /**
+     * Sends a message to the server with the updates of students effect.
+     *
+     * @param chosenStudent student chosen from the player.
+     * @param effectId character id.
+     */
     @Override
     public void onUpdateStudentEffect(String chosenStudent, int effectId) {
         client.sendMessage(new StudentEffectMessage(username, Student.valueOf(chosenStudent), effectId));
     }
 
+    /**
+     * Sends a message to the server with switch students' updates.
+     *
+     * @param students list of the students.
+     * @param effectId character id.
+     */
     @Override
     public void onUpdateSwitchStudents(ArrayList<Student> students, int effectId){
         client.sendMessage(new SwitchStudents(username, students, effectId));
     }
 
+    /**
+     * Sends a message to the server when the player wants to go back to the choice
+     */
     @Override
     public void backToChoice() {
         taskQueue.execute(view::backToChoice);
