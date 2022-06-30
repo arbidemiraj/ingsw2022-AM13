@@ -99,10 +99,6 @@ public class Game extends Observable {
 			id = chooseEffect(availableEffects);
 			characters[i] = new Character(this, id, cost[id]);
 		}
-
-		characters[0] = new Character(this, 1 , cost[1]);
-		characters[1] = new Character(this, 2 , cost[1]);
-		characters[2] = new Character(this, 3 , cost[1]);
 	}
 
 	/**
@@ -116,7 +112,7 @@ public class Game extends Observable {
 		int random;
 
 		do {
-			random = r.nextInt(12);
+			random = r.nextInt(11);
 			effect = availableEffect[random];
 
 			if(effect != 0){
