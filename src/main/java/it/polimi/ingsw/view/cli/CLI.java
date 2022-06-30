@@ -315,6 +315,7 @@ public class CLI extends ViewObservable implements View {
 
         if(finalCardId != 0){
             notifyObserver(viewObserver -> viewObserver.onUpdateCard(finalCardId));
+            currentPhase = PhaseType.NOT_MYTURN;
             output.println("Wait... other player is playing his turn");
         }else{
             reducedModel.setTurnCards(cardsPlayed);
@@ -384,6 +385,8 @@ public class CLI extends ViewObservable implements View {
 
             notifyObserver(viewObserver -> viewObserver.onUpdateCloud(finalCloud - 1));
             input.reset();
+
+            currentPhase = PhaseType.NOT_MYTURN;
 
     }
 
@@ -712,6 +715,8 @@ public class CLI extends ViewObservable implements View {
                 case CLOUD -> askCloud();
 
                 case MOVE_STUDENT -> askStudentToMove();
+
+                case NOT_MYTURN -> output.println("Wait...");
             }
         }
     }

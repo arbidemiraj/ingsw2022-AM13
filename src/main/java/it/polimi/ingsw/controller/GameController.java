@@ -176,7 +176,6 @@ public class GameController implements Observer {
 
             if(gameHandler != null) gameHandler.sendMessageToAll(new UpdateModelMessage(professorOwner, color));
 
-            //TODO fix
             if(gameHandler != null) gameHandler.sendMessage(new GenericMessage("You are now the owner of the " + color + " professor", GenericType.PROFESSOR), professorOwner);
             if(gameHandler != null) gameHandler.sendMessageToAllExcept(new GenericMessage(professorOwner + " is now the owner of the " + color + " professor", GenericType.PROFESSOR), professorOwner);
         }
@@ -254,6 +253,9 @@ public class GameController implements Observer {
         }
     }
 
+    /**
+     * Handles the end of the game and calculates the winner
+     */
     private void endGame() {
         Integer[] numIslands = new Integer[model.getNumPlayers()];
 
@@ -282,6 +284,10 @@ public class GameController implements Observer {
         gameHandler.endGame();
     }
 
+    /**
+     * Removes the student from a cloud and puts it on the entrance
+     * @param cloudId
+     */
     public void moveStudentsFromCloud(int cloudId) {
         ArrayList<Student> students = new ArrayList<>();
 
@@ -295,7 +301,10 @@ public class GameController implements Observer {
         turnController.getCurrentPlayer().getPlayerBoard().fillEntrance(students);
     }
 
-
+    /**
+     * Handles the received message
+     * @param message the message received
+     */
     public void messageReceived (Message message){
         switch (message.getMessageType()) {
             case CLOUD -> {
@@ -416,10 +425,19 @@ public class GameController implements Observer {
         }
     }
 
+    /**
+     * Notifies all the clients the update of mother nature
+     * @param username
+     */
     private void updateMotherNature(String username) {
         if(gameHandler != null) gameHandler.sendMessageToAllExcept(new UpdateMotherNature(model.getBoard().getMotherNature()), username);
     }
 
+    /**
+     * Activates the character n. 7
+     * @param students the students chosen
+     * @param username the username of the player who activated the card
+     */
     private void activateEffect7(ArrayList<Student> students, String username){
         Player player = model.getPlayerByUsername(username);
         Character character = model.getCharacter(7);
@@ -443,6 +461,12 @@ public class GameController implements Observer {
         if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(7, true, username));
     }
 
+    /**
+     * Activates the character n.10
+     * @param students the students chosen for the effect
+     * @param username the username of the player who activated the card
+     * @throws InvalidMoveException when the students given can't be moved
+     */
     private void activateEffect10(ArrayList<Student> students, String username) throws InvalidMoveException {
         Player player = model.getPlayerByUsername(username);
 
@@ -467,6 +491,12 @@ public class GameController implements Observer {
         if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(10, true, username));
     }
 
+    /**
+     * Handles the activation of a character and sends a message asking for student or island when needed
+     * @param id the id of the effect
+     * @param username the username of the player who asked for the character activation
+     * @throws NotEnoughCoinException
+     */
     private void activateGenericCharacter(int id, String username) throws NotEnoughCoinException {
         if(model.getCharacter(id).getCost() > model.getPlayerByUsername(username).getNumCoins()) throw new NotEnoughCoinException();
 
@@ -498,6 +528,10 @@ public class GameController implements Observer {
         }
     }
 
+    /**
+     * Parses the message parameters in the attributes needed to move a student
+     * @param studentMessage the message received containing from, to and the student
+     */
     private void parseParametersStudent(MoveStudentMessage studentMessage) {
         Movable from = null;
         Student student = null;
@@ -555,11 +589,13 @@ public class GameController implements Observer {
 
     }
 
+    /**
+     * Adds a player to the game
+     * @param username the username of the player
+     */
     public void addPlayer(String username){
         model.addPlayer(username);
         activePlayers.add(username);
-
-
     }
 
     @Override
@@ -581,6 +617,9 @@ public class GameController implements Observer {
         }
     }
 
+    /**
+     * Method called when a game start, it handles the setup phase and planning phase of a game, also creates the reduced version of the model
+     */
     public void startGame() {
         ReducedModel reducedModel;
         
@@ -630,6 +669,10 @@ public class GameController implements Observer {
 
     }
 
+    /**
+     * Creates the character desc by reading json file containing them
+     * @return
+     */
     private List<String> createCharacterDesc() {
         Gson gson = new Gson();
         List<String> desc = new ArrayList<>();
@@ -645,6 +688,11 @@ public class GameController implements Observer {
         return desc;
     }
 
+    /**
+     * Creates a reduced version of the board for the player
+     * @param player
+     * @return the reduced version of the game board created
+     */
     private ReducedBoard createBoard(Player player) {
 
         String[] owner = new String[12];
@@ -673,10 +721,17 @@ public class GameController implements Observer {
         return new ReducedBoard(model.getBoard().getClouds(), owner, reducedPlayerBoard, model.getBoard().getMotherNature(), islands);
     }
 
+    /**
+     * Checks if the bag is not empty, if it is the game ends
+     */
     public void checkBag() {
         if(model.getBoard().getBag().isEmpty()) endGame();
     }
 
+    /**
+     * Updates all the islands after a change and sends the island updated
+     * @param username the username of the player that changed the state of the board
+     */
     public void updateIslands(String username){
         String[] owner = new String[12];
 

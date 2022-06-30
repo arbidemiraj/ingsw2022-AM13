@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
+/**
+ * Handles the server socket
+ */
 public class SocketServer {
     private final Server server;
     private final int port;
@@ -19,10 +21,10 @@ public class SocketServer {
         this.port = port;
     }
 
+    /**
+     * Thread running and accepting connection on this socket
+     */
     public void run() {
-        /**
-        *runs the server socket and sees if it works
-        */
         try {
             serverSocket = new ServerSocket(port);
             Server.LOGGER.info(() -> "Socket server started on port " + port + ".");
@@ -31,9 +33,7 @@ public class SocketServer {
             return;
         }
 
-        /**
-         * creates a server-client thread and controls the connection status
-         */
+
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 Socket client = serverSocket.accept();
@@ -50,7 +50,7 @@ public class SocketServer {
     }
 
     /**
-     *
+     * Adds a client
      * @param username to add to the server
      * @param clientHandler that has to handle it
      * @throws DuplicateUsernameException
@@ -61,8 +61,8 @@ public class SocketServer {
 
 
     /**
-     *
-     * @param message ack
+     * Handles the received message and sends it to the server
+     * @param message the received message
      */
     public void MessageReceived(Message message) {
         server.messageReceived(message);
@@ -70,8 +70,8 @@ public class SocketServer {
 
 
     /**
-     *
-     * @param clientHandler disconnection
+     * Handles the disconnection of an user
+     * @param clientHandler the clientHandler that disconnected
      */
     public void disconnect(ClientHandler clientHandler) {
         server.disconnect(clientHandler);

@@ -17,6 +17,9 @@ import javafx.application.Platform;
 
 import java.util.*;
 
+/**
+ * Class for the GUI view
+ */
 public class GUI extends ViewObservable implements View {
     private final SceneController sceneController;
     private BoardController controller;
@@ -24,25 +27,42 @@ public class GUI extends ViewObservable implements View {
     private String playerUsername;
     private String firstPlayer;
 
+    /**
+     * Default constructor
+     * @param sceneController the controller that handles the scene switch
+     */
     public GUI(SceneController sceneController){
         this.sceneController = sceneController;
     }
 
+    /**
+     * Asks the player if he wants to create a new game or join an existing one
+     */
     @Override
     public void askCreateOrJoin() {
         Platform.runLater(() -> sceneController.changeRoot(observers, "choice_scene.fxml"));
     }
 
+    /**
+     * Asks to insert a username
+     */
     @Override
     public void askUsername() {
        Platform.runLater(() -> sceneController.changeRoot(observers, "login_scene.fxml"));
     }
 
+    /**
+     * Changes the scene to the game settings and asks for the settings when creating a new game
+     */
     @Override
     public void askGameSettings() {
         Platform.runLater(() -> sceneController.changeRoot(observers, "game_settings_scene.fxml"));
     }
 
+    /**
+     * Changes to the tower color scene and asks for it
+     * @param availableColors the colors the user can choose
+     */
     @Override
     public void askTowerColor(List<TowerColor> availableColors) {
         TowerColorController towerColorController = new TowerColorController();
@@ -60,11 +80,19 @@ public class GUI extends ViewObservable implements View {
 
     }
 
+    /**
+     * Shows an alert containing the error
+     * @param error
+     */
     @Override
     public void error(String error) {
         Platform.runLater(() -> sceneController.showAlert(error));
     }
 
+    /**
+     * Switches to the lobby scene
+     * @param lobby the lobby
+     */
     @Override
     public void showLobby(String lobby) {
         LobbySceneController lobbySceneController = new LobbySceneController();
@@ -75,10 +103,15 @@ public class GUI extends ViewObservable implements View {
         Platform.runLater(() -> sceneController.changeRoot(lobbySceneController, "lobby_scene.fxml"));
     }
 
+    /**
+     * Shows an alert with the winner when the game ends
+     * @param winner the winner of the game
+     */
     @Override
     public void winMessage(String winner) {
-
+        Platform.runLater(() -> controller.showWin(winner));
     }
+
 
     @Override
     public void askCardToPlay(List<AssistantCard> assistantCards, List<AssistantCard> cardsPlayed) {
@@ -114,7 +147,6 @@ public class GUI extends ViewObservable implements View {
 
     @Override
     public void showGenericMessage(String message) {
-        Platform.runLater(() -> sceneController.showGenericAlert(message));
     }
 
     @Override

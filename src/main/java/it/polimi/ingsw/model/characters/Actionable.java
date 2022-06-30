@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.EmptyBagException;
 
 /**
- * interface used for the cards effect, as a similar Strategy Pattern
+ * Interface used for the cards effect, as a similar Strategy Pattern
  */
 public interface Actionable {
 	/**

@@ -111,6 +111,10 @@ public class ReducedIsland implements Serializable {
         this.students = students;
     }
 
+    public void setNumIsland(int numIsland){
+        this.numIsland = numIsland;
+    }
+
     public void addIsland() {
         this.numIsland++;
     }

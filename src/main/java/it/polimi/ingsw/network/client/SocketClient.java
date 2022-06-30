@@ -61,6 +61,7 @@ public class SocketClient extends Client {
                 }
             });
         }
+
     /** This method sends message to the server **/
     @Override
     public void sendMessage(Message message) {

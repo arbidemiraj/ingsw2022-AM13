@@ -8,6 +8,9 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * Handles the game settings scene when a player creates a game
+ */
 public class GameSettingsSceneController extends ViewObservable implements GenericSceneController{
     @FXML
     private TextField numPlayers;
@@ -21,6 +24,9 @@ public class GameSettingsSceneController extends ViewObservable implements Gener
     @FXML
     private Button joinGameBtn;
 
+    /**
+     * JavaFX initialize method for the controller
+     */
     @FXML
     public void initialize() {
         joinGameBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onJoinGame);

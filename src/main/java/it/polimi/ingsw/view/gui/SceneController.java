@@ -1,21 +1,21 @@
 package it.polimi.ingsw.view.gui;
 
-import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.observer.ViewObserver;
 import it.polimi.ingsw.view.gui.controllers.BoardController;
 import it.polimi.ingsw.view.gui.controllers.GenericSceneController;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * The controller of a generic scene
+ */
 public class SceneController extends ViewObservable {
     private Scene currentScene;
     private Parent root;
@@ -23,31 +23,21 @@ public class SceneController extends ViewObservable {
     private Map<String, String> pathMap = new HashMap<>();
     private Map<String, Scene> sceneMap = new HashMap<>();
     private Map<String, GenericSceneController> controllerMap = new HashMap<>();
-    private static final String CONNECT = "connection_scene.fxml";
-    public static final String LOGIN = "login_scene.fxml";
     private JavaFxMain main;
-    private ReducedModel reducedModel;
 
+    /**
+     * Default constructor
+     * @param main the main that runs the application
+     */
     public SceneController(JavaFxMain main){
         this.main = main;
     }
 
-    public void setup(){
-        List<String> fxmList = new ArrayList<>(Arrays.asList(CONNECT, LOGIN));
-
-        try {
-            for (String path : fxmList) {
-                FXMLLoader loader = new FXMLLoader(JavaFxMain.class.getResource("/fxml/" + path));
-                sceneMap.put(path, new Scene(loader.load()));
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        currentScene = sceneMap.get(CONNECT);
-    }
-
+    /**
+     * Changes the scene by changing the root and loading the controller
+     * @param observers the observers to add to the controller
+     * @param fxml the fxml of the new scene
+     */
     public void changeRoot(List<ViewObserver> observers, String fxml){
         GenericSceneController controller;
 
@@ -68,6 +58,11 @@ public class SceneController extends ViewObservable {
         main.changeScene(currentScene);
     }
 
+    /**
+     * Changes scene by changing the root and
+     * @param genericSceneController the controller of the scene already created
+     * @param fxml the fxml of the scene
+     */
     public void changeRoot(GenericSceneController genericSceneController, String fxml){
         try {
             FXMLLoader loader = new FXMLLoader(SceneController.class.getResource("/fxml/" + fxml));
@@ -87,11 +82,19 @@ public class SceneController extends ViewObservable {
         main.changeScene(currentScene);
     }
 
+    /**
+     * Shows an error alert with the given message
+     * @param message the message the alert shows
+     */
     public void showAlert(String message){
         main.showAlert(message);
     }
 
-
+    /**
+     * Changes the scene to the main game scene and starts the game
+     * @param controller the controller of the main game scene
+     * @param fxml the new scene
+     */
     public void startGame(BoardController controller, String fxml) {
         try {
             FXMLLoader loader = new FXMLLoader(SceneController.class.getResource("/fxml/" + fxml));
@@ -107,13 +110,5 @@ public class SceneController extends ViewObservable {
         }
 
         main.startGame(currentScene);
-    }
-
-    public void showGenericAlert(String message) {
-        main.showGenericAlert(message);
-    }
-
-    public GenericSceneController getCurrentController() {
-        return currentController;
     }
 }

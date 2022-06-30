@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-
+/**
+ * Class that handles a single game
+ */
 public class GameHandler {
     private final GameController gameController;
     private final Server server;
@@ -33,7 +35,7 @@ public class GameHandler {
 
 
     /**
-     *
+     * Default constructor
      * @param server class
      * @param newGameMessage message that contains the game settings
      * @param gameId number of the match
@@ -62,6 +64,10 @@ public class GameHandler {
         }
     }
 
+    /**
+     * returns true if the game is active
+     * @return true if the game is active
+     */
     public boolean isActive() {
         return isActive;
     }
@@ -86,17 +92,25 @@ public class GameHandler {
     }
 
     /**
-     * @param username adds the player to the game controller
+     * Adds a player to the game
+     * @param username the username of the player to add
      */
     public void addPlayer(String username){
         gameController.addPlayer(username);
         askTowerColor(username);
     }
 
+    /**
+     * removes a player from the game
+     * @param username the username of the player to remove
+     */
     public void removePlayer(String username){
         game.getPlayers().remove(game.getPlayerByUsername(username));
     }
 
+    /**
+     * Handles the end of a game
+     */
     public void endGame(){
         for(String username : gameController.getGame().getUsernames()){
             server.removeClient(username);
@@ -108,8 +122,8 @@ public class GameHandler {
     }
 
     /**
-     *
-     * @param username that has to be removed
+     * Handles the end  of a game due to a disconnection
+     * @param username the username of the player that disconnected
      */
     public void endGame(String username){
         for(String user : gameController.getGame().getUsernames()){
@@ -145,7 +159,7 @@ public class GameHandler {
     }
 
     /**
-     *
+     * Handles the received message
      * @param message sent from the client that chose the tower colour
      */
     public void receivedMessage(Message message){
@@ -169,7 +183,8 @@ public class GameHandler {
     }
 
     /**
-     * @param message that contains the game data
+     * Sends a message to a single user
+     * @param message the message sent to the client
      * @param username of the player that receives the message
      */
     public void sendMessage(Message message, String username){
@@ -177,7 +192,7 @@ public class GameHandler {
     }
 
     /**
-     *
+     * Sends a message to all the users
      * @param message asks the username to everyone
      */
     public void sendMessageToAll(Message message){
@@ -187,9 +202,9 @@ public class GameHandler {
     }
 
     /**
-     *
-     * @param message
-     * @param user
+     * Sends the message to all the users except the given one
+     * @param message the message to send to the clients
+     * @param user the username of the user excluded
      */
     public void sendMessageToAllExcept(Message message, String user){
         for(String username : gameController.getGame().getUsernames()){

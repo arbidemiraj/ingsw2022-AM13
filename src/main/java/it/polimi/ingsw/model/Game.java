@@ -91,7 +91,7 @@ public class Game extends Observable {
 		characters = new Character[3];
 		int[] cost = {0, 1, 2, 3, 1, 2, 3, 0, 2, 0, 0, 2};
 
-		int[] availableEffects = {1, 2, 3, 4, 5, 6, 8, 11};
+		int[] availableEffects = {1, 2, 3, 4, 5, 6, 8, 11, 12};
 
 		generalSupply = 20 - numPlayers;
 
@@ -525,6 +525,10 @@ public class Game extends Observable {
 		disabledColor = createColorIntMap(color);
 	}
 
+	public int getDisabledColor() {
+		return disabledColor;
+	}
+
 	public boolean isExpertMode() {
 		return expertMode;
 	}
@@ -549,22 +553,23 @@ public class Game extends Observable {
 	 * @param student the student to put in the bag
 	 */
 	public void putStudentInBag(Student student){
+		int pos = createColorIntMap(student);
+
 		for(Player player : players){
-			int num = player.getPlayerBoard().getDinnerRoom()[4].getNumStudents();
+			int num = player.getPlayerBoard().getDinnerRoom()[pos].getNumStudents();
 
 			if(num > 3) num = 3;
 
-			do{
+			while(num > 0){
 				try {
-					player.getPlayerBoard().getDinnerRoom()[4].removeStudent(student);
+					player.getPlayerBoard().getDinnerRoom()[pos].removeStudent(student);
 				} catch (InvalidMoveException e) {
 					e.printStackTrace();
 				}
 
 				board.getBag().add(student);
 				num --;
-			}while (num > 0);
-
+			}
 		}
 
 	}

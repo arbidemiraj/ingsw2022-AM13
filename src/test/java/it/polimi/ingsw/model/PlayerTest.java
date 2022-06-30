@@ -11,6 +11,17 @@ class PlayerTest {
 
     @Test
     void playCard() {
+        Game game = new Game(2, false);
+        game.addPlayer("FirstPlayer");
+
+        Player player = game.getPlayers().get(0);
+
+        AssistantCard card = player.getAssistantCardById(1);
+
+        player.playCard(card);
+
+        assertFalse(player.getDeck().contains(card));
+        assertEquals(card.getMaxMotherNatureMoves(), player.getMotherNatureMoves());
     }
 
     @Test
@@ -33,5 +44,31 @@ class PlayerTest {
 
         assertEquals(4, numStud);
 
+    }
+
+    @Test
+    void addCoin() {
+        Game game = new Game(2, false);
+        game.addPlayer("FirstPlayer");
+
+        Player player = game.getPlayers().get(0);
+
+        player.setNumCoins(2);
+
+        player.addCoin();
+
+        assertEquals(3, player.getNumCoins());
+    }
+
+    @Test
+    void getAssistantCardById() {
+        Game game = new Game(2, false);
+        game.addPlayer("FirstPlayer");
+
+        Player player = game.getPlayers().get(0);
+
+        AssistantCard card = player.getAssistantCardById(1);
+
+        assertEquals(player.getDeck().get(0), card);
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/** This class contains the reduced part of the game logic with the informations the client needs**/
+/** This class contains the reduced part of the game logic with the information the client needs */
 
 public class ReducedModel implements Serializable {
     private List<String> username;

@@ -357,4 +357,44 @@ class GameTest {
         assertEquals(1, game.getPlayers().size());
         assertEquals("FirstPlayer", player.getUsername());
     }
+
+    @Test
+    void setDisabledColor() {
+        Game game = new Game(2, false);
+
+        game.setDisabledColor(Student.YELLOW);
+
+        assertEquals(0, game.getDisabledColor());
+    }
+
+    @Test
+    void putStudentInBag() {
+        Game game = new Game(2, false);
+        game.addPlayer("FirstPlayer");
+        game.addPlayer("SecondPlayer");
+
+        game.startGame();
+
+        for(int i = 0; i < 2; i++){
+            game.getPlayers().get(0).getPlayerBoard().getDinnerRoom()[1].addStudent(Student.BLUE);
+        }
+
+        assertEquals(2, game.getPlayers().get(0).getNumStudents(Student.BLUE));
+
+        game.putStudentInBag(Student.BLUE);
+
+        assertEquals(0, game.getPlayers().get(0).getNumStudents(Student.BLUE));
+    }
+
+    @Test
+    void removePlayer() {
+        Game game = new Game(2, false);
+        game.addPlayer("FirstPlayer");
+
+        assertEquals(1, game.getPlayers().size());
+
+        game.removePlayer("FirstPlayer");
+
+        assertEquals(0, game.getPlayers().size());
+    }
 }

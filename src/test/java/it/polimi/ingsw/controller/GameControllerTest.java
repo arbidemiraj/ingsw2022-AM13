@@ -78,7 +78,7 @@ class GameControllerTest {
 
 
     @Test
-    void playCard(){/*
+    void playCard(){
         prepareTestGame(false);
 
         testTurnController.calcCurrentPlayer("FirstPlayer");
@@ -95,7 +95,7 @@ class GameControllerTest {
 
         assertEquals(9, player.getDeck().size());
         assertEquals(assistantCard, testTurnController.getTurnCardsPlayed().get(0));
-        */
+
     }
 
     @Test
@@ -169,7 +169,7 @@ class GameControllerTest {
 
     @Test
     void moveMotherNature() {
-       /* prepareTestGame(false);
+        prepareTestGame(false);
 
         Player player = testGame.getPlayers().get(0);
 
@@ -193,12 +193,12 @@ class GameControllerTest {
         int moves = assistantCard.getMaxMotherNatureMoves()-1;
 
         assertEquals(prevMotherNature+moves, testGame.getBoard().getMotherNature());
-        */
+
     }
 
     @Test
     void moveMotherNatureFail() {
-        /*
+
         prepareTestGame(false);
 
         Player player = testGame.getPlayers().get(0);
@@ -221,7 +221,17 @@ class GameControllerTest {
         }
 
         assertEquals(prevMotherNature, testGame.getBoard().getMotherNature());
-        */
 
+
+    }
+
+    @Test
+    void addPlayer() {
+        testGame = new Game(2, true);
+        testGameController = new GameController(testGame, null);
+
+        testGameController.addPlayer("First");
+
+        assertEquals("First", testGameController.getGame().getPlayers().get(0).getUsername());
     }
 }

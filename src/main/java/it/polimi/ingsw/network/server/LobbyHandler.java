@@ -11,11 +11,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Class that handles the lobby for multiple games feature
+ */
 public class LobbyHandler {
     private List<GameHandler> games;
     private List<String> usernameQueue;
     private Map<String, Integer> gameIdUsernameMap;
 
+    /**
+     * Default constructor
+     */
     public LobbyHandler() {
         this.games = new ArrayList<>();
         this.usernameQueue = new ArrayList<>();
@@ -23,15 +29,15 @@ public class LobbyHandler {
     }
 
     /**
-     *
-     * @param newGame that the handler has to track
+     * Creates a new game and adds it to games list
+     * @param newGame the class that handles the game
      */
     public void newGame(GameHandler newGame){
         games.add(newGame);
     }
 
     /**
-     *
+     * Prints the lobby containing all the existing games
      * @return lobby information
      */
     public String printLobby(){
@@ -59,9 +65,9 @@ public class LobbyHandler {
     }
 
     /**
-     *
-     * @param receivedMessage
-     * @param gameId
+     * Handles a received message from the client and sends it to the associated game handler
+     * @param receivedMessage the received message
+     * @param gameId the id of the game of the message
      */
     public void receivedMessage(Message receivedMessage, int gameId){
         GameHandler game = games
@@ -74,9 +80,9 @@ public class LobbyHandler {
     }
 
     /**
-     *
-     * @param username
-     * @return error if there is no username
+     * Returns the game id the player is playing
+     * @param username the username of the player whose game id you need
+     * @return the game id or error if there is no username
      */
     public int getGameIdFromUsername(String username){
         if(gameIdUsernameMap.get(username) != null){
@@ -92,7 +98,7 @@ public class LobbyHandler {
     }
 
     /**
-     *
+     * Adds a username to the username queue list
      * @param username to add to the list of players
      */
     public void login(String username){
@@ -100,7 +106,7 @@ public class LobbyHandler {
     }
 
     /**
-     *
+     * Adds to the game id username map the username and the game id, to associate a game id to the player
      * @param username that wants to join the game
      * @param gameId to join
      */
@@ -113,18 +119,20 @@ public class LobbyHandler {
     }
 
     /**
-     *
+     * Handles the disconnection of an user
      * @param username that drops the connection
      */
     public void disconnect(String username) {
         if(getGameIdFromUsername(username) != -1){
             games.get(getGameIdFromUsername(username)).sendMessageToAllExcept(new NotifyDisconnectionMessage(username), username);
 
+            usernameQueue.remove(username);
+
             games.get(getGameIdFromUsername(username)).endGame(username);
 
             gameIdUsernameMap.remove(username);
 
-            usernameQueue.remove(username);
+
         }
     }
 }

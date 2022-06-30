@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.Player;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,6 +38,15 @@ class TurnControllerTest {
 
     @Test
     void nextPlayer() {
+        prepareTestGame(false);
 
+        String player1 = testGameController.getTurnController().getCurrentPlayerUsername();
+        String player2 = testGameController.getTurnController().getUsernameQueue().get(1);
+
+
+        assertTrue(testTurnController.nextPlayer());
+        assertEquals(player2, testTurnController.getCurrentPlayerUsername());
+
+        assertFalse(testTurnController.nextPlayer());
     }
 }

@@ -7,7 +7,7 @@ import it.polimi.ingsw.network.message.Message;
  */
 public interface Observer {
     /**
-     * Handles a received message
+     * Handles a received message from an observable class
      * @param message the received message
      */
     void update(Message message);

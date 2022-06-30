@@ -84,7 +84,8 @@ public class TurnController {
     }
 
     /**
-     * Used on each phase to advance to another player turn
+     * Sets the next player
+     * @return true if all the player in the username queue played their turn
      */
     public boolean nextPlayer() {
         int currentPlayerIndex = usernameQueue.indexOf(currentPlayer);
@@ -125,6 +126,9 @@ public class TurnController {
         return turnCardsPlayed;
     }
 
+    /**
+     * Creates the first username queue ordered at the start of the turn
+     */
     public void firstUsernameQueue() {
 
         usernameQueue.add(currentPlayer);
@@ -132,5 +136,9 @@ public class TurnController {
         for(Player player : game.getPlayers()){
             if(!player.getUsername().equals(currentPlayer)) usernameQueue.add(player.getUsername());
         }
+    }
+
+    public List<String> getUsernameQueue() {
+        return usernameQueue;
     }
 }

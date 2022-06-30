@@ -45,7 +45,7 @@ public class Character {
 				try {
 					students1 = game.getBoard().extractStudents(4);
 				} catch (EmptyBagException e) {
-					e.printStackTrace();
+
 				}
 				effect = new Effect1(students1);
 				break;
@@ -63,23 +63,26 @@ public class Character {
 				try {
 					students7 = game.getBoard().extractStudents(6);
 				} catch (EmptyBagException e) {
-					e.printStackTrace();
 				}
 				effect = new Effect7(students7);
+
 				break;
 
 			case 9:
+				effect = new Effect9();
+				break;
 
 			case 11:
 				ArrayList<Student> students11 = null;
 				try {
 					students11 = game.getBoard().extractStudents(4);
 				} catch (EmptyBagException e) {
-					e.printStackTrace();
 				}
 				effect = new Effect11(students11);
 				break;
-
+			case 12:
+				effect = new Effect12();
+				break;
 			default:
 				effect = new Effect();
 				break;

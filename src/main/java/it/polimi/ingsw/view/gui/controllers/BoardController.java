@@ -30,6 +30,9 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * The controller that handles the GUI in the game phase
+ */
 public class BoardController extends ViewObservable implements GenericSceneController {
 
     @FXML
@@ -150,6 +153,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     private Stage stage;
 
+    /**
+     * JavaFx initialize method that handles the setup phase of the game
+     */
     @FXML
     public void initialize() {
         confirmBtn.setOpacity(0);
@@ -282,15 +288,20 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * Plays the card with the given id and notifies the observer
+     * @param id the id of the card to play
+     */
     private void playCard(int id) {
         deck.setOnMouseClicked(e -> {showAlert("You can't play a card now!");});
         turnInfo.setText("Wait... other players are playing their turn");
 
         new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateCard((id + 1)))).start();
-
-
     }
 
+    /**
+     * Shows the user player board and fills the entrance
+     */
     private void showPlayerBoard() {
         int i = 0, j = 0;
 
@@ -317,7 +328,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
-
+    /**
+     * Initializes the islands and shows the students and mother nature
+     */
     public void initIslands(){
         int i = 0;
 
@@ -349,6 +362,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         fillClouds();
     }
 
+    /**
+     * Fills the cloud with the students and shows them
+     */
     public void fillClouds() {
         int k = 0;
 
@@ -363,6 +379,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * Initializes all the maps
+     */
     public void initMaps(){
         //map var to image
         studentsImages.put(Student.RED, String.valueOf(getClass().getResource("/assets/custom/redStud.png")));
@@ -417,6 +436,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         this.reducedModel = reducedModel;
     }
 
+    /**
+     * If the game is in expert mode this method is called to show the characters
+     */
     public void showCharacters(){
         int id = reducedModel.getReducedCharacters()[0].getEffectId();
         character1.setImage(new Image(String.valueOf(getClass().getResource("/assets/personaggi/character" + id +".jpg"))));
@@ -468,6 +490,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * Shows the deck to the player with all the assistant cards he has
+     */
     public void showDeck() {
         for(int i = 0; i < 10; i++){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente" + (i + 1) + ".png"))));
@@ -477,14 +502,17 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * Shows a generic text in the turn info label
+     * @param text
+     */
     public void showGenericText(String text) {
         turnInfo.setText(text);
     }
 
-    private void disableClickable() {
-
-    }
-
+    /**
+     * Asks the player for a student and sets the entrance students clickable
+     */
     public void askStudent() {
         if(reducedModel.isExpertMode()) setCharacterClickable();
 
@@ -517,6 +545,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * After selecting an entrance student this method is called to ask where the user wants to move the student
+     * @param url the url of the image of the student selected
+     */
     private void askWhere(String url) {
         disableCharacterClickable();
 
@@ -577,6 +609,11 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     }
 
+    /**
+     * This method is called when a student is moven to an island
+     * @param island the island selected
+     * @param student the student to move
+     */
     private void updateIsland(GridPane island, Student student) {
         int numStudents = reducedModel.getReducedBoard().getIslands().get(islands.indexOf(island)).getNumStudents()[getIntFromStudent.get(student)];
 
@@ -594,6 +631,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * Disables all the entrance students
+     */
     private void disableStudents() {
         for(ImageView singleStud : entrance) {
             singleStud.setOnMouseClicked(e -> {
@@ -603,10 +643,18 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * Moves a student to the dinner
+     * @param dinner the dinner room row associated to the color
+     * @param url the url of the image of the selected student
+     */
     private void addStudentToDinner(TilePane dinner, String url) {
         dinner.getChildren().add(new ImageView(new Image(url)));
     }
 
+    /**
+     * Asks the player for an assistant card
+     */
     public void askCard(){
         currentPhase = PhaseType.CARD;
 
@@ -631,11 +679,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                     if (assistantCard.getValue() == id + 1) {
                         isValid = false;
                     }
-
-
                 }
 
-                if (isValid = true) {
+                if (isValid) {
                     ImageView imageView = (ImageView) node;
 
                     int wizardId = reducedModel.getWizardId();
@@ -651,6 +697,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
                     lastCardMap.get(reducedModel.getPlayerUsername()).setImage(new Image(String.valueOf(getClass().getResource("/assets/assistenti/Assistente" + (id + 1) + ".png"))));
                 }
+                else{
+                    showAlert("Card already played!");
+                }
             }
 
 
@@ -659,6 +708,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         if(reducedModel.isExpertMode()) setCharacterClickable();
     }
 
+    /**
+     * Sets the info board with the card played by each user
+     * @param turnCardsPlayed the map containing the username and the id of the played card
+     */
     public void setTurnCards(HashMap<String, Integer> turnCardsPlayed) {
         for(String username : reducedModel.getUsername()){
             if(turnCardsPlayed.containsKey(username)) {
@@ -669,6 +722,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     }
 
+    /**
+     * Asks the user to move mother nature
+     */
     public void askMotherNature() {
         currentPhase = PhaseType.MOTHER_NATURE;
 
@@ -726,6 +782,11 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     }
 
+    /**
+     * Returns the steps made from mother nature after moving it
+     * @param island the island where mother nature is now
+     * @return the steps made from mother nature after moving it
+     */
     private int getSteps(GridPane island) {
         int steps = islands.indexOf(island) - reducedModel.getReducedBoard().getMotherNature();
 
@@ -736,12 +797,18 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         return steps;
     }
 
+    /**
+     * Disables the islands after moving mother nature
+     */
     private void disableMotherNatureClickable() {
         for(GridPane island : islands){
             island.setDisable(true);
         }
     }
 
+    /**
+     * Asks the user to select the cloud where he wants to get the students from
+     */
     public void askCloud() {
         currentPhase = PhaseType.CLOUD;
 
@@ -780,6 +847,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * Refills the entrance with the given student
+     * @param url the url of the image associated to the student
+     */
     private void refillEntrance(String url) {
         for(int i = 0; i < entrance.size(); i++){
             if(entrance.get(i).getImage() == null){
@@ -790,6 +861,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * Sets the cloud clickable to select a cloud to get the student from
+     * @param b true if you want to set the clouds clickable or else false
+     */
     private void setCloudClickable(boolean b) {
         if(b) {
             cloudImage1.getStyleClass().set(0, "clickable");
@@ -808,6 +883,11 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * Changes the professor owner
+     * @param professorOwner the new professor owner
+     * @param color the color of the new professor owner
+     */
     public void setProf(String professorOwner, Student color) {
         professors.get(getIntFromStudent.get(color)).setText(" : " + professorOwner);
         if (professorOwner.equals(reducedModel.getPlayerUsername())){
@@ -818,6 +898,11 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * Merges the 2 given island and shows the merge
+     * @param island1 the first island to merge
+     * @param island2 the second island to merge
+     */
     public void mergeIslands(int island1, int island2) {
         reducedModel.getReducedBoard().mergeIslands(island1, island2);
 
@@ -847,6 +932,11 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         updateIslands();
     }
 
+    /**
+     * Notifies that an island has been conquered
+     * @param island the conquered island
+     * @param color the tower color of the conquerer
+     */
     public void conquerIsland(int island, String color) {
         GridPane islandOwned = islands.get(island);
         int j = 0;
@@ -878,6 +968,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         islandOwned.add(new ImageView((new Image(towerImages.get(TowerColor.valueOf(color))))), 0, 4);
     }
 
+    /**
+     * Called on the mouse click on the quit button
+     * @param event
+     */
     @FXML
     public void quit (MouseEvent event){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -894,6 +988,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     }
 
+    /**
+     * Method called when the client received an update islands message and show the updated islands to the user
+     */
     public void updateIslands(){
         int i = 0;
 
@@ -958,12 +1055,19 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         islands.get(reducedModel.getReducedBoard().getMotherNature()).add(new ImageView(new Image(String.valueOf(getClass().getResource("/assets/custom/motherNature.png")))), 1, 1);
     }
 
+    /**
+     * Notifies that a cloud has been unfilled
+     * @param cloudId the id of the unfilled cloud
+     */
     public void updateCloud(int cloudId) {
 
         ObservableList<Node> childrens =  cloudsPane.get(cloudId).getChildren();
         cloudsPane.get(cloudId).getChildren().clear();
     }
 
+    /**
+     * Sets the character clickable if the game is in expert mode
+     */
     public void setCharacterClickable(){
         if(reducedModel.isExpertMode()) {
             for (ImageView character : charactersImages) {
@@ -988,6 +1092,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * Disables the characters
+     */
     public void disableCharacterClickable() {
         if (reducedModel.isExpertMode()) {
             for (ImageView character : charactersImages) {
@@ -997,6 +1104,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * Method called when a user tries to activate a character that needs a student in input
+     * @param effectId the id of the character card
+     */
     public void askStudentEffect(int effectId) {
         int index = Arrays.asList(reducedModel.getReducedCharacters()).indexOf(reducedModel.getCharacterById(effectId));
 
@@ -1155,6 +1266,11 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * Method called when a user tries to activate a character that needs an island in input
+     * @param effectId the id of the character card
+     */
+
     public void askIslandEffect(int effectId) {
         turnInfo.setText("Select the island you want");
 
@@ -1211,6 +1327,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * Method called when a user tries to activate a character that needs a list of students to switch in input
+     */
     public void askSwitch() {
         boolean test = false;
 
@@ -1290,6 +1409,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     }
 
+    /**
+     * Shows the students on the character card
+     */
     public void updateCharacterStudents() {
         for(int i = 0; i < 3; i++){
             charactersPanes.get(i).getChildren().clear();
@@ -1301,6 +1423,12 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * Notifies to the user that a card has been activated or is no more active
+     * @param effectId the id of the character card
+     * @param activated true if the card is active or else false
+     * @param owner the username of the player that activated the character
+     */
     public void characterIsActivated(int effectId, boolean activated, String owner) {
         if(activated){
             reducedModel.activateCharacter(effectId);
@@ -1359,6 +1487,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         }
     }
 
+    /**
+     * Method called after a character has been activated to resume the game
+     */
     private void resumePhase() {
         if(currentPhase != null){
             switch (currentPhase){
@@ -1372,6 +1503,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
     }
 
+    /**
+     * Notifies the character 12 has been activated and removes the students
+     * @param color the color of the students to remove
+     */
     public void askEffect12Students(Student color) {
         TilePane dinner = dinnerRoom.get(positionMap.get(color));
 
@@ -1388,6 +1523,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         turnInfo.setText(numStudents + " students have been taken from the dinner! ");
     }
 
+    /**
+     * Updates mother nature after a player move
+     */
     public void updateMotherNature() {
         int i = 0;
 
@@ -1418,6 +1556,10 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         islands.get(reducedModel.getReducedBoard().getMotherNature()).add(new ImageView(new Image(String.valueOf(getClass().getResource("/assets/custom/motherNature.png")))), 1, 1);
     }
 
+    /**
+     * Shows the disconnection message
+     * @param username the user that disconnected
+     */
     public void showDisconnection(String username) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Disconnection");
@@ -1428,10 +1570,22 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         Platform.exit();
     }
 
+    /**
+     * Shows an error alert with the given message
+     * @param message the message to show
+     */
     public void showAlert(String message){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setContentText(message);
+
+        alert.showAndWait();
+    }
+
+    public void showWin(String winner) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Win");
+        alert.setContentText( winner + " has won! ");
 
         alert.showAndWait();
     }

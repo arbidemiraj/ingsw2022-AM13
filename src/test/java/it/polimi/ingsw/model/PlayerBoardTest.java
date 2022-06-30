@@ -72,4 +72,18 @@ class PlayerBoardTest {
 
         assertEquals(Student.YELLOW, playerBoard.getEntrance().get(0));
     }
+
+    @Test
+    void getEntranceStudents() {
+        PlayerBoard playerBoard = new PlayerBoard();
+
+        playerBoard.addStudent(Student.BLUE);
+
+        playerBoard.addStudent(Student.YELLOW);
+
+        int numStud[] = {1, 1, 0, 0, 0};
+
+        assertEquals(numStud[0], playerBoard.getEntranceStudents()[0]);
+        assertEquals(numStud[1], playerBoard.getEntranceStudents()[1]);
+    }
 }

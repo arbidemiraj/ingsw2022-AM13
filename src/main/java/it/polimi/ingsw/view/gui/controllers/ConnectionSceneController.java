@@ -9,6 +9,9 @@ import javafx.scene.input.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Handles the connection to the server scene
+ */
 public class ConnectionSceneController extends ViewObservable implements GenericSceneController{
 
     @FXML
@@ -18,11 +21,18 @@ public class ConnectionSceneController extends ViewObservable implements Generic
     @FXML
     private Button connectBtn;
 
+    /**
+     * JavaFx initialize method
+     */
     @FXML
     public void initialize() {
         connectBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onConnectBtnClick);
     }
 
+    /**
+     * The action when the button connect is clicked, sends the address and port
+     * @param event
+     */
     @FXML
     private void onConnectBtnClick(Event event) {
         boolean isValid = true;
@@ -44,6 +54,11 @@ public class ConnectionSceneController extends ViewObservable implements Generic
         }
     }
 
+    /**
+     * Verifies if the given ip is valid
+     * @param ip the given ip
+     * @return true if it is valid or else false
+     */
     private boolean isValidIp(String ip) {
         String[] groups = ip.split("\\.");
 

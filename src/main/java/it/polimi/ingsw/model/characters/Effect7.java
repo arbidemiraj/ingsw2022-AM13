@@ -36,7 +36,6 @@ public class Effect7 implements Movable, Actionable {
     @Override
     public void apply(Game game, Student chosenStudent) {
         removeStudent(chosenStudent);
-
     }
 
     /**
