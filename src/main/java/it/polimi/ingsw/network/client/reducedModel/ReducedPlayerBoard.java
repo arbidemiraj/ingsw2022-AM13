@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/** This class is useful for showing client-side player board updates **/
 public class ReducedPlayerBoard implements Serializable {
     @Serial
     private static final long serialVersionUID = -7603520844991327878L;
@@ -23,6 +24,13 @@ public class ReducedPlayerBoard implements Serializable {
     private ArrayList<Student> students = new ArrayList<>();
     private final String LINE = "\n---------------------------------------------------------------------\n";
 
+
+    /**
+     * Default constructor
+     * @param entranceStudents     number of entrance students
+     * @param hallStudents          number of hall students
+     * @param numTowers            number of towers
+     */
     public ReducedPlayerBoard(int[] entranceStudents, int[] hallStudents, int numTowers) {
         this.entranceStudents = entranceStudents;
         this.hallStudents = hallStudents;
@@ -68,6 +76,7 @@ public class ReducedPlayerBoard implements Serializable {
         hallStudents[intColor.get(Student.valueOf(student))]--;
     }
 
+    /** This method prints all the lines of the player board **/
     public String print(){
         String pb = "";
 
