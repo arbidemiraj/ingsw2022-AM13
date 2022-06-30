@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.network.client.ClientController;
-import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.view.gui.controllers.ConnectionSceneController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +12,6 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.File;
 import java.util.Objects;
 
 /**
@@ -38,7 +36,7 @@ public class JavaFxMain extends Application {
         MediaPlayer player = new MediaPlayer(pick);
         player.setAutoPlay(true);
         player.setCycleCount(MediaPlayer.INDEFINITE);
-        player.setVolume(0.4);
+        player.setVolume(0.2);
 
         player.setOnEndOfMedia(() -> {
             player.seek(Duration.ZERO);
@@ -98,9 +96,6 @@ public class JavaFxMain extends Application {
         Media pick = new Media(Objects.requireNonNull(getClass().getClassLoader()
                 .getResource("Spitfires.mp3")).toExternalForm());
         MediaPlayer player = new MediaPlayer(pick);
-
-        music.stop();
-        player.stop();
 
         stage.setResizable(true);
         stage.setWidth(1920);

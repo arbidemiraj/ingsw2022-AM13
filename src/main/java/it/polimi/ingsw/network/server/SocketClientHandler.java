@@ -13,6 +13,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 
+/**
+ * class that handles the single socket with the client
+ */
 public class SocketClientHandler implements ClientHandler, Runnable {
     private final Socket client;
     private final SocketServer socketServer;
