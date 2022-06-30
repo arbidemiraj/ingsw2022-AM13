@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/** This class is useful for showing client-side island updates **/
 public class ReducedIsland implements Serializable {
     @Serial
     private static final long serialVersionUID = -4207476138481288015L;
@@ -23,6 +24,12 @@ public class ReducedIsland implements Serializable {
     private int[] numStudents;
     private int numIsland;
 
+    /**
+     * Default constructor
+     * @param students      list of the students
+     * @param id            player id
+     * @param isNoEntryTile      true if that island cannot be used
+     */
     public ReducedIsland(List<Student> students, String owner, int id, boolean isNoEntryTile) {
         this.students = students;
         this.owner = owner;
@@ -33,7 +40,7 @@ public class ReducedIsland implements Serializable {
 
         setNumStudents();
     }
-
+    /** This method sets the number of the students **/
     public void setNumStudents(){
         ColorIntMap studentColorMap = new ColorIntMap();
         HashMap<Student, Integer> studentColor = studentColorMap.getMap();
@@ -51,11 +58,13 @@ public class ReducedIsland implements Serializable {
         return owner;
     }
 
+    /** This method adds the student **/
     public void addStudent(Student color){
        students.add(color);
        numStudents[studentColor.get(color)]++;
     }
 
+    /**This method removes the student **/
     public void removeStudent(Student color){
         students.remove(color);
         numStudents[studentColor.get(color)]--;
@@ -73,6 +82,7 @@ public class ReducedIsland implements Serializable {
         return students;
     }
 
+    /** This method prints the island **/
     public String printIsland(){
         String print = "";
 
@@ -105,6 +115,7 @@ public class ReducedIsland implements Serializable {
         this.numIsland++;
     }
 
+    /** This method merges the students **/
     public void mergeStudents(int[] numStudents) {
         for(int i = 0; i < 5; i++){
             this.numStudents[i] += numStudents[i];
