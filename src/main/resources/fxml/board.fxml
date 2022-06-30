@@ -407,6 +407,9 @@
       <ImageView fx:id="desc2" fitHeight="100.0" fitWidth="380.0" layoutX="1385.0" layoutY="376.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="desc3" fitHeight="100.0" fitWidth="380.0" layoutX="1522.0" layoutY="376.0" pickOnBounds="true" preserveRatio="true" />
       <Button fx:id="confirmBtn" layoutX="1620.0" layoutY="-5.0" mnemonicParsing="false" text="Confirm" underline="true" />
+      <Label fx:id="coinText1" alignment="CENTER" layoutX="1111.0" layoutY="564.0" prefHeight="42.0" prefWidth="113.0" text="MONETE: " textAlignment="CENTER" />
+      <ImageView fx:id="coinImage1" fitHeight="81.0" fitWidth="87.0" layoutX="1126.0" layoutY="601.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="generalSupply" layoutX="1226.0" layoutY="571.0" prefHeight="30.0" prefWidth="30.0" text="X" />
    </children>
    <stylesheets>
       <URL value="@../css/board.css" />

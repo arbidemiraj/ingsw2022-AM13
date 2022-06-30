@@ -93,6 +93,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
     private ImageView lastCard3;
     @FXML
     private ImageView greenProf,redProf,blueProf,yellowProf,pinkProf;
+    @FXML
+    private Label generalSupply;
 
     private ReducedModel reducedModel;
 
