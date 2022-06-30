@@ -7,12 +7,13 @@ import it.polimi.ingsw.observer.Observable;
 import java.util.logging.Logger;
 
     /**
-     * Abstract class to communicate with the server. Every type of connection must implement this interface.
+     * Abstract class to communicate with the server where every type of connection must implement this interface.
      */
     public abstract class Client extends Observable {
 
         public static final Logger LOGGER = Logger.getLogger(Client.class.getName());
 
+        /** Send message **/
 
         public abstract void sendMessage(Message message);
 
