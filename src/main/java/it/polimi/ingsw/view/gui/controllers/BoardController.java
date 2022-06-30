@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.enumerations.TowerColor;
 import it.polimi.ingsw.model.maps.ColorIntMap;
 import it.polimi.ingsw.model.maps.IntColorMap;
-import it.polimi.ingsw.network.client.reducedModel.ReducedCharacter;
 import it.polimi.ingsw.network.client.reducedModel.ReducedModel;
 import it.polimi.ingsw.observer.ViewObservable;
 import javafx.application.Platform;
@@ -1445,6 +1444,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
             owners.get(index).setText(owner);
 
             coins.setText(String.valueOf(reducedModel.getNumCoins()));
+
+            reducedModel.getCharacterById(effectId).setCost(reducedModel.getCharacterById(effectId).getCost() + 1);
 
             if(currentPhase != null && !currentPhase.equals(PhaseType.NOT_MYTURN)) setCharacterClickable();
 

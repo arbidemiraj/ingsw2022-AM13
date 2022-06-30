@@ -44,6 +44,7 @@ public class JavaFxMain extends Application {
             player.seek(Duration.ZERO);
             player.play();
         });
+
         sceneController = new SceneController(this);
         this.stage = stage;
         GUI view = new GUI(sceneController);

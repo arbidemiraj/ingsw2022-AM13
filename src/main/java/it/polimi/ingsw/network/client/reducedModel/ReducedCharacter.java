@@ -57,7 +57,13 @@ public class ReducedCharacter implements Serializable {
         return isActive;
     }
 
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
     public void disactivate() {
         isActive = false;
+
+
     }
 }

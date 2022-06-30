@@ -27,8 +27,6 @@ public class SocketClientHandler implements ClientHandler, Runnable {
     private ObjectOutputStream output;
     private ObjectInputStream input;
 
-    private final ScheduledExecutorService ping;
-
     /**
      *
      * @param socketServer that recieves the messages
@@ -40,7 +38,6 @@ public class SocketClientHandler implements ClientHandler, Runnable {
         this.connected = true;
         this.inputLock = new Object();
         this.outputLock = new Object();
-        this.ping = Executors.newSingleThreadScheduledExecutor();
 
         try {
             this.output = new ObjectOutputStream(client.getOutputStream());

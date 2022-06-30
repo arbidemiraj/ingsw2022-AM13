@@ -29,7 +29,6 @@ public class SocketClient extends Client {
     private final ObjectOutputStream output;
     private final ObjectInputStream input;
     private final ExecutorService readExecutionQueue;
-    private final ExecutorService pingExecutionQueue;
     private final ScheduledExecutorService ping;
 
     public SocketClient(String address, int port) throws IOException {
@@ -44,8 +43,8 @@ public class SocketClient extends Client {
         this.output = new ObjectOutputStream(socket.getOutputStream());
         this.input = new ObjectInputStream(socket.getInputStream());
         this.readExecutionQueue = Executors.newSingleThreadExecutor();
-        this.pingExecutionQueue = Executors.newSingleThreadExecutor();
         this.ping = Executors.newSingleThreadScheduledExecutor();
+
         socket.setSoTimeout(5000);
     }
         /** This method reads the message sent from the server **/
@@ -102,7 +101,7 @@ public class SocketClient extends Client {
      */
     public void enablePing(boolean enabled) {
             if (enabled) {
-                ping.scheduleAtFixedRate(() -> ping(), 0, 1000, TimeUnit.MILLISECONDS);
+                ping.scheduleAtFixedRate(this::ping, 0, 1000, TimeUnit.MILLISECONDS);
             } else {
                 ping.shutdownNow();
             }
