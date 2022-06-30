@@ -40,7 +40,7 @@ public class SocketClient extends Client {
         this.ping = Executors.newSingleThreadScheduledExecutor();
         socket.setSoTimeout(1000);
     }
-
+        /** This method reads the message sent from the server **/
         @Override
         public void readMessage() {
             readExecutionQueue.execute(() -> {
@@ -60,7 +60,7 @@ public class SocketClient extends Client {
                 }
             });
         }
-
+    /** This method sends message to the server **/
     @Override
     public void sendMessage(Message message) {
         try {
