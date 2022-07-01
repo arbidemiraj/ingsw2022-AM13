@@ -478,7 +478,10 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void startGame(String firstPlayer, ReducedModel reducedModel) {
+
         this.reducedModel = reducedModel;
+
+        reducedModel.setUsername(username);
 
         clearCli();
 
