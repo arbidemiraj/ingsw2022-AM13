@@ -49,7 +49,7 @@ To execute the jar, after moving in the "deliveries/jar" folder run the command
 ```bash
 java -jar  AM13.jar
 ```
-Then follow the instructions 
+Then follow the instructions, to connect to a server with the default address and port press ENTER in the CLI
 
 For the colored CLI the jar has to be runned in Windows Terminal
 
