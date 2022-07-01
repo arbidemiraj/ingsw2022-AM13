@@ -37,7 +37,7 @@ Final test of the "Software engineering" course.
 The majority of the classes have javadocs specifying what the single method does
 
 ## Coverage
-![immagine](https://user-images.githubusercontent.com/100212250/176940834-efc65e6c-2e77-49d9-afe2-fa99b6080600.png)
+![immagine](https://user-images.githubusercontent.com/100212250/176957849-7b4083f9-8af4-4e50-a7a5-7d0593d0bf3c.png)
 
 The untested controller's methods are used for the view and for the handling of the received messages
 
