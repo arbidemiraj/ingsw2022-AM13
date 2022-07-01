@@ -1,11 +1,13 @@
 package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.model.exceptions.DuplicateUsernameException;
+import it.polimi.ingsw.model.exceptions.InvalidGameIdException;
 import it.polimi.ingsw.network.client.SocketClient;
 import it.polimi.ingsw.network.message.*;
 import it.polimi.ingsw.network.message.clientmsg.JoinGameMessage;
 import it.polimi.ingsw.network.message.clientmsg.NewGameMessage;
 import it.polimi.ingsw.network.message.servermsg.AskTowerColor;
+import it.polimi.ingsw.network.message.servermsg.ErrorMessage;
 import it.polimi.ingsw.network.message.servermsg.LobbyMessage;
 
 import java.util.*;
@@ -82,15 +84,25 @@ public class Server {
                 clientHandlerMap.get(message.getUsername()).setGameId(nextGameId);
                 createNewGame((NewGameMessage) message);
                 lobbyHandler.getGames().get(nextGameId - 1).addPlayer(message.getUsername());
-                lobbyHandler.joinGame(message.getUsername(), nextGameId - 1);
+                try {
+                    lobbyHandler.joinGame(message.getUsername(), nextGameId - 1);
+                } catch (InvalidGameIdException e) {
+                    e.printStackTrace();
+                }
                 clientHandlerMap.get(message.getUsername()).sendMessage(new GenericMessage("\n Waiting players to join ...", GenericType.GENERIC));
             }
 
             case JOIN_GAME -> {
                 JoinGameMessage joinGameMessage = (JoinGameMessage) message;
-                clientHandlerMap.get(message.getUsername()).setGameId(joinGameMessage.getGameId());
-                lobbyHandler.getGames().get(joinGameMessage.getGameId()).addPlayer(message.getUsername());
-                lobbyHandler.joinGame(message.getUsername(), joinGameMessage.getGameId());
+
+                try {
+                    lobbyHandler.joinGame(message.getUsername(), joinGameMessage.getGameId());
+                    clientHandlerMap.get(message.getUsername()).setGameId(joinGameMessage.getGameId());
+                    lobbyHandler.getGames().get(joinGameMessage.getGameId()).addPlayer(message.getUsername());
+                } catch (InvalidGameIdException e) {
+                    clientHandlerMap.get(message.getUsername()).sendMessage(new ErrorMessage("Invalid game id", ErrorType.INVALID_GAME_ID));
+                    clientHandlerMap.get(message.getUsername()).sendMessage(new LobbyMessage(lobbyHandler.printLobby()));
+                }
             }
 
             default -> {

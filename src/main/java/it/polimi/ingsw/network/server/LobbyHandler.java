@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.server;
 
+import it.polimi.ingsw.model.exceptions.InvalidGameIdException;
 import it.polimi.ingsw.network.message.GenericMessage;
 import it.polimi.ingsw.network.message.GenericType;
 import it.polimi.ingsw.network.message.Message;
@@ -110,8 +111,16 @@ public class LobbyHandler {
      * @param username that wants to join the game
      * @param gameId to join
      */
-    public void joinGame(String username, int gameId){
-        gameIdUsernameMap.put(username, gameId);
+    public void joinGame(String username, int gameId) throws InvalidGameIdException {
+        try{
+            games.get(gameId);
+        }catch (IndexOutOfBoundsException e){
+            throw  new InvalidGameIdException();
+        }
+
+        if(games.get(gameId) != null && games.get(gameId).isStarted());
+        else gameIdUsernameMap.put(username, gameId);
+
     }
 
     public List<String> getUsernameQueue() {
@@ -119,7 +128,7 @@ public class LobbyHandler {
     }
 
     /**
-     * Handles the disconnection of an user
+     * Handles the disconnection of a user
      * @param username that drops the connection
      */
     public void disconnect(String username) {
@@ -133,8 +142,6 @@ public class LobbyHandler {
             games.get(getGameIdFromUsername(username)).endGame(username);
 
             gameIdUsernameMap.remove(username);
-
-
         }
     }
 }

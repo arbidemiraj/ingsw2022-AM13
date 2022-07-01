@@ -5,6 +5,9 @@ import it.polimi.ingsw.network.message.MessageType;
 
 import java.io.Serial;
 
+/**
+ * This message is sent from the server to the client to notify that a character has been activated
+ */
 public class CharacterActivated extends Message {
     @Serial
     private static final long serialVersionUID = -3351832612563423675L;
@@ -13,6 +16,12 @@ public class CharacterActivated extends Message {
     private final boolean activated;
     private final String owner;
 
+    /**
+     * Default constructor
+     * @param effectId the id of the activated / no more active effect
+     * @param activated true if the effect is being activated
+     * @param owner the username of the player who activated the effect
+     */
     public CharacterActivated(int effectId, boolean activated, String owner) {
         super("Server", MessageType.CHARACTER_ACTIVATED);
         this.owner = owner;

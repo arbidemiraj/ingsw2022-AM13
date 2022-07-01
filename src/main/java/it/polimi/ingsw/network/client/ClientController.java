@@ -107,40 +107,14 @@ public class ClientController implements ViewObserver, Observer {
                 taskQueue.execute(() -> view.askCardToPlay(msg.getAssistantCards(), msg.getCardsPlayed()));
             }
 
-            case BOARD_MESSAGE -> {
-                BoardMessage msg = (BoardMessage) message;
-
-                taskQueue.execute(() -> view.setBoard(msg.getReducedBoard()));
-            }
-
             case ASK_CLOUD -> {
                 taskQueue.execute(view::askCloud);
-            }
-
-            case REDUCED_MODEL -> {
-                ReducedModelMessage msg = (ReducedModelMessage) message;
-
-                taskQueue.execute(()-> view.createModel(msg.getReducedModel()));
             }
 
             case ASK_STUDENT -> {
                 AskStudent msg = (AskStudent) message;
 
                 taskQueue.execute(view::askStudentToMove);
-            }
-
-            case TURN_INFO -> {
-                TurnInfo turnInfo = (TurnInfo) message;
-
-                taskQueue.execute(() -> view.setTurnInfo(turnInfo.getSteps()));
-            }
-
-            case CONFIRM_CHARACTER -> {
-                ConfirmCharacterActivation msg = (ConfirmCharacterActivation) message;
-
-                int id = msg.getId();
-
-                taskQueue.execute(() -> view.activateCharacter(id));
             }
 
             case WIN -> {

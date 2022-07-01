@@ -1202,8 +1202,6 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                         ImageView student = (ImageView) e.getTarget();
 
 
-                        charactersPanes.get(index).getChildren().remove(node);
-
                         students.add(imagesStudent.get(student.getImage().getUrl()));
 
                         charactersPanes.get(index).getChildren().remove(node);
@@ -1221,6 +1219,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                                 Node entranceNode = (Node) e1.getTarget();
 
                                 ImageView entranceStud = (ImageView) entranceNode;
+
+                                charactersPanes.get(index).getChildren().add(entranceStud);
 
                                 students.add(imagesStudent.get(entranceStud.getImage().getUrl()));
 

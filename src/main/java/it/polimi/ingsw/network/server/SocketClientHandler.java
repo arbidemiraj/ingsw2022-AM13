@@ -67,7 +67,6 @@ public class SocketClientHandler implements ClientHandler, Runnable {
             while (!Thread.currentThread().isInterrupted()) {
 
                     Message message = (Message) input.readObject();
-                    SuccessMessage successMessage = new SuccessMessage(SuccessType.CONNECTED);
 
                     if(message != null && message.getMessageType() == MessageType.PING){
                         sendMessage(new Ping());

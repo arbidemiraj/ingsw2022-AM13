@@ -291,6 +291,7 @@ public class GameController implements Observer {
         gameHandler.sendMessageToAll(new WinMessage(winner));
 
         gameHandler.sendMessage(new GenericMessage("Congratulations! ", GenericType.WIN), winner);
+
         gameHandler.endGame();
     }
 
@@ -461,7 +462,6 @@ public class GameController implements Observer {
                 gameHandler.sendMessage(new ErrorMessage("Invalid students selected", ErrorType.GENERIC), username);
             }
         }
-
 
         buyCharacter(player, character);
 

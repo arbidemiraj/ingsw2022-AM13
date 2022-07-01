@@ -10,11 +10,14 @@ import java.io.Serial;
  */
 public class WinMessage extends Message {
 
-
     @Serial
     private static final long serialVersionUID = -2178844112313440462L;
-    private String winner;
+    private final String winner;
 
+    /**
+     *
+     * @param winner the username of the winner
+     */
     public WinMessage(String winner) {
         super("Server", MessageType.WIN);
         this.winner = winner;

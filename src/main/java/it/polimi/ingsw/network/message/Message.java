@@ -6,7 +6,6 @@ import java.io.Serializable;
 /**
  * Abstract message class which must be extended by each message type.
  * Both server and clients will communicate using this generic type of message.
- * This avoids the usage of the "instance of" primitive.
  */
 
 public abstract class Message implements Serializable {

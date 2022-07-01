@@ -67,7 +67,7 @@ public class CLI extends ViewObservable implements View {
             output.print("\n\nEnter the server address [ Default = " + defaultAddress + "] : ");
             String address = input.nextLine();
 
-            if(address.equals("")){
+            if(address.equals("") || address.equals("localhost")){
                 serverInfo.add(defaultAddress);
                 isValid = true;
             }
@@ -229,16 +229,11 @@ public class CLI extends ViewObservable implements View {
     }
 
     public void showBoard() {
-        output.println("\n\nUSERNAME: " +
-                        reducedModel.getUsername() +
-                        "\nCOLOR: " +
-                        reducedModel.getColor() +
-                        "\n\nPLAYER BOARD\n" +
-                        reducedModel.getReducedBoard().printPlayerBoard());
-
         output.println("\n");
         String infos = "";
         String menu = "";
+
+        output.println(reducedModel.getReducedBoard().printIslands());
 
         if(reducedModel.isExpertMode()){
             infos +="\nType CHARACTER <CharacterId> to activate the effect " +
@@ -255,7 +250,12 @@ public class CLI extends ViewObservable implements View {
             output.print(infos + "\n\n");
         }
 
-        output.println(reducedModel.getReducedBoard().printIslands());
+        output.println("\n\nUSERNAME: " +
+                reducedModel.getPlayerUsername() +
+                "\nCOLOR: " +
+                reducedModel.getColor() +
+                "\n\nPLAYER BOARD\n" +
+                reducedModel.getReducedBoard().printPlayerBoard());
     }
 
     @Override
@@ -429,7 +429,7 @@ public class CLI extends ViewObservable implements View {
         from = "ENTRANCE";
 
         output.println("Select the student you want to move");
-        output.println("[ insert his color and where you want to move it (DINNER | ISLAND) ]");
+        output.println("[ insert his color and where you want to move it (<COLOR> <DINNER | ISLAND> ]");
         output.print("> ");
         input.reset();
 
@@ -663,6 +663,8 @@ public class CLI extends ViewObservable implements View {
                 HashMap<Student, Integer> m = map.getMap();
                 String answer = null;
                 int count = 0;
+                String cardStud;
+                String test;
 
                 do{
                     input.reset();
@@ -677,16 +679,16 @@ public class CLI extends ViewObservable implements View {
 
                         output.print("> ");
 
-                        String selectedStudent = input.nextLine();
+                        cardStud = input.nextLine();
 
-                        if(!reducedModel.getCharacterById(effectId).getStudents().contains(Student.valueOf(selectedStudent))){
+                        if(!reducedModel.getCharacterById(effectId).getStudents().contains(Student.valueOf(cardStud))){
                             output.println("The given student is not in the card, insert another student");
                             isValid = false;
                         }
                         else{
                             isValid = true;
-                            students.add(Student.valueOf(selectedStudent));
-                            reducedModel.getCharacterById(effectId).removeStudent(Student.valueOf(selectedStudent));
+                            students.add(Student.valueOf(cardStud));
+                            reducedModel.getCharacterById(effectId).removeStudent(Student.valueOf(cardStud));
                         }
                     }while(!isValid);
 
@@ -700,13 +702,14 @@ public class CLI extends ViewObservable implements View {
 
                         int pos = m.get(Student.valueOf(selectedStudent));
 
-                        if(reducedModel.getReducedBoard().getPlayerBoard().getEntranceStudents()[pos] > 0){
+                        if(reducedModel.getReducedBoard().getPlayerBoard().getEntranceStudents()[pos] < 0){
                             output.println("The given student is not in the entrance, insert another student");
                             isValid = false;
                         }
                         else{
                             isValid = true;
                             students.add(Student.valueOf(selectedStudent));
+                            reducedModel.getReducedBoard().getPlayerBoard().addEntranceStudent(cardStud);
                             reducedModel.getReducedBoard().getPlayerBoard().removeEntranceStudent(selectedStudent);
                         }
                     }while(!isValid);
@@ -723,10 +726,12 @@ public class CLI extends ViewObservable implements View {
 
                             answer = input.nextLine();
 
-                        }while(!answer.equals("n") || !answer.equals("y"));
+                            test = answer.toUpperCase();
+
+                        }while(!test.equals("N") && !test.equals("Y"));
                     }
 
-                }while(answer != null && answer.equals("y") && count < 3);
+                }while(answer != null && answer.equals("Y") && count < 3);
             }
             case 11 -> {
                 String selectedStudent;
@@ -758,7 +763,9 @@ public class CLI extends ViewObservable implements View {
                     output.print("> ");
 
                     selectedColor = input.nextLine();
-                }while(selectedColor.toUpperCase().equals("RED")||selectedColor.toUpperCase().equals("YELLOW")||selectedColor.toUpperCase().equals("GREEN")||selectedColor.toUpperCase().equals("BLUE")||selectedColor.toUpperCase().equals("PINK"));
+                    selectedColor.toUpperCase();
+
+                }while(!selectedColor.equals("RED") && !selectedColor.equals("YELLOW") && !selectedColor.equals("GREEN") && !selectedColor.equals("BLUE") && !selectedColor.toUpperCase().equals("PINK"));
 
 
                 String finalSelectedColor = selectedColor;
@@ -788,8 +795,9 @@ public class CLI extends ViewObservable implements View {
         ColorIntMap map = new ColorIntMap();
         HashMap<Student, Integer> m = map.getMap();
         int effectId = 10;
-        String selectedStudent;
+        String entranceStud;
         int count = 0;
+        String test;
 
         do{
             do{
@@ -799,18 +807,18 @@ public class CLI extends ViewObservable implements View {
 
                 output.print("> ");
 
-                selectedStudent = input.nextLine();
+                entranceStud = input.nextLine();
 
-                int pos = m.get(Student.valueOf(selectedStudent));
+                int pos = m.get(Student.valueOf(entranceStud));
 
-                if(reducedModel.getReducedBoard().getPlayerBoard().getEntranceStudents()[pos] > 0){
+                if(reducedModel.getReducedBoard().getPlayerBoard().getEntranceStudents()[pos] <= 0){
                     output.println("The given student is not in the entrance, insert another student");
                     isValid = false;
                 }
                 else{
                     isValid = true;
-                    students.add(Student.valueOf(selectedStudent));
-                    reducedModel.getReducedBoard().getPlayerBoard().removeEntranceStudent(selectedStudent);
+                    students.add(Student.valueOf(entranceStud));
+                    reducedModel.getReducedBoard().getPlayerBoard().removeEntranceStudent(entranceStud);
                 }
             }while(!isValid);
 
@@ -821,23 +829,23 @@ public class CLI extends ViewObservable implements View {
 
                 output.print("> ");
 
-                selectedStudent = input.nextLine();
+                String selectedStudent = input.nextLine();
 
                 int pos = m.get(Student.valueOf(selectedStudent));
 
-                if(reducedModel.getReducedBoard().getPlayerBoard().getHallStudents()[pos] > 0){
+                if(reducedModel.getReducedBoard().getPlayerBoard().getHallStudents()[pos] <= 0){
                     output.println("The given student is not in the dinner, insert another student");
                     isValid = false;
                 }
                 else{
                     isValid = true;
                     students.add(Student.valueOf(selectedStudent));
+                    reducedModel.getReducedBoard().getPlayerBoard().addHallStudent(entranceStud);
+                    reducedModel.getReducedBoard().getPlayerBoard().addEntranceStudent(selectedStudent);
+
                     reducedModel.getReducedBoard().getPlayerBoard().removeEntranceStudent(selectedStudent);
                 }
             }while(!isValid);
-
-
-            students.add(Student.valueOf(selectedStudent));
 
             count ++;
 
@@ -848,10 +856,12 @@ public class CLI extends ViewObservable implements View {
 
                     answer = input.nextLine();
 
-                }while(!answer.equals("n") || !answer.equals("y"));
+                    test = answer.toUpperCase();
+
+                }while(!test.equals("N") && !test.equals("Y"));
             }
 
-        }while(answer != null && answer.equals("y") && count < 2);
+        }while(answer != null && answer.equals("Y") && count < 2);
 
 
         notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students, 10));
@@ -868,8 +878,8 @@ public class CLI extends ViewObservable implements View {
             output.println(owner + " has activated character " + effectId);
             reducedModel.activateCharacter(effectId);
 
-            if(effectId == 5){
-
+            if (effectId == 4) {
+                reducedModel.setMaxSteps(reducedModel.getMaxSteps() + 2);
             }
 
             resumePhase();
@@ -900,7 +910,7 @@ public class CLI extends ViewObservable implements View {
         ColorIntMap map = new ColorIntMap();
         HashMap<Student, Integer> posMap = map.getMap();
 
-        int numStudents = reducedModel.getReducedBoard().getPlayerBoard().getHallStudents()[posMap.get(color)];
+        int numStudents = reducedModel.getReducedBoard().getPlayerBoard().getEntranceStudents()[posMap.get(color)];
 
         if(numStudents >= 3){
             for(int i = 0; i < 3; i++){
@@ -914,6 +924,8 @@ public class CLI extends ViewObservable implements View {
         }
 
         output.println(numStudents + " students have been taken from the dinner! ");
+
+        resumePhase();
     }
 
     @Override
