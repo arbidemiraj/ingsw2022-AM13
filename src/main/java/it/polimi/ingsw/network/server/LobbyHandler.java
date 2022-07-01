@@ -47,7 +47,7 @@ public class LobbyHandler {
         lobby = "\n [LOBBY] \n";
 
         for (GameHandler game : games) {
-            if(game.isActive() && !game.isStarted()) {
+            if(game.isActive() && !game.isStarted() && game.getNumPlayers() != 0) {
                 lobby += "\nGame Id : " +
                         game.getGameId() + "    " +
                         "Number of players:  " +

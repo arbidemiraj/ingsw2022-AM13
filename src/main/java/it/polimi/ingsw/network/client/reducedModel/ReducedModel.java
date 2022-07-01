@@ -47,7 +47,7 @@ public class ReducedModel implements Serializable {
         this.reducedBoard = reducedBoard;
         this.professorOwners = new String[5];
         this.isExpertMode = isExpertMode;
-        generalSupply = 20 - username.size() * 3;
+        generalSupply = 20 - username.size();
         numCoins = 1;
     }
 
@@ -122,13 +122,16 @@ public class ReducedModel implements Serializable {
     }
 
     /** This method activates the character's effect **/
-    public void activateCharacter(int id){
+    public void activateCharacter(int id, String owner){
             ReducedCharacter character = Arrays.stream(reducedCharacters).filter(reducedCharacter -> reducedCharacter.getEffectId() == id).collect(Collectors.toList())
                     .get(0);
 
             character.activate();
 
-            numCoins -= character.getCost();
+            if(owner.equals(playerUsername)){
+                numCoins -= character.getCost();
+            }
+
             generalSupply += character.getCost();
             character.setCost(character.getCost() + 1);
 

@@ -17,6 +17,5 @@ public class ClientApp {
         ClientController clientController = new ClientController(view);
         view.addObserver(clientController);
         view.init();
-
     }
 }

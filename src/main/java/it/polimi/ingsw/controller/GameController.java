@@ -42,7 +42,7 @@ public class GameController implements Observer {
      */
 
     public GameController(Game model, GameHandler gameHandler) {
-        if(model.getPlayers().size() == 2) NUM_STUDENTS = 3;
+        if(model.getNumPlayers() == 2) NUM_STUDENTS = 3;
         else NUM_STUDENTS = 4;
 
         this.model = model;
@@ -467,7 +467,10 @@ public class GameController implements Observer {
 
         model.getActivatedCharacters().add(character.getEffectId());
 
-        if(gameHandler != null) gameHandler.sendMessageToAll(new CharacterActivated(7, true, username));
+        if(gameHandler != null){
+            gameHandler.sendMessageToAll(new CharacterActivated(7, true, username));
+            gameHandler.sendMessageToAll(new UpdateCharacterStudents(((Effect7)character.getEffect()).getStudents(), 7));
+        }
     }
 
     /**
@@ -483,13 +486,24 @@ public class GameController implements Observer {
 
         character.setOwner(player);
 
+        player.getPlayerBoard().removeStudent(students.get(0));
         player.getPlayerBoard().getDinnerRoom()[model.createColorIntMap(students.get(1))].removeStudent(students.get(1));
-        player.getPlayerBoard().getDinnerRoom()[model.createColorIntMap(students.get(3))].removeStudent(students.get(3));
 
-        player.getPlayerBoard().addStudent(students.get(0));
+        player.getPlayerBoard().addStudent(students.get(1));
+
+        player.getPlayerBoard().getDinnerRoom()[model.createColorIntMap(students.get(0))].addStudent(students.get(0));
         professorCheckController(students.get(0));
-        player.getPlayerBoard().addStudent(students.get(2));
-        professorCheckController(students.get(2));
+
+
+        if (students.size() == 4){
+            player.getPlayerBoard().removeStudent(students.get(2));
+            player.getPlayerBoard().getDinnerRoom()[model.createColorIntMap(students.get(3))].removeStudent(students.get(3));
+
+            player.getPlayerBoard().addStudent(students.get(3));
+            player.getPlayerBoard().getDinnerRoom()[model.createColorIntMap(students.get(0))].addStudent(students.get(0));
+
+            professorCheckController(students.get(2));
+        }
 
         buyCharacter(player, character);
 

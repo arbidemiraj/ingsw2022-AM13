@@ -585,7 +585,6 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void activateCharacter(int id) {
-        reducedModel.activateCharacter(id);
     }
 
     @Override
@@ -878,7 +877,7 @@ public class CLI extends ViewObservable implements View {
     public void notifyCharacterActivation(int effectId, boolean activated, String owner) {
         if(activated){
             output.println(owner + " has activated character " + effectId);
-            reducedModel.activateCharacter(effectId);
+            reducedModel.activateCharacter(effectId, owner);
 
             if (effectId == 4) {
                 reducedModel.setMaxSteps(reducedModel.getMaxSteps() + 2);

@@ -162,8 +162,8 @@ public class BoardController extends ViewObservable implements GenericSceneContr
      */
     @FXML
     public void initialize() {
-        if(reducedModel.getUsername().size() == 2) NUM_STUDENTS = 2;
-        else NUM_STUDENTS = 3;
+        if(reducedModel.getUsername().size() == 2) NUM_STUDENTS = 3;
+        else NUM_STUDENTS = 4;
 
         confirmBtn.setOpacity(0);
         confirmBtn.setDisable(true);
@@ -540,31 +540,36 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
         currentPhase = PhaseType.MOVE_STUDENT;
 
-        turnInfo.setText("Select a student from entrance");
+        if(studentsCount < NUM_STUDENTS){
+            turnInfo.setText("Select a student from entrance");
 
-        for (ImageView singleStud : entrance) {
-            singleStud.getStyleClass().set(0, "clickable");
-            singleStud.setDisable(false);
+            for (ImageView singleStud : entrance) {
+                singleStud.getStyleClass().set(0, "clickable");
+                singleStud.setDisable(false);
 
-            singleStud.setOnMouseClicked(e -> {
-                Node node = (Node) e.getTarget();
+                singleStud.setOnMouseClicked(e -> {
+                    Node node = (Node) e.getTarget();
 
-                ImageView student = (ImageView) node;
+                    ImageView student = (ImageView) node;
 
-                String studentString = String.valueOf(imagesStudent.get(student.getImage().getUrl()));
+                    String studentString = String.valueOf(imagesStudent.get(student.getImage().getUrl()));
 
-                moveStudentParameters.add(studentString);
+                    moveStudentParameters.add(studentString);
 
-                turnInfo.setText("Select where you want to move the student [ Dinner or Island ]");
+                    turnInfo.setText("Select where you want to move the student [ Dinner or Island ]");
 
-                askWhere(student.getImage().getUrl());
+                    askWhere(student.getImage().getUrl());
 
-                student.setImage(null);
+                    student.setImage(null);
 
-                disableStudents();
-            });
+                    disableStudents();
+                });
 
+            }
         }
+
+
+
     }
 
     /**
@@ -587,7 +592,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
                 studentsCount++;
 
-                if (studentsCount == 3) {
+                if (studentsCount == NUM_STUDENTS) {
                     disableStudents();
                     studentsCount = 0;
                 }
@@ -608,7 +613,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
                 studentsCount++;
 
-                if (studentsCount == 3) {
+                if (studentsCount == NUM_STUDENTS) {
                     disableStudents();
                     studentsCount = 0;
                 }
@@ -696,7 +701,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
             Node node = (Node) e.getTarget();
 
             if (!cardsPlayed.contains(node)) {
-                int id = GridPane.getColumnIndex(node);
+                int id = deck.getColumnIndex(node);
 
                 boolean isValid = true;
 
@@ -1191,7 +1196,11 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                 AtomicInteger count = new AtomicInteger();
                 ArrayList<Student> students = new ArrayList<>();
 
-                turnInfo.setText("Select a student from the card...Switch max 3 students ");
+                for (ImageView singleStud : entrance) {
+                    singleStud.setDisable(true);
+                }
+
+                turnInfo.setText("Select a student from the card...Switch max 3 students [Click on CONFIRM to end the switch]");
 
                 for (Node node : charactersPanes.get(index).getChildren()) {
                     node.getStyleClass().set(0, "clickable");
@@ -1201,8 +1210,9 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                         turnInfo.setText("Select the student from entrance you want to switch");
                         ImageView student = (ImageView) e.getTarget();
 
+                        ImageView entStud = new ImageView(student.getImage());
 
-                        students.add(imagesStudent.get(student.getImage().getUrl()));
+                        students.add(imagesStudent.get(entStud.getImage().getUrl()));
 
                         charactersPanes.get(index).getChildren().remove(node);
 
@@ -1211,6 +1221,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                         }
 
                         for (ImageView singleStud : entrance) {
+                            singleStud.setDisable(false);
                             singleStud.getStyleClass().set(0, "clickable");
 
                             singleStud.setOnMouseClicked(e1 -> {
@@ -1220,17 +1231,13 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
                                 ImageView entranceStud = (ImageView) entranceNode;
 
-                                charactersPanes.get(index).getChildren().add(entranceStud);
+                                ImageView charStud = new ImageView(entranceStud.getImage());
 
-                                students.add(imagesStudent.get(entranceStud.getImage().getUrl()));
+                                charactersPanes.get(index).getChildren().add(charStud);
 
-                                String studentString = String.valueOf(imagesStudent.get(entranceStud.getImage().getUrl()));
+                                entranceStud.setImage(entStud.getImage());
 
-                                moveStudentParameters.add(studentString);
-
-                                entranceStud.setImage(student.getImage());
-
-                                student.setImage(new Image(entranceStud.getImage().getUrl()));
+                                students.add(imagesStudent.get(charStud.getImage().getUrl()));
 
                                 disableStudents();
 
@@ -1394,13 +1401,14 @@ public class BoardController extends ViewObservable implements GenericSceneContr
      */
     public void askSwitch() {
         boolean test = false;
+        int index = Arrays.asList(reducedModel.getReducedCharacters()).indexOf(reducedModel.getCharacterById(10));
 
         for (TilePane dinner : dinnerRoom) {
             if (!dinner.getChildren().isEmpty()) test = true;
         }
 
         if (test) {
-            turnInfo.setText("Select a student from entrance");
+            turnInfo.setText("Select a student from entrance to switch [Click on CONFIRM to end the switch] ");
 
             ArrayList<Student> students = new ArrayList<>();
 
@@ -1435,7 +1443,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
                     numStudents.getAndIncrement();
 
-                    if (numStudents.get() == NUM_STUDENTS) {
+                    if (numStudents.get() == 2) {
                         disableStudents();
                         numStudents.set(0);
                     }
@@ -1445,13 +1453,23 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
                         dinner.setOnMouseClicked(e1 -> {
                             if (!dinner.getChildren().isEmpty()) {
+                                turnInfo.setText("Select a student from entrance to switch [Click on CONFIRM to end the switch] ");
+
                                 dinner.getChildren().remove(dinner.getChildren().size() - 1);
+
+                                ImageView in = boardProf.get(dinnerRoom.indexOf(dinner));
+
+                                Student stud = imagesProfessor.get(in.getImage().getUrl());
+
+                                students.add(stud);
+
+                                student.setImage(new Image(studentsImages.get(stud)));
 
                                 for (TilePane din : dinnerRoom) {
                                     din.setDisable(true);
                                 }
 
-                                new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students, 10))).start();
+                                if(students.size() == 4) new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students, 10))).start();
 
                             } else {
                                 showAlert("Select another dinner that is not empty!");
@@ -1459,8 +1477,22 @@ public class BoardController extends ViewObservable implements GenericSceneContr
                         });
                     }
 
-
                 });
+
+                confirmBtn.setDisable(false);
+                confirmBtn.setOpacity(1);
+
+                confirmBtn.setOnMouseClicked(e -> {
+                    new Thread(() -> notifyObserver(viewObserver -> viewObserver.onUpdateSwitchStudents(students, 10))).start();
+
+                    confirmBtn.setDisable(true);
+                    confirmBtn.setOpacity(0);
+
+                    for (Node n : charactersPanes.get(index).getChildren()) {
+                        n.setDisable(true);
+                    }
+                });
+
             }
         } else {
             showAlert("Your dinner room is empty!");
@@ -1492,7 +1524,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
      */
     public void characterIsActivated(int effectId, boolean activated, String owner) {
         if (activated) {
-            reducedModel.activateCharacter(effectId);
+            reducedModel.activateCharacter(effectId, owner);
 
             int index = Arrays.asList(reducedModel.getReducedCharacters()).indexOf(reducedModel.getCharacterById(effectId));
 
@@ -1503,15 +1535,12 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
             charactersImages.get(index).setStyle("-fx-effect: dropshadow(gaussian, #f2e0d6, 20, 0.3, 0, 0);");
 
-            reducedModel.setNumCoins(reducedModel.getNumCoins() - reducedModel.getCharacterById(effectId).getCost());
-
             owners.get(index).setText(owner);
 
             coins.setText(String.valueOf(reducedModel.getNumCoins()));
 
             generalSupply.setText(String.valueOf(reducedModel.getGeneralSupply()));
 
-            reducedModel.getCharacterById(effectId).setCost(reducedModel.getCharacterById(effectId).getCost() + 1);
             costs.get(index).setText(String.valueOf(reducedModel.getCharacterById(effectId).getCost()));
 
             if (currentPhase != null && !currentPhase.equals(PhaseType.NOT_MYTURN)) setCharacterClickable();
@@ -1538,7 +1567,7 @@ public class BoardController extends ViewObservable implements GenericSceneContr
         if (currentPhase != null) {
             switch (currentPhase) {
                 case CARD -> turnInfo.setText("It's your turn! Select an assistant card to play");
-                case MOVE_STUDENT -> turnInfo.setText("Select a student from entrance");
+                case MOVE_STUDENT -> { askStudent();}
                 case CLOUD -> turnInfo.setText("Choose the cloud you want to get the students from");
                 case MOTHER_NATURE -> askMotherNature();
                 case NOT_MYTURN -> turnInfo.setText("Wait...other players are playing their turn");
@@ -1559,13 +1588,16 @@ public class BoardController extends ViewObservable implements GenericSceneContr
 
         ObservableList<Node> childrens = dinner.getChildren();
 
-        for (int i = childrens.size() - 1; i > childrens.size() - numStudents + 1; i--) {
-            Node node = childrens.get(i);
+        if(!childrens.isEmpty()){
+            for (int i = childrens.size() - 1; i > childrens.size() - numStudents + 1; i--) {
+                Node node = childrens.get(i);
 
-            dinner.getChildren().remove(node);
+                dinner.getChildren().remove(node);
+            }
+
+            turnInfo.setText(numStudents + " students have been taken from the dinner! ");
         }
 
-        turnInfo.setText(numStudents + " students have been taken from the dinner! ");
     }
 
     /**

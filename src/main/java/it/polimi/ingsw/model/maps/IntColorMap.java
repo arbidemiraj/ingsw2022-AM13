@@ -12,6 +12,7 @@ import java.util.HashMap;
 public class IntColorMap implements Serializable {
     @Serial
     private static final long serialVersionUID = -7465717978198819076L;
+
     private HashMap<Integer, Student> map = new HashMap<>();
 
     public IntColorMap() {
