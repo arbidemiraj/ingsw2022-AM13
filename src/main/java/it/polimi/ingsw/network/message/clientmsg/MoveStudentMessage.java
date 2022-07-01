@@ -11,7 +11,6 @@ import java.io.Serial;
  * This message is sent from the client to the server when the user wants to move a student
  */
 
-
 public class MoveStudentMessage extends Message {
 
     @Serial
@@ -21,7 +20,14 @@ public class MoveStudentMessage extends Message {
     private final String to;
     private final int id;
 
-
+    /**
+     *
+     * @param username
+     * @param from where the student is
+     * @param color the color of the student
+     * @param to where he wants to move the student
+     * @param id the id of the island where he wants to move the student
+     */
     public MoveStudentMessage(String username, String from, String color, String to, int id) {
         super(username, MessageType.MOVE_STUDENT);
         this.from = from;

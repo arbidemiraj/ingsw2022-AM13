@@ -10,7 +10,6 @@ import java.io.Serial;
  * This message is sent from the client to the server as a response of the AskIslandMessage
  */
 
-
 public class IslandEffectMessage extends Message {
 
     @Serial
@@ -18,6 +17,12 @@ public class IslandEffectMessage extends Message {
     private final int chosenIslandId;
     private final int effectId;
 
+    /**
+     * Default constructor
+     * @param username the username of the client
+     * @param chosenIsland the id of the chosen island
+     * @param effectId the id of the activated character
+     */
     public IslandEffectMessage(String username,int chosenIsland, int effectId) {
         super(username, MessageType.ISLAND_EFFECT);
         this.chosenIslandId = chosenIsland;

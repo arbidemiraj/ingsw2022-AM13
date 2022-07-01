@@ -7,7 +7,7 @@ import it.polimi.ingsw.network.message.MessageType;
 import java.io.Serial;
 
 /**
- * This message is sent from the client to the server
+ * This message is sent from the client to the server and contains the chosen tower color
  */
 public class ChooseTowerColorMessage extends Message {
 
@@ -15,6 +15,11 @@ public class ChooseTowerColorMessage extends Message {
     private static final long serialVersionUID = 1986386864618069042L;
     private final TowerColor chosenTowerColor;
 
+    /**
+     * Default constructor
+     * @param username the client's username
+     * @param chosenTowerColor the chosen tower color
+     */
     public ChooseTowerColorMessage(String username, TowerColor chosenTowerColor) {
         super(username, MessageType.TOWER_COLOR_CHOOSE);
         this.chosenTowerColor = chosenTowerColor;

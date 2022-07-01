@@ -15,6 +15,11 @@ public class JoinGameMessage extends Message {
     private static final long serialVersionUID = 9187668166052235515L;
     private final int gameId;
 
+    /**
+     *
+     * @param username
+     * @param gameId The id the player wants to join
+     */
     public JoinGameMessage(String username, int gameId) {
         super(username, MessageType.JOIN_GAME);
         this.gameId = gameId;
@@ -23,8 +28,6 @@ public class JoinGameMessage extends Message {
     public int getGameId() {
         return gameId;
     }
-
-
 
     @Override
     public String toString() {

@@ -17,6 +17,12 @@ public class StudentEffectMessage extends Message {
     private final Student chosenStudent;
     private final int effectId;
 
+    /**
+     *
+     * @param username
+     * @param chosenStudent the chosen student
+     * @param effectId the id of the effect to activate
+     */
     public StudentEffectMessage(String username, Student chosenStudent, int effectId) {
         super(username, MessageType.STUDENT_EFFECT);
         this.chosenStudent = chosenStudent;

@@ -16,6 +16,11 @@ public class MoveMotherNatureMessage extends Message{
     private static final long serialVersionUID = -7479615496572783489L;
     private final int steps;
 
+    /**
+     *
+     * @param username
+     * @param steps The number of steps made by mother nature
+     */
     public MoveMotherNatureMessage(String username, int steps) {
         super(username, MessageType.MOVE_MOTHERNATURE);
         this.steps = steps;

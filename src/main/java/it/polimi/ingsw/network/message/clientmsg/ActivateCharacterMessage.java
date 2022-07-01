@@ -17,6 +17,11 @@ public class ActivateCharacterMessage extends Message {
     private static final long serialVersionUID = 1590744886009517317L;
     private int effectId;
 
+    /**
+     * Default constructor
+     * @param username the username of the player
+     * @param effectId the id of the card to activate
+     */
     public ActivateCharacterMessage(String username,int effectId) {
         super(username, MessageType.ACTIVATE_CHARACTER);
         this.effectId = effectId;
