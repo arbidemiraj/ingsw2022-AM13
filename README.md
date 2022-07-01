@@ -34,7 +34,7 @@ Final test of the "Software engineering" course.
 - [Final UML](deliveries/uml/final/final_uml.png)
 
 ## Javadoc
-The majority of the classes has javadocs specifying what the single method does
+The majority of the classes have javadocs specifying what the single method does
 
 ## Coverage
 ![immagine](https://user-images.githubusercontent.com/100212250/176940834-efc65e6c-2e77-49d9-afe2-fa99b6080600.png)
