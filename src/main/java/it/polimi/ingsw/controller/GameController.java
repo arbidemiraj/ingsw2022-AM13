@@ -64,7 +64,7 @@ public class GameController implements Observer {
 
     /**
      * method used to activate a character after receiving the chosenIsland
-     *
+     * when a character is activated he is added to a list containing the currently activated characters
      * @param id        the id of the character
      * @param chosenIsland      the island the player choose for applying the effect
      */
@@ -181,6 +181,10 @@ public class GameController implements Observer {
         if(profCheck) professorCheckController(color);
     }
 
+    /**
+     * method called after a student has been moved to the dinner check the professor owner
+     * @param color the color to check
+     */
     private void professorCheckController(Student color) {
         if(model.professorCheck(color)){
             int colorPos = model.createColorIntMap(color);
@@ -222,6 +226,7 @@ public class GameController implements Observer {
 
     /**
      * Method called when the player wants to move mother nature
+     * It also checks if an island has been conquered / merged after the mother nature move
      * @param steps number of steps he wants to move mother nature
      * @throws InvalidMotherNatureMovesException
      */
@@ -266,8 +271,12 @@ public class GameController implements Observer {
     /**
      * Handles the end of the game and calculates the winner
      */
-    private void endGame() {
+    public String endGame() {
         Integer[] numIslands = new Integer[model.getNumPlayers()];
+
+        for(int i = 0; i < numIslands.length; i++){
+            numIslands[i] = 0;
+        }
 
         for(int i = 0; i < model.getBoard().getIslands().size(); i++){
             if(model.getBoard().getIslands().get(i).getOwner() != null){
@@ -288,11 +297,16 @@ public class GameController implements Observer {
 
         String winner = model.getPlayers().get(playerIndex).getUsername();
 
-        gameHandler.sendMessageToAll(new WinMessage(winner));
+        if(gameHandler != null){
+            gameHandler.sendMessageToAll(new WinMessage(winner));
 
-        gameHandler.sendMessage(new GenericMessage("Congratulations! ", GenericType.WIN), winner);
+            gameHandler.sendMessage(new GenericMessage("Congratulations! ", GenericType.WIN), winner);
 
-        gameHandler.endGame();
+            gameHandler.endGame();
+        }
+
+
+        return winner;
     }
 
     /**
@@ -449,17 +463,18 @@ public class GameController implements Observer {
      * @param students the students chosen
      * @param username the username of the player who activated the card
      */
-    private void activateEffect7(ArrayList<Student> students, String username){
+    public void activateEffect7(ArrayList<Student> students, String username){
         Player player = model.getPlayerByUsername(username);
         Character character = model.getCharacter(7);
 
         for(int i = 0; i < (students.size()); i = i + 2){
             ((Effect7)character.getEffect()).removeStudent(students.get(i));
-            player.getPlayerBoard().addStudent(students.get(i));
             try {
                 player.getPlayerBoard().removeStudent(students.get(i + 1));
+                player.getPlayerBoard().addStudent(students.get(i));
+                ((Effect7)character.getEffect()).addStudent(students.get(i + 1));
             } catch (InvalidMoveException e) {
-                gameHandler.sendMessage(new ErrorMessage("Invalid students selected", ErrorType.GENERIC), username);
+                if(gameHandler != null) gameHandler.sendMessage(new ErrorMessage("Invalid students selected", ErrorType.GENERIC), username);
             }
         }
 
@@ -479,7 +494,7 @@ public class GameController implements Observer {
      * @param username the username of the player who activated the card
      * @throws InvalidMoveException when the students given can't be moved
      */
-    private void activateEffect10(ArrayList<Student> students, String username) throws InvalidMoveException {
+    public void activateEffect10(ArrayList<Student> students, String username) throws InvalidMoveException {
         Player player = model.getPlayerByUsername(username);
 
         Character character = model.getCharacter(10);

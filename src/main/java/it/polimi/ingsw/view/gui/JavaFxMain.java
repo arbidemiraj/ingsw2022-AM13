@@ -36,7 +36,7 @@ public class JavaFxMain extends Application {
         MediaPlayer player = new MediaPlayer(pick);
         player.setAutoPlay(true);
         player.setCycleCount(MediaPlayer.INDEFINITE);
-        player.setVolume(0.2);
+        player.setVolume(0.05);
 
         player.setOnEndOfMedia(() -> {
             player.seek(Duration.ZERO);
@@ -91,12 +91,6 @@ public class JavaFxMain extends Application {
      * @param scene the main scene
      */
     public void startGame(Scene scene) {
-        Media media = new Media(String.valueOf(getClass().getResource("/Spitfires.mp3")));
-        MediaPlayer music = new MediaPlayer(media);
-        Media pick = new Media(Objects.requireNonNull(getClass().getClassLoader()
-                .getResource("Spitfires.mp3")).toExternalForm());
-        MediaPlayer player = new MediaPlayer(pick);
-
         stage.setResizable(true);
         stage.setWidth(1920);
         stage.setHeight(1080);

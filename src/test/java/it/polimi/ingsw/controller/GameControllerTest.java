@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.characters.Character;
+import it.polimi.ingsw.model.characters.Effect7;
 import it.polimi.ingsw.model.enumerations.Student;
 import it.polimi.ingsw.model.exceptions.CardAlreadyPlayedException;
 import it.polimi.ingsw.model.exceptions.InvalidMotherNatureMovesException;
@@ -11,6 +12,7 @@ import it.polimi.ingsw.network.message.clientmsg.ChooseCloudMessage;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -233,5 +235,68 @@ class GameControllerTest {
         testGameController.addPlayer("First");
 
         assertEquals("First", testGameController.getGame().getPlayers().get(0).getUsername());
+    }
+
+    @Test
+    void endGame() {
+        prepareTestGame(false);
+        Player player = testGame.getPlayers().get(0);
+
+        for(int i = 0; i < 4; i++){
+            testGame.getBoard().getIslands().get(i).setOwner(player);
+        }
+
+        assertEquals(player.getUsername(), testGameController.endGame());
+    }
+
+    @Test
+    void activateEffect7() {
+        prepareTestGame(true);
+        Player player = testGame.getPlayers().get(0);
+        player.getPlayerBoard().addStudent(Student.BLUE);
+
+        testGame.getCharacters()[0] = new Character(testGame, 7, 1);
+
+        ArrayList<Student> students = new ArrayList<>();
+
+        students.add(((Effect7)testGame.getCharacters()[0].getEffect()).getStudents().get(0));
+
+        students.add(Student.BLUE);
+
+        testGameController.activateEffect7(students, player.getUsername());
+
+        int pos = ((Effect7)testGame.getCharacters()[0].getEffect()).getStudents().size();
+        int pos2 = player.getPlayerBoard().getEntrance().size();
+
+
+
+        assertEquals(students.get(1), ((Effect7)testGame.getCharacters()[0].getEffect()).getStudents().get(pos - 1));
+        assertEquals(player.getPlayerBoard().getEntrance().get(pos2 - 1), students.get(0));
+
+    }
+
+    @Test
+    void activateEffect10() {
+        prepareTestGame(true);
+        Player player = testGame.getPlayers().get(0);
+        player.getPlayerBoard().addStudent(Student.YELLOW);
+        player.getPlayerBoard().getDinnerRoom()[1].addStudent(Student.BLUE);
+
+        testGame.getCharacters()[0] = new Character(testGame, 10, 1);
+
+        ArrayList<Student> students = new ArrayList<>();
+
+        students.add(Student.YELLOW);
+
+        students.add(Student.BLUE);
+
+        try {
+            testGameController.activateEffect10(students, player.getUsername());
+        } catch (InvalidMoveException e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(1, player.getPlayerBoard().getDinnerRoom()[0].getNumStudents());
+        assertEquals(Student.BLUE, player.getPlayerBoard().getEntrance().get(0));
     }
 }
