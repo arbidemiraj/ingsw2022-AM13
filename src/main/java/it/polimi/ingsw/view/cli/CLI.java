@@ -412,7 +412,9 @@ public class CLI extends ViewObservable implements View {
 
     @Override
     public void askStudentToMove() {
+
         output.flush();
+
         input.reset();
 
         currentPhase = PhaseType.MOVE_STUDENT;
